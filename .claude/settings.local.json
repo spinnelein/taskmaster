@@ -15,7 +15,11 @@
       "Bash(copy .env.example .env)",
       "Bash(cp:*)",
       "Bash(pytest:*)",
-      "Bash(uvicorn:*)"
+      "Bash(uvicorn:*)",
+      "Bash(git merge:*)",
+      "Bash(git branch:*)",
+      "Bash(git stash:*)",
+      "Bash(alembic init:*)"
     ],
     "deny": []
   }
