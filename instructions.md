@@ -1,371 +1,619 @@
-Milestone 5: Frontend Foundation
+Milestone 6: Task and Event Management UI
 IMPORTANT: Clean State Setup
-Commands to run FIRST from project root (NOT in backend folder):
+Commands to run FIRST from project root:
 
-cd .. (if you're in backend folder)
 git checkout develop
 git pull origin develop
-git branch -D feature/frontend-setup (if it exists)
-git checkout -b feature/frontend-setup
+git branch -D feature/task-event-ui (if it exists)
+git checkout -b feature/task-event-ui
 
 Objective
-Set up React frontend with routing and basic layout
-Step 1: Create React App with Vite
-Commands to run from project root:
-
-npm create vite@latest frontend -- --template react
-cd frontend
-npm install
-npm install axios react-router-dom
-npm install -D tailwindcss postcss autoprefixer
-npx tailwindcss init -p
-
-Files to Create in Order:
-1. frontend/tailwind.config.js
-Replace content with:
-javascript/** @type {import('tailwindcss').Config} */
-export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-}
-2. frontend/src/index.css
-Replace content with:
-css@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-3. frontend/vite.config.js
-Replace content with:
-javascriptimport { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react()],
-  server: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:8000',
-        changeOrigin: true,
-      },
-      '/health': {
-        target: 'http://localhost:8000',
-        changeOrigin: true,
-      },
-      '/docs': {
-        target: 'http://localhost:8000',
-        changeOrigin: true,
-      }
-    }
-  }
-})
-4. frontend/src/services/api.js
-Create new file:
-javascript// API service configuration
-// NO EMOJIS
-import axios from 'axios';
-
-const API_BASE_URL = '/api';
-
-// Create axios instance
-const apiClient = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-// Request interceptor
-apiClient.interceptors.request.use(
-  (config) => {
-    // Add auth token here if needed
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-// Response interceptor
-apiClient.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
-    if (error.response) {
-      // Handle specific error statuses
-      if (error.response.status === 404) {
-        console.error('Resource not found');
-      } else if (error.response.status === 500) {
-        console.error('Server error');
-      }
-    }
-    return Promise.reject(error);
-  }
-);
-
-export default apiClient;
-5. frontend/src/services/taskService.js
-Create new file:
-javascript// Task API service
-// NO EMOJIS
-import apiClient from './api';
-
-const taskService = {
-  // Get all tasks
-  getTasks: async (status = null) => {
-    const params = status ? { status } : {};
-    const response = await apiClient.get('/tasks', { params });
-    return response.data;
-  },
-
-  // Get single task
-  getTask: async (id) => {
-    const response = await apiClient.get(`/tasks/${id}`);
-    return response.data;
-  },
-
-  // Create task
-  createTask: async (taskData) => {
-    const response = await apiClient.post('/tasks', taskData);
-    return response.data;
-  },
-
-  // Update task
-  updateTask: async (id, taskData) => {
-    const response = await apiClient.put(`/tasks/${id}`, taskData);
-    return response.data;
-  },
-
-  // Delete task
-  deleteTask: async (id) => {
-    const response = await apiClient.delete(`/tasks/${id}`);
-    return response.data;
-  },
-
-  // Complete task
-  completeTask: async (id) => {
-    const response = await apiClient.post(`/tasks/${id}/complete`);
-    return response.data;
-  },
-
-  // Get overdue tasks
-  getOverdueTasks: async () => {
-    const response = await apiClient.get('/tasks/overdue');
-    return response.data;
-  }
-};
-
-export default taskService;
-6. frontend/src/services/eventService.js
-Create new file:
-javascript// Event API service
-// NO EMOJIS
-import apiClient from './api';
-
-const eventService = {
-  // Get all events
-  getEvents: async (date = null) => {
-    const params = date ? { date } : {};
-    const response = await apiClient.get('/events', { params });
-    return response.data;
-  },
-
-  // Get single event
-  getEvent: async (id) => {
-    const response = await apiClient.get(`/events/${id}`);
-    return response.data;
-  },
-
-  // Create event
-  createEvent: async (eventData) => {
-    const response = await apiClient.post('/events', eventData);
-    return response.data;
-  },
-
-  // Update event
-  updateEvent: async (id, eventData) => {
-    const response = await apiClient.put(`/events/${id}`, eventData);
-    return response.data;
-  },
-
-  // Delete event
-  deleteEvent: async (id) => {
-    const response = await apiClient.delete(`/events/${id}`);
-    return response.data;
-  }
-};
-
-export default eventService;
-7. frontend/src/components/layout/Header.jsx
+Add forms to create/edit tasks and events, plus view events
+Files to Create/Modify in Order:
+1. frontend/src/components/tasks/TaskForm.jsx
 Create new folders and file:
-javascript// Header component
+javascript// Task form component
 // NO EMOJIS
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
-function Header() {
+function TaskForm({ task, onSubmit, onCancel }) {
+  const [formData, setFormData] = useState({
+    title: task?.title || '',
+    duration: task?.duration || 30,
+    urgency: task?.urgency || 5,
+    description: task?.description || '',
+    status: task?.status || 'pending',
+    due_date: task?.due_date || '',
+    due_time: task?.due_time || ''
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(formData);
+  };
+
   return (
-    <header className="bg-blue-600 text-white shadow-lg">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          <Link to="/" className="text-xl font-bold">
-            TaskMaster
-          </Link>
-          <nav className="flex space-x-4">
-            <Link to="/" className="hover:text-blue-200">Dashboard</Link>
-            <Link to="/tasks" className="hover:text-blue-200">Tasks</Link>
-            <Link to="/schedule" className="hover:text-blue-200">Schedule</Link>
-            <Link to="/events" className="hover:text-blue-200">Events</Link>
-          </nav>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
+          Title *
+        </label>
+        <input
+          type="text"
+          name="title"
+          value={formData.title}
+          onChange={handleChange}
+          required
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
+        />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Duration (minutes) *
+          </label>
+          <input
+            type="number"
+            name="duration"
+            value={formData.duration}
+            onChange={handleChange}
+            min="1"
+            required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Urgency (1-10) *
+          </label>
+          <input
+            type="number"
+            name="urgency"
+            value={formData.urgency}
+            onChange={handleChange}
+            min="1"
+            max="10"
+            required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
+          />
         </div>
       </div>
-    </header>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
+          Description
+        </label>
+        <textarea
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
+          rows="3"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
+        />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Due Date
+          </label>
+          <input
+            type="date"
+            name="due_date"
+            value={formData.due_date}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Due Time
+          </label>
+          <input
+            type="time"
+            name="due_time"
+            value={formData.due_time}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
+          Status
+        </label>
+        <select
+          name="status"
+          value={formData.status}
+          onChange={handleChange}
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
+        >
+          <option value="pending">Pending</option>
+          <option value="in_progress">In Progress</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </div>
+
+      <div className="flex justify-end space-x-2">
+        <button
+          type="button"
+          onClick={onCancel}
+          className="px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+          {task ? 'Update' : 'Create'} Task
+        </button>
+      </div>
+    </form>
   );
 }
 
-export default Header;
-8. frontend/src/components/layout/Layout.jsx
+export default TaskForm;
+2. frontend/src/pages/NewTask.jsx
 Create new file:
-javascript// Layout wrapper component
+javascript// New task page
 // NO EMOJIS
-import { Outlet } from 'react-router-dom';
-import Header from './Header';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import TaskForm from '../components/tasks/TaskForm';
+import taskService from '../services/taskService';
 
-function Layout() {
+function NewTask() {
+  const navigate = useNavigate();
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (formData) => {
+    try {
+      setError('');
+      // Convert empty strings to null for optional fields
+      const taskData = {
+        ...formData,
+        due_date: formData.due_date || null,
+        due_time: formData.due_time || null
+      };
+      
+      await taskService.createTask(taskData);
+      navigate('/tasks');
+    } catch (err) {
+      setError(err.response?.data?.detail || 'Failed to create task');
+    }
+  };
+
+  const handleCancel = () => {
+    navigate('/tasks');
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      <main className="container mx-auto px-4 py-8">
-        <Outlet />
-      </main>
+    <div className="max-w-2xl mx-auto">
+      <h1 className="text-3xl font-bold mb-6">Create New Task</h1>
+      
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {error}
+        </div>
+      )}
+      
+      <div className="bg-white p-6 rounded-lg shadow">
+        <TaskForm onSubmit={handleSubmit} onCancel={handleCancel} />
+      </div>
     </div>
   );
 }
 
-export default Layout;
-9. frontend/src/pages/Dashboard.jsx
+export default NewTask;
+3. frontend/src/components/events/EventForm.jsx
 Create new folders and file:
-javascript// Dashboard page
+javascript// Event form component
+// NO EMOJIS
+import { useState } from 'react';
+
+function EventForm({ event, onSubmit, onCancel }) {
+  const [formData, setFormData] = useState({
+    title: event?.title || '',
+    start_time: event?.start_time || '',
+    end_time: event?.end_time || '',
+    is_blocking: event?.is_blocking !== undefined ? event.is_blocking : true,
+    location: event?.location || '',
+    description: event?.description || ''
+  });
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    // Format datetime for API
+    const eventData = {
+      ...formData,
+      start_time: formData.start_time ? `${formData.start_time}:00` : '',
+      end_time: formData.end_time ? `${formData.end_time}:00` : ''
+    };
+    
+    onSubmit(eventData);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
+          Title *
+        </label>
+        <input
+          type="text"
+          name="title"
+          value={formData.title}
+          onChange={handleChange}
+          required
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
+        />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Start Time *
+          </label>
+          <input
+            type="datetime-local"
+            name="start_time"
+            value={formData.start_time}
+            onChange={handleChange}
+            required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            End Time *
+          </label>
+          <input
+            type="datetime-local"
+            name="end_time"
+            value={formData.end_time}
+            onChange={handleChange}
+            required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
+          Location
+        </label>
+        <input
+          type="text"
+          name="location"
+          value={formData.location}
+          onChange={handleChange}
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
+          Description
+        </label>
+        <textarea
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
+          rows="3"
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
+        />
+      </div>
+
+      <div className="flex items-center">
+        <input
+          type="checkbox"
+          name="is_blocking"
+          checked={formData.is_blocking}
+          onChange={handleChange}
+          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+        />
+        <label className="ml-2 block text-sm text-gray-900">
+          Blocking Event (prevents scheduling tasks during this time)
+        </label>
+      </div>
+
+      <div className="flex justify-end space-x-2">
+        <button
+          type="button"
+          onClick={onCancel}
+          className="px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+          {event ? 'Update' : 'Create'} Event
+        </button>
+      </div>
+    </form>
+  );
+}
+
+export default EventForm;
+4. frontend/src/pages/Events.jsx
+Create new file:
+javascript// Events page
 // NO EMOJIS
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import taskService from '../services/taskService';
 import eventService from '../services/eventService';
 
-function Dashboard() {
-  const [stats, setStats] = useState({
-    totalTasks: 0,
-    pendingTasks: 0,
-    todayEvents: 0,
-    overdueTasks: 0
-  });
+function Events() {
+  const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadDashboardData();
+    loadEvents();
   }, []);
 
-  const loadDashboardData = async () => {
+  const loadEvents = async () => {
     try {
       setLoading(true);
-      
-      // Get tasks
-      const tasksData = await taskService.getTasks();
-      const pendingData = await taskService.getTasks('pending');
-      const overdueData = await taskService.getOverdueTasks();
-      
-      // Get today's events
-      const today = new Date().toISOString().split('T')[0];
-      const eventsData = await eventService.getEvents(today);
-      
-      setStats({
-        totalTasks: tasksData.total,
-        pendingTasks: pendingData.total,
-        todayEvents: eventsData.total,
-        overdueTasks: overdueData.total
-      });
+      const data = await eventService.getEvents();
+      setEvents(data.events);
     } catch (error) {
-      console.error('Failed to load dashboard data:', error);
+      console.error('Failed to load events:', error);
     } finally {
       setLoading(false);
     }
   };
 
+  const handleDelete = async (eventId) => {
+    if (window.confirm('Are you sure you want to delete this event?')) {
+      try {
+        await eventService.deleteEvent(eventId);
+        loadEvents();
+      } catch (error) {
+        console.error('Failed to delete event:', error);
+      }
+    }
+  };
+
+  const formatDateTime = (dateTimeStr) => {
+    return new Date(dateTimeStr).toLocaleString();
+  };
+
   if (loading) {
-    return <div className="text-center py-8">Loading...</div>;
+    return <div className="text-center py-8">Loading events...</div>;
   }
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h3 className="text-gray-500 text-sm">Total Tasks</h3>
-          <p className="text-2xl font-bold">{stats.totalTasks}</p>
-        </div>
-        
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h3 className="text-gray-500 text-sm">Pending Tasks</h3>
-          <p className="text-2xl font-bold text-blue-600">{stats.pendingTasks}</p>
-        </div>
-        
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h3 className="text-gray-500 text-sm">Today's Events</h3>
-          <p className="text-2xl font-bold text-green-600">{stats.todayEvents}</p>
-        </div>
-        
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h3 className="text-gray-500 text-sm">Overdue Tasks</h3>
-          <p className="text-2xl font-bold text-red-600">{stats.overdueTasks}</p>
-        </div>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Events</h1>
+        <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+          New Event
+        </button>
       </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
-          <div className="space-y-2">
-            <Link to="/tasks/new" className="block w-full text-center bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
-              Create New Task
-            </Link>
-            <Link to="/events/new" className="block w-full text-center bg-green-600 text-white py-2 rounded hover:bg-green-700">
-              Create New Event
-            </Link>
-            <Link to="/schedule" className="block w-full text-center bg-purple-600 text-white py-2 rounded hover:bg-purple-700">
-              View Today's Schedule
-            </Link>
-          </div>
+
+      {events.length === 0 ? (
+        <div className="bg-white p-8 rounded-lg shadow text-center">
+          <p className="text-gray-500">No events scheduled. Create your first event!</p>
         </div>
-        
+      ) : (
+        <div className="bg-white rounded-lg shadow">
+          <ul className="divide-y">
+            {events.map((event) => (
+              <li key={event.id} className="p-4 hover:bg-gray-50">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <h3 className="font-semibold">{event.title}</h3>
+                    <p className="text-sm text-gray-500">
+                      {formatDateTime(event.start_time)} - {formatDateTime(event.end_time)}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      Duration: {event.duration_minutes} minutes
+                      {event.is_blocking && (
+                        <span className="ml-2 text-red-600">(Blocking)</span>
+                      )}
+                    </p>
+                    {event.location && (
+                      <p className="text-sm text-gray-600">Location: {event.location}</p>
+                    )}
+                    {event.description && (
+                      <p className="text-sm text-gray-600 mt-1">{event.description}</p>
+                    )}
+                  </div>
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={() => handleDelete(event.id)}
+                      className="text-red-600 hover:text-red-800"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default Events;
+5. frontend/src/pages/NewEvent.jsx
+Create new file:
+javascript// New event page
+// NO EMOJIS
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import EventForm from '../components/events/EventForm';
+import eventService from '../services/eventService';
+
+function NewEvent() {
+  const navigate = useNavigate();
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (formData) => {
+    try {
+      setError('');
+      await eventService.createEvent(formData);
+      navigate('/events');
+    } catch (err) {
+      setError(err.response?.data?.detail || 'Failed to create event');
+    }
+  };
+
+  const handleCancel = () => {
+    navigate('/events');
+  };
+
+  return (
+    <div className="max-w-2xl mx-auto">
+      <h1 className="text-3xl font-bold mb-6">Create New Event</h1>
+      
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {error}
+        </div>
+      )}
+      
+      <div className="bg-white p-6 rounded-lg shadow">
+        <EventForm onSubmit={handleSubmit} onCancel={handleCancel} />
+      </div>
+    </div>
+  );
+}
+
+export default NewEvent;
+6. frontend/src/pages/Schedule.jsx
+Create new file:
+javascript// Schedule page
+// NO EMOJIS
+import { useState, useEffect } from 'react';
+import apiClient from '../services/api';
+
+function Schedule() {
+  const [schedule, setSchedule] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split('T')[0]
+  );
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadSchedule();
+  }, [selectedDate]);
+
+  const loadSchedule = async () => {
+    try {
+      setLoading(true);
+      const response = await apiClient.get(`/schedule/${selectedDate}`);
+      setSchedule(response.data);
+    } catch (error) {
+      console.error('Failed to load schedule:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const formatTime = (dateTimeStr) => {
+    return new Date(dateTimeStr).toLocaleTimeString([], { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    });
+  };
+
+  if (loading) {
+    return <div className="text-center py-8">Loading schedule...</div>;
+  }
+
+  return (
+    <div>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Schedule</h1>
+        <input
+          type="date"
+          value={selectedDate}
+          onChange={(e) => setSelectedDate(e.target.value)}
+          className="px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
-          <p className="text-gray-500">No recent activity</p>
+          <h2 className="text-xl font-semibold mb-4">Events</h2>
+          {schedule?.events.length === 0 ? (
+            <p className="text-gray-500">No events scheduled</p>
+          ) : (
+            <ul className="space-y-2">
+              {schedule?.events.map((event) => (
+                <li key={event.id} className="border-l-4 border-blue-500 pl-4 py-2">
+                  <div className="font-semibold">{event.title}</div>
+                  <div className="text-sm text-gray-600">
+                    {formatTime(event.start_time)} - {formatTime(event.end_time)}
+                  </div>
+                  {event.is_blocking && (
+                    <span className="text-xs text-red-600">Blocking</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h2 className="text-xl font-semibold mb-4">Free Time Slots</h2>
+          {schedule?.free_slots.length === 0 ? (
+            <p className="text-gray-500">No free time slots available</p>
+          ) : (
+            <ul className="space-y-2">
+              {schedule?.free_slots.map((slot, index) => (
+                <li key={index} className="border-l-4 border-green-500 pl-4 py-2">
+                  <div className="text-sm">
+                    {formatTime(slot.start)} - {formatTime(slot.end)}
+                  </div>
+                  <div className="text-xs text-gray-600">
+                    {slot.duration_minutes} minutes available
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
     </div>
   );
 }
 
-export default Dashboard;
-10. frontend/src/pages/Tasks.jsx
-Create new file:
-javascript// Tasks page
+export default Schedule;
+7. Update frontend/src/pages/Tasks.jsx
+Replace the New Task button to link to the form:
+javascript// Tasks page - UPDATED
 // NO EMOJIS
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import taskService from '../services/taskService';
 
 function Tasks() {
@@ -391,7 +639,7 @@ function Tasks() {
   const handleComplete = async (taskId) => {
     try {
       await taskService.completeTask(taskId);
-      loadTasks(); // Reload tasks
+      loadTasks();
     } catch (error) {
       console.error('Failed to complete task:', error);
     }
@@ -401,7 +649,7 @@ function Tasks() {
     if (window.confirm('Are you sure you want to delete this task?')) {
       try {
         await taskService.deleteTask(taskId);
-        loadTasks(); // Reload tasks
+        loadTasks();
       } catch (error) {
         console.error('Failed to delete task:', error);
       }
@@ -416,9 +664,12 @@ function Tasks() {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Tasks</h1>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        <Link 
+          to="/tasks/new" 
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
           New Task
-        </button>
+        </Link>
       </div>
 
       {tasks.length === 0 ? (
@@ -467,14 +718,30 @@ function Tasks() {
 }
 
 export default Tasks;
-11. frontend/src/App.jsx
-Replace content with:
-javascript// Main App component
+8. Update frontend/src/pages/Events.jsx button
+Update the New Event button to use Link:
+javascript// In Events.jsx, replace the button with:
+import { Link } from 'react-router-dom';
+
+// Then in the JSX, replace the button with:
+<Link 
+  to="/events/new" 
+  className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+>
+  New Event
+</Link>
+9. Update frontend/src/App.jsx
+Add all the new routes:
+javascript// Main App component - UPDATED
 // NO EMOJIS
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import Dashboard from './pages/Dashboard';
 import Tasks from './pages/Tasks';
+import NewTask from './pages/NewTask';
+import Events from './pages/Events';
+import NewEvent from './pages/NewEvent';
+import Schedule from './pages/Schedule';
 
 function App() {
   return (
@@ -483,6 +750,10 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Dashboard />} />
           <Route path="tasks" element={<Tasks />} />
+          <Route path="tasks/new" element={<NewTask />} />
+          <Route path="events" element={<Events />} />
+          <Route path="events/new" element={<NewEvent />} />
+          <Route path="schedule" element={<Schedule />} />
         </Route>
       </Routes>
     </Router>
@@ -490,53 +761,35 @@ function App() {
 }
 
 export default App;
-12. frontend/src/main.jsx
-Replace content with:
-javascript// Main entry point
-// NO EMOJIS
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
+Test the Features:
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-)
-Commands to Run:
-In a NEW terminal (keep backend running):
-
-cd frontend
-npm run dev
-
-Frontend should start on http://localhost:5173
-Test the Frontend:
-
-Open http://localhost:5173 in your browser
-You should see the TaskMaster header
-Dashboard should show stats (all zeros initially)
-Tasks page should show "No tasks yet"
-Navigation should work
+Navigate to Tasks page and click "New Task"
+Fill out the form and create a task
+Task should appear in the list
+Try completing and deleting tasks
+Navigate to Events page and click "New Event"
+Create an event with start/end times
+Check the Schedule page to see events and free time slots
 
 Git Commands to Complete:
-After frontend is working:
+After testing all features:
 
 git add .
-git commit -m "feat: frontend foundation - React setup with routing and basic pages"
-git push origin feature/frontend-setup
+git commit -m "feat: task and event management UI - forms for creating and managing tasks/events"
+git push origin feature/task-event-ui
 
 Merge to develop:
 
 git checkout develop
-git merge feature/frontend-setup
+git merge feature/task-event-ui
 git push origin develop
-git branch -d feature/frontend-setup
+git branch -d feature/task-event-ui
 
 Success Criteria:
 
-Frontend runs on port 5173
-Can navigate between Dashboard and Tasks
-API calls work (check Network tab in browser)
-Tailwind styling applied
+Can create new tasks with form
+Can create new events with form
+Can view and delete tasks/events
+Can complete tasks
+Schedule page shows events and free time slots
 No console errors

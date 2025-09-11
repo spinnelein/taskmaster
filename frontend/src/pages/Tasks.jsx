@@ -1,6 +1,7 @@
-// Tasks page
+// Tasks page - UPDATED
 // NO EMOJIS
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import taskService from '../services/taskService';
 
 function Tasks() {
@@ -26,7 +27,7 @@ function Tasks() {
   const handleComplete = async (taskId) => {
     try {
       await taskService.completeTask(taskId);
-      loadTasks(); // Reload tasks
+      loadTasks();
     } catch (error) {
       console.error('Failed to complete task:', error);
     }
@@ -36,7 +37,7 @@ function Tasks() {
     if (window.confirm('Are you sure you want to delete this task?')) {
       try {
         await taskService.deleteTask(taskId);
-        loadTasks(); // Reload tasks
+        loadTasks();
       } catch (error) {
         console.error('Failed to delete task:', error);
       }
@@ -51,9 +52,12 @@ function Tasks() {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Tasks</h1>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        <Link 
+          to="/tasks/new" 
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
           New Task
-        </button>
+        </Link>
       </div>
 
       {tasks.length === 0 ? (

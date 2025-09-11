@@ -27,7 +27,9 @@
       "Bash(npx tailwindcss init:*)",
       "Bash(npm run dev:*)",
       "Bash(pkill:*)",
-      "Bash(taskkill:*)"
+      "Bash(taskkill:*)",
+      "Bash(npm start)",
+      "Bash(npm run:*)"
     ],
     "deny": []
   }
