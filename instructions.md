@@ -1,525 +1,449 @@
-Milestone 6: Task and Event Management UI
-IMPORTANT: Clean State Setup
-Commands to run FIRST from project root:
+# Milestone 8: Schedule View with Time Pools
 
-git checkout develop
-git pull origin develop
-git branch -D feature/task-event-ui (if it exists)
-git checkout -b feature/task-event-ui
+## CRITICAL REMINDERS
+- NO EMOJIS in code or comments!
+- Use only ASCII characters
+- Keep components under 150 lines
+- Use TypeScript for type safety
+- This is a Windows environment
 
-Objective
-Add forms to create/edit tasks and events, plus view events
-Files to Create/Modify in Order:
-1. frontend/src/components/tasks/TaskForm.jsx
-Create new folders and file:
-javascript// Task form component
-// NO EMOJIS
-import { useState } from 'react';
+## Git Commands to Start
+git checkout main
+git pull origin main
+git checkout -b feature/schedule-view
 
-function TaskForm({ task, onSubmit, onCancel }) {
-  const [formData, setFormData] = useState({
-    title: task?.title || '',
-    duration: task?.duration || 30,
-    urgency: task?.urgency || 5,
-    description: task?.description || '',
-    status: task?.status || 'pending',
-    due_date: task?.due_date || '',
-    due_time: task?.due_time || ''
+## Objective
+Build a schedule view that shows events, time pools, and allows drag-and-drop task scheduling
+
+## Files to Create
+
+### File 1: frontend/src/types/schedule.ts
+export interface TimeSlot {
+  start: Date;
+  end: Date;
+  type: 'event' | 'timepool' | 'task';
+  isBlocking?: boolean;
+  duration: number; // minutes
+}
+
+export interface TimePool {
+  id: string;
+  start: Date;
+  end: Date;
+  duration: number;
+  availableMinutes: number;
+  suggestedTasks: string[]; // task IDs that would fit
+}
+
+export interface ScheduleDay {
+  date: Date;
+  events: Event[];
+  tasks: Task[];
+  timePools: TimePool[];
+  totalAvailableMinutes: number;
+}
+
+### File 2: frontend/src/utils/timeUtils.ts
+import { Event, Task, TimePool } from '../types';
+
+export const formatTime = (date: Date): string => {
+  return date.toLocaleTimeString('en-US', { 
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true 
   });
+};
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
+export const calculateDuration = (start: Date, end: Date): number => {
+  return Math.round((end.getTime() - start.getTime()) / 60000);
+};
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(formData);
-  };
+export const findTimePools = (events: Event[], dayStart: Date, dayEnd: Date): TimePool[] => {
+  const pools: TimePool[] = [];
+  const blockingEvents = events
+    .filter(e => e.is_blocking)
+    .sort((a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime());
 
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Title *
-        </label>
-        <input
-          type="text"
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          required
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
-        />
-      </div>
+  let currentTime = dayStart;
 
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Duration (minutes) *
-          </label>
-          <input
-            type="number"
-            name="duration"
-            value={formData.duration}
-            onChange={handleChange}
-            min="1"
-            required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Urgency (1-10) *
-          </label>
-          <input
-            type="number"
-            name="urgency"
-            value={formData.urgency}
-            onChange={handleChange}
-            min="1"
-            max="10"
-            required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
-          />
-        </div>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Description
-        </label>
-        <textarea
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          rows="3"
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
-        />
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Due Date
-          </label>
-          <input
-            type="date"
-            name="due_date"
-            value={formData.due_date}
-            onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Due Time
-          </label>
-          <input
-            type="time"
-            name="due_time"
-            value={formData.due_time}
-            onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
-          />
-        </div>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Status
-        </label>
-        <select
-          name="status"
-          value={formData.status}
-          onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
-        >
-          <option value="pending">Pending</option>
-          <option value="in_progress">In Progress</option>
-          <option value="completed">Completed</option>
-          <option value="cancelled">Cancelled</option>
-        </select>
-      </div>
-
-      <div className="flex justify-end space-x-2">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300"
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-        >
-          {task ? 'Update' : 'Create'} Task
-        </button>
-      </div>
-    </form>
-  );
-}
-
-export default TaskForm;
-2. frontend/src/pages/NewTask.jsx
-Create new file:
-javascript// New task page
-// NO EMOJIS
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import TaskForm from '../components/tasks/TaskForm';
-import taskService from '../services/taskService';
-
-function NewTask() {
-  const navigate = useNavigate();
-  const [error, setError] = useState('');
-
-  const handleSubmit = async (formData) => {
-    try {
-      setError('');
-      // Convert empty strings to null for optional fields
-      const taskData = {
-        ...formData,
-        due_date: formData.due_date || null,
-        due_time: formData.due_time || null
-      };
-      
-      await taskService.createTask(taskData);
-      navigate('/tasks');
-    } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to create task');
-    }
-  };
-
-  const handleCancel = () => {
-    navigate('/tasks');
-  };
-
-  return (
-    <div className="max-w-2xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Create New Task</h1>
-      
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          {error}
-        </div>
-      )}
-      
-      <div className="bg-white p-6 rounded-lg shadow">
-        <TaskForm onSubmit={handleSubmit} onCancel={handleCancel} />
-      </div>
-    </div>
-  );
-}
-
-export default NewTask;
-3. frontend/src/components/events/EventForm.jsx
-Create new folders and file:
-javascript// Event form component
-// NO EMOJIS
-import { useState } from 'react';
-
-function EventForm({ event, onSubmit, onCancel }) {
-  const [formData, setFormData] = useState({
-    title: event?.title || '',
-    start_time: event?.start_time || '',
-    end_time: event?.end_time || '',
-    is_blocking: event?.is_blocking !== undefined ? event.is_blocking : true,
-    location: event?.location || '',
-    description: event?.description || ''
-  });
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  blockingEvents.forEach(event => {
+    const eventStart = new Date(event.start_time);
     
-    // Format datetime for API
-    const eventData = {
-      ...formData,
-      start_time: formData.start_time ? `${formData.start_time}:00` : '',
-      end_time: formData.end_time ? `${formData.end_time}:00` : ''
-    };
-    
-    onSubmit(eventData);
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Title *
-        </label>
-        <input
-          type="text"
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          required
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
-        />
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Start Time *
-          </label>
-          <input
-            type="datetime-local"
-            name="start_time"
-            value={formData.start_time}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            End Time *
-          </label>
-          <input
-            type="datetime-local"
-            name="end_time"
-            value={formData.end_time}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
-          />
-        </div>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Location
-        </label>
-        <input
-          type="text"
-          name="location"
-          value={formData.location}
-          onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700">
-          Description
-        </label>
-        <textarea
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          rows="3"
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
-        />
-      </div>
-
-      <div className="flex items-center">
-        <input
-          type="checkbox"
-          name="is_blocking"
-          checked={formData.is_blocking}
-          onChange={handleChange}
-          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-        />
-        <label className="ml-2 block text-sm text-gray-900">
-          Blocking Event (prevents scheduling tasks during this time)
-        </label>
-      </div>
-
-      <div className="flex justify-end space-x-2">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300"
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-        >
-          {event ? 'Update' : 'Create'} Event
-        </button>
-      </div>
-    </form>
-  );
-}
-
-export default EventForm;
-4. frontend/src/pages/Events.jsx
-Create new file:
-javascript// Events page
-// NO EMOJIS
-import { useState, useEffect } from 'react';
-import eventService from '../services/eventService';
-
-function Events() {
-  const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    loadEvents();
-  }, []);
-
-  const loadEvents = async () => {
-    try {
-      setLoading(true);
-      const data = await eventService.getEvents();
-      setEvents(data.events);
-    } catch (error) {
-      console.error('Failed to load events:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDelete = async (eventId) => {
-    if (window.confirm('Are you sure you want to delete this event?')) {
-      try {
-        await eventService.deleteEvent(eventId);
-        loadEvents();
-      } catch (error) {
-        console.error('Failed to delete event:', error);
+    if (eventStart > currentTime) {
+      const duration = calculateDuration(currentTime, eventStart);
+      if (duration >= 15) { // Minimum 15 minutes for a time pool
+        pools.push({
+          id: `pool-${currentTime.getTime()}`,
+          start: currentTime,
+          end: eventStart,
+          duration,
+          availableMinutes: duration,
+          suggestedTasks: []
+        });
       }
     }
-  };
+    
+    currentTime = new Date(event.end_time);
+  });
 
-  const formatDateTime = (dateTimeStr) => {
-    return new Date(dateTimeStr).toLocaleString();
-  };
-
-  if (loading) {
-    return <div className="text-center py-8">Loading events...</div>;
+  // Check for time pool after last event
+  if (currentTime < dayEnd) {
+    const duration = calculateDuration(currentTime, dayEnd);
+    if (duration >= 15) {
+      pools.push({
+        id: `pool-${currentTime.getTime()}`,
+        start: currentTime,
+        end: dayEnd,
+        duration,
+        availableMinutes: duration,
+        suggestedTasks: []
+      });
+    }
   }
 
-  return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Events</h1>
-        <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-          New Event
-        </button>
-      </div>
+  return pools;
+};
 
-      {events.length === 0 ? (
-        <div className="bg-white p-8 rounded-lg shadow text-center">
-          <p className="text-gray-500">No events scheduled. Create your first event!</p>
-        </div>
-      ) : (
-        <div className="bg-white rounded-lg shadow">
-          <ul className="divide-y">
-            {events.map((event) => (
-              <li key={event.id} className="p-4 hover:bg-gray-50">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <h3 className="font-semibold">{event.title}</h3>
-                    <p className="text-sm text-gray-500">
-                      {formatDateTime(event.start_time)} - {formatDateTime(event.end_time)}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      Duration: {event.duration_minutes} minutes
-                      {event.is_blocking && (
-                        <span className="ml-2 text-red-600">(Blocking)</span>
-                      )}
-                    </p>
-                    {event.location && (
-                      <p className="text-sm text-gray-600">Location: {event.location}</p>
-                    )}
-                    {event.description && (
-                      <p className="text-sm text-gray-600 mt-1">{event.description}</p>
-                    )}
-                  </div>
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => handleDelete(event.id)}
-                      className="text-red-600 hover:text-red-800"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
-  );
+export const canTaskFitInPool = (task: Task, pool: TimePool): boolean => {
+  return task.duration <= pool.availableMinutes;
+};
+
+### File 3: frontend/src/services/scheduleService.ts
+import { api } from '../config/api';
+import { ScheduleDay, Event, Task } from '../types';
+
+export const scheduleService = {
+  async getDaySchedule(date: string): Promise<ScheduleDay> {
+    const response = await api.get(`/api/v1/schedule/day/${date}`);
+    return response.data;
+  },
+
+  async getWeekSchedule(startDate: string): Promise<ScheduleDay[]> {
+    const response = await api.get(`/api/v1/schedule/week/${startDate}`);
+    return response.data;
+  },
+
+  async scheduleTask(taskId: string, startTime: string): Promise<Task> {
+    const response = await api.post(`/api/v1/schedule/task`, {
+      task_id: taskId,
+      start_time: startTime
+    });
+    return response.data;
+  },
+
+  async autoScheduleTasks(date: string): Promise<ScheduleDay> {
+    const response = await api.post(`/api/v1/schedule/auto/${date}`);
+    return response.data;
+  }
+};
+
+### File 4: frontend/src/components/schedule/TimeAxis.tsx
+import React from 'react';
+
+interface TimeAxisProps {
+  startHour: number;
+  endHour: number;
+  hourHeight: number;
 }
 
-export default Events;
-5. frontend/src/pages/NewEvent.jsx
-Create new file:
-javascript// New event page
-// NO EMOJIS
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import EventForm from '../components/events/EventForm';
-import eventService from '../services/eventService';
+const TimeAxis: React.FC<TimeAxisProps> = ({ startHour, endHour, hourHeight }) => {
+  const hours = [];
+  for (let i = startHour; i <= endHour; i++) {
+    hours.push(i);
+  }
 
-function NewEvent() {
-  const navigate = useNavigate();
-  const [error, setError] = useState('');
-
-  const handleSubmit = async (formData) => {
-    try {
-      setError('');
-      await eventService.createEvent(formData);
-      navigate('/events');
-    } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to create event');
-    }
-  };
-
-  const handleCancel = () => {
-    navigate('/events');
+  const formatHour = (hour: number): string => {
+    if (hour === 0) return '12 AM';
+    if (hour === 12) return '12 PM';
+    if (hour < 12) return `${hour} AM`;
+    return `${hour - 12} PM`;
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Create New Event</h1>
-      
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          {error}
+    <div className="w-16 flex-shrink-0 border-r border-gray-200">
+      {hours.map(hour => (
+        <div
+          key={hour}
+          className="text-xs text-gray-500 pr-2 text-right"
+          style={{ height: `${hourHeight}px` }}
+        >
+          {formatHour(hour)}
         </div>
+      ))}
+    </div>
+  );
+};
+
+export default TimeAxis;
+
+### File 5: frontend/src/components/schedule/EventBlock.tsx
+import React from 'react';
+import { Event } from '../../types';
+import { formatTime, calculateDuration } from '../../utils/timeUtils';
+
+interface EventBlockProps {
+  event: Event;
+  hourHeight: number;
+  onEdit?: (event: Event) => void;
+}
+
+const EventBlock: React.FC<EventBlockProps> = ({ event, hourHeight, onEdit }) => {
+  const startTime = new Date(event.start_time);
+  const endTime = new Date(event.end_time);
+  const duration = calculateDuration(startTime, endTime);
+  const height = (duration / 60) * hourHeight;
+  
+  const startHour = startTime.getHours() + startTime.getMinutes() / 60;
+  const top = startHour * hourHeight;
+
+  const bgColor = event.is_blocking 
+    ? 'bg-red-100 border-red-300' 
+    : 'bg-blue-100 border-blue-300';
+
+  return (
+    <div
+      className={`absolute left-0 right-0 mx-1 p-2 rounded border ${bgColor} cursor-pointer hover:shadow-md transition-shadow`}
+      style={{
+        top: `${top}px`,
+        height: `${height}px`,
+        minHeight: '30px'
+      }}
+      onClick={() => onEdit && onEdit(event)}
+    >
+      <div className="text-xs font-semibold truncate">{event.title}</div>
+      <div className="text-xs text-gray-600">
+        {formatTime(startTime)} - {formatTime(endTime)}
+      </div>
+      {event.is_blocking && (
+        <div className="text-xs text-red-600 mt-1">Blocking</div>
       )}
-      
-      <div className="bg-white p-6 rounded-lg shadow">
-        <EventForm onSubmit={handleSubmit} onCancel={handleCancel} />
+    </div>
+  );
+};
+
+export default EventBlock;
+
+### File 6: frontend/src/components/schedule/TimePoolBlock.tsx
+import React, { useState } from 'react';
+import { TimePool } from '../../types/schedule';
+import { formatTime } from '../../utils/timeUtils';
+import { useDrop } from 'react-dnd';
+
+interface TimePoolBlockProps {
+  pool: TimePool;
+  hourHeight: number;
+  onDropTask: (taskId: string, pool: TimePool) => void;
+}
+
+const TimePoolBlock: React.FC<TimePoolBlockProps> = ({ pool, hourHeight, onDropTask }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  
+  const [{ isOver }, drop] = useDrop({
+    accept: 'task',
+    drop: (item: { id: string }) => onDropTask(item.id, pool),
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver()
+    })
+  });
+
+  const height = (pool.duration / 60) * hourHeight;
+  const startHour = pool.start.getHours() + pool.start.getMinutes() / 60;
+  const top = startHour * hourHeight;
+
+  return (
+    <div
+      ref={drop}
+      className={`absolute left-0 right-0 mx-1 rounded transition-all ${
+        isOver ? 'bg-green-200 border-green-400' : 'bg-green-50 border-green-300'
+      } border-2 border-dashed`}
+      style={{
+        top: `${top}px`,
+        height: `${height}px`,
+        minHeight: '30px'
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="p-2">
+        <div className="text-xs font-semibold text-green-700">
+          Available: {pool.duration} min
+        </div>
+        {isHovered && (
+          <div className="text-xs text-green-600 mt-1">
+            Drop task here to schedule
+          </div>
+        )}
       </div>
     </div>
   );
+};
+
+export default TimePoolBlock;
+
+### File 7: frontend/src/components/schedule/TaskQueue.tsx
+import React from 'react';
+import { Task } from '../../types';
+import { useDrag } from 'react-dnd';
+
+interface DraggableTaskProps {
+  task: Task;
 }
 
-export default NewEvent;
-6. frontend/src/pages/Schedule.jsx
-Create new file:
-javascript// Schedule page
-// NO EMOJIS
-import { useState, useEffect } from 'react';
-import apiClient from '../services/api';
+const DraggableTask: React.FC<DraggableTaskProps> = ({ task }) => {
+  const [{ isDragging }, drag] = useDrag({
+    type: 'task',
+    item: { id: task.id },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging()
+    })
+  });
 
-function Schedule() {
-  const [schedule, setSchedule] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(
-    new Date().toISOString().split('T')[0]
+  const urgencyColor = task.urgency >= 8 ? 'border-red-400' : 
+                       task.urgency >= 5 ? 'border-yellow-400' : 
+                       'border-gray-300';
+
+  return (
+    <div
+      ref={drag}
+      className={`p-3 bg-white rounded border-l-4 ${urgencyColor} shadow-sm cursor-move hover:shadow-md transition-shadow ${
+        isDragging ? 'opacity-50' : ''
+      }`}
+    >
+      <div className="font-medium text-sm">{task.title}</div>
+      <div className="flex items-center gap-3 mt-1 text-xs text-gray-600">
+        <span>{task.duration} min</span>
+        <span>Urgency: {task.urgency}</span>
+      </div>
+    </div>
   );
+};
+
+interface TaskQueueProps {
+  tasks: Task[];
+  title?: string;
+}
+
+const TaskQueue: React.FC<TaskQueueProps> = ({ tasks, title = "Unscheduled Tasks" }) => {
+  const pendingTasks = tasks.filter(t => t.completion_status === 'pending');
+  
+  return (
+    <div className="w-64 bg-gray-50 p-4 h-full overflow-y-auto">
+      <h3 className="font-semibold mb-4">{title}</h3>
+      <div className="space-y-2">
+        {pendingTasks.length === 0 ? (
+          <p className="text-gray-500 text-sm">No pending tasks</p>
+        ) : (
+          pendingTasks.map(task => (
+            <DraggableTask key={task.id} task={task} />
+          ))
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default TaskQueue;
+
+### File 8: frontend/src/components/schedule/DaySchedule.tsx
+import React from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import TimeAxis from './TimeAxis';
+import EventBlock from './EventBlock';
+import TimePoolBlock from './TimePoolBlock';
+import { Event, Task, TimePool } from '../../types';
+import { findTimePools } from '../../utils/timeUtils';
+
+interface DayScheduleProps {
+  date: Date;
+  events: Event[];
+  tasks: Task[];
+  onDropTask: (taskId: string, pool: TimePool) => void;
+  onEditEvent?: (event: Event) => void;
+}
+
+const DaySchedule: React.FC<DayScheduleProps> = ({ 
+  date, 
+  events, 
+  tasks, 
+  onDropTask,
+  onEditEvent 
+}) => {
+  const startHour = 7;
+  const endHour = 22;
+  const hourHeight = 60;
+  
+  const dayStart = new Date(date);
+  dayStart.setHours(startHour, 0, 0, 0);
+  
+  const dayEnd = new Date(date);
+  dayEnd.setHours(endHour, 0, 0, 0);
+  
+  const timePools = findTimePools(events, dayStart, dayEnd);
+  const totalHeight = (endHour - startHour + 1) * hourHeight;
+
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <div className="flex bg-white rounded-lg shadow">
+        <TimeAxis 
+          startHour={startHour} 
+          endHour={endHour} 
+          hourHeight={hourHeight} 
+        />
+        
+        <div className="flex-1 relative" style={{ height: `${totalHeight}px` }}>
+          {/* Hour lines */}
+          {Array.from({ length: endHour - startHour + 1 }).map((_, i) => (
+            <div
+              key={i}
+              className="absolute left-0 right-0 border-t border-gray-100"
+              style={{ top: `${i * hourHeight}px` }}
+            />
+          ))}
+          
+          {/* Time pools */}
+          {timePools.map(pool => (
+            <TimePoolBlock
+              key={pool.id}
+              pool={pool}
+              hourHeight={hourHeight}
+              onDropTask={onDropTask}
+            />
+          ))}
+          
+          {/* Events */}
+          {events.map(event => (
+            <EventBlock
+              key={event.id}
+              event={event}
+              hourHeight={hourHeight}
+              onEdit={onEditEvent}
+            />
+          ))}
+        </div>
+      </div>
+    </DndProvider>
+  );
+};
+
+export default DaySchedule;
+
+### File 9: frontend/src/pages/SchedulePage.tsx
+import React, { useState, useEffect } from 'react';
+import { format } from 'date-fns';
+import DaySchedule from '../components/schedule/DaySchedule';
+import TaskQueue from '../components/schedule/TaskQueue';
+import { Event, Task, TimePool } from '../types';
+import { scheduleService } from '../services/scheduleService';
+import { taskService } from '../services/taskService';
+import LoadingSpinner from '../components/common/LoadingSpinner';
+import toast from 'react-hot-toast';
+
+const SchedulePage: React.FC = () => {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [events, setEvents] = useState<Event[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [unscheduledTasks, setUnscheduledTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -529,267 +453,167 @@ function Schedule() {
   const loadSchedule = async () => {
     try {
       setLoading(true);
-      const response = await apiClient.get(`/schedule/${selectedDate}`);
-      setSchedule(response.data);
-    } catch (error) {
-      console.error('Failed to load schedule:', error);
+      const dateStr = format(selectedDate, 'yyyy-MM-dd');
+      
+      // Load both schedule and unscheduled tasks
+      const [scheduleData, allTasks] = await Promise.all([
+        scheduleService.getDaySchedule(dateStr),
+        taskService.getTasks('pending')
+      ]);
+      
+      setEvents(scheduleData.events || []);
+      setTasks(scheduleData.tasks || []);
+      setUnscheduledTasks(allTasks.filter(t => !t.scheduled_time));
+    } catch (err) {
+      console.error('Failed to load schedule:', err);
+      toast.error('Failed to load schedule');
     } finally {
       setLoading(false);
     }
   };
 
-  const formatTime = (dateTimeStr) => {
-    return new Date(dateTimeStr).toLocaleTimeString([], { 
-      hour: '2-digit', 
-      minute: '2-digit' 
-    });
+  const handleDropTask = async (taskId: string, pool: TimePool) => {
+    try {
+      const startTime = pool.start.toISOString();
+      await scheduleService.scheduleTask(taskId, startTime);
+      toast.success('Task scheduled!');
+      await loadSchedule();
+    } catch (err) {
+      toast.error('Failed to schedule task');
+    }
   };
 
-  if (loading) {
-    return <div className="text-center py-8">Loading schedule...</div>;
-  }
+  const handleAutoSchedule = async () => {
+    try {
+      const dateStr = format(selectedDate, 'yyyy-MM-dd');
+      await scheduleService.autoScheduleTasks(dateStr);
+      toast.success('Tasks auto-scheduled!');
+      await loadSchedule();
+    } catch (err) {
+      toast.error('Failed to auto-schedule');
+    }
+  };
+
+  if (loading) return <LoadingSpinner />;
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Schedule</h1>
-        <input
-          type="date"
-          value={selectedDate}
-          onChange={(e) => setSelectedDate(e.target.value)}
-          className="px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+    <div className="flex h-full">
+      <TaskQueue tasks={unscheduledTasks} />
+      
+      <div className="flex-1 p-6">
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => {
+                const newDate = new Date(selectedDate);
+                newDate.setDate(newDate.getDate() - 1);
+                setSelectedDate(newDate);
+              }}
+              className="p-2 hover:bg-gray-100 rounded"
+            >
+              Previous
+            </button>
+            
+            <h2 className="text-xl font-semibold">
+              {format(selectedDate, 'EEEE, MMMM d, yyyy')}
+            </h2>
+            
+            <button
+              onClick={() => {
+                const newDate = new Date(selectedDate);
+                newDate.setDate(newDate.getDate() + 1);
+                setSelectedDate(newDate);
+              }}
+              className="p-2 hover:bg-gray-100 rounded"
+            >
+              Next
+            </button>
+          </div>
+          
+          <button
+            onClick={handleAutoSchedule}
+            className="btn-primary"
+          >
+            Auto-Schedule Tasks
+          </button>
+        </div>
+        
+        <DaySchedule
+          date={selectedDate}
+          events={events}
+          tasks={tasks}
+          onDropTask={handleDropTask}
         />
       </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-4">Events</h2>
-          {schedule?.events.length === 0 ? (
-            <p className="text-gray-500">No events scheduled</p>
-          ) : (
-            <ul className="space-y-2">
-              {schedule?.events.map((event) => (
-                <li key={event.id} className="border-l-4 border-blue-500 pl-4 py-2">
-                  <div className="font-semibold">{event.title}</div>
-                  <div className="text-sm text-gray-600">
-                    {formatTime(event.start_time)} - {formatTime(event.end_time)}
-                  </div>
-                  {event.is_blocking && (
-                    <span className="text-xs text-red-600">Blocking</span>
-                  )}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-4">Free Time Slots</h2>
-          {schedule?.free_slots.length === 0 ? (
-            <p className="text-gray-500">No free time slots available</p>
-          ) : (
-            <ul className="space-y-2">
-              {schedule?.free_slots.map((slot, index) => (
-                <li key={index} className="border-l-4 border-green-500 pl-4 py-2">
-                  <div className="text-sm">
-                    {formatTime(slot.start)} - {formatTime(slot.end)}
-                  </div>
-                  <div className="text-xs text-gray-600">
-                    {slot.duration_minutes} minutes available
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </div>
     </div>
   );
-}
+};
 
-export default Schedule;
-7. Update frontend/src/pages/Tasks.jsx
-Replace the New Task button to link to the form:
-javascript// Tasks page - UPDATED
-// NO EMOJIS
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import taskService from '../services/taskService';
+export default SchedulePage;
 
-function Tasks() {
-  const [tasks, setTasks] = useState([]);
-  const [loading, setLoading] = useState(true);
+## Dependencies to Install
+cd frontend
+npm install react-dnd react-dnd-html5-backend
+npm install date-fns
 
-  useEffect(() => {
-    loadTasks();
-  }, []);
+## Test Requirements
+1. Schedule page loads without errors
+2. Time axis shows hours from 7 AM to 10 PM
+3. Events display as blocks (red for blocking, blue for non-blocking)
+4. Time pools show as green areas between blocking events
+5. Tasks can be dragged from queue to time pools
+6. Navigation between days works
 
-  const loadTasks = async () => {
-    try {
-      setLoading(true);
-      const data = await taskService.getTasks();
-      setTasks(data.tasks);
-    } catch (error) {
-      console.error('Failed to load tasks:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+## Success Criteria
+- Schedule displays events and time pools correctly
+- Drag and drop functionality works
+- No TypeScript errors
+- Visual distinction between blocking/non-blocking events
+- Time pools calculate correctly between events
 
-  const handleComplete = async (taskId) => {
-    try {
-      await taskService.completeTask(taskId);
-      loadTasks();
-    } catch (error) {
-      console.error('Failed to complete task:', error);
-    }
-  };
-
-  const handleDelete = async (taskId) => {
-    if (window.confirm('Are you sure you want to delete this task?')) {
-      try {
-        await taskService.deleteTask(taskId);
-        loadTasks();
-      } catch (error) {
-        console.error('Failed to delete task:', error);
-      }
-    }
-  };
-
-  if (loading) {
-    return <div className="text-center py-8">Loading tasks...</div>;
-  }
-
-  return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Tasks</h1>
-        <Link 
-          to="/tasks/new" 
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          New Task
-        </Link>
-      </div>
-
-      {tasks.length === 0 ? (
-        <div className="bg-white p-8 rounded-lg shadow text-center">
-          <p className="text-gray-500">No tasks yet. Create your first task!</p>
-        </div>
-      ) : (
-        <div className="bg-white rounded-lg shadow">
-          <ul className="divide-y">
-            {tasks.map((task) => (
-              <li key={task.id} className="p-4 hover:bg-gray-50">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <h3 className="font-semibold">{task.title}</h3>
-                    <p className="text-sm text-gray-500">
-                      Duration: {task.duration} min | Urgency: {task.urgency}/10
-                    </p>
-                    {task.description && (
-                      <p className="text-sm text-gray-600 mt-1">{task.description}</p>
-                    )}
-                  </div>
-                  <div className="flex space-x-2">
-                    {!task.is_completed && (
-                      <button
-                        onClick={() => handleComplete(task.id)}
-                        className="text-green-600 hover:text-green-800"
-                      >
-                        Complete
-                      </button>
-                    )}
-                    <button
-                      onClick={() => handleDelete(task.id)}
-                      className="text-red-600 hover:text-red-800"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
-  );
-}
-
-export default Tasks;
-8. Update frontend/src/pages/Events.jsx button
-Update the New Event button to use Link:
-javascript// In Events.jsx, replace the button with:
-import { Link } from 'react-router-dom';
-
-// Then in the JSX, replace the button with:
-<Link 
-  to="/events/new" 
-  className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
->
-  New Event
-</Link>
-9. Update frontend/src/App.jsx
-Add all the new routes:
-javascript// Main App component - UPDATED
-// NO EMOJIS
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Layout from './components/layout/Layout';
-import Dashboard from './pages/Dashboard';
-import Tasks from './pages/Tasks';
-import NewTask from './pages/NewTask';
-import Events from './pages/Events';
-import NewEvent from './pages/NewEvent';
-import Schedule from './pages/Schedule';
-
-function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="tasks" element={<Tasks />} />
-          <Route path="tasks/new" element={<NewTask />} />
-          <Route path="events" element={<Events />} />
-          <Route path="events/new" element={<NewEvent />} />
-          <Route path="schedule" element={<Schedule />} />
-        </Route>
-      </Routes>
-    </Router>
-  );
-}
-
-export default App;
-Test the Features:
-
-Navigate to Tasks page and click "New Task"
-Fill out the form and create a task
-Task should appear in the list
-Try completing and deleting tasks
-Navigate to Events page and click "New Event"
-Create an event with start/end times
-Check the Schedule page to see events and free time slots
-
-Git Commands to Complete:
-After testing all features:
-
+## Git Commands to Finish
 git add .
-git commit -m "feat: task and event management UI - forms for creating and managing tasks/events"
-git push origin feature/task-event-ui
+git commit -m "feat: add schedule view with time pools and drag-drop"
+git push origin feature/schedule-view
 
-Merge to develop:
+# Create PR and merge
+git checkout main
+git pull origin main
+git merge feature/schedule-view
+git push origin main
 
-git checkout develop
-git merge feature/task-event-ui
-git push origin develop
-git branch -d feature/task-event-ui
+# Clean up
+git branch -d feature/schedule-view
 
-Success Criteria:
+## DO NOT
+- Use emojis anywhere in the code
+- Create components over 150 lines
+- Modify backend files
+- Use class components
+- Install unnecessary packages
+Instructions for Claude Code:
+We're building a schedule view for the TaskMaster app. This is the main feature that shows events, calculates time pools between blocking events, and allows drag-and-drop task scheduling.
 
-Can create new tasks with form
-Can create new events with form
-Can view and delete tasks/events
-Can complete tasks
-Schedule page shows events and free time slots
-No console errors
+CRITICAL: 
+- NO EMOJIS! Only ASCII characters
+- Use TypeScript for all components
+- Keep each component under 150 lines
+- Use functional components with hooks
+
+Read the milestone document for complete requirements.
+
+The schedule view should:
+1. Show a daily timeline from 7 AM to 10 PM
+2. Display events as colored blocks (red=blocking, blue=non-blocking)
+3. Calculate and show green time pools between blocking events
+4. Allow dragging tasks from the left sidebar into time pools
+5. Have navigation to move between days
+
+First install the required dependencies (react-dnd and date-fns).
+Then create all 9 files in the order listed.
+Test that the schedule page loads and drag-drop works.
+
+The visual layout should clearly show the difference between:
+- Blocking events (prevent task scheduling)
+- Non-blocking events (just for reference)
+- Available time pools (where tasks can be scheduled)
