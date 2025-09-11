@@ -4,7 +4,18 @@
       "Bash(mkdir:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(git checkout:*)",
+      "Bash(git pull:*)",
+      "Bash(python:*)",
+      "Bash(venvScripts:*)",
+      "Bash(pip install:*)",
+      "Bash(.venvScriptsactivate)",
+      "Bash(venv/Scripts/activate:*)",
+      "Bash(copy .env.example .env)",
+      "Bash(cp:*)",
+      "Bash(pytest:*)",
+      "Bash(uvicorn:*)"
     ],
     "deny": []
   }
