@@ -1,722 +1,542 @@
-
+Milestone 5: Frontend Foundation
 IMPORTANT: Clean State Setup
-Commands to run FIRST:
+Commands to run FIRST from project root (NOT in backend folder):
 
+cd .. (if you're in backend folder)
 git checkout develop
 git pull origin develop
-git branch -D feature/api-routes (if it exists)
-git checkout -b feature/api-routes
+git branch -D feature/frontend-setup (if it exists)
+git checkout -b feature/frontend-setup
 
 Objective
-Create REST API endpoints with FastAPI
+Set up React frontend with routing and basic layout
+Step 1: Create React App with Vite
+Commands to run from project root:
+
+npm create vite@latest frontend -- --template react
+cd frontend
+npm install
+npm install axios react-router-dom
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+
 Files to Create in Order:
-1. backend/src/schemas/init.py
-Create empty file
-2. backend/src/schemas/base_schemas.py
-Content:
-python"""
-Base schemas for API
-NO EMOJIS
-"""
-from pydantic import BaseModel, Field
-from typing import Optional
-from datetime import datetime
+1. frontend/tailwind.config.js
+Replace content with:
+javascript/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+2. frontend/src/index.css
+Replace content with:
+css@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-class BaseResponse(BaseModel):
-    """Base response model"""
-    id: str = Field(..., description="Unique identifier")
-    created_at: datetime = Field(..., description="Creation timestamp")
-    updated_at: datetime = Field(..., description="Last update timestamp")
-    
-    class Config:
-        orm_mode = True
-        json_encoders = {
-            datetime: lambda v: v.isoformat()
-        }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+3. frontend/vite.config.js
+Replace content with:
+javascriptimport { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
-class MessageResponse(BaseModel):
-    """Simple message response"""
-    message: str
-    
-class ErrorResponse(BaseModel):
-    """Error response model"""
-    error: str
-    detail: Optional[str] = None
-3. backend/src/schemas/task_schemas.py
-Content:
-python"""
-Task schemas for API
-NO EMOJIS
-"""
-from pydantic import BaseModel, Field, validator
-from typing import Optional
-from datetime import date, time
-from .base_schemas import BaseResponse
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+      '/health': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+      '/docs': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      }
+    }
+  }
+})
+4. frontend/src/services/api.js
+Create new file:
+javascript// API service configuration
+// NO EMOJIS
+import axios from 'axios';
 
-class TaskCreate(BaseModel):
-    """Schema for creating a task"""
-    title: str = Field(..., min_length=1, max_length=255)
-    duration: int = Field(..., gt=0, description="Duration in minutes")
-    urgency: int = Field(5, ge=1, le=10)
-    description: str = Field("", max_length=1000)
-    status: str = Field("pending")
-    due_date: Optional[date] = None
-    due_time: Optional[time] = None
-    
-    @validator('status')
-    def validate_status(cls, v):
-        valid_statuses = ["pending", "in_progress", "completed", "cancelled"]
-        if v not in valid_statuses:
-            raise ValueError(f"Status must be one of {valid_statuses}")
-        return v
+const API_BASE_URL = '/api';
 
-class TaskUpdate(BaseModel):
-    """Schema for updating a task"""
-    title: Optional[str] = Field(None, min_length=1, max_length=255)
-    duration: Optional[int] = Field(None, gt=0)
-    urgency: Optional[int] = Field(None, ge=1, le=10)
-    description: Optional[str] = Field(None, max_length=1000)
-    status: Optional[str] = None
-    due_date: Optional[date] = None
-    due_time: Optional[time] = None
-    
-    @validator('status')
-    def validate_status(cls, v):
-        if v is not None:
-            valid_statuses = ["pending", "in_progress", "completed", "cancelled"]
-            if v not in valid_statuses:
-                raise ValueError(f"Status must be one of {valid_statuses}")
-        return v
+// Create axios instance
+const apiClient = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
-class TaskResponse(BaseResponse):
-    """Schema for task response"""
-    title: str
-    duration: int
-    urgency: int
-    description: str
-    status: str
-    due_date: Optional[date]
-    due_time: Optional[time]
-    is_completed: bool
-    
-    class Config:
-        orm_mode = True
+// Request interceptor
+apiClient.interceptors.request.use(
+  (config) => {
+    // Add auth token here if needed
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
-class TaskListResponse(BaseModel):
-    """Schema for list of tasks"""
-    tasks: list[TaskResponse]
-    total: int
-4. backend/src/schemas/event_schemas.py
-Content:
-python"""
-Event schemas for API
-NO EMOJIS
-"""
-from pydantic import BaseModel, Field, validator
-from typing import Optional
-from datetime import datetime
-from .base_schemas import BaseResponse
+// Response interceptor
+apiClient.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response) {
+      // Handle specific error statuses
+      if (error.response.status === 404) {
+        console.error('Resource not found');
+      } else if (error.response.status === 500) {
+        console.error('Server error');
+      }
+    }
+    return Promise.reject(error);
+  }
+);
 
-class EventCreate(BaseModel):
-    """Schema for creating an event"""
-    title: str = Field(..., min_length=1, max_length=255)
-    start_time: datetime
-    end_time: datetime
-    is_blocking: bool = Field(True)
-    location: Optional[str] = Field(None, max_length=255)
-    description: str = Field("", max_length=1000)
-    
-    @validator('end_time')
-    def validate_end_after_start(cls, v, values):
-        if 'start_time' in values and v <= values['start_time']:
-            raise ValueError('End time must be after start time')
-        return v
+export default apiClient;
+5. frontend/src/services/taskService.js
+Create new file:
+javascript// Task API service
+// NO EMOJIS
+import apiClient from './api';
 
-class EventUpdate(BaseModel):
-    """Schema for updating an event"""
-    title: Optional[str] = Field(None, min_length=1, max_length=255)
-    start_time: Optional[datetime] = None
-    end_time: Optional[datetime] = None
-    is_blocking: Optional[bool] = None
-    location: Optional[str] = Field(None, max_length=255)
-    description: Optional[str] = Field(None, max_length=1000)
-    
-    @validator('end_time')
-    def validate_end_after_start(cls, v, values):
-        if v and 'start_time' in values and values['start_time']:
-            if v <= values['start_time']:
-                raise ValueError('End time must be after start time')
-        return v
+const taskService = {
+  // Get all tasks
+  getTasks: async (status = null) => {
+    const params = status ? { status } : {};
+    const response = await apiClient.get('/tasks', { params });
+    return response.data;
+  },
 
-class EventResponse(BaseResponse):
-    """Schema for event response"""
-    title: str
-    start_time: datetime
-    end_time: datetime
-    is_blocking: bool
-    location: Optional[str]
-    description: str
-    duration_minutes: int
-    
-    class Config:
-        orm_mode = True
+  // Get single task
+  getTask: async (id) => {
+    const response = await apiClient.get(`/tasks/${id}`);
+    return response.data;
+  },
 
-class EventListResponse(BaseModel):
-    """Schema for list of events"""
-    events: list[EventResponse]
-    total: int
-5. backend/src/schemas/schedule_schemas.py
-Content:
-python"""
-Schedule schemas for API
-NO EMOJIS
-"""
-from pydantic import BaseModel, Field
-from typing import List, Optional
-from datetime import date, datetime
-from .task_schemas import TaskResponse
-from .event_schemas import EventResponse
+  // Create task
+  createTask: async (taskData) => {
+    const response = await apiClient.post('/tasks', taskData);
+    return response.data;
+  },
 
-class TimeSlotResponse(BaseModel):
-    """Schema for available time slot"""
-    start: datetime
-    end: datetime
-    duration_minutes: int
+  // Update task
+  updateTask: async (id, taskData) => {
+    const response = await apiClient.put(`/tasks/${id}`, taskData);
+    return response.data;
+  },
 
-class ScheduleResponse(BaseModel):
-    """Schema for daily schedule"""
-    date: date
-    events: List[EventResponse]
-    scheduled_tasks: List[dict]  # Contains task and start_time
-    free_slots: List[TimeSlotResponse]
+  // Delete task
+  deleteTask: async (id) => {
+    const response = await apiClient.delete(`/tasks/${id}`);
+    return response.data;
+  },
 
-class ScheduleTaskRequest(BaseModel):
-    """Request to schedule a task"""
-    task_id: str = Field(..., description="Task ID to schedule")
-    start_time: datetime = Field(..., description="When to start the task")
-6. backend/src/api/dependencies.py
-Update existing file with new content:
-python"""
-API dependencies
-NO EMOJIS
-"""
-from typing import Generator
-from sqlalchemy.orm import Session
-from ..data.database import SessionLocal
+  // Complete task
+  completeTask: async (id) => {
+    const response = await apiClient.post(`/tasks/${id}/complete`);
+    return response.data;
+  },
 
-def get_db() -> Generator[Session, None, None]:
-    """Get database session"""
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-7. backend/src/api/routes/init.py
-Create empty file
-8. backend/src/api/routes/tasks.py
-Content:
-python"""
-Task API routes
-NO EMOJIS
-"""
-from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy.orm import Session
-from typing import Optional
-from datetime import date
+  // Get overdue tasks
+  getOverdueTasks: async () => {
+    const response = await apiClient.get('/tasks/overdue');
+    return response.data;
+  }
+};
 
-from ...schemas.task_schemas import TaskCreate, TaskUpdate, TaskResponse, TaskListResponse
-from ...schemas.base_schemas import MessageResponse
-from ...data.repositories.task_repo import TaskRepository
-from ...domain.task import Task
-from ..dependencies import get_db
+export default taskService;
+6. frontend/src/services/eventService.js
+Create new file:
+javascript// Event API service
+// NO EMOJIS
+import apiClient from './api';
 
-router = APIRouter(prefix="/api/tasks", tags=["tasks"])
+const eventService = {
+  // Get all events
+  getEvents: async (date = null) => {
+    const params = date ? { date } : {};
+    const response = await apiClient.get('/events', { params });
+    return response.data;
+  },
 
-@router.get("", response_model=TaskListResponse)
-def get_tasks(
-    status: Optional[str] = Query(None, description="Filter by status"),
-    db: Session = Depends(get_db)
-):
-    """Get all tasks with optional status filter"""
-    repo = TaskRepository(db)
-    
-    if status:
-        tasks = repo.get_by_status(status)
-    else:
-        tasks = repo.get_all()
-    
-    return TaskListResponse(
-        tasks=[TaskResponse(**task.to_dict()) for task in tasks],
-        total=len(tasks)
-    )
+  // Get single event
+  getEvent: async (id) => {
+    const response = await apiClient.get(`/events/${id}`);
+    return response.data;
+  },
 
-@router.post("", response_model=TaskResponse)
-def create_task(
-    task_data: TaskCreate,
-    db: Session = Depends(get_db)
-):
-    """Create a new task"""
-    repo = TaskRepository(db)
-    
-    try:
-        task = Task(
-            title=task_data.title,
-            duration=task_data.duration,
-            urgency=task_data.urgency,
-            description=task_data.description,
-            status=task_data.status,
-            due_date=task_data.due_date,
-            due_time=task_data.due_time
-        )
-        saved_task = repo.save(task)
-        return TaskResponse(**saved_task.to_dict())
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+  // Create event
+  createEvent: async (eventData) => {
+    const response = await apiClient.post('/events', eventData);
+    return response.data;
+  },
 
-@router.get("/overdue", response_model=TaskListResponse)
-def get_overdue_tasks(db: Session = Depends(get_db)):
-    """Get all overdue tasks"""
-    repo = TaskRepository(db)
-    tasks = repo.get_overdue()
-    
-    return TaskListResponse(
-        tasks=[TaskResponse(**task.to_dict()) for task in tasks],
-        total=len(tasks)
-    )
+  // Update event
+  updateEvent: async (id, eventData) => {
+    const response = await apiClient.put(`/events/${id}`, eventData);
+    return response.data;
+  },
 
-@router.get("/{task_id}", response_model=TaskResponse)
-def get_task(
-    task_id: str,
-    db: Session = Depends(get_db)
-):
-    """Get a specific task by ID"""
-    repo = TaskRepository(db)
-    task = repo.get_by_id(task_id)
-    
-    if not task:
-        raise HTTPException(status_code=404, detail="Task not found")
-    
-    return TaskResponse(**task.to_dict())
+  // Delete event
+  deleteEvent: async (id) => {
+    const response = await apiClient.delete(`/events/${id}`);
+    return response.data;
+  }
+};
 
-@router.put("/{task_id}", response_model=TaskResponse)
-def update_task(
-    task_id: str,
-    task_data: TaskUpdate,
-    db: Session = Depends(get_db)
-):
-    """Update a task"""
-    repo = TaskRepository(db)
-    task = repo.get_by_id(task_id)
-    
-    if not task:
-        raise HTTPException(status_code=404, detail="Task not found")
-    
-    # Update fields if provided
-    update_data = task_data.dict(exclude_unset=True)
-    for field, value in update_data.items():
-        setattr(task, field, value)
-    
-    try:
-        task.validate()
-        saved_task = repo.save(task)
-        return TaskResponse(**saved_task.to_dict())
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+export default eventService;
+7. frontend/src/components/layout/Header.jsx
+Create new folders and file:
+javascript// Header component
+// NO EMOJIS
+import { Link } from 'react-router-dom';
 
-@router.delete("/{task_id}", response_model=MessageResponse)
-def delete_task(
-    task_id: str,
-    db: Session = Depends(get_db)
-):
-    """Delete a task"""
-    repo = TaskRepository(db)
-    
-    if not repo.get_by_id(task_id):
-        raise HTTPException(status_code=404, detail="Task not found")
-    
-    deleted = repo.delete(task_id)
-    
-    if deleted:
-        return MessageResponse(message="Task deleted successfully")
-    else:
-        raise HTTPException(status_code=500, detail="Failed to delete task")
+function Header() {
+  return (
+    <header className="bg-blue-600 text-white shadow-lg">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          <Link to="/" className="text-xl font-bold">
+            TaskMaster
+          </Link>
+          <nav className="flex space-x-4">
+            <Link to="/" className="hover:text-blue-200">Dashboard</Link>
+            <Link to="/tasks" className="hover:text-blue-200">Tasks</Link>
+            <Link to="/schedule" className="hover:text-blue-200">Schedule</Link>
+            <Link to="/events" className="hover:text-blue-200">Events</Link>
+          </nav>
+        </div>
+      </div>
+    </header>
+  );
+}
 
-@router.post("/{task_id}/complete", response_model=TaskResponse)
-def complete_task(
-    task_id: str,
-    db: Session = Depends(get_db)
-):
-    """Mark a task as completed"""
-    repo = TaskRepository(db)
-    task = repo.get_by_id(task_id)
-    
-    if not task:
-        raise HTTPException(status_code=404, detail="Task not found")
-    
-    try:
-        task.complete()
-        saved_task = repo.save(task)
-        return TaskResponse(**saved_task.to_dict())
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
-9. backend/src/api/routes/events.py
-Content:
-python"""
-Event API routes
-NO EMOJIS
-"""
-from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy.orm import Session
-from typing import Optional
-from datetime import date, datetime
+export default Header;
+8. frontend/src/components/layout/Layout.jsx
+Create new file:
+javascript// Layout wrapper component
+// NO EMOJIS
+import { Outlet } from 'react-router-dom';
+import Header from './Header';
 
-from ...schemas.event_schemas import EventCreate, EventUpdate, EventResponse, EventListResponse
-from ...schemas.base_schemas import MessageResponse
-from ...data.repositories.event_repo import EventRepository
-from ...domain.event import Event
-from ..dependencies import get_db
+function Layout() {
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      <main className="container mx-auto px-4 py-8">
+        <Outlet />
+      </main>
+    </div>
+  );
+}
 
-router = APIRouter(prefix="/api/events", tags=["events"])
+export default Layout;
+9. frontend/src/pages/Dashboard.jsx
+Create new folders and file:
+javascript// Dashboard page
+// NO EMOJIS
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import taskService from '../services/taskService';
+import eventService from '../services/eventService';
 
-@router.get("", response_model=EventListResponse)
-def get_events(
-    date: Optional[date] = Query(None, description="Filter by date"),
-    db: Session = Depends(get_db)
-):
-    """Get all events with optional date filter"""
-    repo = EventRepository(db)
-    
-    if date:
-        events = repo.get_by_date(date)
-    else:
-        events = repo.get_all()
-    
-    return EventListResponse(
-        events=[EventResponse(**event.to_dict()) for event in events],
-        total=len(events)
-    )
+function Dashboard() {
+  const [stats, setStats] = useState({
+    totalTasks: 0,
+    pendingTasks: 0,
+    todayEvents: 0,
+    overdueTasks: 0
+  });
+  const [loading, setLoading] = useState(true);
 
-@router.post("", response_model=EventResponse)
-def create_event(
-    event_data: EventCreate,
-    db: Session = Depends(get_db)
-):
-    """Create a new event"""
-    repo = EventRepository(db)
-    
-    try:
-        event = Event(
-            title=event_data.title,
-            start_time=event_data.start_time,
-            end_time=event_data.end_time,
-            is_blocking=event_data.is_blocking,
-            location=event_data.location,
-            description=event_data.description
-        )
-        saved_event = repo.save(event)
-        return EventResponse(**saved_event.to_dict())
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+  useEffect(() => {
+    loadDashboardData();
+  }, []);
 
-@router.get("/{event_id}", response_model=EventResponse)
-def get_event(
-    event_id: str,
-    db: Session = Depends(get_db)
-):
-    """Get a specific event by ID"""
-    repo = EventRepository(db)
-    event = repo.get_by_id(event_id)
-    
-    if not event:
-        raise HTTPException(status_code=404, detail="Event not found")
-    
-    return EventResponse(**event.to_dict())
+  const loadDashboardData = async () => {
+    try {
+      setLoading(true);
+      
+      // Get tasks
+      const tasksData = await taskService.getTasks();
+      const pendingData = await taskService.getTasks('pending');
+      const overdueData = await taskService.getOverdueTasks();
+      
+      // Get today's events
+      const today = new Date().toISOString().split('T')[0];
+      const eventsData = await eventService.getEvents(today);
+      
+      setStats({
+        totalTasks: tasksData.total,
+        pendingTasks: pendingData.total,
+        todayEvents: eventsData.total,
+        overdueTasks: overdueData.total
+      });
+    } catch (error) {
+      console.error('Failed to load dashboard data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-@router.put("/{event_id}", response_model=EventResponse)
-def update_event(
-    event_id: str,
-    event_data: EventUpdate,
-    db: Session = Depends(get_db)
-):
-    """Update an event"""
-    repo = EventRepository(db)
-    event = repo.get_by_id(event_id)
-    
-    if not event:
-        raise HTTPException(status_code=404, detail="Event not found")
-    
-    # Update fields if provided
-    update_data = event_data.dict(exclude_unset=True)
-    for field, value in update_data.items():
-        setattr(event, field, value)
-    
-    try:
-        event.validate()
-        saved_event = repo.save(event)
-        return EventResponse(**saved_event.to_dict())
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+  if (loading) {
+    return <div className="text-center py-8">Loading...</div>;
+  }
 
-@router.delete("/{event_id}", response_model=MessageResponse)
-def delete_event(
-    event_id: str,
-    db: Session = Depends(get_db)
-):
-    """Delete an event"""
-    repo = EventRepository(db)
-    
-    if not repo.get_by_id(event_id):
-        raise HTTPException(status_code=404, detail="Event not found")
-    
-    deleted = repo.delete(event_id)
-    
-    if deleted:
-        return MessageResponse(message="Event deleted successfully")
-    else:
-        raise HTTPException(status_code=500, detail="Failed to delete event")
-10. backend/src/api/routes/schedule.py
-Content:
-python"""
-Schedule API routes
-NO EMOJIS
-"""
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
-from datetime import date, datetime
+  return (
+    <div>
+      <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h3 className="text-gray-500 text-sm">Total Tasks</h3>
+          <p className="text-2xl font-bold">{stats.totalTasks}</p>
+        </div>
+        
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h3 className="text-gray-500 text-sm">Pending Tasks</h3>
+          <p className="text-2xl font-bold text-blue-600">{stats.pendingTasks}</p>
+        </div>
+        
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h3 className="text-gray-500 text-sm">Today's Events</h3>
+          <p className="text-2xl font-bold text-green-600">{stats.todayEvents}</p>
+        </div>
+        
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h3 className="text-gray-500 text-sm">Overdue Tasks</h3>
+          <p className="text-2xl font-bold text-red-600">{stats.overdueTasks}</p>
+        </div>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
+          <div className="space-y-2">
+            <Link to="/tasks/new" className="block w-full text-center bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+              Create New Task
+            </Link>
+            <Link to="/events/new" className="block w-full text-center bg-green-600 text-white py-2 rounded hover:bg-green-700">
+              Create New Event
+            </Link>
+            <Link to="/schedule" className="block w-full text-center bg-purple-600 text-white py-2 rounded hover:bg-purple-700">
+              View Today's Schedule
+            </Link>
+          </div>
+        </div>
+        
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
+          <p className="text-gray-500">No recent activity</p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
-from ...schemas.schedule_schemas import ScheduleResponse, TimeSlotResponse
-from ...data.repositories.task_repo import TaskRepository
-from ...data.repositories.event_repo import EventRepository
-from ...domain.schedule import Schedule
-from ..dependencies import get_db
+export default Dashboard;
+10. frontend/src/pages/Tasks.jsx
+Create new file:
+javascript// Tasks page
+// NO EMOJIS
+import { useState, useEffect } from 'react';
+import taskService from '../services/taskService';
 
-router = APIRouter(prefix="/api/schedule", tags=["schedule"])
+function Tasks() {
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-@router.get("/{schedule_date}", response_model=ScheduleResponse)
-def get_schedule(
-    schedule_date: date,
-    db: Session = Depends(get_db)
-):
-    """Get schedule for a specific date"""
-    task_repo = TaskRepository(db)
-    event_repo = EventRepository(db)
-    
-    # Create schedule
-    schedule = Schedule(schedule_date)
-    
-    # Add events for the day
-    events = event_repo.get_by_date(schedule_date)
-    for event in events:
-        schedule.add_event(event)
-    
-    # Get pending tasks
-    pending_tasks = task_repo.get_pending()
-    
-    # Find free time slots (for 30 minute minimum)
-    free_slots = schedule.find_free_time(30)
-    
-    return ScheduleResponse(
-        date=schedule_date,
-        events=[e.to_dict() for e in events],
-        scheduled_tasks=[],  # Will be populated when scheduling is implemented
-        free_slots=[
-            TimeSlotResponse(
-                start=slot.start,
-                end=slot.end,
-                duration_minutes=slot.duration_minutes
-            ) for slot in free_slots
-        ]
-    )
-11. Update backend/src/api/app.py
-Update the existing app.py to include routers:
-python"""
-FastAPI application setup
-NO EMOJIS
-"""
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+  useEffect(() => {
+    loadTasks();
+  }, []);
 
-from .routes import tasks, events, schedule
+  const loadTasks = async () => {
+    try {
+      setLoading(true);
+      const data = await taskService.getTasks();
+      setTasks(data.tasks);
+    } catch (error) {
+      console.error('Failed to load tasks:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-# Create FastAPI instance
-app = FastAPI(
-    title="TaskMaster API",
-    description="Task and Schedule Management API",
-    version="1.0.0"
+  const handleComplete = async (taskId) => {
+    try {
+      await taskService.completeTask(taskId);
+      loadTasks(); // Reload tasks
+    } catch (error) {
+      console.error('Failed to complete task:', error);
+    }
+  };
+
+  const handleDelete = async (taskId) => {
+    if (window.confirm('Are you sure you want to delete this task?')) {
+      try {
+        await taskService.deleteTask(taskId);
+        loadTasks(); // Reload tasks
+      } catch (error) {
+        console.error('Failed to delete task:', error);
+      }
+    }
+  };
+
+  if (loading) {
+    return <div className="text-center py-8">Loading tasks...</div>;
+  }
+
+  return (
+    <div>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Tasks</h1>
+        <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+          New Task
+        </button>
+      </div>
+
+      {tasks.length === 0 ? (
+        <div className="bg-white p-8 rounded-lg shadow text-center">
+          <p className="text-gray-500">No tasks yet. Create your first task!</p>
+        </div>
+      ) : (
+        <div className="bg-white rounded-lg shadow">
+          <ul className="divide-y">
+            {tasks.map((task) => (
+              <li key={task.id} className="p-4 hover:bg-gray-50">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <h3 className="font-semibold">{task.title}</h3>
+                    <p className="text-sm text-gray-500">
+                      Duration: {task.duration} min | Urgency: {task.urgency}/10
+                    </p>
+                    {task.description && (
+                      <p className="text-sm text-gray-600 mt-1">{task.description}</p>
+                    )}
+                  </div>
+                  <div className="flex space-x-2">
+                    {!task.is_completed && (
+                      <button
+                        onClick={() => handleComplete(task.id)}
+                        className="text-green-600 hover:text-green-800"
+                      >
+                        Complete
+                      </button>
+                    )}
+                    <button
+                      onClick={() => handleDelete(task.id)}
+                      className="text-red-600 hover:text-red-800"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default Tasks;
+11. frontend/src/App.jsx
+Replace content with:
+javascript// Main App component
+// NO EMOJIS
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Layout from './components/layout/Layout';
+import Dashboard from './pages/Dashboard';
+import Tasks from './pages/Tasks';
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="tasks" element={<Tasks />} />
+        </Route>
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;
+12. frontend/src/main.jsx
+Replace content with:
+javascript// Main entry point
+// NO EMOJIS
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App.jsx'
+import './index.css'
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
 )
+Commands to Run:
+In a NEW terminal (keep backend running):
 
-# Configure CORS for frontend
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+cd frontend
+npm run dev
 
-# Include routers
-app.include_router(tasks.router)
-app.include_router(events.router)
-app.include_router(schedule.router)
+Frontend should start on http://localhost:5173
+Test the Frontend:
 
-# Health check endpoint
-@app.get("/health")
-def health_check():
-    """Check if API is running"""
-    return {"status": "healthy", "service": "TaskMaster API"}
-
-# Root endpoint
-@app.get("/")
-def root():
-    """Root endpoint"""
-    return {"message": "TaskMaster API", "version": "1.0.0", "docs": "/docs"}
-12. backend/tests/integration/test_api_tasks.py
-Content:
-python"""
-Test Task API endpoints
-NO EMOJIS
-"""
-import pytest
-from datetime import date, time
-import sys
-import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
-
-def test_create_task(client):
-    """Test creating a task via API"""
-    response = client.post(
-        "/api/tasks",
-        json={
-            "title": "Test Task",
-            "duration": 60,
-            "urgency": 7,
-            "description": "Test description"
-        }
-    )
-    
-    assert response.status_code == 200
-    data = response.json()
-    assert data["title"] == "Test Task"
-    assert data["duration"] == 60
-    assert "id" in data
-
-def test_get_all_tasks(client):
-    """Test getting all tasks"""
-    # Create a task first
-    client.post(
-        "/api/tasks",
-        json={"title": "Task 1", "duration": 30}
-    )
-    
-    response = client.get("/api/tasks")
-    assert response.status_code == 200
-    data = response.json()
-    assert "tasks" in data
-    assert "total" in data
-
-def test_get_task_by_id(client):
-    """Test getting a specific task"""
-    # Create a task
-    create_response = client.post(
-        "/api/tasks",
-        json={"title": "Test Task", "duration": 30}
-    )
-    task_id = create_response.json()["id"]
-    
-    # Get the task
-    response = client.get(f"/api/tasks/{task_id}")
-    assert response.status_code == 200
-    data = response.json()
-    assert data["id"] == task_id
-
-def test_update_task(client):
-    """Test updating a task"""
-    # Create a task
-    create_response = client.post(
-        "/api/tasks",
-        json={"title": "Original", "duration": 30}
-    )
-    task_id = create_response.json()["id"]
-    
-    # Update the task
-    response = client.put(
-        f"/api/tasks/{task_id}",
-        json={"title": "Updated", "duration": 60}
-    )
-    
-    assert response.status_code == 200
-    data = response.json()
-    assert data["title"] == "Updated"
-    assert data["duration"] == 60
-
-def test_delete_task(client):
-    """Test deleting a task"""
-    # Create a task
-    create_response = client.post(
-        "/api/tasks",
-        json={"title": "To Delete", "duration": 30}
-    )
-    task_id = create_response.json()["id"]
-    
-    # Delete the task
-    response = client.delete(f"/api/tasks/{task_id}")
-    assert response.status_code == 200
-    
-    # Verify it's gone
-    get_response = client.get(f"/api/tasks/{task_id}")
-    assert get_response.status_code == 404
-
-def test_complete_task(client):
-    """Test completing a task"""
-    # Create a task
-    create_response = client.post(
-        "/api/tasks",
-        json={"title": "To Complete", "duration": 30}
-    )
-    task_id = create_response.json()["id"]
-    
-    # Complete the task
-    response = client.post(f"/api/tasks/{task_id}/complete")
-    assert response.status_code == 200
-    data = response.json()
-    assert data["is_completed"] == True
-    assert data["status"] == "completed"
-Windows Commands to Run:
-Navigate to backend and activate venv:
-
-cd backend
-venv\Scripts\activate
-
-Run API tests:
-
-pytest tests\integration\test_api_tasks.py -v
-
-Start the server to test manually:
-
-uvicorn src.api.app:app --reload
-
-Check the API documentation:
-
-Open browser to http://localhost:8000/docs
+Open http://localhost:5173 in your browser
+You should see the TaskMaster header
+Dashboard should show stats (all zeros initially)
+Tasks page should show "No tasks yet"
+Navigation should work
 
 Git Commands to Complete:
-After all tests pass and API works:
+After frontend is working:
 
 git add .
-git commit -m "feat: API routes - REST endpoints for tasks, events, and schedule"
-git push origin feature/api-routes
+git commit -m "feat: frontend foundation - React setup with routing and basic pages"
+git push origin feature/frontend-setup
 
 Merge to develop:
 
 git checkout develop
-git merge feature/api-routes
+git merge feature/frontend-setup
 git push origin develop
-git branch -d feature/api-routes
+git branch -d feature/frontend-setup
 
 Success Criteria:
 
-All API tests pass
-Server runs with all endpoints
-Swagger docs available at /docs
-Can create, read, update, delete tasks and events
-Schedule endpoint returns free time slots
+Frontend runs on port 5173
+Can navigate between Dashboard and Tasks
+API calls work (check Network tab in browser)
+Tailwind styling applied
+No console errors

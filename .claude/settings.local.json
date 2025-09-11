@@ -20,7 +20,14 @@
       "Bash(git branch:*)",
       "Bash(git stash:*)",
       "Bash(alembic init:*)",
-      "Bash(venv\\Scripts\\activate:*)"
+      "Bash(venv\\Scripts\\activate:*)",
+      "Bash(npm create:*)",
+      "Bash(npm install)",
+      "Bash(npm install:*)",
+      "Bash(npx tailwindcss init:*)",
+      "Bash(npm run dev:*)",
+      "Bash(pkill:*)",
+      "Bash(taskkill:*)"
     ],
     "deny": []
   }
