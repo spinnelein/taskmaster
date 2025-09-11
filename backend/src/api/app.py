@@ -1,9 +1,11 @@
 """
 FastAPI application setup
-NO EMOJIS in comments
+NO EMOJIS
 """
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+from .routes import tasks, events, schedule
 
 # Create FastAPI instance
 app = FastAPI(
@@ -21,6 +23,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Include routers
+app.include_router(tasks.router)
+app.include_router(events.router)
+app.include_router(schedule.router)
+
 # Health check endpoint
 @app.get("/health")
 def health_check():
@@ -31,4 +38,4 @@ def health_check():
 @app.get("/")
 def root():
     """Root endpoint"""
-    return {"message": "TaskMaster API", "version": "1.0.0"}
+    return {"message": "TaskMaster API", "version": "1.0.0", "docs": "/docs"}
