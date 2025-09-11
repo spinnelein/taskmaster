@@ -1,401 +1,434 @@
-Milestone 2: Domain Layer
-Git Setup - RUN THESE FIRST
+Milestone 3: Repository Layer
 IMPORTANT: Clean State Setup
 Commands to run FIRST:
 
 git checkout develop
 git pull origin develop
-git branch -D feature/domain-layer (if it exists from a previous attempt)
-git checkout -b feature/domain-layer
+git branch -D feature/repositories (if it exists)
+git checkout -b feature/repositories
 
 Objective
-Create domain models with business logic (separate from database models)
+Implement repository pattern to bridge domain models and database models
 Files to Create in Order:
-1. backend/src/domain/init.py
+1. backend/src/data/repositories/init.py
 Create empty file
-2. backend/src/domain/base.py
+2. backend/src/data/repositories/base.py
 Content:
 python"""
-Base domain entity
+Base repository with common CRUD operations
 NO EMOJIS
 """
-from typing import Dict, Any
-from datetime import datetime
+from typing import TypeVar, Generic, Optional, List, Type
+from sqlalchemy.orm import Session
+from abc import ABC, abstractmethod
 import uuid
 
-class DomainEntity:
-    """Base class for all domain entities"""
+DomainModel = TypeVar('DomainModel')
+DBModel = TypeVar('DBModel')
+
+class BaseRepository(Generic[DomainModel, DBModel], ABC):
+    """Base repository with common database operations"""
     
-    def __init__(self):
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.utcnow()
-        self.updated_at = datetime.utcnow()
+    def __init__(self, session: Session, domain_class: Type[DomainModel], db_class: Type[DBModel]):
+        self.session = session
+        self.domain_class = domain_class
+        self.db_class = db_class
     
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert entity to dictionary"""
-        return {
-            'id': self.id,
-            'created_at': self.created_at.isoformat(),
-            'updated_at': self.updated_at.isoformat()
-        }
+    @abstractmethod
+    def _to_domain(self, db_model: DBModel) -> DomainModel:
+        """Convert database model to domain model"""
+        pass
     
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]):
-        """Create entity from dictionary"""
-        raise NotImplementedError
-3. backend/src/domain/task.py
+    @abstractmethod
+    def _to_db_model(self, domain_model: DomainModel) -> DBModel:
+        """Convert domain model to database model"""
+        pass
+    
+    def get_by_id(self, entity_id: str) -> Optional[DomainModel]:
+        """Get entity by ID"""
+        db_model = self.session.query(self.db_class).filter(
+            self.db_class.id == entity_id
+        ).first()
+        
+        if db_model:
+            return self._to_domain(db_model)
+        return None
+    
+    def get_all(self) -> List[DomainModel]:
+        """Get all entities"""
+        db_models = self.session.query(self.db_class).all()
+        return [self._to_domain(model) for model in db_models]
+    
+    def save(self, entity: DomainModel) -> DomainModel:
+        """Save or update entity"""
+        db_model = self._to_db_model(entity)
+        
+        # Check if exists
+        existing = self.session.query(self.db_class).filter(
+            self.db_class.id == db_model.id
+        ).first()
+        
+        if existing:
+            # Update existing
+            for key, value in db_model.__dict__.items():
+                if not key.startswith('_'):
+                    setattr(existing, key, value)
+            db_model = existing
+        else:
+            # Add new
+            self.session.add(db_model)
+        
+        self.session.commit()
+        self.session.refresh(db_model)
+        return self._to_domain(db_model)
+    
+    def delete(self, entity_id: str) -> bool:
+        """Delete entity by ID"""
+        db_model = self.session.query(self.db_class).filter(
+            self.db_class.id == entity_id
+        ).first()
+        
+        if db_model:
+            self.session.delete(db_model)
+            self.session.commit()
+            return True
+        return False
+3. backend/src/data/repositories/task_repo.py
 Content:
 python"""
-Task domain entity
+Task repository implementation
 NO EMOJIS
 """
-from typing import Optional, Dict, Any
-from datetime import date, time, datetime
-from .base import DomainEntity
+from typing import Optional, List
+from datetime import date, datetime, time
+from sqlalchemy.orm import Session
+from sqlalchemy import and_
 
-class Task(DomainEntity):
-    """Task domain model with business logic"""
-    
-    def __init__(
-        self,
-        title: str,
-        duration: int,
-        urgency: int = 5,
-        description: str = "",
-        status: str = "pending",
-        due_date: Optional[date] = None,
-        due_time: Optional[time] = None
-    ):
-        super().__init__()
-        self.title = title
-        self.duration = duration  # minutes
-        self.urgency = urgency
-        self.description = description
-        self.status = status
-        self.due_date = due_date
-        self.due_time = due_time
-        self.is_completed = False
-        self.validate()
-    
-    def validate(self):
-        """Validate task properties"""
-        if not self.title:
-            raise ValueError("Task title cannot be empty")
-        if self.duration <= 0:
-            raise ValueError("Duration must be positive")
-        if not 1 <= self.urgency <= 10:
-            raise ValueError("Urgency must be between 1 and 10")
-        if self.status not in ["pending", "in_progress", "completed", "cancelled"]:
-            raise ValueError("Invalid status")
-    
-    def can_start(self) -> bool:
-        """Check if task can be started"""
-        return self.status == "pending" and not self.is_completed
-    
-    def start(self):
-        """Start the task"""
-        if not self.can_start():
-            raise ValueError("Task cannot be started")
-        self.status = "in_progress"
-        self.updated_at = datetime.utcnow()
-    
-    def complete(self):
-        """Mark task as completed"""
-        if self.is_completed:
-            raise ValueError("Task already completed")
-        self.status = "completed"
-        self.is_completed = True
-        self.updated_at = datetime.utcnow()
-    
-    def update_status(self, status: str):
-        """Update task status"""
-        old_status = self.status
-        self.status = status
-        self.validate()
-        self.updated_at = datetime.utcnow()
-    
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary"""
-        data = super().to_dict()
-        data.update({
-            'title': self.title,
-            'duration': self.duration,
-            'urgency': self.urgency,
-            'description': self.description,
-            'status': self.status,
-            'due_date': self.due_date.isoformat() if self.due_date else None,
-            'due_time': self.due_time.isoformat() if self.due_time else None,
-            'is_completed': self.is_completed
-        })
-        return data
-4. backend/src/domain/event.py
-Content:
-python"""
-Event domain entity
-NO EMOJIS
-"""
-from typing import Optional, Dict, Any
-from datetime import datetime, timedelta
-from .base import DomainEntity
+from .base import BaseRepository
+from ..models.task_model import TaskModel
+from ...domain.task import Task
 
-class Event(DomainEntity):
-    """Event domain model with business logic"""
+class TaskRepository(BaseRepository[Task, TaskModel]):
+    """Repository for Task entities"""
     
-    def __init__(
-        self,
-        title: str,
-        start_time: datetime,
-        end_time: datetime,
-        is_blocking: bool = True,
-        location: Optional[str] = None,
-        description: str = ""
-    ):
-        super().__init__()
-        self.title = title
-        self.start_time = start_time
-        self.end_time = end_time
-        self.is_blocking = is_blocking
-        self.location = location
-        self.description = description
-        self.validate()
+    def __init__(self, session: Session):
+        super().__init__(session, Task, TaskModel)
     
-    def validate(self):
-        """Validate event properties"""
-        if not self.title:
-            raise ValueError("Event title cannot be empty")
-        if self.end_time <= self.start_time:
-            raise ValueError("End time must be after start time")
+    def _to_domain(self, db_model: TaskModel) -> Task:
+        """Convert TaskModel to Task domain entity"""
+        task = Task(
+            title=db_model.title,
+            duration=db_model.duration,
+            urgency=db_model.urgency,
+            description=db_model.description or "",
+            status=db_model.status,
+            due_date=db_model.due_date,
+            due_time=db_model.due_time
+        )
+        # Set ID and timestamps from DB
+        task.id = db_model.id
+        task.created_at = db_model.created_at
+        task.updated_at = db_model.updated_at
+        task.is_completed = db_model.is_completed
+        return task
     
-    def duration_minutes(self) -> int:
-        """Calculate duration in minutes"""
-        delta = self.end_time - self.start_time
-        return int(delta.total_seconds() / 60)
-    
-    def blocks_time_period(self, start: datetime, end: datetime) -> bool:
-        """Check if event blocks a time period"""
-        if not self.is_blocking:
-            return False
-        # Check for overlap
-        return not (end <= self.start_time or start >= self.end_time)
-    
-    def overlaps_with(self, other: 'Event') -> bool:
-        """Check if this event overlaps with another"""
-        return not (
-            other.end_time <= self.start_time or 
-            other.start_time >= self.end_time
+    def _to_db_model(self, domain_model: Task) -> TaskModel:
+        """Convert Task domain entity to TaskModel"""
+        return TaskModel(
+            id=domain_model.id,
+            title=domain_model.title,
+            duration=domain_model.duration,
+            urgency=domain_model.urgency,
+            description=domain_model.description,
+            status=domain_model.status,
+            due_date=domain_model.due_date,
+            due_time=domain_model.due_time,
+            is_completed=domain_model.is_completed,
+            created_at=domain_model.created_at,
+            updated_at=domain_model.updated_at
         )
     
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary"""
-        data = super().to_dict()
-        data.update({
-            'title': self.title,
-            'start_time': self.start_time.isoformat(),
-            'end_time': self.end_time.isoformat(),
-            'is_blocking': self.is_blocking,
-            'location': self.location,
-            'description': self.description,
-            'duration_minutes': self.duration_minutes()
-        })
-        return data
-5. backend/src/domain/schedule.py
+    def get_by_status(self, status: str) -> List[Task]:
+        """Get tasks by status"""
+        db_models = self.session.query(TaskModel).filter(
+            TaskModel.status == status
+        ).all()
+        return [self._to_domain(model) for model in db_models]
+    
+    def get_pending(self) -> List[Task]:
+        """Get all pending tasks"""
+        return self.get_by_status("pending")
+    
+    def get_overdue(self) -> List[Task]:
+        """Get overdue tasks"""
+        now = datetime.now()
+        today = now.date()
+        current_time = now.time()
+        
+        db_models = self.session.query(TaskModel).filter(
+            and_(
+                TaskModel.status != "completed",
+                TaskModel.due_date != None,
+                TaskModel.due_date <= today
+            )
+        ).all()
+        
+        overdue_tasks = []
+        for model in db_models:
+            # Check if task is overdue
+            if model.due_date < today:
+                overdue_tasks.append(self._to_domain(model))
+            elif model.due_date == today and model.due_time and model.due_time < current_time:
+                overdue_tasks.append(self._to_domain(model))
+        
+        return overdue_tasks
+    
+    def get_by_date_range(self, start_date: date, end_date: date) -> List[Task]:
+        """Get tasks within date range"""
+        db_models = self.session.query(TaskModel).filter(
+            and_(
+                TaskModel.due_date != None,
+                TaskModel.due_date >= start_date,
+                TaskModel.due_date <= end_date
+            )
+        ).all()
+        return [self._to_domain(model) for model in db_models]
+4. backend/src/data/repositories/event_repo.py
 Content:
 python"""
-Schedule domain entity
+Event repository implementation
 NO EMOJIS
 """
-from typing import List, Dict, Any, Optional, Tuple
-from datetime import date, datetime, time, timedelta
-from .task import Task
-from .event import Event
+from typing import Optional, List
+from datetime import date, datetime
+from sqlalchemy.orm import Session
+from sqlalchemy import and_, or_
 
-class TimeSlot:
-    """Represents an available time slot"""
-    
-    def __init__(self, start: datetime, end: datetime):
-        self.start = start
-        self.end = end
-        self.duration_minutes = int((end - start).total_seconds() / 60)
+from .base import BaseRepository
+from ..models.event_model import EventModel
+from ...domain.event import Event
 
-class Schedule:
-    """Daily schedule with tasks and events"""
+class EventRepository(BaseRepository[Event, EventModel]):
+    """Repository for Event entities"""
     
-    def __init__(self, schedule_date: date):
-        self.date = schedule_date
-        self.events: List[Event] = []
-        self.scheduled_tasks: List[Tuple[Task, datetime]] = []
+    def __init__(self, session: Session):
+        super().__init__(session, Event, EventModel)
     
-    def add_event(self, event: Event):
-        """Add an event to the schedule"""
-        # Check if event is on this day
-        if event.start_time.date() != self.date:
-            raise ValueError("Event is not on this schedule date")
-        self.events.append(event)
+    def _to_domain(self, db_model: EventModel) -> Event:
+        """Convert EventModel to Event domain entity"""
+        event = Event(
+            title=db_model.title,
+            start_time=db_model.start_time,
+            end_time=db_model.end_time,
+            is_blocking=db_model.is_blocking,
+            location=db_model.location,
+            description=db_model.description or ""
+        )
+        # Set ID and timestamps from DB
+        event.id = db_model.id
+        event.created_at = db_model.created_at
+        event.updated_at = db_model.updated_at
+        return event
     
-    def add_task(self, task: Task, start_time: datetime):
-        """Schedule a task at a specific time"""
-        if start_time.date() != self.date:
-            raise ValueError("Task start time is not on this schedule date")
-        
-        end_time = start_time + timedelta(minutes=task.duration)
-        
-        # Check for conflicts
-        if self.has_conflict(start_time, end_time):
-            raise ValueError("Time slot has conflict")
-        
-        self.scheduled_tasks.append((task, start_time))
+    def _to_db_model(self, domain_model: Event) -> EventModel:
+        """Convert Event domain entity to EventModel"""
+        return EventModel(
+            id=domain_model.id,
+            title=domain_model.title,
+            start_time=domain_model.start_time,
+            end_time=domain_model.end_time,
+            is_blocking=domain_model.is_blocking,
+            location=domain_model.location,
+            description=domain_model.description,
+            created_at=domain_model.created_at,
+            updated_at=domain_model.updated_at
+        )
     
-    def has_conflict(self, start: datetime, end: datetime) -> bool:
-        """Check if time period has conflicts"""
-        # Check against blocking events
-        for event in self.events:
-            if event.blocks_time_period(start, end):
-                return True
+    def get_by_date(self, target_date: date) -> List[Event]:
+        """Get events for a specific date"""
+        start_of_day = datetime.combine(target_date, datetime.min.time())
+        end_of_day = datetime.combine(target_date, datetime.max.time())
         
-        # Check against scheduled tasks
-        for task, task_start in self.scheduled_tasks:
-            task_end = task_start + timedelta(minutes=task.duration)
-            if not (end <= task_start or start >= task_end):
-                return True
-        
-        return False
+        db_models = self.session.query(EventModel).filter(
+            and_(
+                EventModel.start_time >= start_of_day,
+                EventModel.start_time <= end_of_day
+            )
+        ).all()
+        return [self._to_domain(model) for model in db_models]
     
-    def find_free_time(self, duration_minutes: int) -> List[TimeSlot]:
-        """Find available time slots of given duration"""
-        free_slots = []
-        
-        # Define work hours (8 AM to 8 PM)
-        day_start = datetime.combine(self.date, time(8, 0))
-        day_end = datetime.combine(self.date, time(20, 0))
-        
-        # Get all busy periods
-        busy_periods = []
-        
-        # Add blocking events
-        for event in self.events:
-            if event.is_blocking:
-                busy_periods.append((event.start_time, event.end_time))
-        
-        # Add scheduled tasks
-        for task, start_time in self.scheduled_tasks:
-            end_time = start_time + timedelta(minutes=task.duration)
-            busy_periods.append((start_time, end_time))
-        
-        # Sort busy periods
-        busy_periods.sort(key=lambda x: x[0])
-        
-        # Find gaps
-        current_time = day_start
-        for busy_start, busy_end in busy_periods:
-            if busy_start > current_time:
-                gap_minutes = int((busy_start - current_time).total_seconds() / 60)
-                if gap_minutes >= duration_minutes:
-                    free_slots.append(TimeSlot(current_time, busy_start))
-            current_time = max(current_time, busy_end)
-        
-        # Check final gap
-        if current_time < day_end:
-            gap_minutes = int((day_end - current_time).total_seconds() / 60)
-            if gap_minutes >= duration_minutes:
-                free_slots.append(TimeSlot(current_time, day_end))
-        
-        return free_slots
-6. backend/tests/unit/test_domain_task.py
+    def get_blocking_events(self, start: datetime, end: datetime) -> List[Event]:
+        """Get blocking events in time range"""
+        db_models = self.session.query(EventModel).filter(
+            and_(
+                EventModel.is_blocking == True,
+                EventModel.start_time < end,
+                EventModel.end_time > start
+            )
+        ).all()
+        return [self._to_domain(model) for model in db_models]
+    
+    def get_overlapping(self, start: datetime, end: datetime) -> List[Event]:
+        """Get events that overlap with time range"""
+        db_models = self.session.query(EventModel).filter(
+            and_(
+                EventModel.start_time < end,
+                EventModel.end_time > start
+            )
+        ).all()
+        return [self._to_domain(model) for model in db_models]
+5. backend/tests/integration/init.py
+Create empty file
+6. backend/tests/integration/test_task_repo.py
 Content:
 python"""
-Test Task domain entity
+Test TaskRepository
 NO EMOJIS
 """
 import pytest
-from datetime import date, time
+from datetime import date, time, datetime, timedelta
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
 
+from src.data.repositories.task_repo import TaskRepository
 from src.domain.task import Task
 
-def test_task_creation():
-    """Test creating a task"""
+def test_save_and_get_task(db_session):
+    """Test saving and retrieving a task"""
+    repo = TaskRepository(db_session)
+    
+    # Create task
     task = Task(
         title="Test Task",
-        duration=30,
+        duration=60,
         urgency=7,
         description="Test description"
     )
     
-    assert task.title == "Test Task"
-    assert task.duration == 30
-    assert task.urgency == 7
-    assert task.status == "pending"
-    assert task.id is not None
+    # Save task
+    saved_task = repo.save(task)
+    assert saved_task.id == task.id
+    
+    # Get task by ID
+    retrieved_task = repo.get_by_id(task.id)
+    assert retrieved_task is not None
+    assert retrieved_task.title == "Test Task"
+    assert retrieved_task.duration == 60
 
-def test_task_validation():
-    """Test task validation"""
-    # Test empty title
-    with pytest.raises(ValueError):
-        Task(title="", duration=30)
+def test_get_all_tasks(db_session):
+    """Test getting all tasks"""
+    repo = TaskRepository(db_session)
     
-    # Test invalid duration
-    with pytest.raises(ValueError):
-        Task(title="Test", duration=0)
+    # Create multiple tasks
+    task1 = Task(title="Task 1", duration=30)
+    task2 = Task(title="Task 2", duration=45)
     
-    # Test invalid urgency
-    with pytest.raises(ValueError):
-        Task(title="Test", duration=30, urgency=11)
+    repo.save(task1)
+    repo.save(task2)
+    
+    # Get all tasks
+    all_tasks = repo.get_all()
+    assert len(all_tasks) >= 2
 
-def test_task_can_start():
-    """Test can_start method"""
-    task = Task(title="Test", duration=30)
-    assert task.can_start() == True
+def test_update_task(db_session):
+    """Test updating a task"""
+    repo = TaskRepository(db_session)
     
-    task.status = "in_progress"
-    assert task.can_start() == False
+    # Create and save task
+    task = Task(title="Original", duration=30)
+    repo.save(task)
+    
+    # Update task
+    task.title = "Updated"
+    task.duration = 60
+    updated_task = repo.save(task)
+    
+    # Verify update
+    retrieved = repo.get_by_id(task.id)
+    assert retrieved.title == "Updated"
+    assert retrieved.duration == 60
 
-def test_task_complete():
-    """Test completing a task"""
-    task = Task(title="Test", duration=30)
-    task.complete()
+def test_delete_task(db_session):
+    """Test deleting a task"""
+    repo = TaskRepository(db_session)
     
-    assert task.is_completed == True
-    assert task.status == "completed"
+    # Create and save task
+    task = Task(title="To Delete", duration=30)
+    repo.save(task)
     
-    # Cannot complete again
-    with pytest.raises(ValueError):
-        task.complete()
+    # Delete task
+    deleted = repo.delete(task.id)
+    assert deleted == True
+    
+    # Verify deletion
+    retrieved = repo.get_by_id(task.id)
+    assert retrieved is None
 
-def test_task_to_dict():
-    """Test converting task to dictionary"""
-    task = Task(
-        title="Test",
+def test_get_by_status(db_session):
+    """Test getting tasks by status"""
+    repo = TaskRepository(db_session)
+    
+    # Create tasks with different statuses
+    pending_task = Task(title="Pending", duration=30, status="pending")
+    completed_task = Task(title="Completed", duration=30, status="completed")
+    
+    repo.save(pending_task)
+    repo.save(completed_task)
+    
+    # Get pending tasks
+    pending_tasks = repo.get_by_status("pending")
+    assert any(t.id == pending_task.id for t in pending_tasks)
+
+def test_get_overdue_tasks(db_session):
+    """Test getting overdue tasks"""
+    repo = TaskRepository(db_session)
+    
+    # Create overdue task
+    yesterday = date.today() - timedelta(days=1)
+    overdue_task = Task(
+        title="Overdue",
         duration=30,
-        urgency=5,
-        due_date=date(2024, 1, 1)
+        due_date=yesterday
     )
     
-    data = task.to_dict()
-    assert data['title'] == "Test"
-    assert data['duration'] == 30
-    assert data['urgency'] == 5
-    assert 'id' in data
-7. backend/tests/unit/test_domain_event.py
+    # Create future task
+    tomorrow = date.today() + timedelta(days=1)
+    future_task = Task(
+        title="Future",
+        duration=30,
+        due_date=tomorrow
+    )
+    
+    repo.save(overdue_task)
+    repo.save(future_task)
+    
+    # Get overdue tasks
+    overdue = repo.get_overdue()
+    assert any(t.id == overdue_task.id for t in overdue)
+    assert not any(t.id == future_task.id for t in overdue)
+7. backend/tests/integration/test_event_repo.py
 Content:
 python"""
-Test Event domain entity
+Test EventRepository
 NO EMOJIS
 """
 import pytest
-from datetime import datetime, timedelta
+from datetime import datetime, date, timedelta
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
 
+from src.data.repositories.event_repo import EventRepository
 from src.domain.event import Event
 
-def test_event_creation():
-    """Test creating an event"""
+def test_save_and_get_event(db_session):
+    """Test saving and retrieving an event"""
+    repo = EventRepository(db_session)
+    
+    # Create event
     start = datetime.now()
     end = start + timedelta(hours=1)
-    
     event = Event(
         title="Test Event",
         start_time=start,
@@ -403,181 +436,145 @@ def test_event_creation():
         is_blocking=True
     )
     
-    assert event.title == "Test Event"
-    assert event.start_time == start
-    assert event.end_time == end
-    assert event.is_blocking == True
+    # Save event
+    saved_event = repo.save(event)
+    assert saved_event.id == event.id
+    
+    # Get event by ID
+    retrieved_event = repo.get_by_id(event.id)
+    assert retrieved_event is not None
+    assert retrieved_event.title == "Test Event"
 
-def test_event_validation():
-    """Test event validation"""
-    start = datetime.now()
+def test_get_events_by_date(db_session):
+    """Test getting events by date"""
+    repo = EventRepository(db_session)
     
-    # End time before start time
-    with pytest.raises(ValueError):
-        Event(
-            title="Test",
-            start_time=start,
-            end_time=start - timedelta(hours=1)
-        )
-
-def test_event_duration():
-    """Test duration calculation"""
-    start = datetime.now()
-    end = start + timedelta(minutes=90)
-    
-    event = Event(title="Test", start_time=start, end_time=end)
-    assert event.duration_minutes() == 90
-
-def test_event_blocks_time_period():
-    """Test blocking time period"""
-    start = datetime(2024, 1, 1, 10, 0)
-    end = datetime(2024, 1, 1, 11, 0)
-    
-    event = Event(title="Test", start_time=start, end_time=end)
-    
-    # Test overlapping period
-    assert event.blocks_time_period(
-        datetime(2024, 1, 1, 10, 30),
-        datetime(2024, 1, 1, 11, 30)
-    ) == True
-    
-    # Test non-overlapping period
-    assert event.blocks_time_period(
-        datetime(2024, 1, 1, 11, 30),
-        datetime(2024, 1, 1, 12, 30)
-    ) == False
-    
-    # Non-blocking event
-    event.is_blocking = False
-    assert event.blocks_time_period(
-        datetime(2024, 1, 1, 10, 30),
-        datetime(2024, 1, 1, 11, 30)
-    ) == False
-8. backend/tests/unit/test_domain_schedule.py
-Content:
-python"""
-Test Schedule domain entity
-NO EMOJIS
-"""
-import pytest
-from datetime import datetime, date, time, timedelta
-import sys
-import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
-
-from src.domain.schedule import Schedule
-from src.domain.task import Task
-from src.domain.event import Event
-
-def test_schedule_creation():
-    """Test creating a schedule"""
     today = date.today()
-    schedule = Schedule(today)
     
-    assert schedule.date == today
-    assert len(schedule.events) == 0
-    assert len(schedule.scheduled_tasks) == 0
-
-def test_add_event_to_schedule():
-    """Test adding an event"""
-    today = date.today()
-    schedule = Schedule(today)
-    
-    event = Event(
-        title="Meeting",
-        start_time=datetime.combine(today, time(10, 0)),
-        end_time=datetime.combine(today, time(11, 0))
+    # Create event for today
+    start = datetime.combine(today, datetime.min.time()) + timedelta(hours=10)
+    end = start + timedelta(hours=1)
+    today_event = Event(
+        title="Today Event",
+        start_time=start,
+        end_time=end
     )
     
-    schedule.add_event(event)
-    assert len(schedule.events) == 1
+    # Create event for tomorrow
+    tomorrow_start = start + timedelta(days=1)
+    tomorrow_end = tomorrow_start + timedelta(hours=1)
+    tomorrow_event = Event(
+        title="Tomorrow Event",
+        start_time=tomorrow_start,
+        end_time=tomorrow_end
+    )
+    
+    repo.save(today_event)
+    repo.save(tomorrow_event)
+    
+    # Get today's events
+    today_events = repo.get_by_date(today)
+    assert any(e.id == today_event.id for e in today_events)
+    assert not any(e.id == tomorrow_event.id for e in today_events)
 
-def test_schedule_task():
-    """Test scheduling a task"""
-    today = date.today()
-    schedule = Schedule(today)
+def test_get_blocking_events(db_session):
+    """Test getting blocking events"""
+    repo = EventRepository(db_session)
     
-    task = Task(title="Work", duration=60)
-    start_time = datetime.combine(today, time(14, 0))
+    start = datetime.now()
+    end = start + timedelta(hours=1)
     
-    schedule.add_task(task, start_time)
-    assert len(schedule.scheduled_tasks) == 1
-
-def test_schedule_conflict_detection():
-    """Test conflict detection"""
-    today = date.today()
-    schedule = Schedule(today)
-    
-    # Add blocking event
-    event = Event(
-        title="Meeting",
-        start_time=datetime.combine(today, time(10, 0)),
-        end_time=datetime.combine(today, time(11, 0)),
+    # Create blocking event
+    blocking_event = Event(
+        title="Blocking",
+        start_time=start,
+        end_time=end,
         is_blocking=True
     )
-    schedule.add_event(event)
     
-    # Try to schedule task during event
-    task = Task(title="Work", duration=30)
-    with pytest.raises(ValueError):
-        schedule.add_task(task, datetime.combine(today, time(10, 30)))
-
-def test_find_free_time():
-    """Test finding free time slots"""
-    today = date.today()
-    schedule = Schedule(today)
-    
-    # Add a blocking event
-    event = Event(
-        title="Meeting",
-        start_time=datetime.combine(today, time(10, 0)),
-        end_time=datetime.combine(today, time(11, 0)),
-        is_blocking=True
+    # Create non-blocking event
+    non_blocking_event = Event(
+        title="Non-blocking",
+        start_time=start,
+        end_time=end,
+        is_blocking=False
     )
-    schedule.add_event(event)
     
-    # Find free time for 30 minute task
-    free_slots = schedule.find_free_time(30)
+    repo.save(blocking_event)
+    repo.save(non_blocking_event)
     
-    # Should have slots before and after the meeting
-    assert len(free_slots) >= 2
+    # Get blocking events
+    blocking = repo.get_blocking_events(
+        start - timedelta(minutes=30),
+        end + timedelta(minutes=30)
+    )
+    
+    assert any(e.id == blocking_event.id for e in blocking)
+    assert not any(e.id == non_blocking_event.id for e in blocking)
+
+def test_get_overlapping_events(db_session):
+    """Test getting overlapping events"""
+    repo = EventRepository(db_session)
+    
+    base_time = datetime.now()
+    
+    # Create overlapping event
+    overlap_event = Event(
+        title="Overlapping",
+        start_time=base_time,
+        end_time=base_time + timedelta(hours=2)
+    )
+    
+    # Create non-overlapping event
+    no_overlap_event = Event(
+        title="No Overlap",
+        start_time=base_time + timedelta(hours=3),
+        end_time=base_time + timedelta(hours=4)
+    )
+    
+    repo.save(overlap_event)
+    repo.save(no_overlap_event)
+    
+    # Check for overlaps
+    overlapping = repo.get_overlapping(
+        base_time + timedelta(hours=1),
+        base_time + timedelta(hours=2, minutes=30)
+    )
+    
+    assert any(e.id == overlap_event.id for e in overlapping)
+    assert not any(e.id == no_overlap_event.id for e in overlapping)
 Windows Commands to Run:
 Navigate to backend and activate venv:
 
 cd backend
 venv\Scripts\activate
 
-Run tests for each domain entity:
+Run integration tests:
 
-pytest tests\unit\test_domain_task.py -v
-pytest tests\unit\test_domain_event.py -v
-pytest tests\unit\test_domain_schedule.py -v
+pytest tests\integration\test_task_repo.py -v
+pytest tests\integration\test_event_repo.py -v
 
-Run all domain tests:
+Run all repository tests:
 
-pytest tests\unit\test_domain_* -v
-
-Check coverage:
-
-pytest tests\unit\test_domain_* --cov=src.domain --cov-report=term-missing
+pytest tests\integration\ -v
 
 Git Commands to Complete:
 After all tests pass:
 
 git add .
-git commit -m "feat: domain layer - Task, Event, and Schedule domain models with business logic"
-git push origin feature/domain-layer
+git commit -m "feat: repository layer - implemented repository pattern for data access"
+git push origin feature/repositories
 
 Merge to develop:
 
 git checkout develop
-git merge feature/domain-layer
+git merge feature/repositories
 git push origin develop
-git branch -d feature/domain-layer
+git branch -d feature/repositories
 
 Success Criteria:
 
-All domain tests pass
-Coverage above 80%
-Business logic works correctly
-No validation errors
+All repository tests pass
+CRUD operations work
+Custom queries work
+Domain/DB model conversion works
