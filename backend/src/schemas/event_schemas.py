@@ -66,7 +66,7 @@ class EventResponse(BaseResponse):
     duration_minutes: int
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class EventListResponse(BaseModel):
     """Schema for list of events"""

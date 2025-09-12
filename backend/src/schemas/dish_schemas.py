@@ -104,7 +104,7 @@ class PrepTaskTemplateResponse(BaseResponse):
     equipment_required: Optional[List[str]]
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class RecipeResponse(BaseResponse):
     """Schema for recipe response"""
@@ -119,7 +119,7 @@ class RecipeResponse(BaseResponse):
     prep_tasks_template: List[PrepTaskTemplateResponse]
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class DishResponse(BaseResponse):
     """Schema for dish response"""
@@ -140,7 +140,7 @@ class DishResponse(BaseResponse):
     recipe: Optional[RecipeResponse]
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class DishListResponse(BaseModel):
     """Schema for list of dishes"""
@@ -159,4 +159,4 @@ class IngredientResponse(BaseResponse):
     preferred_brand: Optional[str]
     
     class Config:
-        orm_mode = True
+        from_attributes = True

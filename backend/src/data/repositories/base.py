@@ -2,78 +2,61 @@
 Base repository with common CRUD operations
 NO EMOJIS
 """
-from typing import TypeVar, Generic, Optional, List, Type
+from typing import TypeVar, Generic, Optional, List, Type, Dict, Any
 from sqlalchemy.orm import Session
-from abc import ABC, abstractmethod
 import uuid
 
-DomainModel = TypeVar('DomainModel')
-DBModel = TypeVar('DBModel')
+T = TypeVar('T')
 
-class BaseRepository(Generic[DomainModel, DBModel], ABC):
+class BaseRepository(Generic[T]):
     """Base repository with common database operations"""
     
-    def __init__(self, session: Session, domain_class: Type[DomainModel], db_class: Type[DBModel]):
-        self.session = session
-        self.domain_class = domain_class
-        self.db_class = db_class
+    def __init__(self, model: Type[T], db: Session):
+        self.model = model
+        self.db = db
     
-    @abstractmethod
-    def _to_domain(self, db_model: DBModel) -> DomainModel:
-        """Convert database model to domain model"""
-        pass
-    
-    @abstractmethod
-    def _to_db_model(self, domain_model: DomainModel) -> DBModel:
-        """Convert domain model to database model"""
-        pass
-    
-    def get_by_id(self, entity_id: str) -> Optional[DomainModel]:
+    def get(self, entity_id: str) -> Optional[T]:
         """Get entity by ID"""
-        db_model = self.session.query(self.db_class).filter(
-            self.db_class.id == entity_id
+        return self.db.query(self.model).filter(
+            self.model.id == entity_id
         ).first()
-        
-        if db_model:
-            return self._to_domain(db_model)
-        return None
     
-    def get_all(self) -> List[DomainModel]:
+    def get_all(self) -> List[T]:
         """Get all entities"""
-        db_models = self.session.query(self.db_class).all()
-        return [self._to_domain(model) for model in db_models]
+        return self.db.query(self.model).all()
     
-    def save(self, entity: DomainModel) -> DomainModel:
-        """Save or update entity"""
-        db_model = self._to_db_model(entity)
+    def create(self, data: Dict[str, Any]) -> T:
+        """Create new entity"""
+        # Generate ID if not provided
+        if 'id' not in data:
+            data['id'] = str(uuid.uuid4())
         
-        # Check if exists
-        existing = self.session.query(self.db_class).filter(
-            self.db_class.id == db_model.id
-        ).first()
+        entity = self.model(**data)
+        self.db.add(entity)
+        self.db.commit()
+        self.db.refresh(entity)
+        return entity
+    
+    def update(self, entity_id: str, data: Dict[str, Any]) -> Optional[T]:
+        """Update entity by ID"""
+        entity = self.get(entity_id)
+        if not entity:
+            return None
         
-        if existing:
-            # Update existing
-            for key, value in db_model.__dict__.items():
-                if not key.startswith('_'):
-                    setattr(existing, key, value)
-            db_model = existing
-        else:
-            # Add new
-            self.session.add(db_model)
+        for key, value in data.items():
+            if hasattr(entity, key) and value is not None:
+                setattr(entity, key, value)
         
-        self.session.commit()
-        self.session.refresh(db_model)
-        return self._to_domain(db_model)
+        self.db.commit()
+        self.db.refresh(entity)
+        return entity
     
     def delete(self, entity_id: str) -> bool:
         """Delete entity by ID"""
-        db_model = self.session.query(self.db_class).filter(
-            self.db_class.id == entity_id
-        ).first()
+        entity = self.get(entity_id)
+        if not entity:
+            return False
         
-        if db_model:
-            self.session.delete(db_model)
-            self.session.commit()
-            return True
-        return False
+        self.db.delete(entity)
+        self.db.commit()
+        return True

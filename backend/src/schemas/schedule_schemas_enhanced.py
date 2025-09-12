@@ -32,7 +32,7 @@ class TimePoolResponse(BaseResponse):
     is_flexible: bool
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class TaskScheduleCreate(BaseModel):
     """Schema for scheduling a task"""
@@ -59,20 +59,20 @@ class TaskScheduleResponse(BaseResponse):
     is_partial: bool
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class ScheduleCreate(BaseModel):
     """Schema for creating a schedule"""
     week_start_date: date
-    default_work_start: str = Field("09:00:00", regex="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$")
-    default_work_end: str = Field("17:00:00", regex="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$")
+    default_work_start: str = Field("09:00:00", pattern="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$")
+    default_work_end: str = Field("17:00:00", pattern="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$")
     min_task_duration_minutes: int = Field(15, ge=15)
 
 class ScheduleUpdate(BaseModel):
     """Schema for updating a schedule"""
     is_current: Optional[bool] = None
-    default_work_start: Optional[str] = Field(None, regex="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$")
-    default_work_end: Optional[str] = Field(None, regex="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$")
+    default_work_start: Optional[str] = Field(None, pattern="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$")
+    default_work_end: Optional[str] = Field(None, pattern="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$")
     min_task_duration_minutes: Optional[int] = Field(None, ge=15)
 
 class ScheduleResponse(BaseResponse):
@@ -88,7 +88,7 @@ class ScheduleResponse(BaseResponse):
     scheduled_tasks: List[TaskScheduleResponse]
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class ScheduleGenerateRequest(BaseModel):
     """Schema for requesting schedule generation"""
@@ -145,7 +145,7 @@ class ContextConditionResponse(BaseResponse):
     override_dates: Optional[List[Dict[str, Any]]]
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Import TaskResponse to avoid circular import
 from .task_schemas import TaskResponse

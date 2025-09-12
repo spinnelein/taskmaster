@@ -111,7 +111,7 @@ class TaskResponse(BaseResponse):
     snoozed_until: Optional[datetime]
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class TaskListResponse(BaseModel):
     """Schema for list of tasks"""

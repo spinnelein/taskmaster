@@ -13,7 +13,7 @@ class BaseResponse(BaseModel):
     updated_at: datetime = Field(..., description="Last update timestamp")
     
     class Config:
-        orm_mode = True
+        from_attributes = True
         json_encoders = {
             datetime: lambda v: v.isoformat()
         }

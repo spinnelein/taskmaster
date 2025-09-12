@@ -13,7 +13,7 @@ class InitiativeCreate(BaseModel):
     description: Optional[str] = Field(None, max_length=1000)
     frequency: str = Field("weekly")
     interval: int = Field(1, ge=1)
-    preferred_start_time: Optional[str] = Field(None, regex="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$")
+    preferred_start_time: Optional[str] = Field(None, pattern="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$")
     estimated_duration_minutes: Optional[int] = Field(None, gt=0)
     
     @validator('frequency')
@@ -30,7 +30,7 @@ class InitiativeUpdate(BaseModel):
     frequency: Optional[str] = None
     interval: Optional[int] = Field(None, ge=1)
     status: Optional[str] = None
-    preferred_start_time: Optional[str] = Field(None, regex="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$")
+    preferred_start_time: Optional[str] = Field(None, pattern="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$")
     estimated_duration_minutes: Optional[int] = Field(None, gt=0)
     
     @validator('frequency')
@@ -61,7 +61,7 @@ class InitiativeResponse(BaseResponse):
     estimated_duration_minutes: Optional[int]
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class InitiativeListResponse(BaseModel):
     """Schema for list of initiatives"""

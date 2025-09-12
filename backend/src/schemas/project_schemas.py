@@ -42,7 +42,7 @@ class ProjectPhaseResponse(BaseResponse):
     project_id: str
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class ProjectCreate(BaseModel):
     """Schema for creating a project"""
@@ -110,7 +110,7 @@ class ProjectResponse(BaseResponse):
     phases: List[ProjectPhaseResponse]
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class ProjectListResponse(BaseModel):
     """Schema for list of projects"""
@@ -150,7 +150,7 @@ class ProjectTemplateResponse(BaseResponse):
     default_settings: Optional[Dict[str, Any]]
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class ExecuteProjectTemplate(BaseModel):
     """Schema for executing a project template"""

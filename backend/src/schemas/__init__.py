@@ -5,7 +5,7 @@ NO EMOJIS
 from .base_schemas import BaseResponse
 from .task_schemas import TaskCreate, TaskUpdate, TaskResponse, TaskListResponse
 from .event_schemas import EventCreate, EventUpdate, EventResponse, EventListResponse
-from .schedule_schemas import ScheduleResponse, TimePoolResponse, WeeklyScheduleResponse
+from .schedule_schemas import ScheduleResponse
 from .schedule_schemas_enhanced import (
     ScheduleCreate, ScheduleUpdate, ScheduleGenerateRequest,
     TimePoolCreate, TaskScheduleCreate, TaskScheduleResponse,
@@ -40,7 +40,7 @@ __all__ = [
     # Events
     "EventCreate", "EventUpdate", "EventResponse", "EventListResponse",
     # Schedule
-    "ScheduleResponse", "TimePoolResponse", "WeeklyScheduleResponse",
+    "ScheduleResponse",
     "ScheduleCreate", "ScheduleUpdate", "ScheduleGenerateRequest",
     "TimePoolCreate", "TaskScheduleCreate", "TaskScheduleResponse",
     "TaskQueueRequest", "TaskQueueItem", "TaskQueueResponse",

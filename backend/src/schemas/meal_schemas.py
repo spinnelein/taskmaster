@@ -93,7 +93,7 @@ class MealResponse(BaseResponse):
     dishes: List[MealDishResponse]
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class MealListResponse(BaseModel):
     """Schema for list of meals"""
