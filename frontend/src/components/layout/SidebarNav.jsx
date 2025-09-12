@@ -117,6 +117,37 @@ function SidebarNav() {
     }
   ];
 
+  const handleRestartServer = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/api/restart', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      if (response.ok) {
+        // Show success message briefly
+        const button = document.querySelector('.restart-server-btn');
+        const originalText = button.textContent;
+        button.textContent = 'Restarting...';
+        button.disabled = true;
+        
+        // Reset button after delay
+        setTimeout(() => {
+          if (button) {
+            button.textContent = originalText;
+            button.disabled = false;
+          }
+        }, 3000);
+      } else {
+        console.error('Failed to restart server');
+      }
+    } catch (error) {
+      console.error('Error restarting server:', error);
+    }
+  };
+
   const toggleGroup = (group) => {
     setExpandedGroups(prev => 
       prev.includes(group) 
@@ -235,6 +266,21 @@ function SidebarNav() {
             {!isCollapsed && <span className="menu-label">{item.label}</span>}
           </Link>
         ))}
+        
+        {/* Development Tools */}
+        {process.env.NODE_ENV === 'development' && (
+          <button 
+            className="menu-item restart-server-btn dev-button"
+            onClick={handleRestartServer}
+            title={isCollapsed ? 'Restart Server' : ''}
+          >
+            <svg className="menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            {!isCollapsed && <span className="menu-label">Restart Server</span>}
+          </button>
+        )}
         
         {/* User Profile */}
         <div className="user-profile">
