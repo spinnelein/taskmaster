@@ -10,6 +10,8 @@ from .project_repo import ProjectRepository
 from .meal_repo import MealRepository
 from .dish_repo import DishRepository
 from .schedule_repo import ScheduleRepository
+from .schedule_repo import TimePoolRepository, TaskScheduleRepository
+from .reminder_repo import ReminderRepository, ReminderTemplateRepository
 
 __all__ = [
     "BaseRepository",
@@ -19,5 +21,9 @@ __all__ = [
     "ProjectRepository",
     "MealRepository",
     "DishRepository",
-    "ScheduleRepository"
+    "ScheduleRepository",
+    "TimePoolRepository",
+    "TaskScheduleRepository",
+    "ReminderRepository",
+    "ReminderTemplateRepository"
 ]

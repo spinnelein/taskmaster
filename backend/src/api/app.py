@@ -2,16 +2,83 @@
 FastAPI application setup
 NO EMOJIS
 """
+import os
+import asyncio
+import logging
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .routes import tasks, events, schedule, initiatives, projects, meals, dishes, schedules
+from .routes import tasks, events, schedule, initiatives, projects, meals, dishes, schedules, reminders, task_queue, schedule_generation
+from ..data.database import SessionLocal
+from ..services.telegram_service import initialize_telegram_service, get_telegram_service
+from ..workers.reminder_worker import initialize_reminder_worker, get_reminder_worker
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Handle startup and shutdown events"""
+    # Startup
+    logger.info("Starting TaskMaster API...")
+    
+    # Initialize Telegram service if token is available
+    telegram_token = os.getenv("TELEGRAM_BOT_TOKEN")
+    telegram_chat_id = os.getenv("TELEGRAM_DEFAULT_CHAT_ID")
+    
+    if telegram_token:
+        try:
+            telegram_service = initialize_telegram_service(telegram_token, telegram_chat_id)
+            await telegram_service.initialize()
+            logger.info("Telegram service initialized successfully")
+        except Exception as e:
+            logger.error(f"Failed to initialize Telegram service: {e}")
+    else:
+        logger.warning("TELEGRAM_BOT_TOKEN not found, Telegram service disabled")
+    
+    # Initialize reminder worker
+    try:
+        reminder_worker = initialize_reminder_worker(SessionLocal)
+        await reminder_worker.start()
+        logger.info("Reminder worker started successfully")
+    except Exception as e:
+        logger.error(f"Failed to start reminder worker: {e}")
+    
+    logger.info("TaskMaster API startup complete")
+    
+    yield
+    
+    # Shutdown
+    logger.info("Shutting down TaskMaster API...")
+    
+    # Stop reminder worker
+    reminder_worker = get_reminder_worker()
+    if reminder_worker:
+        try:
+            await reminder_worker.stop()
+            logger.info("Reminder worker stopped")
+        except Exception as e:
+            logger.error(f"Error stopping reminder worker: {e}")
+    
+    # Stop Telegram service
+    telegram_service = get_telegram_service()
+    if telegram_service:
+        try:
+            await telegram_service.stop()
+            logger.info("Telegram service stopped")
+        except Exception as e:
+            logger.error(f"Error stopping Telegram service: {e}")
+    
+    logger.info("TaskMaster API shutdown complete")
 
 # Create FastAPI instance
 app = FastAPI(
     title="TaskMaster API",
     description="Task and Schedule Management API",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
 # Configure CORS for frontend
@@ -32,6 +99,9 @@ app.include_router(projects.router, prefix="/api/projects", tags=["projects"])
 app.include_router(meals.router, prefix="/api/meals", tags=["meals"])
 app.include_router(dishes.router, prefix="/api/dishes", tags=["dishes"])
 app.include_router(schedules.router, prefix="/api/schedules", tags=["schedules"])
+app.include_router(reminders.router, prefix="/api/reminders", tags=["reminders"])
+app.include_router(task_queue.router, prefix="/api", tags=["task-queue"])
+app.include_router(schedule_generation.router, prefix="/api", tags=["schedule-generation"])
 
 # Health check endpoint
 @app.get("/health")

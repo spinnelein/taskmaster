@@ -326,3 +326,47 @@ class ScheduleRepository(BaseRepository[ScheduleModel]):
                             break
         
         return scheduled_tasks
+
+class TimePoolRepository(BaseRepository[TimePoolModel]):
+    """Repository for time pool data operations"""
+    
+    def __init__(self, db: Session):
+        super().__init__(TimePoolModel, db)
+    
+    def get_by_schedule(self, schedule_id: str) -> List[TimePoolModel]:
+        """Get all time pools for a schedule"""
+        return self.db.query(self.model).filter(
+            self.model.schedule_id == schedule_id
+        ).order_by(self.model.start_time).all()
+    
+    def get_available_pools(self, schedule_id: str, min_minutes: int = 15) -> List[TimePoolModel]:
+        """Get time pools with available time"""
+        return self.db.query(self.model).filter(
+            and_(
+                self.model.schedule_id == schedule_id,
+                self.model.available_minutes >= min_minutes
+            )
+        ).order_by(self.model.start_time).all()
+
+class TaskScheduleRepository(BaseRepository[TaskScheduleModel]):
+    """Repository for task schedule data operations"""
+    
+    def __init__(self, db: Session):
+        super().__init__(TaskScheduleModel, db)
+    
+    def get_by_task(self, task_id: str) -> List[TaskScheduleModel]:
+        """Get all schedule entries for a task"""
+        return self.db.query(self.model).filter(
+            self.model.task_id == task_id
+        ).order_by(self.model.scheduled_start).all()
+    
+    def get_current_task(self) -> Optional[TaskScheduleModel]:
+        """Get the task that should be worked on now"""
+        now = datetime.now()
+        return self.db.query(self.model).filter(
+            and_(
+                self.model.scheduled_start <= now,
+                self.model.scheduled_end > now,
+                self.model.is_completed == False
+            )
+        ).first()

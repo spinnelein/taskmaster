@@ -31,6 +31,12 @@ from .dish_schemas import (
     RecipeCreate, RecipeResponse, IngredientItem, InstructionStep,
     PrepTaskTemplateCreate, PrepTaskTemplateResponse, IngredientResponse
 )
+from .reminder_schemas import (
+    ReminderCreate, ReminderUpdate, ReminderResponse, ReminderListResponse,
+    ReminderTemplateCreate, ReminderTemplateUpdate, ReminderTemplateResponse,
+    ReminderTemplateListResponse, ChatIdRegister, TestReminderRequest,
+    ReminderStats, BulkReminderOperation, BulkReminderResult
+)
 
 __all__ = [
     # Base
@@ -59,5 +65,10 @@ __all__ = [
     # Dishes
     "DishCreate", "DishUpdate", "DishResponse", "DishListResponse",
     "RecipeCreate", "RecipeResponse", "IngredientItem", "InstructionStep",
-    "PrepTaskTemplateCreate", "PrepTaskTemplateResponse", "IngredientResponse"
+    "PrepTaskTemplateCreate", "PrepTaskTemplateResponse", "IngredientResponse",
+    # Reminders
+    "ReminderCreate", "ReminderUpdate", "ReminderResponse", "ReminderListResponse",
+    "ReminderTemplateCreate", "ReminderTemplateUpdate", "ReminderTemplateResponse",
+    "ReminderTemplateListResponse", "ChatIdRegister", "TestReminderRequest",
+    "ReminderStats", "BulkReminderOperation", "BulkReminderResult"
 ]

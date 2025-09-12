@@ -3,7 +3,7 @@ Recurrence pattern utility
 NO EMOJIS
 """
 from datetime import datetime, timedelta
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from dateutil.relativedelta import relativedelta
 import calendar
 
@@ -130,3 +130,34 @@ def generate_recurring_events(
         count += 1
     
     return events
+
+def calculate_next_occurrence(base_date: datetime.date, pattern: Dict[str, Any]) -> Optional[datetime.date]:
+    """Calculate the next occurrence date for a recurring task"""
+    
+    if not pattern:
+        return None
+    
+    frequency = pattern.get('frequency', 'daily')
+    interval = pattern.get('interval', 1)
+    
+    try:
+        if frequency == 'daily':
+            return base_date + timedelta(days=interval)
+        elif frequency == 'weekly':
+            return base_date + timedelta(weeks=interval)
+        elif frequency == 'monthly':
+            # Use relativedelta for proper month arithmetic
+            base_datetime = datetime.combine(base_date, datetime.min.time())
+            next_datetime = base_datetime + relativedelta(months=interval)
+            return next_datetime.date()
+        elif frequency == 'yearly':
+            base_datetime = datetime.combine(base_date, datetime.min.time())
+            next_datetime = base_datetime + relativedelta(years=interval)
+            return next_datetime.date()
+        else:
+            # Default to daily if unknown frequency
+            return base_date + timedelta(days=interval)
+            
+    except Exception:
+        # Fallback to daily increment if calculation fails
+        return base_date + timedelta(days=1)

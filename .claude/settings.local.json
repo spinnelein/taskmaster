@@ -34,7 +34,9 @@
       "Bash(alembic upgrade:*)",
       "Bash(findstr:*)",
       "Bash(alembic current:*)",
-      "Bash(alembic stamp:*)"
+      "Bash(alembic stamp:*)",
+      "Bash(sed:*)",
+      "Bash(touch:*)"
     ],
     "deny": []
   }
