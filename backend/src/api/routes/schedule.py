@@ -12,7 +12,7 @@ from ...data.repositories.event_repo import EventRepository
 from ...domain.schedule import Schedule
 from ..dependencies import get_db
 
-router = APIRouter(prefix="/api/schedule", tags=["schedule"])
+router = APIRouter(tags=["schedule"])
 
 @router.get("/{schedule_date}", response_model=ScheduleResponse)
 def get_schedule(

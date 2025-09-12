@@ -29,7 +29,8 @@
       "Bash(pkill:*)",
       "Bash(taskkill:*)",
       "Bash(npm start)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(curl:*)"
     ],
     "deny": []
   }

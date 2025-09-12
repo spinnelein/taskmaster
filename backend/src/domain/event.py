@@ -16,7 +16,10 @@ class Event(DomainEntity):
         end_time: datetime,
         is_blocking: bool = True,
         location: Optional[str] = None,
-        description: str = ""
+        description: str = "",
+        is_recurring: bool = False,
+        recurrence_pattern: Optional[Dict[str, Any]] = None,
+        recurrence_parent_id: Optional[str] = None
     ):
         super().__init__()
         self.title = title
@@ -25,6 +28,9 @@ class Event(DomainEntity):
         self.is_blocking = is_blocking
         self.location = location
         self.description = description
+        self.is_recurring = is_recurring
+        self.recurrence_pattern = recurrence_pattern
+        self.recurrence_parent_id = recurrence_parent_id
         self.validate()
     
     def validate(self):
@@ -63,6 +69,9 @@ class Event(DomainEntity):
             'is_blocking': self.is_blocking,
             'location': self.location,
             'description': self.description,
+            'is_recurring': self.is_recurring,
+            'recurrence_pattern': self.recurrence_pattern,
+            'recurrence_parent_id': self.recurrence_parent_id,
             'duration_minutes': self.duration_minutes()
         })
         return data

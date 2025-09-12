@@ -13,7 +13,7 @@ from ...data.repositories.task_repo import TaskRepository
 from ...domain.task import Task
 from ..dependencies import get_db
 
-router = APIRouter(prefix="/api/tasks", tags=["tasks"])
+router = APIRouter(tags=["tasks"])
 
 @router.get("", response_model=TaskListResponse)
 def get_tasks(

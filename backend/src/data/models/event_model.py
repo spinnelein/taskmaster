@@ -2,7 +2,7 @@
 Event database model
 NO EMOJIS
 """
-from sqlalchemy import Column, String, DateTime, Boolean
+from sqlalchemy import Column, String, DateTime, Boolean, Text, JSON
 from .base_model import BaseModel
 
 class EventModel(BaseModel):
@@ -15,3 +15,6 @@ class EventModel(BaseModel):
     is_blocking = Column(Boolean, default=True)
     location = Column(String(255), nullable=True)
     description = Column(String(1000), nullable=True)
+    is_recurring = Column(Boolean, default=False)
+    recurrence_pattern = Column(JSON, nullable=True)
+    recurrence_parent_id = Column(String(36), nullable=True)  # For recurring event instances

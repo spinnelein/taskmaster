@@ -1,534 +1,186 @@
-# Milestone 8-Simplified: Clean Schedule View
+Debugging and Fixing Event Creation Issue
+Instructions for Claude Code to Diagnose and Fix
+markdown# Event Creation Debug and Fix Mission
 
 ## CRITICAL REMINDERS
 - NO EMOJIS in code or comments!
 - Use only ASCII characters
-- Start with basic layout, then add complexity
-- Test each component before moving on
+- Keep all changes minimal and focused
+- Test each change before moving to the next
 
-## Git Commands to Start
-git checkout main
-git pull origin main
-git checkout -b feature/schedule-view-clean
+## Your Mission
+The event creation form submits but events aren't showing up in the schedule. There are dummy events visible, but newly created events don't appear. We need to find and fix the disconnect between frontend and backend.
 
-## Objective
-Create a simple, clean schedule view that actually works and looks good
+## Step 1: Analyze the Current Setup
 
-## Step 1: Basic Schedule Layout (No Drag-Drop Yet)
+First, examine these files and report what you find:
 
-### File 1: frontend/src/components/schedule/ScheduleView.css
-.schedule-container {
-  display: flex;
-  height: calc(100vh - 120px);
-  background: #f9fafb;
-  border-radius: 8px;
-  overflow: hidden;
-}
+1. **Frontend Event Creation:**
+   - Find the event creation form component (likely in frontend/src/components/events/ or frontend/src/pages/)
+   - Check how it's sending data to the backend
+   - Note the API endpoint it's calling
+   - Check the data format being sent
 
-.schedule-sidebar {
-  width: 280px;
-  background: white;
-  border-right: 1px solid #e5e7eb;
-  padding: 20px;
-  overflow-y: auto;
-}
+2. **Frontend API Client:**
+   - Check frontend/src/config/api.ts or frontend/src/services/api.ts
+   - Verify the base URL is correct (should be http://localhost:8000)
+   - Check if there are any interceptors
 
-.schedule-main {
-  flex: 1;
-  background: white;
-  overflow-y: auto;
-}
+3. **Backend Event Routes:**
+   - Check backend/app/api/routes/events.py or similar
+   - Verify the POST endpoint for creating events
+   - Check what data format it expects
+   - Verify it's saving to the database
 
-.schedule-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  border-bottom: 1px solid #e5e7eb;
-  background: white;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
+4. **Backend Database Models:**
+   - Check backend/app/models/event.py or backend/src/data/models/
+   - Verify the Event model structure
+   - Check if UUID is being generated properly
 
-.day-view {
-  display: flex;
-  position: relative;
-  min-height: 1080px; /* 18 hours * 60px */
-}
+## Step 2: Add Debug Logging
 
-.time-column {
-  width: 80px;
-  padding-top: 10px;
-}
+Add console.log/print statements to trace the flow:
 
-.time-label {
-  height: 60px;
-  padding-right: 10px;
-  text-align: right;
-  font-size: 12px;
-  color: #6b7280;
-  font-weight: 500;
-}
+### Frontend (Add to event creation form):
+```javascript
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  console.log('=== EVENT CREATION DEBUG ===');
+  console.log('Form data:', { title, startTime, endTime, isBlocking, location });
+  
+  const eventData = {
+    // ... your data formatting
+  };
+  console.log('Sending to backend:', eventData);
+  
+  try {
+    const response = await api.post('/api/v1/events', eventData);
+    console.log('Backend response:', response.data);
+    // ... rest of code
+  } catch (error) {
+    console.error('Error details:', error.response?.data || error.message);
+  }
+};
+Backend (Add to event creation endpoint):
+python@router.post("/events")
+async def create_event(event: EventCreate, db: Session = Depends(get_db)):
+    print("=== EVENT CREATION DEBUG ===")
+    print(f"Received data: {event.dict()}")
+    
+    # Create event
+    db_event = Event(**event.dict())
+    print(f"Created event object: {db_event.__dict__}")
+    
+    db.add(db_event)
+    db.commit()
+    db.refresh(db_event)
+    
+    print(f"Saved event with ID: {db_event.id}")
+    return db_event
+Step 3: Check Common Issues
+Issue 1: Date Format Mismatch
+Frontend might send dates as strings, backend expects datetime.
+Frontend Fix:
+javascriptconst eventData = {
+  title: title,
+  start_time: new Date(startTime).toISOString(),
+  end_time: new Date(endTime).toISOString(),
+  is_blocking: isBlocking,
+  location: location || null
+};
+Backend Fix (if needed):
+pythonfrom datetime import datetime
 
-.schedule-column {
-  flex: 1;
-  position: relative;
-  border-left: 1px solid #e5e7eb;
-}
+class EventCreate(BaseModel):
+    title: str
+    start_time: Union[datetime, str]  # Accept both
+    end_time: Union[datetime, str]
+    is_blocking: bool = True
+    location: Optional[str] = None
+    
+    @validator('start_time', 'end_time', pre=True)
+    def parse_datetime(cls, v):
+        if isinstance(v, str):
+            return datetime.fromisoformat(v.replace('Z', '+00:00'))
+        return v
+Issue 2: CORS Configuration
+Check backend/app/main.py:
+pythonfrom fastapi.middleware.cors import CORSMiddleware
 
-.hour-line {
-  position: absolute;
-  left: 0;
-  right: 0;
-  border-top: 1px solid #f3f4f6;
-  height: 60px;
-}
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+Issue 3: Frontend Not Refreshing
+After creating an event, ensure the schedule refreshes:
+javascript// In EventForm component
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    await api.post('/api/v1/events', eventData);
+    // Either refresh the page data or redirect
+    window.location.href = '/schedule';  // Simple redirect
+    // OR call a refresh function passed as prop
+    // onEventCreated();  
+  } catch (error) {
+    console.error('Failed to create event:', error);
+  }
+};
 
-.hour-line:nth-child(odd) {
-  background: rgba(249, 250, 251, 0.5);
-}
+// In Schedule component
+const fetchEvents = async () => {
+  const response = await api.get('/api/v1/events');
+  setEvents(response.data);
+};
 
-.event-block {
-  position: absolute;
-  left: 8px;
-  right: 8px;
-  padding: 8px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 13px;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
+useEffect(() => {
+  fetchEvents();
+}, []);  // Fetch on mount
+Step 4: Test the Fix
 
-.event-block:hover {
-  box-shadow: 0 4px 6px rgba(0,0,0,0.15);
-  transform: translateY(-1px);
-}
+Open browser DevTools (F12) → Network tab
+Try creating an event
+Check:
 
-.event-block.blocking {
-  background: #fef2f2;
-  border-left: 4px solid #ef4444;
-}
+Is the POST request being sent?
+What's the response status? (200/201 = good, 4xx/5xx = error)
+Check Console tab for debug logs
 
-.event-block.non-blocking {
-  background: #eff6ff;
-  border-left: 4px solid #3b82f6;
-}
 
-.event-title {
-  font-weight: 600;
-  margin-bottom: 2px;
-}
 
-.event-time {
-  font-size: 11px;
-  color: #6b7280;
-}
-
-.time-pool {
-  position: absolute;
-  left: 8px;
-  right: 8px;
-  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
-  border: 2px dashed #86efac;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-  cursor: pointer;
-}
-
-.time-pool:hover {
-  background: linear-gradient(135deg, #bbf7d0 0%, #86efac 100%);
-  border-color: #4ade80;
-}
-
-.time-pool-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: #15803d;
-}
-
-.task-card {
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  padding: 12px;
-  margin-bottom: 8px;
-  cursor: grab;
-  transition: all 0.2s;
-}
-
-.task-card:hover {
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  transform: translateX(4px);
-}
-
-.task-card.urgent {
-  border-left: 3px solid #ef4444;
-}
-
-.task-card.medium {
-  border-left: 3px solid #f59e0b;
-}
-
-.task-card.low {
-  border-left: 3px solid #6b7280;
-}
-
-.task-title {
-  font-weight: 500;
-  font-size: 14px;
-  margin-bottom: 4px;
-}
-
-.task-meta {
-  display: flex;
-  gap: 12px;
-  font-size: 12px;
-  color: #6b7280;
-}
-
-### File 2: frontend/src/components/schedule/SimpleScheduleView.tsx
-import React, { useState, useEffect } from 'react';
-import './ScheduleView.css';
-import { format } from 'date-fns';
-
-interface Event {
-  id: string;
-  title: string;
-  start_time: string;
-  end_time: string;
-  is_blocking: boolean;
-}
-
-interface Task {
-  id: string;
-  title: string;
-  duration: number;
-  urgency: number;
-  completion_status: string;
-}
-
-interface TimePool {
-  start: Date;
-  end: Date;
-  minutes: number;
-}
-
-const SimpleScheduleView: React.FC = () => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [events, setEvents] = useState<Event[]>([]);
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [timePools, setTimePools] = useState<TimePool[]>([]);
-
-  // Mock data for testing
-  useEffect(() => {
-    // Mock events
-    setEvents([
-      {
-        id: '1',
-        title: 'Take kids to school',
-        start_time: '2024-01-01T08:00:00',
-        end_time: '2024-01-01T08:40:00',
-        is_blocking: true
-      },
-      {
-        id: '2',
-        title: 'Team Meeting',
-        start_time: '2024-01-01T11:00:00',
-        end_time: '2024-01-01T12:00:00',
-        is_blocking: false
-      },
-      {
-        id: '3',
-        title: 'Lunch',
-        start_time: '2024-01-01T12:30:00',
-        end_time: '2024-01-01T13:30:00',
-        is_blocking: true
-      }
-    ]);
-
-    // Mock tasks
-    setTasks([
-      { id: '1', title: 'Review code PR', duration: 45, urgency: 8, completion_status: 'pending' },
-      { id: '2', title: 'Write documentation', duration: 60, urgency: 5, completion_status: 'pending' },
-      { id: '3', title: 'Email client', duration: 15, urgency: 9, completion_status: 'pending' }
-    ]);
-  }, []);
-
-  // Calculate time pools
-  useEffect(() => {
-    const pools: TimePool[] = [];
-    const dayStart = new Date(selectedDate);
-    dayStart.setHours(7, 0, 0, 0);
-    const dayEnd = new Date(selectedDate);
-    dayEnd.setHours(22, 0, 0, 0);
-
-    const blockingEvents = events
-      .filter(e => e.is_blocking)
-      .sort((a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime());
-
-    let currentTime = dayStart;
-
-    blockingEvents.forEach(event => {
-      const eventStart = new Date(event.start_time);
-      eventStart.setFullYear(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
-      
-      if (eventStart > currentTime) {
-        const minutes = Math.round((eventStart.getTime() - currentTime.getTime()) / 60000);
-        if (minutes >= 30) {
-          pools.push({ start: new Date(currentTime), end: eventStart, minutes });
-        }
-      }
-      
-      const eventEnd = new Date(event.end_time);
-      eventEnd.setFullYear(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
-      currentTime = eventEnd;
-    });
-
-    // Add pool after last event
-    if (currentTime < dayEnd) {
-      const minutes = Math.round((dayEnd.getTime() - currentTime.getTime()) / 60000);
-      if (minutes >= 30) {
-        pools.push({ start: new Date(currentTime), end: dayEnd, minutes });
-      }
+Step 5: Verify Database Persistence
+Add a GET endpoint to list all events and test it:
+python@router.get("/events/debug")
+async def debug_events(db: Session = Depends(get_db)):
+    events = db.query(Event).all()
+    return {
+        "count": len(events),
+        "events": [{"id": e.id, "title": e.title} for e in events]
     }
+Then visit: http://localhost:8000/api/v1/events/debug
+Expected Outcome
+After these fixes:
 
-    setTimePools(pools);
-  }, [events, selectedDate]);
+Creating an event should show success in console
+The event should appear in the database
+Navigating to schedule should show the new event
+No errors in browser console or network tab
 
-  const formatTime = (date: Date): string => {
-    return format(date, 'h:mm a');
-  };
+Files to Modify (in order):
 
-  const getEventStyle = (event: Event) => {
-    const start = new Date(event.start_time);
-    const end = new Date(event.end_time);
-    const startMinutes = start.getHours() * 60 + start.getMinutes();
-    const endMinutes = end.getHours() * 60 + end.getMinutes();
-    const duration = endMinutes - startMinutes;
-    
-    // Assuming day starts at 7 AM
-    const top = (startMinutes - 7 * 60) * (60 / 60); // 60px per hour
-    const height = duration * (60 / 60);
-    
-    return {
-      top: `${top}px`,
-      height: `${height}px`
-    };
-  };
+Frontend event creation form - add debugging
+Backend event creation endpoint - add debugging
+Frontend API client - ensure correct configuration
+Backend CORS settings - ensure frontend can connect
+Frontend schedule page - ensure it fetches fresh data
 
-  const getPoolStyle = (pool: TimePool) => {
-    const startMinutes = pool.start.getHours() * 60 + pool.start.getMinutes();
-    const top = (startMinutes - 7 * 60) * (60 / 60);
-    const height = pool.minutes * (60 / 60);
-    
-    return {
-      top: `${top}px`,
-      height: `${height}px`
-    };
-  };
+DO NOT:
 
-  const hours = Array.from({ length: 16 }, (_, i) => i + 7); // 7 AM to 10 PM
+Delete any existing code without understanding it
+Make large structural changes
+Add complex new dependencies
+Use emojis in code or comments
 
-  const getTaskUrgencyClass = (urgency: number): string => {
-    if (urgency >= 8) return 'urgent';
-    if (urgency >= 5) return 'medium';
-    return 'low';
-  };
-
-  return (
-    <div className="schedule-container">
-      {/* Sidebar with tasks */}
-      <div className="schedule-sidebar">
-        <h3 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '16px' }}>
-          Unscheduled Tasks
-        </h3>
-        {tasks.filter(t => t.completion_status === 'pending').map(task => (
-          <div key={task.id} className={`task-card ${getTaskUrgencyClass(task.urgency)}`}>
-            <div className="task-title">{task.title}</div>
-            <div className="task-meta">
-              <span>{task.duration} min</span>
-              <span>Priority: {task.urgency}/10</span>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Main schedule area */}
-      <div className="schedule-main">
-        <div className="schedule-header">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <button 
-              onClick={() => {
-                const newDate = new Date(selectedDate);
-                newDate.setDate(newDate.getDate() - 1);
-                setSelectedDate(newDate);
-              }}
-              style={{
-                padding: '8px 16px',
-                border: '1px solid #e5e7eb',
-                borderRadius: '6px',
-                background: 'white',
-                cursor: 'pointer'
-              }}
-            >
-              Previous
-            </button>
-            
-            <h2 style={{ fontSize: '18px', fontWeight: 600 }}>
-              {format(selectedDate, 'EEEE, MMMM d, yyyy')}
-            </h2>
-            
-            <button 
-              onClick={() => {
-                const newDate = new Date(selectedDate);
-                newDate.setDate(newDate.getDate() + 1);
-                setSelectedDate(newDate);
-              }}
-              style={{
-                padding: '8px 16px',
-                border: '1px solid #e5e7eb',
-                borderRadius: '6px',
-                background: 'white',
-                cursor: 'pointer'
-              }}
-            >
-              Next
-            </button>
-          </div>
-          
-          <button style={{
-            padding: '8px 20px',
-            background: '#3b82f6',
-            color: 'white',
-            border: 'none',
-            borderRadius: '6px',
-            fontWeight: 500,
-            cursor: 'pointer'
-          }}>
-            Auto-Schedule
-          </button>
-        </div>
-
-        <div className="day-view">
-          {/* Time column */}
-          <div className="time-column">
-            {hours.map(hour => (
-              <div key={hour} className="time-label">
-                {hour === 12 ? '12 PM' : hour > 12 ? `${hour - 12} PM` : `${hour} AM`}
-              </div>
-            ))}
-          </div>
-
-          {/* Schedule column */}
-          <div className="schedule-column">
-            {/* Hour lines */}
-            {hours.map((hour, i) => (
-              <div key={hour} className="hour-line" style={{ top: `${i * 60}px` }} />
-            ))}
-
-            {/* Time pools */}
-            {timePools.map((pool, i) => (
-              <div key={i} className="time-pool" style={getPoolStyle(pool)}>
-                <span className="time-pool-label">
-                  {Math.floor(pool.minutes / 60)}h {pool.minutes % 60}m available
-                </span>
-              </div>
-            ))}
-
-            {/* Events */}
-            {events.map(event => (
-              <div
-                key={event.id}
-                className={`event-block ${event.is_blocking ? 'blocking' : 'non-blocking'}`}
-                style={getEventStyle(event)}
-              >
-                <div className="event-title">{event.title}</div>
-                <div className="event-time">
-                  {formatTime(new Date(event.start_time))} - {formatTime(new Date(event.end_time))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default SimpleScheduleView;
-
-### File 3: frontend/src/pages/SchedulePage.tsx (Updated)
-import React from 'react';
-import SimpleScheduleView from '../components/schedule/SimpleScheduleView';
-
-const SchedulePage: React.FC = () => {
-  return <SimpleScheduleView />;
-};
-
-export default SchedulePage;
-
-## Test Steps
-1. Start the app: npm start
-2. Navigate to /schedule
-3. Verify you see:
-   - Left sidebar with task cards
-   - Time axis from 7 AM to 10 PM
-   - Events displayed as colored blocks
-   - Green time pools between blocking events
-   - Navigation buttons work
-
-## Success Criteria
-- Clean, professional appearance
-- Clear visual hierarchy
-- Events and time pools display correctly
-- No overlapping elements
-- Responsive to window size
-
-## Git Commands to Finish
-git add .
-git commit -m "feat: add clean schedule view with proper styling"
-git push origin feature/schedule-view-clean
-
-# After testing and confirming it looks good
-git checkout main
-git pull origin main
-git merge feature/schedule-view-clean
-git push origin main
-git branch -d feature/schedule-view-clean
-
-## Next Steps (After This Works)
-Once the basic view looks good, we can add:
-1. Drag and drop functionality
-2. API integration
-3. Task scheduling logic
-4. Week view
-5. Mobile responsiveness
-Instructions for Claude Code:
-We need to create a CLEAN, SIMPLE schedule view that actually looks good. The previous attempt had layout issues.
-
-CRITICAL: 
-- NO EMOJIS anywhere!
-- Start simple - get the layout right first
-- Use inline styles where needed for precise control
-- Test the visual appearance before adding complexity
-
-Read the milestone document and create the 3 files in order:
-1. First create the CSS file with all the styling
-2. Then create the SimpleScheduleView component with mock data
-3. Update the SchedulePage to use the new component
-
-The schedule should have:
-- Clean white background
-- Professional spacing
-- Clear visual hierarchy
-- Distinct colors for blocking (red) vs non-blocking (blue) events
-- Green gradient for time pools
-- Proper shadows and hover effects
-
-Focus on making it LOOK GOOD first. We'll add drag-drop and API integration after the visual design is solid.

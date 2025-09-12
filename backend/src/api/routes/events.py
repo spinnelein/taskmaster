@@ -6,14 +6,16 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from typing import Optional
 from datetime import date, datetime
+import pytz
 
 from ...schemas.event_schemas import EventCreate, EventUpdate, EventResponse, EventListResponse
 from ...schemas.base_schemas import MessageResponse
 from ...data.repositories.event_repo import EventRepository
 from ...domain.event import Event
+from ...utils.recurrence import generate_recurring_events
 from ..dependencies import get_db
 
-router = APIRouter(prefix="/api/events", tags=["events"])
+router = APIRouter(tags=["events"])
 
 @router.get("", response_model=EventListResponse)
 def get_events(
@@ -39,21 +41,89 @@ def create_event(
     db: Session = Depends(get_db)
 ):
     """Create a new event"""
+    print("=== BACKEND EVENT CREATION DEBUG ===")
+    print(f"Received data: {event_data.dict()}")
+    
     repo = EventRepository(db)
     
     try:
-        event = Event(
-            title=event_data.title,
-            start_time=event_data.start_time,
-            end_time=event_data.end_time,
-            is_blocking=event_data.is_blocking,
-            location=event_data.location,
-            description=event_data.description
-        )
-        saved_event = repo.save(event)
-        return EventResponse(**saved_event.to_dict())
+        # Convert UTC times to Pacific time for storage
+        pacific = pytz.timezone('America/Los_Angeles')
+        
+        # Assume incoming times are UTC and convert to Pacific
+        start_utc = event_data.start_time.replace(tzinfo=pytz.UTC) if event_data.start_time.tzinfo is None else event_data.start_time
+        end_utc = event_data.end_time.replace(tzinfo=pytz.UTC) if event_data.end_time.tzinfo is None else event_data.end_time
+        
+        start_pacific = start_utc.astimezone(pacific).replace(tzinfo=None)
+        end_pacific = end_utc.astimezone(pacific).replace(tzinfo=None)
+        
+        print(f"Time conversion: {event_data.start_time} UTC -> {start_pacific} Pacific")
+        
+        if event_data.is_recurring and event_data.recurrence_pattern:
+            print(f"Creating recurring event with pattern: {event_data.recurrence_pattern}")
+            
+            # Generate recurring events
+            recurrence_dict = event_data.recurrence_pattern.dict() if hasattr(event_data.recurrence_pattern, 'dict') else event_data.recurrence_pattern
+            recurring_events = generate_recurring_events(
+                title=event_data.title,
+                start_time=start_pacific,
+                end_time=end_pacific,
+                recurrence_pattern=recurrence_dict,
+                is_blocking=event_data.is_blocking,
+                location=event_data.location,
+                description=event_data.description
+            )
+            
+            print(f"Generated {len(recurring_events)} recurring events")
+            
+            # Save parent event first
+            parent_event_data = recurring_events[0]
+            parent_event = Event(
+                title=parent_event_data['title'],
+                start_time=parent_event_data['start_time'],
+                end_time=parent_event_data['end_time'],
+                is_blocking=parent_event_data['is_blocking'],
+                location=parent_event_data['location'],
+                description=parent_event_data['description']
+            )
+            saved_parent = repo.save(parent_event)
+            
+            # Save recurring instances
+            for event_instance in recurring_events[1:]:  # Skip parent (first item)
+                instance_event = Event(
+                    title=event_instance['title'],
+                    start_time=event_instance['start_time'],
+                    end_time=event_instance['end_time'],
+                    is_blocking=event_instance['is_blocking'],
+                    location=event_instance['location'],
+                    description=event_instance['description']
+                )
+                repo.save(instance_event)
+            
+            return EventResponse(**saved_parent.to_dict())
+        else:
+            # Single event
+            event = Event(
+                title=event_data.title,
+                start_time=start_pacific,
+                end_time=end_pacific,
+                is_blocking=event_data.is_blocking,
+                location=event_data.location,
+                description=event_data.description
+            )
+            print(f"Created event object: {event.__dict__}")
+            
+            saved_event = repo.save(event)
+            print(f"Saved event with ID: {saved_event.id}")
+            print(f"Event data: {saved_event.to_dict()}")
+            
+            return EventResponse(**saved_event.to_dict())
     except ValueError as e:
+        print(f"Validation error: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        print(f"Unexpected error: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/{event_id}", response_model=EventResponse)
 def get_event(
@@ -111,3 +181,24 @@ def delete_event(
         return MessageResponse(message="Event deleted successfully")
     else:
         raise HTTPException(status_code=500, detail="Failed to delete event")
+
+@router.get("/debug", response_model=dict)
+def debug_events(db: Session = Depends(get_db)):
+    """Debug endpoint to list all events in database"""
+    repo = EventRepository(db)
+    events = repo.get_all()
+    
+    return {
+        "count": len(events),
+        "events": [
+            {
+                "id": event.id,
+                "title": event.title,
+                "start_time": str(event.start_time),
+                "end_time": str(event.end_time),
+                "is_blocking": event.is_blocking,
+                "created_at": str(event.created_at) if hasattr(event, 'created_at') else None
+            }
+            for event in events
+        ]
+    }

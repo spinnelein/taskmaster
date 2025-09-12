@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './ScheduleView.css';
 import { format } from 'date-fns';
+import eventService from '../../services/eventService';
+import taskService from '../../services/taskService';
 
 interface Event {
   id: string;
@@ -29,41 +31,69 @@ const SimpleScheduleView: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [timePools, setTimePools] = useState<TimePool[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Mock data for testing
+  // Load real data from API
   useEffect(() => {
-    // Mock events
-    setEvents([
-      {
-        id: '1',
-        title: 'Take kids to school',
-        start_time: '2024-01-01T08:00:00',
-        end_time: '2024-01-01T08:40:00',
-        is_blocking: true
-      },
-      {
-        id: '2',
-        title: 'Team Meeting',
-        start_time: '2024-01-01T11:00:00',
-        end_time: '2024-01-01T12:00:00',
-        is_blocking: false
-      },
-      {
-        id: '3',
-        title: 'Lunch',
-        start_time: '2024-01-01T12:30:00',
-        end_time: '2024-01-01T13:30:00',
-        is_blocking: true
-      }
-    ]);
+    loadScheduleData();
+  }, [selectedDate]);
 
-    // Mock tasks
-    setTasks([
-      { id: '1', title: 'Review code PR', duration: 45, urgency: 8, completion_status: 'pending' },
-      { id: '2', title: 'Write documentation', duration: 60, urgency: 5, completion_status: 'pending' },
-      { id: '3', title: 'Email client', duration: 15, urgency: 9, completion_status: 'pending' }
-    ]);
-  }, []);
+  const loadScheduleData = async () => {
+    try {
+      setLoading(true);
+      console.log('=== LOADING SCHEDULE DATA ===');
+      console.log('Selected date:', selectedDate);
+      
+      // Format date for API (YYYY-MM-DD in local timezone)
+      const dateStr = format(selectedDate, 'yyyy-MM-dd');
+      console.log('Loading data for date:', dateStr);
+      
+      // Load events and tasks in parallel
+      const [eventsResponse, tasksResponse] = await Promise.all([
+        eventService.getEvents(dateStr),
+        taskService.getTasks()
+      ]);
+      
+      console.log('Events loaded:', eventsResponse);
+      console.log('Tasks loaded:', tasksResponse);
+      
+      // Extract events array from response
+      const eventsArray = eventsResponse.events || eventsResponse || [];
+      const tasksArray = tasksResponse.tasks || tasksResponse || [];
+      
+      setEvents(eventsArray);
+      setTasks(tasksArray);
+      
+    } catch (error) {
+      console.error('=== SCHEDULE DATA LOADING ERROR ===');
+      console.error('Error loading schedule data:', error);
+      
+      // Fallback to mock data on error
+      setEvents([
+        {
+          id: '1',
+          title: 'Take kids to school',
+          start_time: '2024-01-01T08:00:00',
+          end_time: '2024-01-01T08:40:00',
+          is_blocking: true
+        },
+        {
+          id: '2',
+          title: 'Team Meeting',
+          start_time: '2024-01-01T11:00:00',
+          end_time: '2024-01-01T12:00:00',
+          is_blocking: false
+        }
+      ]);
+      
+      setTasks([
+        { id: '1', title: 'Review code PR', duration: 45, urgency: 8, completion_status: 'pending' },
+        { id: '2', title: 'Write documentation', duration: 60, urgency: 5, completion_status: 'pending' }
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Calculate time pools
   useEffect(() => {
@@ -145,6 +175,16 @@ const SimpleScheduleView: React.FC = () => {
     if (urgency >= 5) return 'medium';
     return 'low';
   };
+
+  if (loading) {
+    return (
+      <div className="schedule-container" style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: '16px', color: '#6b7280' }}>Loading schedule...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="schedule-container">

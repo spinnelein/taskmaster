@@ -12,9 +12,18 @@ function NewEvent() {
   const handleSubmit = async (formData) => {
     try {
       setError('');
-      await eventService.createEvent(formData);
-      navigate('/events');
+      console.log('=== EVENT CREATION DEBUG ===');
+      console.log('Form data received:', formData);
+      
+      const response = await eventService.createEvent(formData);
+      console.log('Backend response:', response);
+      console.log('Event created successfully, navigating to schedule page');
+      
+      navigate('/schedule');
     } catch (err) {
+      console.error('=== EVENT CREATION ERROR ===');
+      console.error('Error details:', err.response?.data || err.message);
+      console.error('Full error:', err);
       setError(err.response?.data?.detail || 'Failed to create event');
     }
   };
@@ -24,16 +33,31 @@ function NewEvent() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Create New Event</h1>
-      
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          {error}
+    <div style={{ background: '#f9fafb', minHeight: 'calc(100vh - 64px)', paddingTop: '40px' }}>
+      <div className="max-w-3xl mx-auto px-4">
+        <div style={{ marginBottom: '32px' }}>
+          <h1 style={{ fontSize: '28px', fontWeight: '700', color: '#1f2937', marginBottom: '8px' }}>
+            Create New Event
+          </h1>
+          <p style={{ color: '#6b7280', fontSize: '15px' }}>
+            Add a new event to your schedule
+          </p>
         </div>
-      )}
-      
-      <div className="bg-white p-6 rounded-lg shadow">
+        
+        {error && (
+          <div style={{
+            background: '#fee',
+            border: '1px solid #fcc',
+            color: '#c00',
+            padding: '12px 16px',
+            borderRadius: '8px',
+            marginBottom: '20px',
+            fontSize: '14px'
+          }}>
+            {error}
+          </div>
+        )}
+        
         <EventForm onSubmit={handleSubmit} onCancel={handleCancel} />
       </div>
     </div>
