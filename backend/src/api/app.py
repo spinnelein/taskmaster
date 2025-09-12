@@ -5,7 +5,7 @@ NO EMOJIS
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .routes import tasks, events, schedule
+from .routes import tasks, events, schedule, initiatives, projects, meals, dishes, schedules
 
 # Create FastAPI instance
 app = FastAPI(
@@ -24,9 +24,14 @@ app.add_middleware(
 )
 
 # Include routers with API prefix
-app.include_router(tasks.router, prefix="/api/tasks")
-app.include_router(events.router, prefix="/api/events")
-app.include_router(schedule.router, prefix="/api/schedule")
+app.include_router(tasks.router, prefix="/api/tasks", tags=["tasks"])
+app.include_router(events.router, prefix="/api/events", tags=["events"])
+app.include_router(schedule.router, prefix="/api/schedule", tags=["schedule"])
+app.include_router(initiatives.router, prefix="/api/initiatives", tags=["initiatives"])
+app.include_router(projects.router, prefix="/api/projects", tags=["projects"])
+app.include_router(meals.router, prefix="/api/meals", tags=["meals"])
+app.include_router(dishes.router, prefix="/api/dishes", tags=["dishes"])
+app.include_router(schedules.router, prefix="/api/schedules", tags=["schedules"])
 
 # Health check endpoint
 @app.get("/health")
