@@ -8,7 +8,7 @@ function TaskForm({ task, onSubmit, onCancel }) {
     duration: task?.duration || 30,
     urgency: task?.urgency || 5,
     description: task?.description || '',
-    status: task?.status || 'pending',
+    status: task?.status || 'active',
     due_date: task?.due_date || '',
     due_time: task?.due_time || ''
   });
@@ -118,7 +118,7 @@ function TaskForm({ task, onSubmit, onCancel }) {
 
       <div>
         <label className="block text-sm font-medium text-gray-700">
-          Status
+          Status (optional)
         </label>
         <select
           name="status"
@@ -126,10 +126,9 @@ function TaskForm({ task, onSubmit, onCancel }) {
           onChange={handleChange}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
         >
-          <option value="pending">Pending</option>
-          <option value="in_progress">In Progress</option>
+          <option value="active">Active</option>
+          <option value="blocked">Blocked</option>
           <option value="completed">Completed</option>
-          <option value="cancelled">Cancelled</option>
         </select>
       </div>
 

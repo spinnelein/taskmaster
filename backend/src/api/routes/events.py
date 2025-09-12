@@ -47,17 +47,12 @@ def create_event(
     repo = EventRepository(db)
     
     try:
-        # Convert UTC times to Pacific time for storage
-        pacific = pytz.timezone('America/Los_Angeles')
+        # Incoming times are already in Pacific time from frontend
+        # Store them as-is without timezone conversion
+        start_pacific = event_data.start_time.replace(tzinfo=None) if event_data.start_time.tzinfo else event_data.start_time
+        end_pacific = event_data.end_time.replace(tzinfo=None) if event_data.end_time.tzinfo else event_data.end_time
         
-        # Assume incoming times are UTC and convert to Pacific
-        start_utc = event_data.start_time.replace(tzinfo=pytz.UTC) if event_data.start_time.tzinfo is None else event_data.start_time
-        end_utc = event_data.end_time.replace(tzinfo=pytz.UTC) if event_data.end_time.tzinfo is None else event_data.end_time
-        
-        start_pacific = start_utc.astimezone(pacific).replace(tzinfo=None)
-        end_pacific = end_utc.astimezone(pacific).replace(tzinfo=None)
-        
-        print(f"Time conversion: {event_data.start_time} UTC -> {start_pacific} Pacific")
+        print(f"Storing times as Pacific: {start_pacific} - {end_pacific}")
         
         if event_data.is_recurring and event_data.recurrence_pattern:
             print(f"Creating recurring event with pattern: {event_data.recurrence_pattern}")

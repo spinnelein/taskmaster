@@ -80,7 +80,7 @@ function Tasks() {
                     )}
                   </div>
                   <div className="flex space-x-2">
-                    {!task.is_completed && (
+                    {task.status !== 'completed' && (
                       <button
                         onClick={() => handleComplete(task.id)}
                         className="text-green-600 hover:text-green-800"

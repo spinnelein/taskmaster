@@ -13,7 +13,7 @@ class TaskModel(BaseModel):
     description = Column(String(1000), nullable=True)
     duration = Column(Integer, nullable=False)  # in minutes
     urgency = Column(Integer, default=5)  # 1-10
-    status = Column(String(50), default="pending")
+    status = Column(String(50), default="active")
     due_date = Column(Date, nullable=True)
     due_time = Column(Time, nullable=True)
     is_completed = Column(Boolean, default=False)

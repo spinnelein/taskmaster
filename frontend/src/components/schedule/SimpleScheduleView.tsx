@@ -3,6 +3,7 @@ import './ScheduleView.css';
 import { format } from 'date-fns';
 import eventService from '../../services/eventService';
 import taskService from '../../services/taskService';
+import { parsePacificTime, formatPacificTime } from '../../utils/timezone';
 
 interface Event {
   id: string;
@@ -110,7 +111,7 @@ const SimpleScheduleView: React.FC = () => {
     let currentTime = dayStart;
 
     blockingEvents.forEach(event => {
-      const eventStart = new Date(event.start_time);
+      const eventStart = parsePacificTime(event.start_time);
       eventStart.setFullYear(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
       
       if (eventStart > currentTime) {
@@ -120,7 +121,7 @@ const SimpleScheduleView: React.FC = () => {
         }
       }
       
-      const eventEnd = new Date(event.end_time);
+      const eventEnd = parsePacificTime(event.end_time);
       eventEnd.setFullYear(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
       currentTime = eventEnd;
     });
@@ -136,13 +137,13 @@ const SimpleScheduleView: React.FC = () => {
     setTimePools(pools);
   }, [events, selectedDate]);
 
-  const formatTime = (date: Date): string => {
-    return format(date, 'h:mm a');
+  const formatTime = (dateString: string): string => {
+    return formatPacificTime(dateString, { hour: 'numeric', minute: '2-digit', hour12: true });
   };
 
   const getEventStyle = (event: Event) => {
-    const start = new Date(event.start_time);
-    const end = new Date(event.end_time);
+    const start = parsePacificTime(event.start_time);
+    const end = parsePacificTime(event.end_time);
     const startMinutes = start.getHours() * 60 + start.getMinutes();
     const endMinutes = end.getHours() * 60 + end.getMinutes();
     const duration = endMinutes - startMinutes;
@@ -295,7 +296,7 @@ const SimpleScheduleView: React.FC = () => {
               >
                 <div className="event-title">{event.title}</div>
                 <div className="event-time">
-                  {formatTime(new Date(event.start_time))} - {formatTime(new Date(event.end_time))}
+                  {formatTime(event.start_time)} - {formatTime(event.end_time)}
                 </div>
               </div>
             ))}

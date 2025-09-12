@@ -13,13 +13,13 @@ class TaskCreate(BaseModel):
     duration: int = Field(..., gt=0, description="Duration in minutes")
     urgency: int = Field(5, ge=1, le=10)
     description: str = Field("", max_length=1000)
-    status: str = Field("pending")
+    status: str = Field("active")
     due_date: Optional[date] = None
     due_time: Optional[time] = None
     
     @validator('status')
     def validate_status(cls, v):
-        valid_statuses = ["pending", "in_progress", "completed", "cancelled"]
+        valid_statuses = ["active", "blocked", "completed"]
         if v not in valid_statuses:
             raise ValueError(f"Status must be one of {valid_statuses}")
         return v
@@ -37,7 +37,7 @@ class TaskUpdate(BaseModel):
     @validator('status')
     def validate_status(cls, v):
         if v is not None:
-            valid_statuses = ["pending", "in_progress", "completed", "cancelled"]
+            valid_statuses = ["active", "blocked", "completed"]
             if v not in valid_statuses:
                 raise ValueError(f"Status must be one of {valid_statuses}")
         return v

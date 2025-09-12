@@ -1,9 +1,8 @@
-// Main App component - UPDATED
+// Modern TaskMaster App
 // NO EMOJIS
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
-import Layout from './components/layout/Layout';
-import Dashboard from './pages/Dashboard';
+import ModernLayout from './components/layout/ModernLayout';
+import ModernDashboard from './pages/ModernDashboard';
 import Tasks from './pages/Tasks';
 import NewTask from './pages/NewTask';
 import Events from './pages/Events';
@@ -12,21 +11,18 @@ import SchedulePage from './pages/SchedulePage';
 
 function App() {
   return (
-    <>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Dashboard />} />
-            <Route path="tasks" element={<Tasks />} />
-            <Route path="tasks/new" element={<NewTask />} />
-            <Route path="events" element={<Events />} />
-            <Route path="events/new" element={<NewEvent />} />
-            <Route path="schedule" element={<SchedulePage />} />
-          </Route>
-        </Routes>
-      </Router>
-      <Toaster position="top-right" />
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<ModernLayout />}>
+          <Route index element={<ModernDashboard />} />
+          <Route path="tasks" element={<Tasks />} />
+          <Route path="tasks/new" element={<NewTask />} />
+          <Route path="events" element={<Events />} />
+          <Route path="events/new" element={<NewEvent />} />
+          <Route path="schedule" element={<SchedulePage />} />
+        </Route>
+      </Routes>
+    </Router>
   );
 }
 

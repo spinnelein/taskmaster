@@ -15,7 +15,7 @@ class Task(DomainEntity):
         duration: int,
         urgency: int = 5,
         description: str = "",
-        status: str = "pending",
+        status: str = "active",
         due_date: Optional[date] = None,
         due_time: Optional[time] = None
     ):
@@ -38,18 +38,25 @@ class Task(DomainEntity):
             raise ValueError("Duration must be positive")
         if not 1 <= self.urgency <= 10:
             raise ValueError("Urgency must be between 1 and 10")
-        if self.status not in ["pending", "in_progress", "completed", "cancelled"]:
+        if self.status not in ["active", "blocked", "completed"]:
             raise ValueError("Invalid status")
     
     def can_start(self) -> bool:
         """Check if task can be started"""
-        return self.status == "pending" and not self.is_completed
+        return self.status == "active" and not self.is_completed
     
-    def start(self):
-        """Start the task"""
-        if not self.can_start():
-            raise ValueError("Task cannot be started")
-        self.status = "in_progress"
+    def block(self):
+        """Block the task due to dependencies or external factors"""
+        if self.is_completed:
+            raise ValueError("Cannot block completed task")
+        self.status = "blocked"
+        self.updated_at = datetime.utcnow()
+    
+    def unblock(self):
+        """Unblock the task, setting it back to active"""
+        if self.status != "blocked":
+            raise ValueError("Task is not blocked")
+        self.status = "active"
         self.updated_at = datetime.utcnow()
     
     def complete(self):
