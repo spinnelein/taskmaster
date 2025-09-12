@@ -62,6 +62,10 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
+    # Get database URL from environment or use SQLite default
+    database_url = os.environ.get("DATABASE_URL", "sqlite:///./taskmaster.db")
+    config.set_main_option("sqlalchemy.url", database_url)
+    
     connectable = engine_from_config(
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",

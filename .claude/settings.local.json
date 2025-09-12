@@ -30,7 +30,11 @@
       "Bash(taskkill:*)",
       "Bash(npm start)",
       "Bash(npm run:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(alembic upgrade:*)",
+      "Bash(findstr:*)",
+      "Bash(alembic current:*)",
+      "Bash(alembic stamp:*)"
     ],
     "deny": []
   }

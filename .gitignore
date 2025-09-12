@@ -8,6 +8,7 @@ env/
 venv/
 .venv
 .env
+.env.production
 *.db
 .pytest_cache/
 .coverage
