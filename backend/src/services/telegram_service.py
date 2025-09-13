@@ -25,9 +25,14 @@ class TelegramService:
         self.bot = Bot(token=token)
         self.application = None
         self.active_chats = set()  # Track users who have interacted with the bot
+        self.chat_file = "telegram_chats.txt"  # File to persist chat IDs
+        self.load_chats()
         
     async def initialize(self):
         """Initialize the Telegram application"""
+        if not self.token:
+            raise ValueError("Bot token required")
+            
         self.application = Application.builder().token(self.token).build()
         
         # Add handlers
@@ -36,13 +41,14 @@ class TelegramService:
         self.application.add_handler(CommandHandler("current_task", self.current_task_command))
         self.application.add_handler(CallbackQueryHandler(self.button_callback))
         
-        # Start polling (for webhook, use different method)
+        # Initialize and start the application
         await self.application.initialize()
+        await self.application.start()
         
     async def start_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle /start command"""
         chat_id = str(update.effective_chat.id)
-        self.active_chats.add(chat_id)  # Track this user
+        self.add_chat(chat_id)  # Track this user and persist
         
         await update.message.reply_text(
             "Welcome to TaskMaster Bot!\n\n"
@@ -407,18 +413,62 @@ class TelegramService:
         """Get list of active chat IDs"""
         return list(self.active_chats)
     
-    def start_polling(self):
-        """Start the bot in polling mode (for development)"""
+    def load_chats(self):
+        """Load chat IDs from file"""
+        try:
+            if os.path.exists(self.chat_file):
+                with open(self.chat_file, 'r') as f:
+                    for line in f:
+                        chat_id = line.strip()
+                        if chat_id:
+                            self.active_chats.add(chat_id)
+                logger.info(f"Loaded {len(self.active_chats)} chat IDs from {self.chat_file}")
+        except Exception as e:
+            logger.error(f"Error loading chat IDs: {e}")
+    
+    def save_chats(self):
+        """Save chat IDs to file"""
+        try:
+            with open(self.chat_file, 'w') as f:
+                for chat_id in self.active_chats:
+                    f.write(f"{chat_id}\n")
+            logger.info(f"Saved {len(self.active_chats)} chat IDs to {self.chat_file}")
+        except Exception as e:
+            logger.error(f"Error saving chat IDs: {e}")
+    
+    def add_chat(self, chat_id: str):
+        """Add a chat ID and persist it"""
+        self.active_chats.add(chat_id)
+        self.save_chats()
+        logger.info(f"Added chat ID {chat_id} to active chats")
+    
+    
+    async def start_background_polling(self):
+        """Start the bot polling in background mode following working pattern"""
         if not self.application:
             raise RuntimeError("Application not initialized. Call initialize() first.")
         
-        self.application.run_polling()
+        logger.info("Starting Telegram bot with polling...")
+        
+        try:
+            # Start polling using the updater
+            await self.application.updater.start_polling()
+            logger.info("Telegram bot started polling for messages")
+        except Exception as e:
+            logger.error(f"Error starting Telegram polling: {e}")
+            raise
     
     async def stop(self):
-        """Stop the bot"""
+        """Stop the bot with proper cleanup sequence"""
         if self.application:
-            await self.application.stop()
-            await self.application.shutdown()
+            try:
+                logger.info("Stopping Telegram bot...")
+                await self.application.updater.stop()
+                await self.application.stop()
+                await self.application.shutdown()
+                logger.info("Telegram bot stopped successfully")
+            except Exception as e:
+                logger.error(f"Error stopping Telegram bot: {e}")
 
 # Singleton instance
 _telegram_service: Optional[TelegramService] = None

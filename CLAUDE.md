@@ -357,6 +357,81 @@ Comprehensive Telegram notifications for both tasks and events:
     └── projectService.js            # Project API calls
 ```
 
+## Development Process Management
+
+### Restart Methods (USE THESE - NO DUPLICATE PROCESSES!)
+
+**CRITICAL**: Always use these restart methods instead of manually starting uvicorn/npm to prevent duplicate processes and port conflicts.
+
+**Backend Restart (Choose One):**
+```bash
+# Option 1: Python script (cross-platform, RECOMMENDED)
+cd backend && python restart.py
+
+# Option 2: API endpoint (if server is running)
+curl http://localhost:8000/api/restart
+
+# Option 3: Manual process cleanup + start
+cd backend && taskkill /f /im uvicorn.exe && uvicorn src.api.app:app --reload --host 0.0.0.0 --port 8000
+```
+
+**Frontend Restart:**
+```bash
+# Windows (recommended)
+cd frontend && restart-frontend.bat
+
+# Manual cross-platform
+cd frontend && taskkill /f /im node.exe && npm run dev
+```
+
+**Process Cleanup Commands:**
+- Backend: `python restart.py` (kills ALL TaskMaster processes: uvicorn, node.exe, python.exe)
+- Frontend: `restart-frontend.bat` (kills all node.exe processes)  
+- API Endpoint: `GET /api/restart` (built-in server restart with cleanup)
+
+**IMPORTANT NOTES:**
+- Backend restart script kills ALL TaskMaster processes: uvicorn, node.exe, AND python.exe (Telegram/workers)
+- This prevents database conflicts from multiple Telegram services or background workers
+- Frontend restart script kills only node.exe processes  
+- Restart scripts automatically find free ports (8000-8020 for backend, 5173-5180 for frontend)
+- Scripts handle process cleanup, dependency checks, and proper startup
+- Never manually start servers without killing existing processes first
+- Use restart methods for deployments, testing, and development workflow
+
+### Development Commands
+
+**Backend:**
+```bash
+cd backend
+python restart.py              # PREFERRED - handles process cleanup
+# OR manually (not recommended):
+pip install -r requirements.txt
+uvicorn src.api.app:app --reload --host 0.0.0.0 --port 8000
+```
+
+**Frontend:**
+```bash
+cd frontend
+restart-frontend.bat           # PREFERRED - handles process cleanup  
+# OR manually (not recommended):
+npm install
+npm run dev                    # Development server
+npm run build                  # Production build
+npm run lint                   # ESLint
+```
+
+**Testing:**
+```bash
+cd backend
+python -m pytest                    # Run all tests
+python -m pytest tests/unit/        # Unit tests only
+python -m pytest tests/integration/ # Integration tests only
+```
+
+**Database:**
+- Migration: `cd backend && alembic upgrade head`
+- Create Migration: `cd backend && alembic revision --autogenerate -m "description"`
+
 ## Repository Context
 
 This is an active project under development. When making changes:
@@ -367,4 +442,4 @@ This is an active project under development. When making changes:
 5. Follow RESTful API conventions for new endpoints
 6. For Telegram integration, ensure proper error handling and logging
 7. **Current State**: Core API endpoints (tasks, events) fully functional with comprehensive CRUD operations
-8. **Current Priority**: Investigate initiatives/projects API issues, then connect frontend forms to working backends
+8. **Current Priority**: Fix database enum issue (WEEKLY status) preventing initiatives API from working

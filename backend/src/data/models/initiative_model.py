@@ -7,15 +7,6 @@ from sqlalchemy.orm import relationship
 from .base_model import BaseModel
 import enum
 
-class InitiativeFrequency(enum.Enum):
-    """Frequency options for initiatives"""
-    DAILY = "daily"
-    WEEKLY = "weekly"
-    MONTHLY = "monthly"
-    QUARTERLY = "quarterly"
-    YEARLY = "yearly"
-    CUSTOM = "custom"
-
 class InitiativeStatus(enum.Enum):
     """Status options for initiatives"""
     ACTIVE = "active"
@@ -24,27 +15,24 @@ class InitiativeStatus(enum.Enum):
     ARCHIVED = "archived"
 
 class InitiativeModel(BaseModel):
-    """Initiative table model"""
+    """Initiative table model - A container for related tasks and events"""
     __tablename__ = "initiatives"
     
+    # Basic info
     title = Column(String(255), nullable=False)
     description = Column(Text, nullable=True)
-    
-    # Recurrence settings
-    frequency = Column(SQLEnum(InitiativeFrequency), nullable=False, default=InitiativeFrequency.WEEKLY)
-    interval = Column(Integer, default=1)  # Every X frequency periods
     
     # Status and control
     status = Column(SQLEnum(InitiativeStatus), nullable=False, default=InitiativeStatus.ACTIVE)
     is_template = Column(Boolean, default=False)  # If true, this is a template for creating new initiatives
     
-    # Schedule settings
-    preferred_start_time = Column(String(8), nullable=True)  # HH:MM:SS format
-    estimated_duration_minutes = Column(Integer, nullable=True)
+    # Goal/target (optional)
+    target_completion_count = Column(Integer, nullable=True)  # e.g., "Complete 30 workouts"
+    current_completion_count = Column(Integer, default=0)
     
-    # Relationships
+    # Relationships - The key part: initiatives contain tasks and can have projects
     tasks = relationship("TaskModel", back_populates="initiative", cascade="all, delete-orphan")
     project = relationship("ProjectModel", back_populates="initiative", uselist=False)
     
     def __repr__(self):
-        return f"<Initiative(id={self.id}, title='{self.title}', frequency={self.frequency.value})>"
+        return f"<Initiative(id={self.id}, title='{self.title}', status={self.status.value}, tasks={len(self.tasks)})>"

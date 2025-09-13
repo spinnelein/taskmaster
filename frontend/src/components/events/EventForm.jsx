@@ -5,20 +5,59 @@ import './EventForm.css';
 
 function EventForm({ event, onSubmit, onCancel }) {
   const [eventType, setEventType] = useState('timed'); // 'timed', 'all-day', 'instant'
-  const [isRecurring, setIsRecurring] = useState(false);
-  const [recurrence, setRecurrence] = useState({
-    pattern: 'daily', // 'daily', 'weekly', 'monthly', 'yearly'
-    interval: 1,
-    weekdays: [],
-    end_type: 'never', // 'never', 'after', 'on'
-    end_after_count: 10,
-    end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] // 30 days from now
-  });
+  const [isRecurring, setIsRecurring] = useState(event?.is_recurring || false);
+  const [recurrence, setRecurrence] = useState(
+    event?.recurrence_pattern || {
+      pattern: 'daily', // 'daily', 'weekly', 'monthly', 'yearly'
+      interval: 1,
+      weekdays: [],
+      end_type: 'never', // 'never', 'after', 'on'
+      end_after_count: 10,
+      end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] // 30 days from now
+    }
+  );
+  
+  // Update recurring state when event prop changes
+  useEffect(() => {
+    if (event) {
+      setIsRecurring(event.is_recurring || false);
+      if (event.recurrence_pattern) {
+        setRecurrence(event.recurrence_pattern);
+      }
+    }
+  }, [event]);
+  
+  // Helper function to parse API datetime to local components
+  const parseEventDateTime = (dateTimeString) => {
+    if (!dateTimeString) return null;
+    
+    try {
+      // Parse the datetime string from the API
+      const date = new Date(dateTimeString);
+      
+      // Format for form inputs (YYYY-MM-DD and HH:MM)
+      const dateStr = date.getFullYear() + '-' + 
+                     String(date.getMonth() + 1).padStart(2, '0') + '-' + 
+                     String(date.getDate()).padStart(2, '0');
+      const timeStr = String(date.getHours()).padStart(2, '0') + ':' + 
+                     String(date.getMinutes()).padStart(2, '0');
+      
+      return { date: dateStr, time: timeStr };
+    } catch (error) {
+      console.error('Error parsing event datetime:', error);
+      return null;
+    }
+  };
+
+  // Parse existing event times if editing
+  const startDateTime = event?.start_time ? parseEventDateTime(event.start_time) : null;
+  const endDateTime = event?.end_time ? parseEventDateTime(event.end_time) : null;
+
   const [formData, setFormData] = useState({
     title: event?.title || '',
-    date: event?.start_time ? event.start_time.split('T')[0] : new Date().toISOString().split('T')[0],
-    start_time: event?.start_time ? event.start_time.split('T')[1].substring(0, 5) : '09:00',
-    end_time: event?.end_time ? event.end_time.split('T')[1].substring(0, 5) : '10:00',
+    date: startDateTime?.date || new Date().toISOString().split('T')[0],
+    start_time: startDateTime?.time || '09:00',
+    end_time: endDateTime?.time || '10:00',
     is_blocking: event?.is_blocking !== undefined ? event.is_blocking : true,
     location: event?.location || '',
     description: event?.description || ''

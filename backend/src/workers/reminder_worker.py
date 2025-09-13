@@ -115,8 +115,8 @@ class ReminderWorker:
     
     async def process_pending_reminders(self):
         """Process all pending reminders that are due"""
+        db = self.db_session_factory()
         try:
-            db = next(self.db_session_factory())
             reminder_service = ReminderService(db)
             
             # Get pending reminders
@@ -149,13 +149,12 @@ class ReminderWorker:
         except Exception as e:
             logger.error(f"Error in process_pending_reminders: {e}")
         finally:
-            if 'db' in locals():
-                db.close()
+            db.close()
     
     async def retry_failed_reminders(self):
         """Retry failed reminders that haven't exceeded max retry count"""
+        db = self.db_session_factory()
         try:
-            db = next(self.db_session_factory())
             reminder_repo = ReminderRepository(db)
             reminder_service = ReminderService(db)
             
@@ -191,13 +190,12 @@ class ReminderWorker:
         except Exception as e:
             logger.error(f"Error in retry_failed_reminders: {e}")
         finally:
-            if 'db' in locals():
-                db.close()
+            db.close()
     
     async def process_snoozed_reminders(self):
         """Process snoozed reminders that are ready to be sent"""
+        db = self.db_session_factory()
         try:
-            db = next(self.db_session_factory())
             reminder_repo = ReminderRepository(db)
             reminder_service = ReminderService(db)
             
@@ -229,13 +227,12 @@ class ReminderWorker:
         except Exception as e:
             logger.error(f"Error in process_snoozed_reminders: {e}")
         finally:
-            if 'db' in locals():
-                db.close()
+            db.close()
     
     async def cleanup_old_reminders(self):
         """Clean up old reminders to prevent database bloat"""
+        db = self.db_session_factory()
         try:
-            db = next(self.db_session_factory())
             reminder_repo = ReminderRepository(db)
             
             # Clean up reminders older than 30 days
@@ -249,14 +246,12 @@ class ReminderWorker:
         except Exception as e:
             logger.error(f"Error in cleanup_old_reminders: {e}")
         finally:
-            if 'db' in locals():
-                db.close()
+            db.close()
     
     async def process_event_notifications(self):
         """Process event start notifications"""
+        db = self.db_session_factory()
         try:
-            db = next(self.db_session_factory())
-            
             from ..services.event_notification_service import EventNotificationService
             event_notification_service = EventNotificationService(db)
             
@@ -265,8 +260,7 @@ class ReminderWorker:
         except Exception as e:
             logger.error(f"Error in process_event_notifications: {e}")
         finally:
-            if 'db' in locals():
-                db.close()
+            db.close()
     
     def get_scheduler_status(self) -> dict:
         """Get status information about the scheduler"""
@@ -289,8 +283,8 @@ class ReminderWorker:
     
     async def send_test_reminder(self, reminder_id: str) -> bool:
         """Send a specific reminder immediately (for testing)"""
+        db = self.db_session_factory()
         try:
-            db = next(self.db_session_factory())
             reminder_repo = ReminderRepository(db)
             reminder_service = ReminderService(db)
             
@@ -312,14 +306,12 @@ class ReminderWorker:
             logger.error(f"Error sending test reminder {reminder_id}: {e}")
             return False
         finally:
-            if 'db' in locals():
-                db.close()
+            db.close()
     
     async def update_weather_data(self):
         """Update weather forecast data from NWS API"""
+        db = self.db_session_factory()
         try:
-            db = next(self.db_session_factory())
-            
             from ..services.weather_service import get_weather_service
             weather_service = get_weather_service()
             
@@ -332,8 +324,7 @@ class ReminderWorker:
         except Exception as e:
             logger.error(f"Error updating weather data: {e}")
         finally:
-            if 'db' in locals():
-                db.close()
+            db.close()
 
 # Global instance
 _reminder_worker: Optional[ReminderWorker] = None

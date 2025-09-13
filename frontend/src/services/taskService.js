@@ -44,7 +44,16 @@ const taskService = {
   getOverdueTasks: async () => {
     const response = await apiClient.get('/tasks/overdue');
     return response.data;
+  },
+
+  // Get tasks by initiative
+  getByInitiative: async (initiativeId) => {
+    const response = await apiClient.get('/tasks', {
+      params: { initiative_id: initiativeId }
+    });
+    return response.data.tasks || [];
   }
 };
 
+export { taskService };
 export default taskService;

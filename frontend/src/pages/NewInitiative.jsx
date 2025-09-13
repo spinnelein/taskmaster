@@ -4,7 +4,7 @@
  */
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import InitiativeForm from '../components/forms/InitiativeForm';
+import InitiativeContainerForm from '../components/forms/InitiativeContainerForm';
 import { initiativeService } from '../services/initiativeService';
 
 const NewInitiative = () => {
@@ -39,7 +39,7 @@ const NewInitiative = () => {
                 <div className="mb-6">
                     <h1 className="text-2xl font-bold">New Initiative</h1>
                     <p className="text-gray-600 mt-1">
-                        Create a new initiative to organize your recurring tasks and goals.
+                        Create a new initiative to organize and group related tasks.
                     </p>
                 </div>
 
@@ -59,7 +59,7 @@ const NewInitiative = () => {
                         </div>
                     )}
                     
-                    <InitiativeForm
+                    <InitiativeContainerForm
                         initiative={null}
                         onSubmit={handleSubmit}
                         onCancel={handleCancel}

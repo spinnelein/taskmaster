@@ -52,6 +52,12 @@ export const initiativeService = {
         return response.data;
     },
 
+    // Complete initiative (marks initiative and all tasks as completed)
+    async complete(id) {
+        const response = await api.post(`/initiatives/${id}/complete`);
+        return response.data;
+    },
+
     // Delete initiative
     async delete(id) {
         await api.delete(`/initiatives/${id}`);

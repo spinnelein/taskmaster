@@ -9,8 +9,8 @@ from datetime import datetime
 import uuid
 
 from .base import BaseRepository
-from ..models.initiative_model import InitiativeModel, InitiativeFrequency, InitiativeStatus
-from ..models.task_model import TaskModel
+from ..models.initiative_model import InitiativeModel, InitiativeStatus
+from ..models.task_model import TaskModel, TaskStatus
 
 class InitiativeRepository(BaseRepository[InitiativeModel]):
     """Repository for initiative data operations"""
@@ -24,17 +24,9 @@ class InitiativeRepository(BaseRepository[InitiativeModel]):
         if 'id' not in data:
             data['id'] = str(uuid.uuid4())
         
-        # Convert string frequency to enum
-        if 'frequency' in data and isinstance(data['frequency'], str):
-            frequency_str = data['frequency'].upper()
-            try:
-                data['frequency'] = InitiativeFrequency(frequency_str)
-            except ValueError:
-                data['frequency'] = InitiativeFrequency.WEEKLY  # Default fallback
-        
         # Convert string status to enum if provided
         if 'status' in data and isinstance(data['status'], str):
-            status_str = data['status'].upper()
+            status_str = data['status'].lower()
             try:
                 data['status'] = InitiativeStatus(status_str)
             except ValueError:
@@ -46,17 +38,51 @@ class InitiativeRepository(BaseRepository[InitiativeModel]):
         self.db.refresh(entity)
         return entity
     
+    def update(self, entity_id: str, data: Dict[str, Any]) -> Optional[InitiativeModel]:
+        """Update initiative with special handling for status changes"""
+        initiative = self.get(entity_id)
+        if not initiative:
+            return None
+        
+        # Check if status is being changed to completed
+        if 'status' in data and isinstance(data['status'], str):
+            status_str = data['status'].lower()
+            try:
+                new_status = InitiativeStatus(status_str)
+                # If changing to completed, use the special method
+                if new_status == InitiativeStatus.COMPLETED and initiative.status != InitiativeStatus.COMPLETED:
+                    # Update other fields first
+                    other_data = {k: v for k, v in data.items() if k != 'status'}
+                    if other_data:
+                        super().update(entity_id, other_data)
+                    # Then complete the initiative with tasks
+                    return self.complete_initiative_with_tasks(entity_id)
+                else:
+                    data['status'] = new_status
+            except ValueError:
+                pass  # Keep the string value, let it fail later if invalid
+        
+        # For all other updates, use the base update method
+        return super().update(entity_id, data)
+    
     def get_active(self) -> List[InitiativeModel]:
         """Get all active initiatives"""
         return self.db.query(self.model).filter(
             self.model.status == InitiativeStatus.ACTIVE
         ).all()
     
-    def get_by_frequency(self, frequency: InitiativeFrequency) -> List[InitiativeModel]:
-        """Get initiatives by frequency"""
-        return self.db.query(self.model).filter(
-            self.model.frequency == frequency
-        ).all()
+    def get_with_task_count(self) -> List[Dict[str, Any]]:
+        """Get initiatives with task counts"""
+        initiatives = self.get_all()
+        result = []
+        for initiative in initiatives:
+            result.append({
+                "initiative": initiative,
+                "task_count": len(initiative.tasks),
+                "active_task_count": len([t for t in initiative.tasks if t.status.value == "active"]),
+                "completed_task_count": len([t for t in initiative.tasks if t.status.value == "completed"])
+            })
+        return result
     
     def get_templates(self) -> List[InitiativeModel]:
         """Get all initiative templates"""
@@ -124,10 +150,6 @@ class InitiativeRepository(BaseRepository[InitiativeModel]):
         new_initiative = InitiativeModel(
             title=title,
             description=template.description,
-            frequency=template.frequency,
-            interval=template.interval,
-            preferred_start_time=template.preferred_start_time,
-            estimated_duration_minutes=template.estimated_duration_minutes,
             status=InitiativeStatus.ACTIVE,
             is_template=False
         )
@@ -139,3 +161,29 @@ class InitiativeRepository(BaseRepository[InitiativeModel]):
         # TODO: Copy tasks from template if needed
         
         return new_initiative
+    
+    def complete_initiative_with_tasks(self, initiative_id: str) -> Optional[InitiativeModel]:
+        """Mark initiative as completed and complete all its tasks"""
+        initiative = self.get(initiative_id)
+        if not initiative:
+            return None
+        
+        # Mark the initiative as completed
+        initiative.status = InitiativeStatus.COMPLETED
+        
+        # Mark all associated tasks as completed
+        for task in initiative.tasks:
+            if task.status != TaskStatus.COMPLETED:
+                task.status = TaskStatus.COMPLETED
+                task.is_completed = True
+                task.last_completed_at = datetime.utcnow()
+        
+        # Update current completion count if target is set
+        if initiative.target_completion_count:
+            completed_task_count = len([t for t in initiative.tasks if t.status == TaskStatus.COMPLETED])
+            initiative.current_completion_count = min(completed_task_count, initiative.target_completion_count)
+        
+        self.db.commit()
+        self.db.refresh(initiative)
+        
+        return initiative

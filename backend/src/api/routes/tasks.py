@@ -23,12 +23,22 @@ def test_fix():
 @router.get("", response_model=TaskListResponse)
 def get_tasks(
     status: Optional[str] = Query(None, description="Filter by status"),
+    initiative_id: Optional[str] = Query(None, description="Filter by initiative ID"),
     db: Session = Depends(get_db)
 ):
-    """Get all tasks with optional status filter"""
+    """Get all tasks with optional filters"""
     repo = TaskRepository(db)
     
-    if status:
+    # Apply filters
+    if initiative_id:
+        # Get tasks for specific initiative
+        from ...data.models.task_model import TaskModel
+        query = db.query(TaskModel)
+        query = query.filter(TaskModel.initiative_id == initiative_id)
+        if status:
+            query = query.filter(TaskModel.status == status.upper())
+        tasks = query.all()
+    elif status:
         tasks = repo.get_by_status(status)
     else:
         tasks = repo.get_all()
@@ -117,10 +127,30 @@ def create_task(
             'description': task_data.description,
             'status': task_data.status.upper() if task_data.status else 'ACTIVE',
             'due_date': task_data.due_date,
-            'due_time': task_data.due_time
+            'due_time': task_data.due_time,
+            # Enhanced fields
+            'is_divisible': task_data.is_divisible,
+            'min_chunk_size': task_data.min_chunk_size,
+            'required_weather': task_data.required_weather.upper() if task_data.required_weather else 'ANY',
+            'required_context': task_data.required_context,
+            'equipment_needed': task_data.equipment_needed,
+            'depends_on_task_ids': task_data.depends_on_task_ids,
+            # Organization - These are the key fields for initiative association
+            'initiative_id': task_data.initiative_id,
+            'project_id': task_data.project_id,
+            'phase_id': task_data.phase_id,
+            # Recurring task
+            'is_recurring': task_data.is_recurring,
+            'recurrence_pattern': task_data.recurrence_pattern
         }
         
+        # Debug: Print what we're creating
+        print(f"DEBUG: Creating task with initiative_id: {task_data.initiative_id}")
+        
         saved_task = repo.create(task_dict)
+        
+        # Debug: Print what we saved
+        print(f"DEBUG: Saved task initiative_id: {saved_task.initiative_id}")
         
         # Convert to response format with enum handling
         task_response_dict = {

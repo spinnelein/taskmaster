@@ -1,0 +1,26 @@
+{
+  "backup_date": "2025-09-13T01:16:58.484220",
+  "source_database": "C:\\Users\\Aaron\\Documents\\Python Scripts\\Taskmaster\\backend\\taskmaster.db",
+  "backup_directory": "C:\\Users\\Aaron\\Documents\\Python Scripts\\Taskmaster\\data_backup\\backup_2025-09-13_01-16-58",
+  "total_records_backed_up": 758,
+  "tables_backed_up": [
+    "events",
+    "tasks",
+    "reminders",
+    "weather_forecasts",
+    "initiatives"
+  ],
+  "backup_files": [
+    "events_backup.json",
+    "tasks_backup.json",
+    "reminders_backup.json",
+    "weather_forecasts_backup.json",
+    "initiatives_backup.json",
+    "events_schema.json",
+    "tasks_schema.json",
+    "reminders_schema.json",
+    "weather_forecasts_schema.json",
+    "initiatives_schema.json",
+    "taskmaster_original.db"
+  ]
+}

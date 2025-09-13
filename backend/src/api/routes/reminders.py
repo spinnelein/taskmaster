@@ -19,7 +19,7 @@ from ...schemas.reminder_schemas import (
     ReminderTemplateListResponse, ChatIdRegister, TestReminderRequest
 )
 
-router = APIRouter(prefix="/reminders", tags=["reminders"])
+router = APIRouter(tags=["reminders"])
 
 @router.post("/", response_model=ReminderResponse, status_code=status.HTTP_201_CREATED)
 def create_reminder(
@@ -265,13 +265,21 @@ def register_chat_id(
 ):
     """Register a Telegram chat ID for receiving reminders"""
     try:
-        # Here you would typically save this to a user settings table
-        # For now, just return success
-        return {
-            "message": f"Chat ID {chat_data.chat_id} registered successfully",
-            "chat_id": chat_data.chat_id
-        }
+        telegram_service = get_telegram_service()
+        if telegram_service:
+            telegram_service.add_chat(str(chat_data.chat_id))
+            return {
+                "message": f"Chat ID {chat_data.chat_id} registered successfully",
+                "chat_id": chat_data.chat_id
+            }
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="Telegram service not available"
+            )
         
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -458,14 +466,18 @@ def get_worker_status():
     return worker.get_scheduler_status()
 
 @router.get("/telegram/status")
-def get_telegram_status():
+async def get_telegram_status():
     """Get the status of the Telegram service"""
     telegram_service = get_telegram_service()
     if not telegram_service:
         return {"status": "not_initialized", "bot_available": False}
     
+    # Get active chats
+    active_chats = await telegram_service.get_active_chats()
+    
     return {
         "status": "initialized",
         "bot_available": True,
-        "default_chat_id": telegram_service.default_chat_id is not None
+        "active_chats_count": len(active_chats),
+        "has_active_users": len(active_chats) > 0
     }

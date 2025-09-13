@@ -32,7 +32,12 @@ async def lifespan(app: FastAPI):
         try:
             telegram_service = initialize_telegram_service(telegram_token)
             await telegram_service.initialize()
-            logger.info("Telegram service initialized successfully")
+            
+            # Start polling in background for message handling
+            import asyncio
+            asyncio.create_task(telegram_service.start_background_polling())
+            
+            logger.info("Telegram service initialized and polling started")
         except Exception as e:
             logger.error(f"Failed to initialize Telegram service: {e}")
     else:
@@ -132,17 +137,102 @@ def root():
 # Development restart endpoint
 @app.post("/api/restart")
 def restart_server():
-    """Restart the server (development only)"""
+    """Restart the server (development only) with proper process cleanup"""
     import os
     import sys
     import threading
+    import subprocess
+    import psutil
+    import time
     
-    def restart():
-        """Restart the current process"""
-        print("=== RESTARTING SERVER ===")
-        os.execv(sys.executable, [sys.executable] + sys.argv)
+    def cleanup_and_restart():
+        """Clean up processes and restart"""
+        try:
+            print("=== RESTARTING SERVER ===")
+            
+            # Get current process info
+            current_pid = os.getpid()
+            current_port = None
+            
+            # Find current server port
+            for conn in psutil.net_connections():
+                if conn.pid == current_pid and conn.laddr and conn.laddr.port >= 8000:
+                    current_port = conn.laddr.port
+                    break
+            
+            print(f"Current PID: {current_pid}, Port: {current_port}")
+            
+            # Find and kill other uvicorn processes on similar ports
+            killed_processes = []
+            for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
+                try:
+                    if proc.info['name'] == 'uvicorn.exe' and proc.info['pid'] != current_pid:
+                        # Check if it's a TaskMaster server by looking at command line
+                        cmdline = ' '.join(proc.info['cmdline'] or [])
+                        if 'src.api.app:app' in cmdline:
+                            print(f"Killing conflicting uvicorn process: PID {proc.info['pid']}")
+                            proc.kill()
+                            killed_processes.append(proc.info['pid'])
+                except (psutil.NoSuchProcess, psutil.AccessDenied):
+                    continue
+            
+            if killed_processes:
+                print(f"Killed {len(killed_processes)} conflicting processes")
+                time.sleep(1)  # Wait for processes to die
+            
+            # Find an available port
+            import socket
+            def find_free_port(start_port=8000):
+                for port in range(start_port, start_port + 10):
+                    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                        try:
+                            s.bind(('', port))
+                            return port
+                        except OSError:
+                            continue
+                return start_port + 10  # Fallback
+            
+            new_port = current_port if current_port else find_free_port()
+            
+            # Build new command
+            new_cmd = [
+                sys.executable, 
+                '-m', 'uvicorn', 
+                'src.api.app:app',
+                '--reload',
+                '--host', '0.0.0.0',
+                '--port', str(new_port)
+            ]
+            
+            print(f"Starting new server on port {new_port}")
+            print(f"Command: {' '.join(new_cmd)}")
+            
+            # Change to backend directory
+            backend_dir = os.path.join(os.path.dirname(__file__), '..', '..')
+            backend_dir = os.path.abspath(backend_dir)
+            
+            # Start new process
+            subprocess.Popen(
+                new_cmd,
+                cwd=backend_dir,
+                creationflags=subprocess.CREATE_NEW_CONSOLE if os.name == 'nt' else 0
+            )
+            
+            print(f"New server started on port {new_port}")
+            time.sleep(2)  # Give new server time to start
+            
+            # Kill current process
+            print("Terminating current process...")
+            os._exit(0)
+            
+        except Exception as e:
+            print(f"Error during restart: {e}")
+            import traceback
+            traceback.print_exc()
+            # Fallback to simple restart
+            os.execv(sys.executable, [sys.executable] + sys.argv)
     
     # Schedule restart after response is sent
-    threading.Timer(0.5, restart).start()
+    threading.Timer(1.0, cleanup_and_restart).start()
     
-    return {"message": "Server restarting...", "status": "initiated"}
+    return {"message": "Server restarting with process cleanup...", "status": "initiated"}

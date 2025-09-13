@@ -2,7 +2,17 @@
 // NO EMOJIS
 import axios from 'axios';
 
-const API_BASE_URL = '/api';
+// Determine backend URL based on environment
+const getBackendUrl = () => {
+  // In development, use specific backend port
+  if (import.meta.env.DEV) {
+    return import.meta.env.VITE_API_URL || 'http://localhost:8002/api';
+  }
+  // In production, assume backend is on same domain
+  return '/api';
+};
+
+const API_BASE_URL = getBackendUrl();
 
 // Create axios instance
 const apiClient = axios.create({

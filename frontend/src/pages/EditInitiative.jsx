@@ -4,7 +4,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import InitiativeForm from '../components/forms/InitiativeForm';
+import InitiativeContainerForm from '../components/forms/InitiativeContainerForm';
 import { initiativeService } from '../services/initiativeService';
 
 const EditInitiative = () => {
@@ -120,7 +120,7 @@ const EditInitiative = () => {
                     )}
                     
                     {initiative && (
-                        <InitiativeForm
+                        <InitiativeContainerForm
                             initiative={initiative}
                             onSubmit={handleSubmit}
                             onCancel={handleCancel}

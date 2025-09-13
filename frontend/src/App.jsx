@@ -8,7 +8,7 @@ import NewTask from './pages/NewTask';
 import Events from './pages/Events';
 import NewEvent from './pages/NewEvent';
 import SchedulePage from './pages/SchedulePage';
-import Initiatives from './pages/Initiatives';
+import InitiativesContainer from './pages/InitiativesContainer';
 import Projects from './pages/Projects';
 import InitiativeDetail from './pages/InitiativeDetail';
 import ProjectDetail from './pages/ProjectDetail';
@@ -26,7 +26,7 @@ function App() {
           <Route path="events" element={<Events />} />
           <Route path="events/new" element={<NewEvent />} />
           <Route path="schedule" element={<SchedulePage />} />
-          <Route path="initiatives" element={<Initiatives />} />
+          <Route path="initiatives" element={<InitiativesContainer />} />
           <Route path="initiatives/new" element={<NewInitiative />} />
           <Route path="initiatives/:id" element={<InitiativeDetail />} />
           <Route path="initiatives/:id/edit" element={<EditInitiative />} />

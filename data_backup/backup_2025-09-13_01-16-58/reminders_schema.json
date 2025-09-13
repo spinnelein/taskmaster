@@ -1,0 +1,125 @@
+{
+  "columns": [
+    {
+      "name": "reminder_type",
+      "type": "VARCHAR(11)",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "title",
+      "type": "VARCHAR(255)",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "message",
+      "type": "VARCHAR(1000)",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "scheduled_time",
+      "type": "DATETIME",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "minutes_before",
+      "type": "INTEGER",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": "VARCHAR(9)",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "sent_at",
+      "type": "DATETIME",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "error_message",
+      "type": "VARCHAR(500)",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "retry_count",
+      "type": "INTEGER",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "snooze_until",
+      "type": "DATETIME",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "snooze_count",
+      "type": "INTEGER",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "task_id",
+      "type": "VARCHAR(36)",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "event_id",
+      "type": "VARCHAR(36)",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "meal_id",
+      "type": "VARCHAR(36)",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "telegram_chat_id",
+      "type": "VARCHAR(100)",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "telegram_message_id",
+      "type": "VARCHAR(100)",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "custom_data",
+      "type": "JSON",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "id",
+      "type": "VARCHAR(36)",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "updated_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "default": null
+    }
+  ],
+  "create_sql": "CREATE TABLE reminders (\n\treminder_type VARCHAR(11) NOT NULL, \n\ttitle VARCHAR(255) NOT NULL, \n\tmessage VARCHAR(1000), \n\tscheduled_time DATETIME NOT NULL, \n\tminutes_before INTEGER, \n\tstatus VARCHAR(9), \n\tsent_at DATETIME, \n\terror_message VARCHAR(500), \n\tretry_count INTEGER, \n\tsnooze_until DATETIME, \n\tsnooze_count INTEGER, \n\ttask_id VARCHAR(36), \n\tevent_id VARCHAR(36), \n\tmeal_id VARCHAR(36), \n\ttelegram_chat_id VARCHAR(100), \n\ttelegram_message_id VARCHAR(100), \n\tcustom_data JSON, \n\tid VARCHAR(36) NOT NULL, \n\tcreated_at DATETIME NOT NULL, \n\tupdated_at DATETIME NOT NULL, \n\tPRIMARY KEY (id), \n\tFOREIGN KEY(event_id) REFERENCES events (id), \n\tFOREIGN KEY(meal_id) REFERENCES meals (id), \n\tFOREIGN KEY(task_id) REFERENCES tasks (id)\n)"
+}

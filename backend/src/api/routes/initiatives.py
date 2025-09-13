@@ -31,7 +31,7 @@ def create_initiative(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Failed to create initiative"
             )
-        return new_initiative
+        return new_initiative.to_dict()
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -57,7 +57,7 @@ def get_initiatives(
         initiatives = initiatives[skip:skip + limit]
         
         return InitiativeListResponse(
-            initiatives=initiatives,
+            initiatives=[init.to_dict() for init in initiatives],
             total=total
         )
     except Exception as e:
@@ -74,7 +74,7 @@ def get_initiative_templates(
     try:
         templates = repo.get_templates()
         return InitiativeListResponse(
-            initiatives=templates,
+            initiatives=[tmpl.to_dict() for tmpl in templates],
             total=len(templates)
         )
     except Exception as e:
@@ -97,7 +97,7 @@ def create_from_template(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Template not found"
             )
-        return initiative
+        return initiative.to_dict()
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -116,7 +116,7 @@ def get_initiative(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Initiative not found"
         )
-    return initiative
+    return initiative.to_dict()
 
 @router.get("/{initiative_id}/stats", response_model=InitiativeStats)
 def get_initiative_stats(
@@ -132,13 +132,25 @@ def get_initiative_stats(
                 detail="Initiative not found"
             )
         
+        # Get all tasks for this initiative to calculate missing fields
+        from ...data.models.task_model import TaskModel
+        tasks = repo.db.query(TaskModel).filter(
+            TaskModel.initiative_id == initiative_id
+        ).all()
+        
+        # Calculate status breakdown
+        active_tasks = len([t for t in tasks if t.status.value == "active"])
+        blocked_tasks = len([t for t in tasks if t.status.value == "blocked"])
+        
         return InitiativeStats(
             initiative_id=initiative_id,
+            total_tasks=stats_data["stats"]["total_tasks"],
+            active_tasks=active_tasks,
+            completed_tasks=stats_data["stats"]["completed_tasks"],
+            blocked_tasks=blocked_tasks,
             completion_rate=stats_data["stats"]["completion_rate"],
-            average_duration_minutes=stats_data["stats"]["average_duration_minutes"],
             last_completed_at=stats_data["stats"]["last_completed_at"],
-            next_due_date=None,  # TODO: Calculate next due date
-            overdue_count=0  # TODO: Calculate overdue tasks
+            average_task_duration_minutes=stats_data["stats"]["average_duration_minutes"]
         )
     except Exception as e:
         raise HTTPException(
@@ -162,7 +174,35 @@ def update_initiative(
     
     try:
         updated = repo.update(initiative_id, initiative.model_dump(exclude_unset=True))
-        return updated
+        return updated.to_dict()
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=str(e)
+        )
+
+@router.post("/{initiative_id}/complete", response_model=InitiativeResponse)
+def complete_initiative(
+    initiative_id: str,
+    repo: InitiativeRepository = Depends(get_initiative_repo)
+):
+    """Complete an initiative and all its tasks"""
+    existing = repo.get(initiative_id)
+    if not existing:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Initiative not found"
+        )
+    
+    if existing.status == "completed":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Initiative is already completed"
+        )
+    
+    try:
+        completed = repo.complete_initiative_with_tasks(initiative_id)
+        return completed.to_dict()
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
