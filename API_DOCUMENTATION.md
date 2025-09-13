@@ -6,6 +6,9 @@ Complete API reference for the TaskMaster application. All endpoints follow REST
 **API Prefix**: `/api/`  
 **Interactive Documentation**: `/docs` (Swagger UI)
 
+**Last Updated**: September 13, 2025  
+**Version**: 1.0.0
+
 ## Authentication
 
 Currently, no authentication is required. All endpoints are open for development.
@@ -429,6 +432,103 @@ GET /api/dishes
 POST /api/dishes
 ```
 
+### Initiatives API (`/api/initiatives`)
+
+**Status**: ⚠️ API endpoints currently experiencing timeout issues (under investigation)
+
+Recurring initiative and goal management system. Initiatives represent repeating activities that generate tasks on a scheduled basis.
+
+#### Get All Initiatives
+```
+GET /api/initiatives?active_only=false&skip=0&limit=100
+```
+
+**Query Parameters:**
+- `active_only` (boolean, optional): Filter to only active initiatives
+- `skip` (integer, optional): Number of records to skip for pagination
+- `limit` (integer, optional): Maximum number of records to return
+
+**Response:**
+```json
+{
+  "initiatives": [
+    {
+      "id": "uuid-string",
+      "title": "Morning Routine",
+      "description": "Daily morning activities",
+      "frequency": "daily",
+      "interval": 1,
+      "status": "active",
+      "is_template": false,
+      "preferred_start_time": "08:00:00",
+      "estimated_duration_minutes": 60,
+      "created_at": "2025-09-13T10:00:00Z",
+      "updated_at": "2025-09-13T10:00:00Z"
+    }
+  ],
+  "total": 1
+}
+```
+
+#### Get Initiative by ID
+```
+GET /api/initiatives/{initiative_id}
+```
+
+#### Get Initiative Statistics
+```
+GET /api/initiatives/{initiative_id}/stats
+```
+
+**Response:**
+```json
+{
+  "initiative_id": "uuid-string",
+  "completion_rate": 85.5,
+  "average_duration_minutes": 45,
+  "last_completed_at": "2025-09-13T10:00:00Z",
+  "next_due_date": null,
+  "overdue_count": 0
+}
+```
+
+#### Create Initiative
+```
+POST /api/initiatives
+```
+
+**Request Body:**
+```json
+{
+  "title": "Evening Reflection",
+  "description": "Daily reflection and planning",
+  "frequency": "daily",
+  "interval": 1,
+  "preferred_start_time": "20:00:00",
+  "estimated_duration_minutes": 30
+}
+```
+
+#### Update Initiative
+```
+PUT /api/initiatives/{initiative_id}
+```
+
+#### Delete Initiative
+```
+DELETE /api/initiatives/{initiative_id}
+```
+
+#### Get Initiative Templates
+```
+GET /api/initiatives/templates
+```
+
+#### Create from Template
+```
+POST /api/initiatives/templates/{template_id}/create?title=New Initiative Title
+```
+
 ## Status Codes
 
 - `200` - Success
@@ -467,6 +567,20 @@ POST /api/dishes
 - `weekly` - Repeat every week(s)
 - `monthly` - Repeat every month(s)
 - `yearly` - Repeat every year(s)
+
+### Initiative Frequency
+- `daily` - Execute every day
+- `weekly` - Execute every week
+- `monthly` - Execute every month
+- `quarterly` - Execute every quarter
+- `yearly` - Execute annually
+- `custom` - Custom recurrence pattern
+
+### Initiative Status
+- `active` - Initiative is currently running
+- `paused` - Initiative is temporarily paused
+- `completed` - Initiative has been completed
+- `archived` - Initiative is archived for reference
 
 ### Recurring Edit Modes
 - `this_only` - Edit only this instance
