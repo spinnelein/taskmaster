@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import eventService from '../../services/eventService';
 import taskService from '../../services/taskService';
 import { parsePacificTime, formatPacificTime } from '../../utils/timezone';
+import EventForm from '../events/EventForm.jsx';
 
 interface Event {
   id: string;
@@ -11,6 +12,17 @@ interface Event {
   start_time: string;
   end_time: string;
   is_blocking: boolean;
+  location?: string;
+  description?: string;
+  is_recurring?: boolean;
+  recurrence_pattern?: {
+    pattern: string;
+    interval: number;
+    weekdays: string[];
+    end_type: string;
+    end_after_count?: number;
+    end_date?: string;
+  };
 }
 
 interface Task {
@@ -27,12 +39,15 @@ interface TimePool {
   minutes: number;
 }
 
+
 const SimpleScheduleView: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [events, setEvents] = useState<Event[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [timePools, setTimePools] = useState<TimePool[]>([]);
   const [loading, setLoading] = useState(true);
+  const [editingEvent, setEditingEvent] = useState<Event | null>(null);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   // Load real data from API
   useEffect(() => {
@@ -69,28 +84,9 @@ const SimpleScheduleView: React.FC = () => {
       console.error('=== SCHEDULE DATA LOADING ERROR ===');
       console.error('Error loading schedule data:', error);
       
-      // Fallback to mock data on error
-      setEvents([
-        {
-          id: '1',
-          title: 'Take kids to school',
-          start_time: '2024-01-01T08:00:00',
-          end_time: '2024-01-01T08:40:00',
-          is_blocking: true
-        },
-        {
-          id: '2',
-          title: 'Team Meeting',
-          start_time: '2024-01-01T11:00:00',
-          end_time: '2024-01-01T12:00:00',
-          is_blocking: false
-        }
-      ]);
-      
-      setTasks([
-        { id: '1', title: 'Review code PR', duration: 45, urgency: 8, completion_status: 'pending' },
-        { id: '2', title: 'Write documentation', duration: 60, urgency: 5, completion_status: 'pending' }
-      ]);
+      // Set empty arrays on error to avoid showing mock data
+      setEvents([]);
+      setTasks([]);
     } finally {
       setLoading(false);
     }
@@ -175,6 +171,41 @@ const SimpleScheduleView: React.FC = () => {
     if (urgency >= 8) return 'urgent';
     if (urgency >= 5) return 'medium';
     return 'low';
+  };
+
+  const handleEventClick = (event: Event) => {
+    setEditingEvent(event);
+    setShowEditModal(true);
+  };
+
+  const handleSaveEvent = async (eventData: any) => {
+    try {
+      if (!editingEvent) return;
+      
+      // The eventData comes from EventForm and is already properly formatted
+      const response = await eventService.updateEvent(editingEvent.id, eventData);
+      
+      // Update the event in the local state with the response data
+      setEvents(events.map(e => e.id === editingEvent.id ? response : e));
+      
+      setShowEditModal(false);
+      setEditingEvent(null);
+      
+      // Reload schedule data to ensure consistency
+      loadScheduleData();
+    } catch (error) {
+      console.error('Failed to update event:', error);
+      
+      // More specific error message
+      let errorMessage = 'Failed to update event. Please try again.';
+      if (error.response?.data?.detail) {
+        errorMessage = `Error: ${error.response.data.detail}`;
+      } else if (error.message) {
+        errorMessage = `Error: ${error.message}`;
+      }
+      
+      alert(errorMessage);
+    }
   };
 
   if (loading) {
@@ -292,9 +323,14 @@ const SimpleScheduleView: React.FC = () => {
               <div
                 key={event.id}
                 className={`event-block ${event.is_blocking ? 'blocking' : 'non-blocking'}`}
-                style={getEventStyle(event)}
+                style={{...getEventStyle(event), cursor: 'pointer'}}
+                onClick={() => handleEventClick(event)}
+                title="Click to edit event"
               >
-                <div className="event-title">{event.title}</div>
+                <div className="event-title">
+                  {event.title}
+                  {event.is_recurring && <span style={{ marginLeft: '4px', fontSize: '12px' }}>🔁</span>}
+                </div>
                 <div className="event-time">
                   {formatTime(event.start_time)} - {formatTime(event.end_time)}
                 </div>
@@ -303,6 +339,45 @@ const SimpleScheduleView: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Edit Event Modal */}
+      {showEditModal && editingEvent && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000
+        }}>
+          <div style={{
+            backgroundColor: 'white',
+            borderRadius: '8px',
+            padding: '24px',
+            maxWidth: '800px',
+            width: '90%',
+            maxHeight: '90vh',
+            overflowY: 'auto'
+          }}>
+            <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: 600 }}>
+              Edit Event
+            </h3>
+            
+            <EventForm 
+              event={editingEvent}
+              onSubmit={handleSaveEvent}
+              onCancel={() => {
+                setShowEditModal(false);
+                setEditingEvent(null);
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

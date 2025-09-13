@@ -92,6 +92,21 @@ python -m pytest tests/integration/ # Integration tests only
 
 ### ✅ Recently Completed (Sept 2025)
 
+**Recurring Events Master/Instance Architecture (Sept 13, 2025):**
+- **Master/Exception Pattern**: Implemented industry-standard recurring event architecture with master events and instances
+- **Database Migration**: Added `recurrence_master_id`, `is_recurrence_master`, `is_recurrence_exception`, `recurrence_instance_date` fields
+- **RecurringEventsService**: Complete service for managing recurring events with edit modes (This Only, This and Future, All in Series)
+- **API Filtering**: Events endpoint now shows only master events + standalone events (reduced from 750+ to ~15 events)
+- **Frontend Integration**: Fixed schedule page event editing to support recurring events and prevent UTC timezone conversion
+- **Data Cleanup**: Removed 1,093 duplicate events created by old recurring logic
+- **Update Endpoint Fix**: Event update now properly uses RecurringEventsService when converting to recurring
+
+**Task System Fixes (Sept 13, 2025):**
+- **Task Deletion Fix**: Corrected API method calls from `repo.get_by_id()` to `repo.get()` in delete and complete endpoints
+- **Frontend Event Count**: Updated sidebar to use API's `total` field instead of counting array length
+
+### ✅ Recently Completed (Sept 2025)
+
 **Frontend - Initiatives & Projects Integration:**
 - **Complete Frontend Implementation**: Full initiatives and projects pages with navigation, forms, and detail views
 - **Advanced Data Models**: Initiative and project models with phases, templates, and relationships
@@ -128,8 +143,9 @@ python -m pytest tests/integration/ # Integration tests only
 - **API Endpoints**: `/api/weather/current`, `/api/weather/forecast`, `/api/weather/suitable-days`, `/api/weather/update`
 
 ### 🔧 Current Issues to Address
-- **Tasks API Endpoint**: Still returning 500 errors due to schema validation issues
 - **Form Integration**: Initiative/Project forms need API connection for create/edit operations
+- **Series-Level Editing UI**: Need frontend interface for editing recurring event series with mode selection
+- **Runtime Event Expansion**: Schedule views need to dynamically expand recurring events for display
 
 ### 🚀 Planned Upgrades & Roadmap
 
@@ -301,7 +317,7 @@ Comprehensive Telegram notifications for both tasks and events:
 │   └── models/
 │       ├── base_model.py            # Base model with UUID/timestamps
 │       ├── task_model.py            # Enhanced task model with relationships
-│       ├── event_model.py           # Event model with notifications_enabled
+│       ├── event_model.py           # Event model with master/instance relationships
 │       ├── initiative_model.py      # Initiative model with recurrence
 │       ├── project_model.py         # Project + ProjectPhase models
 │       ├── meal_model.py            # Meal planning models

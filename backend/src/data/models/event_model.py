@@ -55,10 +55,18 @@ class EventModel(BaseModel):
     is_moveable = Column(Boolean, default=False)  # Can this event be rescheduled automatically?
     min_notice_hours = Column(Integer, default=0)  # Minimum notice needed to move this event
     
-    # Recurrence
+    # Recurrence - Enhanced Master/Exception Pattern
     is_recurring = Column(Boolean, default=False)
     recurrence_pattern = Column(JSON, nullable=True)
-    recurrence_parent_id = Column(String(36), nullable=True)  # For recurring event instances
+    
+    # Master/Instance relationship
+    recurrence_master_id = Column(String(36), ForeignKey("events.id"), nullable=True)  # Points to master event
+    is_recurrence_master = Column(Boolean, default=False)  # True for the master event
+    is_recurrence_exception = Column(Boolean, default=False)  # True if this instance was individually modified
+    recurrence_instance_date = Column(DateTime, nullable=True)  # Original date this instance represents
+    
+    # Legacy field for backward compatibility
+    recurrence_parent_id = Column(String(36), nullable=True)  # Deprecated - use recurrence_master_id
     
     # Organization relationships
     project_id = Column(String(36), ForeignKey("projects.id"), nullable=True)
@@ -77,6 +85,10 @@ class EventModel(BaseModel):
     # Relationships
     project = relationship("ProjectModel", back_populates="events")
     meal = relationship("MealModel", back_populates="event", uselist=False, foreign_keys="MealModel.event_id")
+    
+    # Recurring event relationships
+    recurrence_master = relationship("EventModel", remote_side="EventModel.id", back_populates="recurrence_instances")
+    recurrence_instances = relationship("EventModel", back_populates="recurrence_master", cascade="all, delete-orphan")
     
     def __repr__(self):
         return f"<Event(id={self.id}, title='{self.title}', is_blocking={self.is_blocking})>"

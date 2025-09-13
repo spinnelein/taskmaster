@@ -24,7 +24,7 @@ function SidebarNav() {
         eventService.getEvents()
       ]);
       setTaskCount(tasksResponse.tasks?.length || 0);
-      setEventCount(eventsResponse.events?.length || 0);
+      setEventCount(eventsResponse.total || 0);
     } catch (error) {
       console.error('Failed to load counts:', error);
     }

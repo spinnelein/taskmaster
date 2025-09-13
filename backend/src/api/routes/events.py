@@ -4,15 +4,17 @@ NO EMOJIS
 """
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from typing import Optional
+from typing import Optional, List
 from datetime import date, datetime
 import pytz
 
-from ...schemas.event_schemas import EventCreate, EventUpdate, EventResponse, EventListResponse
+from ...schemas.event_schemas import (
+    EventCreate, EventUpdate, EventResponse, EventListResponse, 
+    RecurringEventEditRequest, RecurringEventDeleteRequest, RecurringEditMode
+)
 from ...schemas.base_schemas import MessageResponse
 from ...data.repositories.event_repo import EventRepository
-from ...domain.event import Event
-from ...utils.recurrence import generate_recurring_events
+from ...services.recurring_events_service import RecurringEventsService
 from ..dependencies import get_db
 
 router = APIRouter(tags=["events"])
@@ -51,7 +53,7 @@ def get_events(
     date: Optional[date] = Query(None, description="Filter by date"),
     db: Session = Depends(get_db)
 ):
-    """Get all events with optional date filter"""
+    """Get all events with optional date filter - shows only master events for recurring series"""
     try:
         print("=== GET EVENTS DEBUG ===")
         repo = EventRepository(db)
@@ -61,12 +63,28 @@ def get_events(
         else:
             events = repo.get_all()
         
-        print(f"Found {len(events)} events")
-        if events:
-            print(f"First event: {events[0].__dict__}")
+        print(f"Found {len(events)} total events")
+        
+        # Filter to show only:
+        # 1. Standalone events (no master_id - these are truly non-recurring)
+        # 2. Master events of recurring series (is_recurrence_master = True)
+        # Exclude: Instance events (has recurrence_master_id)
+        filtered_events = []
+        for event in events:
+            is_master = getattr(event, 'is_recurrence_master', False) or False
+            has_master_id = getattr(event, 'recurrence_master_id', None) is not None
+            
+            # Include if:
+            # - Is a recurring master event, OR
+            # - Is standalone (not part of any recurring series)
+            # Exclude: recurring instances (has_master_id = True)
+            if is_master or not has_master_id:
+                filtered_events.append(event)
+        
+        print(f"Filtered to {len(filtered_events)} events (masters + non-recurring)")
         
         event_responses = []
-        for event in events:
+        for event in filtered_events:
             try:
                 event_response = EventResponse.model_validate(event)
                 event_responses.append(event_response)
@@ -76,7 +94,7 @@ def get_events(
         
         return EventListResponse(
             events=event_responses,
-            total=len(events)
+            total=len(filtered_events)
         )
     except Exception as e:
         print(f"Error in get_events: {e}")
@@ -89,9 +107,10 @@ def create_event(
 ):
     """Create a new event"""
     print("=== BACKEND EVENT CREATION DEBUG ===")
-    print(f"Received data: {event_data.dict()}")
+    print(f"Received data: {event_data.model_dump()}")
     
     repo = EventRepository(db)
+    recurring_service = RecurringEventsService(db)
     
     try:
         # Incoming times are already in Pacific time from frontend
@@ -101,63 +120,33 @@ def create_event(
         
         print(f"Storing times as Pacific: {start_pacific} - {end_pacific}")
         
+        # Prepare event data
+        event_dict = {
+            'title': event_data.title,
+            'start_time': start_pacific,
+            'end_time': end_pacific,
+            'is_blocking': event_data.is_blocking,
+            'location': event_data.location,
+            'description': event_data.description,
+            'notifications_enabled': getattr(event_data, 'notifications_enabled', True),
+            'is_recurring': event_data.is_recurring,
+            'recurrence_pattern': event_data.recurrence_pattern.model_dump() if event_data.recurrence_pattern else None
+        }
+        
         if event_data.is_recurring and event_data.recurrence_pattern:
             print(f"Creating recurring event with pattern: {event_data.recurrence_pattern}")
             
-            # Generate recurring events
-            recurrence_dict = event_data.recurrence_pattern.dict() if hasattr(event_data.recurrence_pattern, 'dict') else event_data.recurrence_pattern
-            recurring_events = generate_recurring_events(
-                title=event_data.title,
-                start_time=start_pacific,
-                end_time=end_pacific,
-                recurrence_pattern=recurrence_dict,
-                is_blocking=event_data.is_blocking,
-                location=event_data.location,
-                description=event_data.description
-            )
+            # Use new recurring events service
+            master_event = recurring_service.create_recurring_event(event_dict)
+            print(f"Created recurring event master with ID: {master_event.id}")
             
-            print(f"Generated {len(recurring_events)} recurring events")
-            
-            # Save parent event first
-            parent_event_data = recurring_events[0]
-            parent_event = Event(
-                title=parent_event_data['title'],
-                start_time=parent_event_data['start_time'],
-                end_time=parent_event_data['end_time'],
-                is_blocking=parent_event_data['is_blocking'],
-                location=parent_event_data['location'],
-                description=parent_event_data['description']
-            )
-            saved_parent = repo.save(parent_event)
-            
-            # Save recurring instances
-            for event_instance in recurring_events[1:]:  # Skip parent (first item)
-                instance_event = Event(
-                    title=event_instance['title'],
-                    start_time=event_instance['start_time'],
-                    end_time=event_instance['end_time'],
-                    is_blocking=event_instance['is_blocking'],
-                    location=event_instance['location'],
-                    description=event_instance['description']
-                )
-                repo.save(instance_event)
-            
-            return EventResponse.model_validate(saved_parent)
+            return EventResponse.model_validate(master_event)
         else:
             # Single event
-            event = Event(
-                title=event_data.title,
-                start_time=start_pacific,
-                end_time=end_pacific,
-                is_blocking=event_data.is_blocking,
-                location=event_data.location,
-                description=event_data.description
-            )
-            print(f"Created event object: {event.__dict__}")
+            print(f"Creating single event with data: {event_dict}")
             
-            saved_event = repo.save(event)
+            saved_event = repo.create(event_dict)
             print(f"Saved event with ID: {saved_event.id}")
-            print(f"Event data: {saved_event.to_dict()}")
             
             return EventResponse.model_validate(saved_event)
     except ValueError as e:
@@ -166,6 +155,80 @@ def create_event(
     except Exception as e:
         print(f"Unexpected error: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.put("/{event_id}", response_model=EventResponse)
+def update_event(
+    event_id: str,
+    event_data: EventUpdate,
+    db: Session = Depends(get_db)
+):
+    """Update an event"""
+    repo = EventRepository(db)
+    event = repo.get(event_id)
+    
+    if not event:
+        raise HTTPException(status_code=404, detail="Event not found")
+    
+    # Convert update data to dict, excluding unset fields
+    update_data = event_data.model_dump(exclude_unset=True)
+    
+    
+    
+    # Handle timezone conversion for start/end times if provided
+    if 'start_time' in update_data:
+        start_time = update_data['start_time']
+        update_data['start_time'] = start_time.replace(tzinfo=None) if start_time.tzinfo else start_time
+    
+    if 'end_time' in update_data:
+        end_time = update_data['end_time']
+        update_data['end_time'] = end_time.replace(tzinfo=None) if end_time.tzinfo else end_time
+    
+    try:
+        # Check if event is being updated to be recurring
+        is_becoming_recurring = (
+            'is_recurring' in update_data and 
+            update_data.get('is_recurring') == True and 
+            not getattr(event, 'is_recurring', False)
+        )
+        
+        if is_becoming_recurring and 'recurrence_pattern' in update_data:
+            print(f"Event {event_id} is becoming recurring, using RecurringEventsService...")
+            
+            # Delete the existing standalone event
+            repo.delete(event_id)
+            
+            # Prepare data for new recurring event
+            event_data = {
+                'title': update_data.get('title', event.title),
+                'start_time': update_data.get('start_time', event.start_time),
+                'end_time': update_data.get('end_time', event.end_time),
+                'is_blocking': update_data.get('is_blocking', event.is_blocking),
+                'location': update_data.get('location', event.location),
+                'description': update_data.get('description', event.description),
+                'is_recurring': True,
+                'recurrence_pattern': update_data['recurrence_pattern']
+            }
+            
+            # Use RecurringEventsService to create proper master/instance structure
+            recurring_service = RecurringEventsService(db)
+            master_event = recurring_service.create_recurring_event(event_data)
+            
+            print(f"Created recurring event with master ID: {master_event.id}")
+            updated_event = master_event
+            
+        else:
+            # Regular update without recurring logic
+            updated_event = repo.update(event_id, update_data)
+        
+        if not updated_event:
+            raise HTTPException(status_code=500, detail="Failed to update event")
+        
+        return EventResponse.model_validate(updated_event)
+        
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error updating event: {str(e)}")
 
 @router.get("/{event_id}", response_model=EventResponse)
 def get_event(
@@ -181,41 +244,117 @@ def get_event(
     
     return EventResponse.model_validate(event)
 
-@router.put("/{event_id}", response_model=EventResponse)
-def update_event(
+
+@router.put("/{event_id}/recurring", response_model=List[EventResponse])
+def update_recurring_event(
     event_id: str,
-    event_data: EventUpdate,
+    request: RecurringEventEditRequest,
     db: Session = Depends(get_db)
 ):
-    """Update an event"""
-    repo = EventRepository(db)
-    event = repo.get_by_id(event_id)
-    
-    if not event:
-        raise HTTPException(status_code=404, detail="Event not found")
-    
-    # Update fields if provided
-    update_data = event_data.dict(exclude_unset=True)
-    for field, value in update_data.items():
-        setattr(event, field, value)
+    """Update a recurring event with specified edit mode"""
+    recurring_service = RecurringEventsService(db)
     
     try:
-        event.validate()
-        saved_event = repo.save(event)
-        return EventResponse.model_validate(saved_event)
+        # Convert update data to dict, excluding unset fields
+        update_data = request.event_data.model_dump(exclude_unset=True)
+        
+        # Handle timezone conversion for start/end times if provided
+        if 'start_time' in update_data:
+            start_time = update_data['start_time']
+            update_data['start_time'] = start_time.replace(tzinfo=None) if start_time.tzinfo else start_time
+        
+        if 'end_time' in update_data:
+            end_time = update_data['end_time']
+            update_data['end_time'] = end_time.replace(tzinfo=None) if end_time.tzinfo else end_time
+        
+        affected_events = recurring_service.edit_recurring_event(
+            event_id=event_id,
+            update_data=update_data,
+            edit_mode=request.edit_mode,
+            original_date=request.original_date
+        )
+        
+        return [EventResponse.model_validate(event) for event in affected_events]
+        
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error updating recurring event: {str(e)}")
+
+@router.delete("/{event_id}/recurring", response_model=MessageResponse)
+def delete_recurring_event(
+    event_id: str,
+    request: RecurringEventDeleteRequest,
+    db: Session = Depends(get_db)
+):
+    """Delete a recurring event with specified edit mode"""
+    recurring_service = RecurringEventsService(db)
+    
+    try:
+        success = recurring_service.delete_recurring_event(
+            event_id=event_id,
+            edit_mode=request.edit_mode,
+            original_date=request.original_date
+        )
+        
+        if success:
+            return MessageResponse(message="Recurring event deleted successfully")
+        else:
+            raise HTTPException(status_code=500, detail="Failed to delete recurring event")
+            
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error deleting recurring event: {str(e)}")
+
+@router.get("/{event_id}/recurring-info", response_model=dict)
+def get_recurring_event_info(
+    event_id: str,
+    db: Session = Depends(get_db)
+):
+    """Get information about a recurring event series"""
+    recurring_service = RecurringEventsService(db)
+    
+    try:
+        event = recurring_service.event_repo.get(event_id)
+        if not event:
+            raise HTTPException(status_code=404, detail="Event not found")
+        
+        is_recurring = recurring_service.is_recurring_event(event_id)
+        master_event = recurring_service.get_master_event(event_id)
+        
+        info = {
+            "is_recurring_event": is_recurring,
+            "is_master": event.is_recurrence_master if hasattr(event, 'is_recurrence_master') else False,
+            "is_exception": event.is_recurrence_exception if hasattr(event, 'is_recurrence_exception') else False,
+            "master_event_id": master_event.id if master_event else None,
+            "recurrence_pattern": master_event.recurrence_pattern if master_event else None
+        }
+        
+        return info
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error getting recurring event info: {str(e)}")
 
 @router.delete("/{event_id}", response_model=MessageResponse)
 def delete_event(
     event_id: str,
     db: Session = Depends(get_db)
 ):
-    """Delete an event"""
+    """Delete an event (non-recurring or single instance)"""
     repo = EventRepository(db)
+    recurring_service = RecurringEventsService(db)
     
-    if not repo.get_by_id(event_id):
+    event = repo.get(event_id)
+    if not event:
         raise HTTPException(status_code=404, detail="Event not found")
+    
+    # Check if this is part of a recurring series
+    if recurring_service.is_recurring_event(event_id):
+        raise HTTPException(
+            status_code=400, 
+            detail="This is a recurring event. Use the recurring delete endpoint with edit mode."
+        )
     
     deleted = repo.delete(event_id)
     
