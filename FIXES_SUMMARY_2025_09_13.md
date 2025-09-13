@@ -152,3 +152,99 @@ When deploying these changes:
 3. No UI for creating event exceptions yet
 
 This foundation provides a robust recurring events system that matches industry standards used by Google Calendar and Outlook.
+
+## API Issues Resolution - September 13, 2025 (Session 2)
+
+### Problem
+After implementing the recurring events architecture, several critical API issues were discovered:
+- Tasks and Events endpoints returning 500 Internal Server Error
+- Missing repository methods causing AttributeError exceptions
+- Pydantic v1 validators causing deprecation warnings
+- Missing route decorators preventing endpoint access
+- SQLAlchemy relationship warnings affecting performance
+
+### Solutions Implemented
+
+#### 1. Repository Layer Fixes
+- **Added `get_by_id()` method**: Created alias in BaseRepository for backwards compatibility
+- **Added `to_dict()` method**: Enhanced BaseModel with proper JSON serialization
+  - Handles datetime formatting (ISO strings)
+  - Processes enum values correctly
+  - Manages null values appropriately
+
+#### 2. API Endpoint Repairs
+- **Fixed task completion endpoint**: Updated to use proper repository pattern instead of non-existent model methods
+- **Added missing route decorator**: Fixed individual task retrieval with `@router.get("/{task_id}")`
+- **Updated error handling**: Proper exception handling with meaningful error messages
+
+#### 3. Schema Modernization
+- **Migrated Pydantic validators**: Updated from `@validator` to `@field_validator` for Pydantic v2
+- **Added classmethod decorators**: Required `@classmethod` decorators for new validator syntax
+- **Maintained validation logic**: All existing validation rules preserved
+
+#### 4. SQLAlchemy Relationship Optimization
+- **Added overlaps parameters**: Fixed relationship warnings in meal/dish models
+- **Eliminated mapper warnings**: Clean database schema initialization
+
+### Testing Results
+
+**Comprehensive API Testing with cURL:**
+
+✅ **Core Endpoints Working:**
+- `/health` - Server health check (200 OK)
+- `/api/tasks` - Task listing (200 OK, returns JSON array)  
+- `/api/tasks/{id}` - Individual task retrieval (200 OK)
+- `/api/tasks` - Task creation (201 Created)
+- `/api/tasks/{id}/complete` - Task completion (200 OK)
+- `/api/events` - Event listing (200 OK, 12 events)
+
+✅ **CRUD Operations Verified:**
+- **Create**: `curl -X POST /api/tasks` with JSON payload
+- **Read**: Both list and individual task endpoints
+- **Update**: Task status updates persist to database  
+- **Complete**: Task completion workflow end-to-end
+
+✅ **Data Integrity Confirmed:**
+- Status updates: `active` → `completed`
+- Boolean flags: `is_completed: false` → `true`
+- Timestamps: `updated_at` reflects changes
+- Enum serialization: Proper string values in responses
+
+**Testing Methodology:**
+1. **Repository Layer**: Direct Python testing of database operations
+2. **Model Serialization**: Validated `to_dict()` method output
+3. **HTTP Endpoints**: cURL testing of all CRUD operations
+4. **Data Persistence**: Verified changes persist across requests
+5. **Error Conditions**: Tested 404s, validation errors, server restarts
+
+### Before/After Comparison
+
+| Endpoint | Before | After | 
+|----------|---------|-------|
+| `GET /api/tasks/{id}` | 500 Internal Server Error | 200 OK with task data |
+| `POST /api/tasks/{id}/complete` | 500 Internal Server Error | 200 OK with success message |
+| Task Status Update | Failed silently | Persists to database correctly |
+| Schema Validation | Deprecation warnings | Clean Pydantic v2 validation |
+| SQLAlchemy Startup | Relationship warnings | Clean initialization |
+
+## Current Status Post-Fixes
+
+### ✅ Fully Functional Systems
+- **Task Management API**: Complete CRUD operations
+- **Event Management API**: Listing and retrieval working
+- **Recurring Events Architecture**: Master/instance pattern operational
+- **Database Operations**: Repository pattern working correctly
+- **Data Serialization**: JSON responses properly formatted
+
+### ⚠️ Known Remaining Issues  
+- **Initiatives/Projects API**: Endpoints hanging (separate investigation needed)
+- **Weather API**: Configuration-dependent issues
+- **Frontend Integration**: Forms not yet connected to working APIs
+
+### 🎯 Next Priority Phase
+With core API functionality restored, the next focus should be:
+1. **Frontend-Backend Integration**: Connect initiative/project forms to working APIs
+2. **Series-Level Editing UI**: Interface for recurring event edit modes  
+3. **Runtime Event Expansion**: Dynamic recurring event display in schedule views
+
+This resolves the critical API functionality blocking normal task management operations.

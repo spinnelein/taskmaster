@@ -2,7 +2,7 @@
 Task schemas for API
 NO EMOJIS
 """
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 from typing import Optional, List, Dict, Any
 from datetime import date, time, datetime
 from .base_schemas import BaseResponse
@@ -34,14 +34,16 @@ class TaskCreate(BaseModel):
     is_recurring: bool = Field(False)
     recurrence_pattern: Optional[Dict[str, Any]] = None
     
-    @validator('status')
+    @field_validator('status')
+    @classmethod
     def validate_status(cls, v):
         valid_statuses = ["active", "blocked", "completed"]
         if v not in valid_statuses:
             raise ValueError(f"Status must be one of {valid_statuses}")
         return v
     
-    @validator('required_weather')
+    @field_validator('required_weather')
+    @classmethod
     def validate_weather(cls, v):
         valid_weather = ["any", "sunny", "cloudy", "rainy", "snowy", "clear", "windy"]
         if v not in valid_weather:
@@ -58,12 +60,68 @@ class TaskUpdate(BaseModel):
     due_date: Optional[date] = None
     due_time: Optional[time] = None
     
-    @validator('status')
+    # Enhanced fields
+    priority: Optional[str] = None
+    is_divisible: Optional[bool] = None
+    min_chunk_size: Optional[int] = Field(None, gt=0)
+    required_weather: Optional[str] = None
+    required_context: Optional[List[str]] = None
+    equipment_needed: Optional[List[str]] = None
+    depends_on_task_ids: Optional[List[str]] = None
+    blocks_task_ids: Optional[List[str]] = None
+    
+    # Organization
+    initiative_id: Optional[str] = None
+    project_id: Optional[str] = None
+    phase_id: Optional[str] = None
+    meal_id: Optional[str] = None
+    
+    # Queue management
+    queue_position: Optional[int] = None
+    auto_scheduled: Optional[bool] = None
+    
+    # Cost tracking
+    estimated_cost: Optional[float] = None
+    actual_cost: Optional[float] = None
+    
+    # Recurring task
+    is_recurring: Optional[bool] = None
+    recurrence_pattern: Optional[Dict[str, Any]] = None
+    parent_task_id: Optional[str] = None
+    
+    # Progress tracking
+    partial_completion_minutes: Optional[int] = Field(None, ge=0)
+    remaining_minutes: Optional[int] = Field(None, ge=0)
+    
+    # Snooze
+    is_snoozed: Optional[bool] = None
+    snoozed_until: Optional[datetime] = None
+    
+    @field_validator('status')
+    @classmethod
     def validate_status(cls, v):
         if v is not None:
             valid_statuses = ["active", "blocked", "completed"]
             if v not in valid_statuses:
                 raise ValueError(f"Status must be one of {valid_statuses}")
+        return v
+    
+    @field_validator('priority')
+    @classmethod
+    def validate_priority(cls, v):
+        if v is not None:
+            valid_priorities = ["low", "medium", "high", "critical"]
+            if v not in valid_priorities:
+                raise ValueError(f"Priority must be one of {valid_priorities}")
+        return v
+    
+    @field_validator('required_weather')
+    @classmethod
+    def validate_weather(cls, v):
+        if v is not None:
+            valid_weather = ["any", "sunny", "cloudy", "rainy", "snowy", "clear", "windy"]
+            if v not in valid_weather:
+                raise ValueError(f"Weather must be one of {valid_weather}")
         return v
 
 class TaskResponse(BaseResponse):

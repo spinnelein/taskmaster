@@ -75,8 +75,8 @@ class MealDishModel(BaseModel):
     cook_completed = Column(Boolean, default=False)
     
     # Relationships
-    meal = relationship("MealModel")
-    dish = relationship("DishModel")
+    meal = relationship("MealModel", overlaps="dishes")
+    dish = relationship("DishModel", overlaps="meals")
     
     def __repr__(self):
         return f"<MealDish(meal_id={self.meal_id}, dish_id={self.dish_id}, servings={self.servings})>"

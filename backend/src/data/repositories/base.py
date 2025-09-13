@@ -21,6 +21,10 @@ class BaseRepository(Generic[T]):
             self.model.id == entity_id
         ).first()
     
+    def get_by_id(self, entity_id: str) -> Optional[T]:
+        """Get entity by ID (alias for get method for backwards compatibility)"""
+        return self.get(entity_id)
+    
     def get_all(self) -> List[T]:
         """Get all entities"""
         return self.db.query(self.model).all()
@@ -44,11 +48,14 @@ class BaseRepository(Generic[T]):
             return None
         
         for key, value in data.items():
-            if hasattr(entity, key) and value is not None:
-                setattr(entity, key, value)
+            if hasattr(entity, key):
+                # Allow setting boolean False values
+                if value is not None or isinstance(value, bool):
+                    setattr(entity, key, value)
         
         self.db.commit()
         self.db.refresh(entity)
+        
         return entity
     
     def delete(self, entity_id: str) -> bool:

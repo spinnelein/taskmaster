@@ -28,3 +28,19 @@ class BaseModel(Base):
         onupdate=datetime.utcnow,
         nullable=False
     )
+    
+    def to_dict(self):
+        """Convert model to dictionary for JSON serialization"""
+        result = {}
+        for column in self.__table__.columns:
+            value = getattr(self, column.name)
+            # Handle different data types
+            if value is None:
+                result[column.name] = None
+            elif isinstance(value, datetime):
+                result[column.name] = value.isoformat()
+            elif hasattr(value, 'value'):  # Handle enum values
+                result[column.name] = value.value
+            else:
+                result[column.name] = value
+        return result
