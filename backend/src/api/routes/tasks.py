@@ -15,7 +15,7 @@ from ..dependencies import get_db
 
 router = APIRouter(tags=["tasks"])
 
-@router.get("", response_model=TaskListResponse)
+@router.get("")
 def get_tasks(
     status: Optional[str] = Query(None, description="Filter by status"),
     db: Session = Depends(get_db)
@@ -28,10 +28,11 @@ def get_tasks(
     else:
         tasks = repo.get_all()
     
-    return TaskListResponse(
-        tasks=[TaskResponse(**task.to_dict()) for task in tasks],
-        total=len(tasks)
-    )
+    return {
+        "tasks": [],
+        "total": len(tasks),
+        "debug": f"Found {len(tasks)} tasks"
+    }
 
 @router.post("", response_model=TaskResponse)
 def create_task(
@@ -63,7 +64,7 @@ def get_overdue_tasks(db: Session = Depends(get_db)):
     tasks = repo.get_overdue()
     
     return TaskListResponse(
-        tasks=[TaskResponse(**task.to_dict()) for task in tasks],
+        tasks=[TaskResponse.model_validate(task) for task in tasks],
         total=len(tasks)
     )
 

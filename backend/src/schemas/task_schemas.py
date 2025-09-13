@@ -71,6 +71,7 @@ class TaskResponse(BaseResponse):
     title: str
     duration: int
     urgency: int
+    priority: str
     description: str
     status: str
     due_date: Optional[date]
@@ -95,6 +96,10 @@ class TaskResponse(BaseResponse):
     # Queue management
     queue_position: Optional[int]
     auto_scheduled: bool
+    
+    # Cost tracking
+    estimated_cost: Optional[float]
+    actual_cost: Optional[float]
     
     # Recurring task
     is_recurring: bool

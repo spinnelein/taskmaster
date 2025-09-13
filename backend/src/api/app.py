@@ -9,9 +9,10 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .routes import tasks, events, schedule, initiatives, projects, meals, dishes, schedules, reminders, task_queue, schedule_generation
+from .routes import tasks, events, schedule, initiatives, projects, meals, dishes, schedules, reminders, task_queue, schedule_generation, weather
 from ..data.database import SessionLocal
 from ..services.telegram_service import initialize_telegram_service, get_telegram_service
+from ..services.weather_service import initialize_weather_service
 from ..workers.reminder_worker import initialize_reminder_worker, get_reminder_worker
 
 # Configure logging
@@ -26,17 +27,29 @@ async def lifespan(app: FastAPI):
     
     # Initialize Telegram service if token is available
     telegram_token = os.getenv("TELEGRAM_BOT_TOKEN")
-    telegram_chat_id = os.getenv("TELEGRAM_DEFAULT_CHAT_ID")
     
     if telegram_token:
         try:
-            telegram_service = initialize_telegram_service(telegram_token, telegram_chat_id)
+            telegram_service = initialize_telegram_service(telegram_token)
             await telegram_service.initialize()
             logger.info("Telegram service initialized successfully")
         except Exception as e:
             logger.error(f"Failed to initialize Telegram service: {e}")
     else:
         logger.warning("TELEGRAM_BOT_TOKEN not found, Telegram service disabled")
+    
+    # Initialize weather service (works with or without API key)
+    weather_api_key = os.getenv("OPENWEATHER_API_KEY")
+    weather_location = os.getenv("WEATHER_LOCATION", "Seattle,WA,US")
+    
+    try:
+        weather_service = initialize_weather_service(weather_api_key, weather_location)
+        if weather_api_key:
+            logger.info(f"Weather service initialized with OpenWeather API for {weather_location}")
+        else:
+            logger.info(f"Weather service initialized with National Weather Service API for {weather_location}")
+    except Exception as e:
+        logger.error(f"Failed to initialize weather service: {e}")
     
     # Initialize reminder worker
     try:
@@ -84,7 +97,7 @@ app = FastAPI(
 # Configure CORS for frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],
+    allow_origins=["http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -102,6 +115,7 @@ app.include_router(schedules.router, prefix="/api/schedules", tags=["schedules"]
 app.include_router(reminders.router, prefix="/api/reminders", tags=["reminders"])
 app.include_router(task_queue.router, prefix="/api", tags=["task-queue"])
 app.include_router(schedule_generation.router, prefix="/api", tags=["schedule-generation"])
+app.include_router(weather.router, prefix="/api/weather", tags=["weather"])
 
 # Health check endpoint
 @app.get("/health")

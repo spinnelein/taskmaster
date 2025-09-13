@@ -53,7 +53,7 @@ class MealModel(BaseModel):
     # Relationships
     event_id = Column(String(36), ForeignKey("events.id"), nullable=True)  # Associated dinner event
     dishes = relationship("DishModel", secondary="meal_dishes", back_populates="meals")
-    event = relationship("EventModel", back_populates="meal")
+    event = relationship("EventModel", back_populates="meal", foreign_keys=[event_id])
     generated_tasks = relationship("TaskModel", back_populates="meal")  # Prep tasks generated from dishes
     
     def __repr__(self):

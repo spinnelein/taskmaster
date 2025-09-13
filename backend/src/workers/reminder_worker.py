@@ -73,6 +73,26 @@ class ReminderWorker:
             max_instances=1
         )
         
+        # Schedule event start notifications every minute
+        self.scheduler.add_job(
+            self.process_event_notifications,
+            trigger=IntervalTrigger(minutes=1),
+            id="process_event_notifications",
+            name="Process Event Start Notifications",
+            replace_existing=True,
+            max_instances=1
+        )
+        
+        # Schedule weather data updates every 3 hours
+        self.scheduler.add_job(
+            self.update_weather_data,
+            trigger=IntervalTrigger(hours=3),
+            id="update_weather_data",
+            name="Update Weather Data",
+            replace_existing=True,
+            max_instances=1
+        )
+        
         # Start the scheduler
         self.scheduler.start()
         self.is_running = True
@@ -232,6 +252,22 @@ class ReminderWorker:
             if 'db' in locals():
                 db.close()
     
+    async def process_event_notifications(self):
+        """Process event start notifications"""
+        try:
+            db = next(self.db_session_factory())
+            
+            from ..services.event_notification_service import EventNotificationService
+            event_notification_service = EventNotificationService(db)
+            
+            await event_notification_service.send_event_start_notifications()
+            
+        except Exception as e:
+            logger.error(f"Error in process_event_notifications: {e}")
+        finally:
+            if 'db' in locals():
+                db.close()
+    
     def get_scheduler_status(self) -> dict:
         """Get status information about the scheduler"""
         jobs = []
@@ -275,6 +311,26 @@ class ReminderWorker:
         except Exception as e:
             logger.error(f"Error sending test reminder {reminder_id}: {e}")
             return False
+        finally:
+            if 'db' in locals():
+                db.close()
+    
+    async def update_weather_data(self):
+        """Update weather forecast data from NWS API"""
+        try:
+            db = next(self.db_session_factory())
+            
+            from ..services.weather_service import get_weather_service
+            weather_service = get_weather_service()
+            
+            if weather_service:
+                saved_count = await weather_service.update_forecast_from_api(db, days=7)
+                logger.info(f"Weather data updated: {saved_count} forecasts saved")
+            else:
+                logger.warning("Weather service not available")
+            
+        except Exception as e:
+            logger.error(f"Error updating weather data: {e}")
         finally:
             if 'db' in locals():
                 db.close()

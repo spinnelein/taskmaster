@@ -17,23 +17,70 @@ from ..dependencies import get_db
 
 router = APIRouter(tags=["events"])
 
+@router.get("/debug_list", response_model=dict)
+def debug_events(db: Session = Depends(get_db)):
+    """Debug endpoint to list all events in database"""
+    try:
+        print("=== DEBUG EVENTS ===")
+        repo = EventRepository(db)
+        print("Repository created")
+        events = repo.get_all()
+        print(f"Got {len(events)} events")
+        
+        return {
+            "count": len(events),
+            "events": [
+                {
+                    "id": event.id,
+                    "title": event.title,
+                    "start_time": str(event.start_time),
+                    "end_time": str(event.end_time),
+                    "is_blocking": event.is_blocking,
+                    "created_at": str(event.created_at) if hasattr(event, 'created_at') else None,
+                    "notifications_enabled": getattr(event, 'notifications_enabled', None)
+                }
+                for event in events
+            ]
+        }
+    except Exception as e:
+        print(f"Debug error: {e}")
+        return {"error": str(e)}
+
 @router.get("", response_model=EventListResponse)
 def get_events(
     date: Optional[date] = Query(None, description="Filter by date"),
     db: Session = Depends(get_db)
 ):
     """Get all events with optional date filter"""
-    repo = EventRepository(db)
-    
-    if date:
-        events = repo.get_by_date(date)
-    else:
-        events = repo.get_all()
-    
-    return EventListResponse(
-        events=[EventResponse(**event.to_dict()) for event in events],
-        total=len(events)
-    )
+    try:
+        print("=== GET EVENTS DEBUG ===")
+        repo = EventRepository(db)
+        
+        if date:
+            events = repo.get_by_date(date)
+        else:
+            events = repo.get_all()
+        
+        print(f"Found {len(events)} events")
+        if events:
+            print(f"First event: {events[0].__dict__}")
+        
+        event_responses = []
+        for event in events:
+            try:
+                event_response = EventResponse.model_validate(event)
+                event_responses.append(event_response)
+            except Exception as e:
+                print(f"Error validating event {event.id}: {e}")
+                raise
+        
+        return EventListResponse(
+            events=event_responses,
+            total=len(events)
+        )
+    except Exception as e:
+        print(f"Error in get_events: {e}")
+        raise
 
 @router.post("", response_model=EventResponse)
 def create_event(
@@ -95,7 +142,7 @@ def create_event(
                 )
                 repo.save(instance_event)
             
-            return EventResponse(**saved_parent.to_dict())
+            return EventResponse.model_validate(saved_parent)
         else:
             # Single event
             event = Event(
@@ -112,7 +159,7 @@ def create_event(
             print(f"Saved event with ID: {saved_event.id}")
             print(f"Event data: {saved_event.to_dict()}")
             
-            return EventResponse(**saved_event.to_dict())
+            return EventResponse.model_validate(saved_event)
     except ValueError as e:
         print(f"Validation error: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))
@@ -132,7 +179,7 @@ def get_event(
     if not event:
         raise HTTPException(status_code=404, detail="Event not found")
     
-    return EventResponse(**event.to_dict())
+    return EventResponse.model_validate(event)
 
 @router.put("/{event_id}", response_model=EventResponse)
 def update_event(
@@ -155,7 +202,7 @@ def update_event(
     try:
         event.validate()
         saved_event = repo.save(event)
-        return EventResponse(**saved_event.to_dict())
+        return EventResponse.model_validate(saved_event)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -176,24 +223,3 @@ def delete_event(
         return MessageResponse(message="Event deleted successfully")
     else:
         raise HTTPException(status_code=500, detail="Failed to delete event")
-
-@router.get("/debug", response_model=dict)
-def debug_events(db: Session = Depends(get_db)):
-    """Debug endpoint to list all events in database"""
-    repo = EventRepository(db)
-    events = repo.get_all()
-    
-    return {
-        "count": len(events),
-        "events": [
-            {
-                "id": event.id,
-                "title": event.title,
-                "start_time": str(event.start_time),
-                "end_time": str(event.end_time),
-                "is_blocking": event.is_blocking,
-                "created_at": str(event.created_at) if hasattr(event, 'created_at') else None
-            }
-            for event in events
-        ]
-    }

@@ -3,6 +3,7 @@
  * NO EMOJIS
  */
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { initiativeService } from '../services/initiativeService';
 
 const Initiatives = () => {
@@ -113,9 +114,12 @@ const Initiatives = () => {
                             </div>
                             
                             <div className="mt-4 flex gap-2">
-                                <button className="text-blue-600 hover:text-blue-800 text-sm">
+                                <Link 
+                                    to={`/initiatives/${initiative.id}`}
+                                    className="text-blue-600 hover:text-blue-800 text-sm"
+                                >
                                     View Details
-                                </button>
+                                </Link>
                                 <button className="text-gray-600 hover:text-gray-800 text-sm">
                                     Edit
                                 </button>

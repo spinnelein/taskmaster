@@ -20,11 +20,11 @@ logger = logging.getLogger(__name__)
 class TelegramService:
     """Service for Telegram bot operations"""
     
-    def __init__(self, token: str, default_chat_id: Optional[str] = None):
+    def __init__(self, token: str):
         self.token = token
-        self.default_chat_id = default_chat_id
         self.bot = Bot(token=token)
         self.application = None
+        self.active_chats = set()  # Track users who have interacted with the bot
         
     async def initialize(self):
         """Initialize the Telegram application"""
@@ -41,23 +41,31 @@ class TelegramService:
         
     async def start_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle /start command"""
+        chat_id = str(update.effective_chat.id)
+        self.active_chats.add(chat_id)  # Track this user
+        
         await update.message.reply_text(
             "Welcome to TaskMaster Bot!\n\n"
-            "Use /register to connect your chat to receive task reminders.\n"
+            "You'll now receive event notifications and task reminders.\n"
             "Use /current_task to see what you should be working on."
         )
     
     async def register_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle /register command"""
         chat_id = str(update.effective_chat.id)
+        self.active_chats.add(chat_id)  # Track this user
+        
         await update.message.reply_text(
-            f"Your chat ID is: {chat_id}\n\n"
-            "Please save this in your TaskMaster settings to receive reminders."
+            f"Registration successful!\n\n"
+            f"Your chat ID is: {chat_id}\n"
+            "You'll now receive event notifications and task reminders automatically."
         )
     
     async def current_task_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Handle /current_task command"""
         chat_id = str(update.effective_chat.id)
+        self.active_chats.add(chat_id)  # Track this user
+        
         # This would be connected to your task queue service
         await update.message.reply_text(
             "This command will show your current task once integrated with the task queue service."
@@ -67,6 +75,10 @@ class TelegramService:
         """Handle inline keyboard button callbacks"""
         query = update.callback_query
         await query.answer()  # Acknowledge the callback
+        
+        # Track this user
+        chat_id = str(query.effective_chat.id)
+        self.active_chats.add(chat_id)
         
         try:
             # Parse callback data
@@ -319,6 +331,52 @@ class TelegramService:
             logger.error(f"Error sending simple message: {e}")
             return None
     
+    async def send_event_notification(self, chat_id: str, event) -> Optional[str]:
+        """Send an event start notification"""
+        try:
+            from datetime import datetime
+            
+            # Format the event message
+            message = f"📅 **Event Starting Now:**\n\n*{event.title}*"
+            
+            if event.description:
+                message += f"\n\n{event.description}"
+            
+            if event.location:
+                message += f"\n\n📍 Location: {event.location}"
+            
+            # Add duration info
+            duration = event.duration_minutes()
+            if duration > 0:
+                hours = duration // 60
+                minutes = duration % 60
+                if hours > 0:
+                    duration_str = f"{hours}h {minutes}m" if minutes > 0 else f"{hours}h"
+                else:
+                    duration_str = f"{minutes}m"
+                message += f"\n⏱️ Duration: {duration_str}"
+            
+            # Add end time
+            if event.end_time:
+                end_time_str = event.end_time.strftime("%H:%M")
+                message += f"\n🏁 Ends at: {end_time_str}"
+            
+            # Add event type if not custom
+            if event.event_type and event.event_type.value != 'custom':
+                message += f"\n🏷️ Type: {event.event_type.value.title()}"
+            
+            sent_message = await self.bot.send_message(
+                chat_id=chat_id,
+                text=message,
+                parse_mode=ParseMode.MARKDOWN
+            )
+            
+            return str(sent_message.message_id)
+            
+        except Exception as e:
+            logger.error(f"Error sending event notification: {e}")
+            return None
+    
     async def edit_message(self, chat_id: str, message_id: str, new_text: str) -> bool:
         """Edit an existing message"""
         try:
@@ -345,6 +403,10 @@ class TelegramService:
             logger.error(f"Error deleting message: {e}")
             return False
     
+    async def get_active_chats(self) -> list[str]:
+        """Get list of active chat IDs"""
+        return list(self.active_chats)
+    
     def start_polling(self):
         """Start the bot in polling mode (for development)"""
         if not self.application:
@@ -365,8 +427,8 @@ def get_telegram_service() -> Optional[TelegramService]:
     """Get the global Telegram service instance"""
     return _telegram_service
 
-def initialize_telegram_service(token: str, default_chat_id: Optional[str] = None) -> TelegramService:
+def initialize_telegram_service(token: str) -> TelegramService:
     """Initialize the global Telegram service"""
     global _telegram_service
-    _telegram_service = TelegramService(token, default_chat_id)
+    _telegram_service = TelegramService(token)
     return _telegram_service

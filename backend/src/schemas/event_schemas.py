@@ -60,10 +60,10 @@ class EventResponse(BaseResponse):
     title: str
     start_time: datetime
     end_time: datetime
-    is_blocking: bool
-    location: Optional[str]
-    description: str
-    duration_minutes: int
+    is_blocking: bool = True
+    location: Optional[str] = None
+    description: Optional[str] = None
+    notifications_enabled: Optional[bool] = True
     
     class Config:
         from_attributes = True

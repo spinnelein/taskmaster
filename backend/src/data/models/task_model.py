@@ -93,7 +93,7 @@ class TaskModel(BaseModel):
     project = relationship("ProjectModel", back_populates="tasks")
     phase = relationship("ProjectPhaseModel", back_populates="tasks")
     meal = relationship("MealModel", back_populates="generated_tasks")
-    parent_task = relationship("TaskModel", remote_side=[id], backref="recurring_instances")
+    parent_task = relationship("TaskModel", remote_side="TaskModel.id", backref="recurring_instances")
     
     def __repr__(self):
         return f"<Task(id={self.id}, title='{self.title}', status={self.status.value})>"

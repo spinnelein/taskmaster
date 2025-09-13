@@ -7,6 +7,7 @@ from datetime import date, datetime, timedelta
 from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_
 import pytz
+import uuid
 
 from .base import BaseRepository
 from ..models.event_model import EventModel
@@ -16,6 +17,24 @@ class EventRepository(BaseRepository[EventModel]):
     
     def __init__(self, db: Session):
         super().__init__(EventModel, db)
+        
+    def get_by_id(self, event_id: str) -> Optional[EventModel]:
+        """Get event by ID"""
+        return self.get(event_id)
+    
+    def save(self, event) -> EventModel:
+        """Save event (create or update)"""
+        if hasattr(event, 'id') and event.id:
+            # Update existing
+            self.db.merge(event)
+        else:
+            # Create new
+            event.id = str(uuid.uuid4())
+            self.db.add(event)
+        
+        self.db.commit()
+        self.db.refresh(event)
+        return event
     
     
     def get_by_date(self, target_date: date) -> List[EventModel]:

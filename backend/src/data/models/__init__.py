@@ -11,6 +11,7 @@ from .meal_model import MealModel, MealDishModel
 from .dish_model import DishModel, RecipeModel, IngredientModel, PrepTaskTemplateModel
 from .schedule_model import ScheduleModel, TimePoolModel, TaskScheduleModel, ContextConditionModel
 from .reminder_model import ReminderModel, ReminderTemplateModel
+from .weather_model import WeatherForecastModel
 
 __all__ = [
     "BaseModel",
@@ -33,5 +34,6 @@ __all__ = [
     "TaskScheduleModel",
     "ContextConditionModel",
     "ReminderModel",
-    "ReminderTemplateModel"
+    "ReminderTemplateModel",
+    "WeatherForecastModel"
 ]

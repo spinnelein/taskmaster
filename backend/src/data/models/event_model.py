@@ -64,7 +64,7 @@ class EventModel(BaseModel):
     project_id = Column(String(36), ForeignKey("projects.id"), nullable=True)
     
     # Special relationships
-    meal_id = Column(String(36), ForeignKey("meals.id"), nullable=True)  # For meal events
+    # Note: meal relationship is defined via MealModel.event_id foreign key
     
     # Attendees and resources
     attendees = Column(JSON, nullable=True)  # Array of attendee objects
@@ -72,10 +72,11 @@ class EventModel(BaseModel):
     
     # Notifications
     reminder_minutes_before = Column(JSON, nullable=True)  # Array of reminder times
+    notifications_enabled = Column(Boolean, default=True)  # Enable/disable all notifications for this event
     
     # Relationships
     project = relationship("ProjectModel", back_populates="events")
-    meal = relationship("MealModel", back_populates="event", uselist=False)
+    meal = relationship("MealModel", back_populates="event", uselist=False, foreign_keys="MealModel.event_id")
     
     def __repr__(self):
         return f"<Event(id={self.id}, title='{self.title}', is_blocking={self.is_blocking})>"

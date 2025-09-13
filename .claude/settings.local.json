@@ -36,7 +36,11 @@
       "Bash(alembic current:*)",
       "Bash(alembic stamp:*)",
       "Bash(sed:*)",
-      "Bash(touch:*)"
+      "Bash(touch:*)",
+      "Bash(alembic revision:*)",
+      "Bash(del \"80a50274ef3e_add_notifications_enabled_field_to_.py\")",
+      "Bash(rm:*)",
+      "Bash(sqlite3:*)"
     ],
     "deny": []
   }
