@@ -2,10 +2,11 @@
 Initiative repository
 NO EMOJIS
 """
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 from sqlalchemy.orm import Session
 from sqlalchemy import and_
 from datetime import datetime
+import uuid
 
 from .base import BaseRepository
 from ..models.initiative_model import InitiativeModel, InitiativeFrequency, InitiativeStatus
@@ -16,6 +17,34 @@ class InitiativeRepository(BaseRepository[InitiativeModel]):
     
     def __init__(self, db: Session):
         super().__init__(InitiativeModel, db)
+    
+    def create(self, data: Dict[str, Any]) -> InitiativeModel:
+        """Create new initiative with enum conversion"""
+        # Generate ID if not provided
+        if 'id' not in data:
+            data['id'] = str(uuid.uuid4())
+        
+        # Convert string frequency to enum
+        if 'frequency' in data and isinstance(data['frequency'], str):
+            frequency_str = data['frequency'].upper()
+            try:
+                data['frequency'] = InitiativeFrequency(frequency_str)
+            except ValueError:
+                data['frequency'] = InitiativeFrequency.WEEKLY  # Default fallback
+        
+        # Convert string status to enum if provided
+        if 'status' in data and isinstance(data['status'], str):
+            status_str = data['status'].upper()
+            try:
+                data['status'] = InitiativeStatus(status_str)
+            except ValueError:
+                data['status'] = InitiativeStatus.ACTIVE  # Default fallback
+        
+        entity = self.model(**data)
+        self.db.add(entity)
+        self.db.commit()
+        self.db.refresh(entity)
+        return entity
     
     def get_active(self) -> List[InitiativeModel]:
         """Get all active initiatives"""

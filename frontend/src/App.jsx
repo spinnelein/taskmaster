@@ -12,6 +12,8 @@ import Initiatives from './pages/Initiatives';
 import Projects from './pages/Projects';
 import InitiativeDetail from './pages/InitiativeDetail';
 import ProjectDetail from './pages/ProjectDetail';
+import NewInitiative from './pages/NewInitiative';
+import EditInitiative from './pages/EditInitiative';
 
 function App() {
   return (
@@ -25,7 +27,9 @@ function App() {
           <Route path="events/new" element={<NewEvent />} />
           <Route path="schedule" element={<SchedulePage />} />
           <Route path="initiatives" element={<Initiatives />} />
+          <Route path="initiatives/new" element={<NewInitiative />} />
           <Route path="initiatives/:id" element={<InitiativeDetail />} />
+          <Route path="initiatives/:id/edit" element={<EditInitiative />} />
           <Route path="projects" element={<Projects />} />
           <Route path="projects/:id" element={<ProjectDetail />} />
         </Route>

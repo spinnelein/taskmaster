@@ -2,7 +2,7 @@
 Initiative schemas for API
 NO EMOJIS
 """
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 from typing import Optional, List
 from datetime import datetime
 from .base_schemas import BaseResponse
@@ -16,7 +16,8 @@ class InitiativeCreate(BaseModel):
     preferred_start_time: Optional[str] = Field(None, pattern="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$")
     estimated_duration_minutes: Optional[int] = Field(None, gt=0)
     
-    @validator('frequency')
+    @field_validator('frequency')
+    @classmethod
     def validate_frequency(cls, v):
         valid_frequencies = ["daily", "weekly", "monthly", "quarterly", "yearly", "custom"]
         if v not in valid_frequencies:
@@ -33,7 +34,8 @@ class InitiativeUpdate(BaseModel):
     preferred_start_time: Optional[str] = Field(None, pattern="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$")
     estimated_duration_minutes: Optional[int] = Field(None, gt=0)
     
-    @validator('frequency')
+    @field_validator('frequency')
+    @classmethod
     def validate_frequency(cls, v):
         if v is not None:
             valid_frequencies = ["daily", "weekly", "monthly", "quarterly", "yearly", "custom"]
@@ -41,7 +43,8 @@ class InitiativeUpdate(BaseModel):
                 raise ValueError(f"Frequency must be one of {valid_frequencies}")
         return v
     
-    @validator('status')
+    @field_validator('status')
+    @classmethod
     def validate_status(cls, v):
         if v is not None:
             valid_statuses = ["active", "paused", "completed", "archived"]

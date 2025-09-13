@@ -68,9 +68,12 @@ const Initiatives = () => {
                         />
                         Active only
                     </label>
-                    <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                    <Link 
+                        to="/initiatives/new"
+                        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 inline-block"
+                    >
                         New Initiative
-                    </button>
+                    </Link>
                 </div>
             </div>
 
@@ -120,9 +123,12 @@ const Initiatives = () => {
                                 >
                                     View Details
                                 </Link>
-                                <button className="text-gray-600 hover:text-gray-800 text-sm">
+                                <Link 
+                                    to={`/initiatives/${initiative.id}/edit`}
+                                    className="text-gray-600 hover:text-gray-800 text-sm"
+                                >
                                     Edit
-                                </button>
+                                </Link>
                             </div>
                         </div>
                     ))}
