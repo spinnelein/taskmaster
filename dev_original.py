@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-TaskMaster Enhanced Development Environment Manager
+TaskMaster Development Environment Manager
 NO EMOJIS
 
 Usage:
@@ -9,7 +9,6 @@ Usage:
     python dev.py frontend # Start only frontend  
     python dev.py stop     # Stop all services
     python dev.py status   # Show service status
-    python dev.py clean    # Clean up all processes and ports
 """
 
 import os
@@ -19,8 +18,6 @@ import subprocess
 import psutil
 import socket
 import json
-import re
-import threading
 from pathlib import Path
 import signal
 import atexit
@@ -28,7 +25,6 @@ import atexit
 # Configuration
 BACKEND_PORT = 8000
 FRONTEND_PORT = 5173
-FRONTEND_PORT_RANGE = range(5173, 5180)  # Ports Vite will try
 PROJECT_ROOT = Path(__file__).parent
 BACKEND_DIR = PROJECT_ROOT / "backend"
 FRONTEND_DIR = PROJECT_ROOT / "frontend"
@@ -97,72 +93,11 @@ def is_port_available(port):
     """Check if a port is available"""
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.settimeout(1)
+            s.settimeout(1)  # Add timeout
             s.bind(('localhost', port))
             return True
     except (OSError, socket.timeout):
         return False
-
-def find_process_using_port(port):
-    """Find process using a specific port"""
-    for conn in psutil.net_connections(kind='inet'):
-        if conn.laddr.port == port and conn.status == 'LISTEN':
-            try:
-                process = psutil.Process(conn.pid)
-                return {'pid': conn.pid, 'name': process.name(), 'cmdline': ' '.join(process.cmdline())}
-            except (psutil.NoSuchProcess, psutil.AccessDenied):
-                return {'pid': conn.pid, 'name': 'Unknown', 'cmdline': 'Access Denied'}
-    return None
-
-def kill_port_process(port):
-    """Kill process using a specific port"""
-    process_info = find_process_using_port(port)
-    if process_info:
-        print_info(f"Found process on port {port}: {process_info['name']} (PID: {process_info['pid']})")
-        try:
-            process = psutil.Process(process_info['pid'])
-            process.terminate()
-            try:
-                process.wait(timeout=5)
-                print_success(f"Killed process on port {port}")
-                return True
-            except psutil.TimeoutExpired:
-                process.kill()
-                print_success(f"Force killed process on port {port}")
-                return True
-        except Exception as e:
-            print_error(f"Failed to kill process on port {port}: {e}")
-            return False
-    return True
-
-def clean_all_ports():
-    """Clean all TaskMaster related ports"""
-    print_info("Cleaning up ports...")
-    
-    # Clean backend port
-    if not is_port_available(BACKEND_PORT):
-        kill_port_process(BACKEND_PORT)
-    
-    # Clean frontend ports
-    for port in FRONTEND_PORT_RANGE:
-        if not is_port_available(port):
-            process_info = find_process_using_port(port)
-            if process_info and 'vite' in process_info.get('cmdline', '').lower():
-                kill_port_process(port)
-    
-    # Kill any orphaned node processes running vite
-    for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
-        try:
-            cmdline_list = proc.info.get('cmdline', None)
-            if cmdline_list and isinstance(cmdline_list, list):
-                cmdline = ' '.join(cmdline_list)
-                if 'vite' in cmdline and str(FRONTEND_DIR) in cmdline:
-                    print_info(f"Found orphaned Vite process (PID: {proc.info['pid']})")
-                    proc.terminate()
-                    proc.wait(timeout=3)
-                    print_success(f"Killed orphaned Vite process")
-        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.TimeoutExpired, TypeError):
-            pass
 
 def wait_for_port(port, timeout=30):
     """Wait for a port to become available"""
@@ -216,11 +151,10 @@ def start_backend():
     
     # Check port availability
     if not is_port_available(BACKEND_PORT):
-        print_warning(f"Port {BACKEND_PORT} is in use, attempting to clean...")
-        if not kill_port_process(BACKEND_PORT):
-            print_error(f"Failed to free port {BACKEND_PORT}")
+        print_warning(f"Port {BACKEND_PORT} is in use, waiting...")
+        if not wait_for_port(BACKEND_PORT):
+            print_error(f"Port {BACKEND_PORT} is still in use after 30 seconds")
             return None
-        time.sleep(2)
     
     # Start backend
     cmd = [
@@ -259,66 +193,32 @@ def start_backend():
         print_error("Backend failed to start")
         return None
 
-def parse_vite_output(process):
-    """Parse Vite output to find actual port"""
-    actual_port = None
-    port_pattern = re.compile(r'Local:\s+http://localhost:(\d+)')
-    
-    def read_output():
-        nonlocal actual_port
-        for line in iter(process.stdout.readline, ''):
-            if line:
-                print(f"  {Colors.BLUE}[Vite]{Colors.END} {line.strip()}")
-                match = port_pattern.search(line)
-                if match:
-                    actual_port = int(match.group(1))
-    
-    # Start thread to read output
-    thread = threading.Thread(target=read_output)
-    thread.daemon = True
-    thread.start()
-    
-    # Wait for port detection
-    timeout = 15
-    start_time = time.time()
-    while actual_port is None and time.time() - start_time < timeout:
-        if process.poll() is not None:
-            print_error("Vite process terminated unexpectedly")
-            break
-        time.sleep(0.5)
-    
-    return actual_port
-
 def start_frontend():
-    """Start the frontend server with port detection"""
+    """Start the frontend server"""
     print_info("Starting frontend server...")
     
     # Check if already running
     pids = load_pids()
     if 'frontend' in pids and is_process_running(pids['frontend']):
-        frontend_port = pids.get('frontend_port', FRONTEND_PORT)
-        print_warning(f"Frontend already running on port {frontend_port}")
+        print_warning(f"Frontend already running on port {FRONTEND_PORT}")
         return pids['frontend']
     
-    # Clean all potential frontend ports
-    for port in FRONTEND_PORT_RANGE:
-        if not is_port_available(port):
-            process_info = find_process_using_port(port)
-            if process_info and 'vite' in process_info.get('cmdline', '').lower():
-                print_info(f"Cleaning up Vite process on port {port}")
-                kill_port_process(port)
-    
-    time.sleep(2)  # Give OS time to release ports
+    # Check port availability
+    if not is_port_available(FRONTEND_PORT):
+        print_warning(f"Port {FRONTEND_PORT} is in use, waiting...")
+        if not wait_for_port(FRONTEND_PORT):
+            print_error(f"Port {FRONTEND_PORT} is still in use after 30 seconds")
+            return None
     
     # Set environment variable for backend URL
     env = os.environ.copy()
     env['VITE_API_URL'] = f'http://localhost:{BACKEND_PORT}/api'
     
-    # Start frontend (let Vite choose the port)
+    # Start frontend
     if os.name == 'nt':  # Windows
-        cmd = ["npm.cmd", "run", "dev"]
+        cmd = ["npm.cmd", "run", "dev", "--", "--port", str(FRONTEND_PORT)]
     else:  # Unix/Linux/Mac
-        cmd = ["npm", "run", "dev"]
+        cmd = ["npm", "run", "dev", "--", "--port", str(FRONTEND_PORT)]
     
     process = subprocess.Popen(
         cmd,
@@ -330,27 +230,21 @@ def start_frontend():
         bufsize=1
     )
     
-    print_info("Waiting for Vite to start...")
+    # Save PID
+    pids = load_pids()
+    pids['frontend'] = process.pid
+    save_pids(pids)
     
-    # Parse output to find actual port
-    actual_port = parse_vite_output(process)
+    # Wait for server to start
+    print_info(f"Waiting for frontend to start on port {FRONTEND_PORT}...")
+    time.sleep(5)
     
-    if actual_port and process.poll() is None:
-        # Save PID and actual port
-        pids = load_pids()
-        pids['frontend'] = process.pid
-        pids['frontend_port'] = actual_port
-        save_pids(pids)
-        
-        print_success(f"Frontend started on http://localhost:{actual_port}")
-        if actual_port != FRONTEND_PORT:
-            print_warning(f"Note: Using port {actual_port} instead of default {FRONTEND_PORT}")
-        
+    # Verify it's running
+    if process.poll() is None:
+        print_success(f"Frontend started on http://localhost:{FRONTEND_PORT}")
         return process.pid
     else:
-        print_error("Frontend failed to start or port not detected")
-        if process.poll() is None:
-            process.terminate()
+        print_error("Frontend failed to start")
         return None
 
 def stop_all():
@@ -388,29 +282,22 @@ def show_status():
     
     # Check frontend
     if 'frontend' in pids and is_process_running(pids['frontend']):
-        frontend_port = pids.get('frontend_port', FRONTEND_PORT)
-        print_success(f"Frontend: Running (PID: {pids['frontend']}, Port: {frontend_port})")
-        print_info(f"  URL: http://localhost:{frontend_port}")
+        print_success(f"Frontend: Running (PID: {pids['frontend']}, Port: {FRONTEND_PORT})")
+        print_info(f"  URL: http://localhost:{FRONTEND_PORT}")
     else:
         print_error("Frontend: Not running")
     
     # Check port availability
     print_info("\nPort Status:")
     if not is_port_available(BACKEND_PORT):
-        process_info = find_process_using_port(BACKEND_PORT)
-        if process_info:
-            print_warning(f"  Port {BACKEND_PORT}: In use by {process_info['name']} (PID: {process_info['pid']})")
-        else:
-            print_warning(f"  Port {BACKEND_PORT}: In use")
+        print_warning(f"  Port {BACKEND_PORT}: In use")
     else:
         print_info(f"  Port {BACKEND_PORT}: Available")
-    
-    # Check all potential frontend ports
-    for port in FRONTEND_PORT_RANGE:
-        if not is_port_available(port):
-            process_info = find_process_using_port(port)
-            if process_info:
-                print_warning(f"  Port {port}: In use by {process_info['name']} (PID: {process_info['pid']})")
+        
+    if not is_port_available(FRONTEND_PORT):
+        print_warning(f"  Port {FRONTEND_PORT}: In use")
+    else:
+        print_info(f"  Port {FRONTEND_PORT}: Available")
 
 def main():
     """Main entry point"""
@@ -422,9 +309,6 @@ def main():
     
     if command in ["all", ""]:
         print_header("Starting TaskMaster Development Environment")
-        
-        # Clean ports first
-        clean_all_ports()
         
         # Start backend first
         backend_pid = start_backend()
@@ -442,9 +326,8 @@ def main():
             # Don't exit, backend is still running
         
         print_header("TaskMaster Development Environment Ready")
-        pids = load_pids()
         print_info(f"Backend: http://localhost:{BACKEND_PORT}")
-        print_info(f"Frontend: http://localhost:{pids.get('frontend_port', FRONTEND_PORT)}")
+        print_info(f"Frontend: http://localhost:{FRONTEND_PORT}")
         print_info("Press Ctrl+C to stop all services")
         
         # Keep running until interrupted
@@ -457,12 +340,10 @@ def main():
             
     elif command == "backend":
         print_header("Starting Backend Only")
-        clean_all_ports()
         start_backend()
         
     elif command == "frontend":
         print_header("Starting Frontend Only")
-        clean_all_ports()
         start_frontend()
         
     elif command == "stop":
@@ -470,12 +351,6 @@ def main():
         
     elif command == "status":
         show_status()
-        
-    elif command == "clean":
-        print_header("Cleaning All Ports and Processes")
-        clean_all_ports()
-        cleanup_pids()
-        print_success("Cleanup complete")
         
     else:
         print_error(f"Unknown command: {command}")

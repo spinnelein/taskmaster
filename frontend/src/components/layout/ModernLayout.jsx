@@ -1,13 +1,17 @@
 // Modern Layout Component
 // NO EMOJIS
 import { Outlet } from 'react-router-dom';
+import { useState } from 'react';
 import SidebarNav from './SidebarNav';
 import ModernNav from './ModernNav';
+import CommandPalette from '../navigation/CommandPalette';
+import { NotificationProvider } from '../notifications/NotificationSystem';
+import { useCommandPalette } from '../../hooks/useCommandPalette';
 import './ModernLayout.css';
 
-function ModernLayout({ variant = 'sidebar' }) {
-  // Two layout variants: 'sidebar' (desktop) and 'top-nav' (mobile/compact)
-  
+function ModernLayoutContent({ variant = 'sidebar' }) {
+  const { isOpen, closePalette } = useCommandPalette();
+
   if (variant === 'top-nav') {
     return (
       <div className="modern-layout top-nav">
@@ -17,6 +21,12 @@ function ModernLayout({ variant = 'sidebar' }) {
             <Outlet />
           </div>
         </main>
+        
+        {/* Global Command Palette */}
+        <CommandPalette 
+          isOpen={isOpen} 
+          onClose={closePalette} 
+        />
       </div>
     );
   }
@@ -29,7 +39,21 @@ function ModernLayout({ variant = 'sidebar' }) {
           <Outlet />
         </div>
       </main>
+      
+      {/* Global Command Palette */}
+      <CommandPalette 
+        isOpen={isOpen} 
+        onClose={closePalette} 
+      />
     </div>
+  );
+}
+
+function ModernLayout(props) {
+  return (
+    <NotificationProvider>
+      <ModernLayoutContent {...props} />
+    </NotificationProvider>
   );
 }
 

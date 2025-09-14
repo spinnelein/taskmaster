@@ -31,18 +31,30 @@ TaskMaster is a full-stack task and schedule management application with:
 # Before executing any coding tasks, read and follow CODING_STANDARDS.md
 cat CODING_STANDARDS.md
 
-### Backend
+### Quick Start (Recommended)
 ```bash
+# Start both backend and frontend with consistent ports
+python dev.py
+
+# Or specific services:
+python dev.py backend   # Backend only on port 8000
+python dev.py frontend  # Frontend only (auto-detects port 5173-5180)
+python dev.py status    # Check service status
+python dev.py stop      # Stop all services
+python dev.py clean     # Clean up ports and orphaned processes
+```
+
+### Manual Commands (Alternative)
+```bash
+# Backend
 cd backend
 pip install -r requirements.txt
 uvicorn src.api.app:app --reload --host 0.0.0.0 --port 8000
-```
 
-### Frontend
-```bash
+# Frontend
 cd frontend
 npm install
-npm run dev      # Development server (port 5173)
+npm run dev      # Development server
 npm run build    # Production build
 npm run lint     # ESLint
 ```
@@ -53,6 +65,10 @@ cd backend
 python -m pytest                    # Run all tests
 python -m pytest tests/unit/        # Unit tests only
 python -m pytest tests/integration/ # Integration tests only
+
+cd frontend
+npm run test:web                    # Playwright browser tests
+npm run test:ui                     # UI component tests
 ```
 
 ## Key Patterns
@@ -189,10 +205,35 @@ python -m pytest tests/integration/ # Integration tests only
 - **Core APIs**: Tasks, events, initiatives, and projects all operational with comprehensive CRUD
 
 **Development Environment Improvements:**
-- **New dev.py Script**: Single command to start/stop/status all services with consistent ports
-- **Fixed Ports**: Backend always on 8000, frontend always on 5173 (no more port confusion)
-- **Process Management**: Proper PID tracking and graceful shutdown handling
-- **Cross-Platform**: Works on Windows, macOS, and Linux
+- **Enhanced dev.py Script**: Single command to start/stop/status all services with port auto-detection
+- **Smart Port Management**: Backend on 8000, frontend auto-detects 5173-5180 with Vite
+- **Process Cleanup**: `python dev.py clean` removes orphaned processes and frees ports
+- **Cross-Platform**: Works on Windows, macOS, and Linux with proper process handling
+
+### ✅ UI/UX Overhaul Complete (September 14, 2025)
+
+**Phase 1: Modal System & Forms (COMPLETED)**
+- **Modal System**: 90vh height limit solving form scrolling issues
+- **Enhanced Forms**: Progressive disclosure with collapsible sections
+- **Form Components**: Reusable FormGrid, FormField, FormSection, PriorityMatrix
+- **Accessibility**: Focus trap, keyboard navigation, WCAG 2.1 AA compliance
+
+**Phase 2: Enhanced Scheduling Interface (COMPLETED)**
+- **Multi-Layer Calendar**: 5 distinct layers (events, tasks, meals, personal, work)
+- **Drag-and-Drop**: Full support for moving and resizing calendar items
+- **Quick Event Creation**: Natural language input ("Meeting at 3pm for 1 hour")
+- **Conflict Detection**: Real-time detection with visual indicators
+
+**Phase 3: Dashboard & Navigation (COMPLETED)**
+- **Widget Dashboard**: Customizable grid with drag-and-drop using @dnd-kit
+- **Command Palette**: Cmd+K/Ctrl+K global access with fuzzy search
+- **Smart Notifications**: Toast system with actions, auto-dismiss, and progress bars
+- **Real Widgets**: TodaysFocusWidget and CalendarSnapshotWidget with live API data
+
+**Testing Infrastructure Added:**
+- **Playwright Integration**: Browser automation for UI testing
+- **Test Scripts**: browser-debug.js, test-ui-demo.js for component validation
+- **npm Scripts**: test:web, test:ui, debug:browser commands
 
 ### 🔧 Current Issues to Address
 - **Weather API**: Configuration-dependent functionality (requires API keys)
@@ -311,27 +352,37 @@ Comprehensive Telegram notifications for both tasks and events:
 - `/register`: Alternative registration command
 - `/current_task`: Show current task (when implemented)
 
-## Development Commands (NEW - Use These!)
+## Additional Development Commands
 
-### **Single Command Development** (Recommended):
+### **Database Operations**:
 ```bash
-# Start both backend and frontend with consistent ports
-python dev.py
+# Database migrations
+cd backend && alembic upgrade head                     # Apply migrations
+cd backend && alembic revision --autogenerate -m "msg" # Create migration
 
-# Or specific services:
-python dev.py backend   # Backend only on port 8000
-python dev.py frontend  # Frontend only on port 5173
-python dev.py status    # Check service status
-python dev.py stop      # Stop all services
+# Run tests
+cd backend && python -m pytest tests/               # All tests
+cd backend && python -m pytest tests/unit/          # Unit tests only
+cd backend && python -m pytest tests/integration/   # Integration tests only
 ```
 
-### **Manual Commands** (Legacy):
-- **Backend**: `cd backend && uvicorn src.api.app:app --reload --host 0.0.0.0 --port 8000`
-- **Frontend**: `cd frontend && npm run dev` (usually runs on port 5173)
-- **Database Migration**: `cd backend && alembic upgrade head`
-- **Create Migration**: `cd backend && alembic revision --autogenerate -m "description"`
-- **Run Tests**: `cd backend && python -m pytest tests/`
-- **Install Dependencies**: `cd backend && pip install -r requirements.txt`
+### **Dependency Management**:
+```bash
+# Backend dependencies
+cd backend && pip install -r requirements.txt
+
+# Frontend dependencies  
+cd frontend && npm install
+```
+
+### **Frontend Commands**:
+```bash
+cd frontend
+npm run build        # Production build
+npm run lint         # ESLint
+npm run test:web     # Playwright browser tests
+npm run test:ui      # UI component tests
+```
 
 ## Current File Structure (Key Files)
 
@@ -378,20 +429,43 @@ python dev.py stop      # Stop all services
 │   ├── layout/
 │   │   ├── SidebarNav.jsx           # Navigation with initiatives/projects
 │   │   └── ModernLayout.jsx         # Layout wrapper
+│   ├── common/
+│   │   ├── Modal.jsx                # Modal system with 90vh height limit
+│   │   └── FormComponents.jsx       # Reusable form components library
+│   ├── dashboard/
+│   │   ├── DashboardGrid.jsx        # Widget-based dashboard with drag-and-drop
+│   │   └── widgets/
+│   │       ├── TodaysFocusWidget.jsx    # Priority tasks widget
+│   │       └── CalendarSnapshotWidget.jsx # Upcoming events widget
+│   ├── navigation/
+│   │   └── CommandPalette.jsx       # Cmd+K global navigation
+│   ├── notifications/
+│   │   └── NotificationSystem.jsx   # Smart toast notifications
+│   ├── schedule/
+│   │   ├── MultiLayerCalendar.jsx   # Multi-layer calendar view
+│   │   ├── DragDropCalendarLayer.jsx # Enhanced drag-and-drop layer
+│   │   └── QuickEventModal.jsx      # Natural language event creation
 │   └── forms/
 │       ├── InitiativeForm.jsx       # Initiative create/edit form
-│       └── ProjectForm.jsx          # Project create/edit form  
+│       ├── ProjectForm.jsx          # Project create/edit form
+│       └── TaskForm.jsx             # Enhanced task form with progressive disclosure
 ├── pages/
+│   ├── UIDemo.jsx                   # Phase 1 UI improvements demo
+│   ├── Phase2Demo.jsx               # Phase 2 scheduling demo
+│   ├── Phase3Demo.jsx               # Phase 3 dashboard demo
 │   ├── Initiatives.jsx              # Initiative listing page
-│   ├── NewInitiative.jsx            # Initiative creation page
-│   ├── EditInitiative.jsx           # Initiative editing page
-│   ├── InitiativeDetail.jsx         # Initiative detail with stats
 │   ├── Projects.jsx                 # Project listing page
-│   └── ProjectDetail.jsx            # Project detail with phases/timeline
+│   └── [other pages...]
+├── hooks/
+│   └── useCommandPalette.js         # Global command palette hook
+├── scripts/
+│   ├── browser-debug.js             # Playwright browser debugging
+│   └── test-ui-demo.js              # UI component testing
 └── services/
     ├── api.js                       # Axios configuration
-    ├── initiativeService.js         # Initiative API calls
-    └── projectService.js            # Project API calls
+    ├── taskService.js               # Task API calls
+    ├── eventService.js              # Event API calls
+    └── [other services...]
 ```
 
 ## Development Process Management

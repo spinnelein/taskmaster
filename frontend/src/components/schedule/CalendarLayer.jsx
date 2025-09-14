@@ -1,14 +1,14 @@
 // Calendar Layer component for multi-layer calendar system
 // NO EMOJIS
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import './CalendarLayer.css';
 
 const LAYER_TYPES = {
-  events: { color: '#3b82f6', name: 'Events', icon: '📅' },
-  tasks: { color: '#10b981', name: 'Tasks', icon: '✓' },
-  meals: { color: '#f59e0b', name: 'Meals', icon: '🍽' },
-  personal: { color: '#8b5cf6', name: 'Personal', icon: '👤' },
-  work: { color: '#06b6d4', name: 'Work', icon: '💼' }
+  events: { color: '#3b82f6', name: 'Events', icon: 'E' },
+  tasks: { color: '#10b981', name: 'Tasks', icon: 'T' },
+  meals: { color: '#f59e0b', name: 'Meals', icon: 'M' },
+  personal: { color: '#8b5cf6', name: 'Personal', icon: 'P' },
+  work: { color: '#06b6d4', name: 'Work', icon: 'W' }
 };
 
 function CalendarLayer({ 

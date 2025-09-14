@@ -20,7 +20,10 @@ A sophisticated full-stack task and schedule management application with advance
 - **Weather Integration**: 7-day forecasts with activity suitability recommendations
 - **Initiatives & Projects**: Recurring project templates with multi-phase management
 - **Meal Planning**: Integrated dish-meal-task workflow for cooking automation
-- **Real-time Dashboard**: Live task/event counts with responsive sidebar navigation
+- **Modern Dashboard**: Customizable widget-based dashboard with drag-and-drop
+- **Command Palette**: Keyboard-first navigation with Cmd+K/Ctrl+K access
+- **Smart Notifications**: Contextual alerts with action buttons and auto-dismiss
+- **Enhanced Scheduling**: Multi-layer calendar with drag-and-drop and conflict detection
 
 ## Technology Stack
 
@@ -38,7 +41,9 @@ A sophisticated full-stack task and schedule management application with advance
 - **TypeScript** 5.9.2 - Type safety
 - **React Router** v7.8.2 - Client-side routing
 - **Tailwind CSS** 4.1.13 - Utility-first styling
-- **React DnD** 16.0.1 - Drag-and-drop functionality
+- **@dnd-kit** - Modern drag-and-drop for dashboard and calendar
+- **date-fns** 2.30.0 - Date manipulation and formatting
+- **Playwright** - Browser automation for testing
 
 ### Database
 - **SQLite** (development) with **PostgreSQL** migration path
@@ -58,7 +63,24 @@ git clone <repository-url>
 cd TaskMaster
 ```
 
-### 2. Backend Setup
+### 2. Quick Start with dev.py (Recommended)
+```bash
+# Start both backend and frontend
+python dev.py
+
+# Or start services individually
+python dev.py backend   # Backend only on port 8000
+python dev.py frontend  # Frontend only on port 5173
+
+# Other commands
+python dev.py status    # Check service status
+python dev.py stop      # Stop all services
+python dev.py clean     # Clean up ports and processes
+```
+
+### 3. Manual Setup (Alternative)
+
+#### Backend Setup
 ```bash
 cd backend
 pip install -r requirements.txt
@@ -70,17 +92,17 @@ alembic upgrade head
 uvicorn src.api.app:app --reload --host 0.0.0.0 --port 8000
 ```
 
-### 3. Frontend Setup
+#### Frontend Setup
 ```bash
 cd frontend
 npm install
 
-# Start development server (runs on port 5173)
+# Start development server
 npm run dev
 ```
 
 ### 4. Access Application
-- **Frontend**: http://localhost:5173
+- **Frontend**: http://localhost:5173 (or check `python dev.py status` for actual port)
 - **Backend API**: http://localhost:8000
 - **API Documentation**: http://localhost:8000/docs
 
@@ -209,12 +231,24 @@ TaskMaster/
 - **Task System Fixes**: Resolved deletion and completion issues
 - **Data Cleanup**: Removed 1,093+ duplicate events from old system
 
+### UI/UX Overhaul (Phase 1-3 Complete)
+- **Phase 1**: Modal system with 90vh height limit, enhanced forms with progressive disclosure
+- **Phase 2**: Multi-layer calendar with drag-and-drop, resize handles, and quick event creation
+- **Phase 3**: Widget-based dashboard, command palette (Cmd+K), smart notifications
+
+### Development Improvements
+- **Enhanced dev.py**: Auto-detects actual Vite port, cleans up orphaned processes
+- **Playwright Testing**: Browser automation for UI testing
+- **Component Library**: Reusable form components and consistent design patterns
+
 ### Current Status
 - ✅ Backend API fully functional with comprehensive endpoints
-- ✅ Frontend React application with modern UI and responsive design
+- ✅ Frontend React application with modern dashboard and calendar
+- ✅ Command palette navigation with keyboard shortcuts
+- ✅ Smart notification system with contextual alerts
+- ✅ Responsive design with mobile optimizations
 - ✅ Database schema optimized with proper relationships
 - ✅ Background workers for automated notifications and scheduling
-- ✅ Integration tests and comprehensive test coverage
 
 ## Contributing
 

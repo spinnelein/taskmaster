@@ -2,7 +2,7 @@
 // NO EMOJIS
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import TaskForm from '../components/tasks/TaskForm';
+import TaskFormModal from '../components/tasks/TaskFormModal';
 import taskService from '../services/taskService';
 import { initiativeService } from '../services/initiativeService';
 
@@ -63,26 +63,34 @@ function NewTask() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold">Create New Task</h1>
-        {initiative && (
-          <p className="text-gray-600 mt-2">
-            For initiative: <span className="font-medium">{initiative.title}</span>
-          </p>
+    <>
+      {/* Background overlay with loading state */}
+      <div className="fixed inset-0 bg-gray-50 flex items-center justify-center p-4">
+        {error && (
+          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded z-50">
+            {error}
+          </div>
         )}
-      </div>
-      
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          {error}
+        
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Create New Task</h1>
+          {initiative && (
+            <p className="text-gray-600 mb-4">
+              For initiative: <span className="font-medium">{initiative.title}</span>
+            </p>
+          )}
         </div>
-      )}
-      
-      <div className="bg-white p-6 rounded-lg shadow">
-        <TaskForm onSubmit={handleSubmit} onCancel={handleCancel} />
       </div>
-    </div>
+
+      {/* Task Form Modal - always open for new task page */}
+      <TaskFormModal
+        isOpen={true}
+        onClose={handleCancel}
+        task={null}
+        onSubmit={handleSubmit}
+        title={initiative ? `New Task for ${initiative.title}` : "Create New Task"}
+      />
+    </>
   );
 }
 

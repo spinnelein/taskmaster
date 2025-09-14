@@ -4,12 +4,12 @@ TaskMaster Enhanced Development Environment Manager
 NO EMOJIS
 
 Usage:
-    python dev.py          # Start both backend and frontend
-    python dev.py backend  # Start only backend
-    python dev.py frontend # Start only frontend  
-    python dev.py stop     # Stop all services
-    python dev.py status   # Show service status
-    python dev.py clean    # Clean up all processes and ports
+    python dev_enhanced.py          # Start both backend and frontend
+    python dev_enhanced.py backend  # Start only backend
+    python dev_enhanced.py frontend # Start only frontend  
+    python dev_enhanced.py stop     # Stop all services
+    python dev_enhanced.py status   # Show service status
+    python dev_enhanced.py clean    # Clean up all processes and ports
 """
 
 import os

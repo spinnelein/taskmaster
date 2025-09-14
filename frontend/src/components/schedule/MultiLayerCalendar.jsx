@@ -2,7 +2,8 @@
 // NO EMOJIS
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { format, addDays, startOfWeek, addHours, isSameDay } from 'date-fns';
-import CalendarLayer from './CalendarLayer';
+import DragDropCalendarLayer from './DragDropCalendarLayer';
+import QuickEventModal from './QuickEventModal';
 import TimeAxis from './TimeAxis';
 import eventService from '../../services/eventService';
 import taskService from '../../services/taskService';
@@ -29,6 +30,13 @@ function MultiLayerCalendar() {
   // Interaction states
   const [selectedItem, setSelectedItem] = useState(null);
   const [draggedItem, setDraggedItem] = useState(null);
+  const [quickCreateModal, setQuickCreateModal] = useState({
+    isOpen: false,
+    initialTime: null,
+    initialDate: null,
+    layerType: 'events'
+  });
+  const [conflictingItems, setConflictingItems] = useState([]);
   
   // Generate time slots for the view
   const timeSlots = useMemo(() => {
@@ -164,16 +172,133 @@ function MultiLayerCalendar() {
     console.log('Item clicked:', { item, layer });
   };
 
-  const handleItemDrag = (dragData, targetTimeSlot, targetLayer) => {
-    console.log('Item drag:', { dragData, targetTimeSlot, targetLayer });
-    // TODO: Implement drag and drop logic
-    // This would update the item's time and potentially move between layers
-  };
+  const handleItemMove = useCallback(async (item, newPosition) => {
+    console.log('Item move:', { item, newPosition });
+    
+    try {
+      // Optimistically update UI
+      const updateItemInState = (items) => 
+        items.map(i => i.id === item.id ? { ...i, ...newPosition } : i);
+      
+      if (item.type === 'events') {
+        setEvents(updateItemInState);
+        // Call API to update event
+        // await eventService.updateEvent(item.id, newPosition);
+      } else if (item.type === 'tasks') {
+        setTasks(updateItemInState);
+        // await taskService.updateTask(item.id, newPosition);
+      }
+      
+      // Check for conflicts after move
+      checkForConflicts();
+      
+    } catch (error) {
+      console.error('Failed to move item:', error);
+      // Revert optimistic update
+      loadData();
+    }
+  }, []);
 
-  const handleQuickCreate = (timeSlot, layer) => {
-    console.log('Quick create:', { timeSlot, layer });
-    // TODO: Open quick create modal/form
-  };
+  const handleItemResize = useCallback(async (item, newDimensions) => {
+    console.log('Item resize:', { item, newDimensions });
+    
+    try {
+      // Optimistically update UI
+      const updateItemInState = (items) => 
+        items.map(i => i.id === item.id ? { ...i, ...newDimensions } : i);
+      
+      if (item.type === 'events') {
+        setEvents(updateItemInState);
+      } else if (item.type === 'tasks') {
+        setTasks(updateItemInState);
+      }
+      
+      checkForConflicts();
+      
+    } catch (error) {
+      console.error('Failed to resize item:', error);
+      loadData();
+    }
+  }, []);
+
+  const handleQuickCreate = useCallback((targetTime, layerType) => {
+    const targetDate = new Date(targetTime);
+    const timeString = `${targetDate.getHours().toString().padStart(2, '0')}:${targetDate.getMinutes().toString().padStart(2, '0')}`;
+    const dateString = format(selectedDate, 'yyyy-MM-dd');
+    
+    setQuickCreateModal({
+      isOpen: true,
+      initialTime: timeString,
+      initialDate: dateString,
+      layerType: layerType
+    });
+  }, [selectedDate]);
+
+  const handleQuickCreateSubmit = useCallback(async (eventData) => {
+    console.log('Quick create submit:', eventData);
+    
+    try {
+      // Determine which service to use based on type
+      if (eventData.type === 'tasks') {
+        // Convert to task format
+        const taskData = {
+          title: eventData.title,
+          due_date: eventData.start_time.split('T')[0],
+          due_time: eventData.start_time.split('T')[1].substring(0, 5),
+          duration: Math.round((new Date(eventData.end_time) - new Date(eventData.start_time)) / (1000 * 60)),
+          description: eventData.description,
+          urgency: 5, // Default priority
+          status: 'active'
+        };
+        
+        // await taskService.createTask(taskData);
+        console.log('Would create task:', taskData);
+      } else {
+        // Create as event
+        // await eventService.createEvent(eventData);
+        console.log('Would create event:', eventData);
+      }
+      
+      // Reload data to show new item
+      loadData();
+      
+    } catch (error) {
+      console.error('Failed to create item:', error);
+    }
+  }, [loadData]);
+
+  // Conflict detection
+  const checkForConflicts = useCallback(() => {
+    const allItems = [...events, ...tasks];
+    const conflicts = [];
+    
+    for (let i = 0; i < allItems.length; i++) {
+      for (let j = i + 1; j < allItems.length; j++) {
+        const item1 = allItems[i];
+        const item2 = allItems[j];
+        
+        if (item1.is_blocking && item2.is_blocking) {
+          const start1 = new Date(item1.start_time);
+          const end1 = new Date(item1.end_time);
+          const start2 = new Date(item2.start_time);
+          const end2 = new Date(item2.end_time);
+          
+          // Check for time overlap
+          if (start1 < end2 && start2 < end1) {
+            if (!conflicts.find(c => c.id === item1.id)) conflicts.push(item1);
+            if (!conflicts.find(c => c.id === item2.id)) conflicts.push(item2);
+          }
+        }
+      }
+    }
+    
+    setConflictingItems(conflicts);
+  }, [events, tasks]);
+
+  // Run conflict detection when data changes
+  useEffect(() => {
+    checkForConflicts();
+  }, [checkForConflicts]);
 
   const handleDateNavigation = (direction) => {
     const days = viewMode === 'day' ? 1 : viewMode === 'week' ? 7 : 30;
@@ -278,15 +403,21 @@ function MultiLayerCalendar() {
                     });
 
                     return (
-                      <CalendarLayer
+                      <DragDropCalendarLayer
                         key={layerType}
                         type={layerType}
                         items={dayItems}
                         visible={layerVisibility[layerType]}
                         onToggle={handleLayerToggle}
                         onItemClick={handleItemClick}
-                        onItemDrag={handleItemDrag}
+                        onItemMove={handleItemMove}
+                        onItemResize={handleItemResize}
+                        onQuickCreate={handleQuickCreate}
                         timeSlots={timeSlots}
+                        conflictItems={conflictingItems.filter(item => {
+                          const itemDate = new Date(item.start_time);
+                          return isSameDay(itemDate, day);
+                        })}
                       />
                     );
                   })}
@@ -312,6 +443,16 @@ function MultiLayerCalendar() {
           + Quick Task
         </button>
       </div>
+
+      {/* Quick Event Creation Modal */}
+      <QuickEventModal
+        isOpen={quickCreateModal.isOpen}
+        onClose={() => setQuickCreateModal(prev => ({ ...prev, isOpen: false }))}
+        onSubmit={handleQuickCreateSubmit}
+        initialTime={quickCreateModal.initialTime}
+        initialDate={quickCreateModal.initialDate}
+        layerType={quickCreateModal.layerType}
+      />
     </div>
   );
 }

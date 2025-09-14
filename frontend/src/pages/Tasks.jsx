@@ -2,11 +2,14 @@
 // NO EMOJIS
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import TaskFormModal from '../components/tasks/TaskFormModal';
 import taskService from '../services/taskService';
 
 function Tasks() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [editingTask, setEditingTask] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
 
   useEffect(() => {
     loadTasks();
@@ -42,6 +45,27 @@ function Tasks() {
         console.error('Failed to delete task:', error);
       }
     }
+  };
+
+  const handleEdit = (task) => {
+    setEditingTask(task);
+    setEditModalOpen(true);
+  };
+
+  const handleEditSubmit = async (formData) => {
+    try {
+      await taskService.updateTask(editingTask.id, formData);
+      setEditModalOpen(false);
+      setEditingTask(null);
+      loadTasks();
+    } catch (error) {
+      console.error('Failed to update task:', error);
+    }
+  };
+
+  const handleEditCancel = () => {
+    setEditModalOpen(false);
+    setEditingTask(null);
   };
 
   if (loading) {
@@ -80,6 +104,12 @@ function Tasks() {
                     )}
                   </div>
                   <div className="flex space-x-2">
+                    <button
+                      onClick={() => handleEdit(task)}
+                      className="text-blue-600 hover:text-blue-800"
+                    >
+                      Edit
+                    </button>
                     {task.status !== 'completed' && (
                       <button
                         onClick={() => handleComplete(task.id)}
@@ -101,6 +131,15 @@ function Tasks() {
           </ul>
         </div>
       )}
+
+      {/* Edit Task Modal */}
+      <TaskFormModal
+        isOpen={editModalOpen}
+        onClose={handleEditCancel}
+        task={editingTask}
+        onSubmit={handleEditSubmit}
+        title="Edit Task"
+      />
     </div>
   );
 }

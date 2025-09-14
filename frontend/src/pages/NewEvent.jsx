@@ -2,7 +2,7 @@
 // NO EMOJIS
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import EventForm from '../components/events/EventForm';
+import EventFormModal from '../components/events/EventFormModal';
 import eventService from '../services/eventService';
 
 function NewEvent() {
@@ -29,38 +29,34 @@ function NewEvent() {
   };
 
   const handleCancel = () => {
-    navigate('/events');
+    navigate('/schedule');
   };
 
   return (
-    <div style={{ background: '#f9fafb', minHeight: 'calc(100vh - 64px)', paddingTop: '40px' }}>
-      <div className="max-w-3xl mx-auto px-4">
-        <div style={{ marginBottom: '32px' }}>
-          <h1 style={{ fontSize: '28px', fontWeight: '700', color: '#1f2937', marginBottom: '8px' }}>
-            Create New Event
-          </h1>
-          <p style={{ color: '#6b7280', fontSize: '15px' }}>
-            Add a new event to your schedule
-          </p>
-        </div>
-        
+    <>
+      {/* Background overlay */}
+      <div className="fixed inset-0 bg-gray-50 flex items-center justify-center p-4">
         {error && (
-          <div style={{
-            background: '#fee',
-            border: '1px solid #fcc',
-            color: '#c00',
-            padding: '12px 16px',
-            borderRadius: '8px',
-            marginBottom: '20px',
-            fontSize: '14px'
-          }}>
+          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded z-50">
             {error}
           </div>
         )}
         
-        <EventForm onSubmit={handleSubmit} onCancel={handleCancel} />
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Create New Event</h1>
+          <p className="text-gray-600 mb-4">Add a new event to your schedule</p>
+        </div>
       </div>
-    </div>
+
+      {/* Event Form Modal - always open for new event page */}
+      <EventFormModal
+        isOpen={true}
+        onClose={handleCancel}
+        event={null}
+        onSubmit={handleSubmit}
+        title="Create New Event"
+      />
+    </>
   );
 }
 
