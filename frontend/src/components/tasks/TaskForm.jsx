@@ -172,7 +172,6 @@ function TaskForm({ task, onSubmit, onCancel }) {
                   { value: 'yearly', label: 'Yearly' }
                 ]}
               />
-            </Select>
             </FormField>
 
             <FormField label="Interval">
