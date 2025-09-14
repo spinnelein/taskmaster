@@ -469,14 +469,58 @@ python -m pytest tests/integration/ # Integration tests only
 - Migration: `cd backend && alembic upgrade head`
 - Create Migration: `cd backend && alembic revision --autogenerate -m "description"`
 
+**Testing & Debugging:**
+- Quick Web Test: `cd frontend && npm run test:web` (tests all endpoints without browser)
+- UI Component Test: `cd frontend && npm run test:ui` (automated browser testing with screenshots)
+- Interactive Debug: `cd frontend && npm run debug:browser -- --head` (visible browser debugging)
+- Direct Script: `node scripts/simple-web-test.js` or `node scripts/browser-debug.js [url] [--head]`
+
+## Repository Context
+
+## Web Testing and Debugging Tools
+
+### Available Testing Scripts (in `/scripts/` directory):
+
+1. **simple-web-test.js** - Lightweight HTTP testing
+   - Tests all routes (/, /ui-demo, /tasks, /events, /schedule)
+   - Tests API endpoints (/health, /api/tasks, /api/events)
+   - No browser installation required
+   - Use for: Quick health checks, endpoint validation
+
+2. **browser-debug.js** - Full browser automation with Playwright
+   - Console log capture with timestamps
+   - JavaScript error detection and stack traces
+   - Network request/response monitoring
+   - Screenshot capability
+   - Custom actions (click, fill, wait, evaluate)
+   - Use for: Deep debugging, interaction testing
+
+3. **test-ui-demo.js** - Automated UI testing
+   - Tests Phase 1 UI improvements (modals, forms)
+   - Automated form interactions and modal testing
+   - Screenshots at key interaction points
+   - Use for: UI regression testing, modal system validation
+
+### Usage Examples:
+- **Quick Check**: `npm run test:web` - Always works, no setup needed
+- **UI Testing**: `npm run test:ui` - Full UI automation with screenshots
+- **Debug Session**: `npm run debug:browser -- --head` - Interactive browser debugging
+- **Custom URL**: `node scripts/browser-debug.js http://localhost:5175/tasks --head`
+
+### Output Files:
+- Logs: `/logs/browser-console-{timestamp}.log`
+- Screenshots: `/logs/*.png`
+- See `/scripts/README.md` for complete documentation
+
 ## Repository Context
 
 This is an active project under development. When making changes:
 1. Always test the full stack (backend + frontend)
-2. Follow existing patterns and naming conventions
-3. Update tests when adding new features
-4. Use the existing repository pattern for data access
-5. Follow RESTful API conventions for new endpoints
-6. For Telegram integration, ensure proper error handling and logging
-7. **Current State**: Core API endpoints (tasks, events) fully functional with comprehensive CRUD operations
-8. **Current Priority**: Fix database enum issue (WEEKLY status) preventing initiatives API from working
+2. **Use testing tools**: Run `npm run test:web` before committing changes
+3. Follow existing patterns and naming conventions
+4. Update tests when adding new features
+5. Use the existing repository pattern for data access
+6. Follow RESTful API conventions for new endpoints
+7. For Telegram integration, ensure proper error handling and logging
+8. **Current State**: Core API endpoints (tasks, events) fully functional with comprehensive CRUD operations
+9. **Current Priority**: Phase 1 UI improvements completed with modal system and enhanced forms
