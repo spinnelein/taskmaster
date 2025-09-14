@@ -15,6 +15,7 @@ import InitiativeTasks from './pages/InitiativeTasks';
 import ProjectDetail from './pages/ProjectDetail';
 import NewInitiative from './pages/NewInitiative';
 import EditInitiative from './pages/EditInitiative';
+import UIDemo from './pages/UIDemo';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path="initiatives/:id/tasks" element={<InitiativeTasks />} />
           <Route path="projects" element={<Projects />} />
           <Route path="projects/:id" element={<ProjectDetail />} />
+          <Route path="ui-demo" element={<UIDemo />} />
         </Route>
       </Routes>
     </Router>
