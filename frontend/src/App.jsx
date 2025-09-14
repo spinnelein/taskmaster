@@ -16,6 +16,7 @@ import ProjectDetail from './pages/ProjectDetail';
 import NewInitiative from './pages/NewInitiative';
 import EditInitiative from './pages/EditInitiative';
 import UIDemo from './pages/UIDemo';
+import Phase2Demo from './pages/Phase2Demo';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
           <Route path="projects" element={<Projects />} />
           <Route path="projects/:id" element={<ProjectDetail />} />
           <Route path="ui-demo" element={<UIDemo />} />
+          <Route path="phase2-demo" element={<Phase2Demo />} />
         </Route>
       </Routes>
     </Router>

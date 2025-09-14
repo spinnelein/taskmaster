@@ -1,0 +1,366 @@
+/* Multi-Layer Calendar Styles */
+/* NO EMOJIS */
+
+.multi-layer-calendar {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-height: 100vh;
+  background: #f8fafc;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Calendar Header */
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.calendar-nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: white;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 16px;
+}
+
+.nav-btn:hover {
+  background: #f3f4f6;
+  color: #374151;
+  border-color: #9ca3af;
+}
+
+.date-display h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  min-width: 200px;
+  text-align: center;
+}
+
+/* View Mode Toggle */
+.view-mode-toggle {
+  display: flex;
+  background: #f3f4f6;
+  border-radius: 8px;
+  padding: 2px;
+}
+
+.view-mode-btn {
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.view-mode-btn.active {
+  background: white;
+  color: #3b82f6;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.view-mode-btn:hover:not(.active) {
+  color: #374151;
+}
+
+/* Layer Controls */
+.layer-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.layer-control {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: capitalize;
+}
+
+.layer-control:hover {
+  transform: scale(1.05);
+}
+
+/* Calendar Body */
+.calendar-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.calendar-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.9);
+  z-index: 50;
+}
+
+.loading-spinner {
+  padding: 20px 30px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.calendar-grid {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.calendar-time-axis {
+  width: 80px;
+  flex-shrink: 0;
+  background: white;
+  border-right: 1px solid #e5e7eb;
+}
+
+.calendar-content {
+  flex: 1;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* Calendar Day */
+.calendar-day {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #e5e7eb;
+}
+
+.calendar-day:last-child {
+  border-right: none;
+}
+
+.calendar-day-header {
+  height: 60px;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.day-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  text-align: center;
+}
+
+.calendar-day-content {
+  flex: 1;
+  position: relative;
+  height: calc(24 * 60px); /* 24 hours * 60px per hour */
+  background: linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(100% - 1px),
+    #e5e7eb calc(100% - 1px),
+    #e5e7eb 100%
+  );
+  background-size: 100% 60px;
+}
+
+/* Quick Actions */
+.calendar-quick-actions {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 1000;
+}
+
+.quick-action-btn {
+  padding: 12px 16px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.quick-action-btn:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .calendar-header {
+    flex-direction: column;
+    gap: 16px;
+    padding: 12px 16px;
+  }
+  
+  .calendar-nav {
+    order: 2;
+  }
+  
+  .view-mode-toggle {
+    order: 1;
+  }
+  
+  .layer-controls {
+    order: 3;
+    flex-wrap: wrap;
+  }
+  
+  .calendar-time-axis {
+    width: 60px;
+  }
+  
+  .calendar-day {
+    min-width: 150px;
+  }
+}
+
+@media (max-width: 768px) {
+  .calendar-header {
+    padding: 8px 12px;
+  }
+  
+  .date-display h2 {
+    font-size: 16px;
+    min-width: 150px;
+  }
+  
+  .nav-btn {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .layer-control {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+  
+  .calendar-time-axis {
+    width: 50px;
+  }
+  
+  .calendar-day {
+    min-width: 120px;
+  }
+  
+  .quick-action-btn {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+}
+
+/* Dark Mode Support (for future) */
+@media (prefers-color-scheme: dark) {
+  .multi-layer-calendar {
+    background: #0f172a;
+  }
+  
+  .calendar-header {
+    background: #1e293b;
+    border-color: #334155;
+  }
+  
+  .calendar-day-header {
+    background: #1e293b;
+    border-color: #334155;
+  }
+  
+  .date-display h2,
+  .day-label {
+    color: #f1f5f9;
+  }
+  
+  .nav-btn,
+  .view-mode-btn:not(.active) {
+    background: #334155;
+    border-color: #475569;
+    color: #cbd5e1;
+  }
+  
+  .view-mode-btn.active {
+    background: #3b82f6;
+    color: white;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .calendar-header {
+    border-bottom-width: 2px;
+  }
+  
+  .calendar-day {
+    border-right-width: 2px;
+  }
+  
+  .calendar-day-header {
+    border-bottom-width: 2px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .nav-btn,
+  .view-mode-btn,
+  .layer-control,
+  .quick-action-btn {
+    transition: none;
+  }
+  
+  .layer-control:hover,
+  .quick-action-btn:hover {
+    transform: none;
+  }
+}
