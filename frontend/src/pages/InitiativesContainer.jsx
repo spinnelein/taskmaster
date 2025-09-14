@@ -11,7 +11,7 @@ const InitiativesContainer = () => {
     const [initiatives, setInitiatives] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [showActiveOnly, setShowActiveOnly] = useState(false);
+    const [showActiveOnly, setShowActiveOnly] = useState(true);
 
     useEffect(() => {
         loadInitiatives();

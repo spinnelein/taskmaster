@@ -7,23 +7,41 @@ echo Step 1: Stopping existing processes...
 echo - Stopping uvicorn (backend) processes...
 taskkill /f /im uvicorn.exe > nul 2>&1
 
+echo - Stopping python.exe processes...
+taskkill /f /im python.exe > nul 2>&1
+
 echo - Stopping node.js (frontend) processes...
 taskkill /f /im node.exe > nul 2>&1
 
-echo - Waiting for processes to terminate...
-timeout /t 3 /nobreak > nul
+echo - Waiting for processes to terminate and ports to release...
+timeout /t 5 /nobreak > nul
 
 :: Find available ports
 echo.
 echo Step 2: Finding available ports...
 
-:: Backend port
+:: Backend port - prefer 8000 if available
 set BACKEND_PORT=8000
-:FIND_BACKEND_PORT
-netstat -an | find ":%BACKEND_PORT%" > nul
-if %errorlevel% == 0 (
-    set /a BACKEND_PORT+=1
-    if %BACKEND_PORT% lss 8010 goto FIND_BACKEND_PORT
+set PREFERRED_PORT=8000
+
+:: Check if user specified a port
+if "%1" NEQ "" (
+    set PREFERRED_PORT=%1
+    echo - User requested backend port %PREFERRED_PORT%
+)
+
+:: Try preferred port first
+netstat -an | find ":%PREFERRED_PORT%" > nul
+if %errorlevel% == 1 (
+    set BACKEND_PORT=%PREFERRED_PORT%
+) else (
+    :: Find alternative port
+    :FIND_BACKEND_PORT
+    netstat -an | find ":%BACKEND_PORT%" > nul
+    if %errorlevel% == 0 (
+        set /a BACKEND_PORT+=1
+        if %BACKEND_PORT% lss 8010 goto FIND_BACKEND_PORT
+    )
 )
 
 :: Frontend port  
@@ -42,10 +60,10 @@ echo - Frontend will use port %FRONTEND_PORT%
 echo.
 echo Step 3: Starting backend server...
 cd /d "%~dp0\backend"
-start "TaskMaster Backend - Port %BACKEND_PORT%" cmd /k "uvicorn src.api.app:app --reload --host 0.0.0.0 --port %BACKEND_PORT%"
+start "TaskMaster Backend - Port %BACKEND_PORT%" cmd /k "python restart.py %BACKEND_PORT%"
 
-:: Wait a moment for backend to start
-timeout /t 3 /nobreak > nul
+:: Wait a moment for backend to start and write config
+timeout /t 5 /nobreak > nul
 
 :: Start frontend
 echo Step 4: Starting frontend server...
@@ -57,7 +75,9 @@ if not exist "node_modules" (
     call npm install
 )
 
-start "TaskMaster Frontend - Port %FRONTEND_PORT%" cmd /k "npm run dev -- --port %FRONTEND_PORT%"
+:: Set backend port environment variable for frontend
+set VITE_BACKEND_PORT=%BACKEND_PORT%
+start "TaskMaster Frontend - Port %FRONTEND_PORT%" cmd /k "set VITE_BACKEND_PORT=%BACKEND_PORT% && npm run dev -- --port %FRONTEND_PORT%"
 
 :: Summary
 echo.

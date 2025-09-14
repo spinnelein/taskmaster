@@ -26,7 +26,7 @@ def create_project(
 ):
     """Create a new project"""
     try:
-        project_data = project.dict(exclude={"phases"})
+        project_data = project.model_dump(exclude={"phases"})
         new_project = repo.create(project_data)
         
         if not new_project:
@@ -38,7 +38,7 @@ def create_project(
         # Create phases if provided
         if project.phases:
             for phase_data in project.phases:
-                repo.create_phase(new_project.id, phase_data.dict())
+                repo.create_phase(new_project.id, phase_data.model_dump())
         
         # Return project with phases
         return repo.get_with_phases(new_project.id)
@@ -131,7 +131,7 @@ def update_project(
         )
     
     try:
-        updated = repo.update(project_id, project.dict(exclude_unset=True))
+        updated = repo.update(project_id, project.model_dump(exclude_unset=True))
         return repo.get_with_phases(updated.id)
     except Exception as e:
         raise HTTPException(
@@ -169,7 +169,7 @@ def create_phase(
 ):
     """Create a new phase for a project"""
     try:
-        new_phase = repo.create_phase(project_id, phase.dict())
+        new_phase = repo.create_phase(project_id, phase.model_dump())
         if not new_phase:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -196,24 +196,8 @@ def update_phase(
             status_enum = ProjectStatus(phase.status)
             updated_phase = repo.update_phase_status(phase_id, status_enum)
         else:
-            # Standard update
-            from ...data.models.project_model import ProjectPhaseModel
-            updated_phase = repo.db.query(ProjectPhaseModel).filter(
-                ProjectPhaseModel.id == phase_id
-            ).first()
-            
-            if not updated_phase:
-                raise HTTPException(
-                    status_code=status.HTTP_404_NOT_FOUND,
-                    detail="Phase not found"
-                )
-            
-            for key, value in phase.dict(exclude_unset=True).items():
-                if hasattr(updated_phase, key):
-                    setattr(updated_phase, key, value)
-            
-            repo.db.commit()
-            repo.db.refresh(updated_phase)
+            # Standard update using repository method
+            updated_phase = repo.update_phase(phase_id, phase.model_dump(exclude_unset=True))
         
         if not updated_phase:
             raise HTTPException(

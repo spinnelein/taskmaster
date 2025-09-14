@@ -1,4 +1,5 @@
 @echo off
+setlocal enabledelayedexpansion
 echo === TaskMaster Frontend Restart Script ===
 
 :: Kill existing node processes
@@ -44,6 +45,19 @@ echo To access the application:
 echo   - Frontend URL: http://localhost:%PORT%
 echo   - With hot module replacement enabled
 echo.
-echo Make sure your backend is running on port 8002 or update the API configuration.
+:: Check for backend port from config file
+if exist "%~dp0..\port_config.json" (
+    echo Reading backend port from configuration...
+    for /f "tokens=2 delims=:" %%a in ('findstr "backend_port" "%~dp0..\port_config.json"') do (
+        for /f "tokens=1 delims=," %%b in ("%%a") do (
+            set BACKEND_PORT=%%b
+            set BACKEND_PORT=!BACKEND_PORT: =!
+        )
+    )
+) else (
+    set BACKEND_PORT=8000
+)
+
+echo Make sure your backend is running on port %BACKEND_PORT%.
 echo.
 pause

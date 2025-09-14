@@ -5,9 +5,12 @@ NO EMOJIS
 import os
 import asyncio
 import logging
+import json
+from pathlib import Path
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from .routes import tasks, events, schedule, initiatives, projects, meals, dishes, schedules, reminders, task_queue, schedule_generation, weather
 from ..data.database import SessionLocal
@@ -100,9 +103,15 @@ app = FastAPI(
 )
 
 # Configure CORS for frontend
+allowed_origins = [
+    "http://localhost:5173", "http://localhost:5174", "http://localhost:5175", 
+    "http://localhost:5176", "http://localhost:5177", "http://localhost:5178",
+    "http://localhost:5179", "http://localhost:5180", "http://localhost:3000"
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:3000"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -127,6 +136,29 @@ app.include_router(weather.router, prefix="/api/weather", tags=["weather"])
 def health_check():
     """Check if API is running"""
     return {"status": "healthy", "service": "TaskMaster API"}
+
+# Port configuration endpoint
+@app.get("/port_config.json")
+def get_port_config():
+    """Serve port configuration for frontend"""
+    config_path = Path(__file__).parent.parent.parent.parent / "port_config.json"
+    
+    # Default config
+    config = {
+        "backend_port": int(os.environ.get("PORT", 8000)),
+        "frontend_port": 5173
+    }
+    
+    # Try to read existing config
+    if config_path.exists():
+        try:
+            with open(config_path, 'r') as f:
+                file_config = json.load(f)
+                config.update(file_config)
+        except:
+            pass
+    
+    return JSONResponse(content=config)
 
 # Root endpoint
 @app.get("/")
@@ -182,6 +214,8 @@ def restart_server():
             
             # Find an available port
             import socket
+            from ..api.port_config import PortConfig
+            
             def find_free_port(start_port=8000):
                 for port in range(start_port, start_port + 10):
                     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -193,6 +227,9 @@ def restart_server():
                 return start_port + 10  # Fallback
             
             new_port = current_port if current_port else find_free_port()
+            
+            # Write port to config
+            PortConfig.write_backend_port(new_port)
             
             # Build new command
             new_cmd = [

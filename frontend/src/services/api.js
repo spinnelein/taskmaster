@@ -1,12 +1,13 @@
 // API service configuration
 // NO EMOJIS
 import axios from 'axios';
+import { portConfig } from '../utils/portConfig';
 
 // Determine backend URL based on environment
 const getBackendUrl = () => {
-  // In development, use specific backend port
+  // In development, use environment variable or default
   if (import.meta.env.DEV) {
-    return import.meta.env.VITE_API_URL || 'http://localhost:8002/api';
+    return import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
   }
   // In production, assume backend is on same domain
   return '/api';

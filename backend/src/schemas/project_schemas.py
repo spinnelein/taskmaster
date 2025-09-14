@@ -2,7 +2,7 @@
 Project schemas for API
 NO EMOJIS
 """
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 from typing import Optional, List, Dict, Any
 from datetime import datetime
 from .base_schemas import BaseResponse
@@ -56,7 +56,8 @@ class ProjectCreate(BaseModel):
     tags: Optional[List[str]] = None
     phases: Optional[List[ProjectPhaseCreate]] = None
     
-    @validator('priority')
+    @field_validator('priority')
+    @classmethod
     def validate_priority(cls, v):
         valid_priorities = ["low", "medium", "high", "critical"]
         if v not in valid_priorities:
@@ -77,7 +78,8 @@ class ProjectUpdate(BaseModel):
     tags: Optional[List[str]] = None
     custom_fields: Optional[Dict[str, Any]] = None
     
-    @validator('status')
+    @field_validator('status')
+    @classmethod
     def validate_status(cls, v):
         if v is not None:
             valid_statuses = ["planning", "active", "on_hold", "completed", "cancelled"]
@@ -85,7 +87,8 @@ class ProjectUpdate(BaseModel):
                 raise ValueError(f"Status must be one of {valid_statuses}")
         return v
     
-    @validator('priority')
+    @field_validator('priority')
+    @classmethod
     def validate_priority(cls, v):
         if v is not None:
             valid_priorities = ["low", "medium", "high", "critical"]
@@ -128,7 +131,8 @@ class ProjectTemplateCreate(BaseModel):
     execution_script: Optional[str] = None
     default_settings: Optional[Dict[str, Any]] = None
     
-    @validator('category')
+    @field_validator('category')
+    @classmethod
     def validate_category(cls, v):
         valid_categories = ["personal", "work", "home", "creative", "learning", "health", "custom"]
         if v not in valid_categories:

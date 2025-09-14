@@ -11,6 +11,7 @@ import SchedulePage from './pages/SchedulePage';
 import InitiativesContainer from './pages/InitiativesContainer';
 import Projects from './pages/Projects';
 import InitiativeDetail from './pages/InitiativeDetail';
+import InitiativeTasks from './pages/InitiativeTasks';
 import ProjectDetail from './pages/ProjectDetail';
 import NewInitiative from './pages/NewInitiative';
 import EditInitiative from './pages/EditInitiative';
@@ -30,6 +31,7 @@ function App() {
           <Route path="initiatives/new" element={<NewInitiative />} />
           <Route path="initiatives/:id" element={<InitiativeDetail />} />
           <Route path="initiatives/:id/edit" element={<EditInitiative />} />
+          <Route path="initiatives/:id/tasks" element={<InitiativeTasks />} />
           <Route path="projects" element={<Projects />} />
           <Route path="projects/:id" element={<ProjectDetail />} />
         </Route>

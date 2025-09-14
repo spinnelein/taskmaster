@@ -7,9 +7,10 @@ from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import and_, or_
 from datetime import datetime
 import json
+import uuid
 
 from .base import BaseRepository
-from ..models.project_model import ProjectModel, ProjectPhaseModel, ProjectStatus
+from ..models.project_model import ProjectModel, ProjectPhaseModel, ProjectStatus, ProjectPriority
 from ..models.project_template_model import ProjectTemplateModel, TemplateExecutionModel
 from ..models.task_model import TaskModel
 from ..models.event_model import EventModel
@@ -19,6 +20,59 @@ class ProjectRepository(BaseRepository[ProjectModel]):
     
     def __init__(self, db: Session):
         super().__init__(ProjectModel, db)
+    
+    def create(self, data: Dict[str, Any]) -> ProjectModel:
+        """Create new project with enum conversion"""
+        # Generate ID if not provided
+        if 'id' not in data:
+            data['id'] = str(uuid.uuid4())
+        
+        # Convert string status to enum if provided
+        if 'status' in data and isinstance(data['status'], str):
+            status_str = data['status'].lower()
+            try:
+                data['status'] = ProjectStatus(status_str)
+            except ValueError:
+                data['status'] = ProjectStatus.PLANNING  # Default fallback
+        
+        # Convert string priority to enum if provided
+        if 'priority' in data and isinstance(data['priority'], str):
+            priority_str = data['priority'].lower()
+            try:
+                data['priority'] = ProjectPriority(priority_str)
+            except ValueError:
+                data['priority'] = ProjectPriority.MEDIUM  # Default fallback
+        
+        entity = self.model(**data)
+        self.db.add(entity)
+        self.db.commit()
+        self.db.refresh(entity)
+        return entity
+    
+    def update(self, entity_id: str, data: Dict[str, Any]) -> Optional[ProjectModel]:
+        """Update project with enum conversion"""
+        project = self.get(entity_id)
+        if not project:
+            return None
+        
+        # Convert string status to enum if provided
+        if 'status' in data and isinstance(data['status'], str):
+            status_str = data['status'].lower()
+            try:
+                data['status'] = ProjectStatus(status_str)
+            except ValueError:
+                pass  # Keep the string value, let it fail later if invalid
+        
+        # Convert string priority to enum if provided
+        if 'priority' in data and isinstance(data['priority'], str):
+            priority_str = data['priority'].lower()
+            try:
+                data['priority'] = ProjectPriority(priority_str)
+            except ValueError:
+                pass  # Keep the string value, let it fail later if invalid
+        
+        # Use the base update method
+        return super().update(entity_id, data)
     
     def get_with_phases(self, project_id: str) -> Optional[ProjectModel]:
         """Get project with all phases loaded"""
@@ -79,6 +133,24 @@ class ProjectRepository(BaseRepository[ProjectModel]):
             phase.actual_start_date = datetime.utcnow()
         elif status == ProjectStatus.COMPLETED and not phase.actual_end_date:
             phase.actual_end_date = datetime.utcnow()
+        
+        self.db.commit()
+        self.db.refresh(phase)
+        
+        return phase
+    
+    def update_phase(self, phase_id: str, data: Dict[str, Any]) -> Optional[ProjectPhaseModel]:
+        """Update phase with given data"""
+        phase = self.db.query(ProjectPhaseModel).filter(
+            ProjectPhaseModel.id == phase_id
+        ).first()
+        
+        if not phase:
+            return None
+        
+        for key, value in data.items():
+            if hasattr(phase, key):
+                setattr(phase, key, value)
         
         self.db.commit()
         self.db.refresh(phase)

@@ -10,7 +10,7 @@ export const initiativeService = {
         const params = new URLSearchParams();
         if (activeOnly) params.append('active_only', 'true');
         
-        const response = await api.get(`/initiatives?${params.toString()}`);
+        const response = await api.get(`/initiatives/?${params.toString()}`);
         return response.data;
     },
 
@@ -28,13 +28,13 @@ export const initiativeService = {
 
     // Get initiative templates
     async getTemplates() {
-        const response = await api.get('/initiatives/templates');
+        const response = await api.get('/initiatives/templates/');
         return response.data;
     },
 
     // Create new initiative
     async create(initiativeData) {
-        const response = await api.post('/initiatives', initiativeData);
+        const response = await api.post('/initiatives/', initiativeData);
         return response.data;
     },
 

@@ -61,6 +61,7 @@ python -m pytest tests/integration/ # Integration tests only
 - All models extend `BaseModel` with UUID `id`, `created_at`, `updated_at`
 - Models are in `backend/src/data/models/` (task_model.py, event_model.py, etc.)
 - Use Alembic for migrations: `alembic revision --autogenerate -m "description"`
+- **Enum Handling**: Repository `create()` and `update()` methods handle string-to-enum conversion for fields like `status` and `priority`
 
 ### API Routes
 - Prefix: `/api/{resource}` (e.g., `/api/tasks`, `/api/events`)
@@ -168,10 +169,33 @@ python -m pytest tests/integration/ # Integration tests only
 - **Single Responsibility**: Each component has clear, focused purpose
 - **Consistent Patterns**: Matches tasks/events UI implementation patterns
 
+### ✅ Recently Completed (September 13, 2025 - Session 4)
+
+**Projects API Complete Stabilization:**
+- **Fixed Enum Conversion**: ProjectRepository now handles string-to-enum conversion for priority/status fields (like InitiativeRepository)
+- **Pydantic v2 Migration**: Updated all project schemas from `@validator` to `@field_validator` with `@classmethod`
+- **Deprecated Method Replacement**: Replaced all `.dict()` calls with `.model_dump()` in project routes
+- **Repository Pattern Compliance**: Moved direct database queries to proper repository methods (added `update_phase()` method)
+
+**Process Management Improvements:**
+- **Enhanced Node.js Detection**: Improved restart script to target only TaskMaster/Vite processes instead of all node.exe
+- **Graceful Shutdown Coordination**: Added proper SIGTERM handling with fallback to SIGKILL for uvicorn and Python services
+- **Process Verification**: Added comprehensive verification to ensure all TaskMaster processes are terminated
+- **Better Coordination**: Increased shutdown timeouts and added database cleanup coordination
+
+**API Status Update:**
+- **Projects API**: Now fully functional with proper enum handling and Pydantic v2 compatibility
+- **Initiatives API**: Already working (previous "hanging" documentation was outdated)
+- **Core APIs**: Tasks, events, initiatives, and projects all operational with comprehensive CRUD
+
+**Development Environment Improvements:**
+- **New dev.py Script**: Single command to start/stop/status all services with consistent ports
+- **Fixed Ports**: Backend always on 8000, frontend always on 5173 (no more port confusion)
+- **Process Management**: Proper PID tracking and graceful shutdown handling
+- **Cross-Platform**: Works on Windows, macOS, and Linux
+
 ### 🔧 Current Issues to Address
-- **Initiatives API Hanging**: Endpoints timeout during GET/POST operations (needs debugging)
-- **Weather API**: Configuration-dependent functionality 
-- **Projects API**: Similar hanging issue as initiatives (investigation needed)
+- **Weather API**: Configuration-dependent functionality (requires API keys)
 - **Series-Level Editing UI**: Need frontend interface for editing recurring event series with mode selection
 - **Runtime Event Expansion**: Schedule views need to dynamically expand recurring events for display
 
@@ -182,9 +206,10 @@ python -m pytest tests/integration/ # Integration tests only
 - **✅ Schema Validation**: Complete alignment of Pydantic schemas with SQLAlchemy models
 - **✅ Error Handling**: Improved API error responses and comprehensive testing coverage
 
-**Phase 2: Frontend-Backend Integration (✅ PARTIALLY COMPLETED)**
+**Phase 2: Frontend-Backend Integration (✅ MOSTLY COMPLETED)**
 - **✅ Connect Initiative Forms**: Complete UI implementation with create/edit forms wired to API services
-- **Connect Project Forms**: Wire up create/edit forms to `/api/projects/` endpoints  
+- **✅ Fix Projects API**: ProjectRepository enum handling, Pydantic v2 migration, and repository pattern compliance
+- **Connect Project Forms**: Wire up create/edit forms to `/api/projects/` endpoints (backend ready, frontend needs connection)
 - **Add Template Management**: UI for creating and using initiative/project templates
 - **✅ Form Validation**: Client-side validation matching backend schemas implemented for initiatives
 
@@ -286,15 +311,27 @@ Comprehensive Telegram notifications for both tasks and events:
 - `/register`: Alternative registration command
 - `/current_task`: Show current task (when implemented)
 
-## Commands to Remember
+## Development Commands (NEW - Use These!)
 
+### **Single Command Development** (Recommended):
+```bash
+# Start both backend and frontend with consistent ports
+python dev.py
+
+# Or specific services:
+python dev.py backend   # Backend only on port 8000
+python dev.py frontend  # Frontend only on port 5173
+python dev.py status    # Check service status
+python dev.py stop      # Stop all services
+```
+
+### **Manual Commands** (Legacy):
 - **Backend**: `cd backend && uvicorn src.api.app:app --reload --host 0.0.0.0 --port 8000`
 - **Frontend**: `cd frontend && npm run dev` (usually runs on port 5173)
 - **Database Migration**: `cd backend && alembic upgrade head`
 - **Create Migration**: `cd backend && alembic revision --autogenerate -m "description"`
 - **Run Tests**: `cd backend && python -m pytest tests/`
 - **Install Dependencies**: `cd backend && pip install -r requirements.txt`
-- **Restart Server**: Available at `/api/restart` endpoint (development only)
 
 ## Current File Structure (Key Files)
 
@@ -390,13 +427,13 @@ cd frontend && taskkill /f /im node.exe && npm run dev
 - API Endpoint: `GET /api/restart` (built-in server restart with cleanup)
 
 **IMPORTANT NOTES:**
-- Backend restart script kills ALL TaskMaster processes: uvicorn, node.exe, AND python.exe (Telegram/workers)
-- This prevents database conflicts from multiple Telegram services or background workers
-- Frontend restart script kills only node.exe processes  
-- Restart scripts automatically find free ports (8000-8020 for backend, 5173-5180 for frontend)
-- Scripts handle process cleanup, dependency checks, and proper startup
-- Never manually start servers without killing existing processes first
-- Use restart methods for deployments, testing, and development workflow
+- **Graceful Shutdown**: Backend restart script now uses SIGTERM for graceful shutdown with fallback to SIGKILL
+- **Targeted Process Detection**: Enhanced to target only TaskMaster-related processes (uvicorn, node.js with Vite, Python services)
+- **Process Verification**: Comprehensive verification ensures all TaskMaster processes are terminated before restart
+- **Database Coordination**: Longer wait times allow for proper database connection cleanup
+- **Port Management**: Automatically finds free ports (8000-8020 for backend, 5173-5180 for frontend)
+- **Cross-Platform**: Scripts work on Windows, Linux, and macOS with proper process handling
+- **Development Workflow**: Use restart methods for deployments, testing, and development to prevent conflicts
 
 ### Development Commands
 
