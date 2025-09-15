@@ -43,4 +43,25 @@ class BaseModel(Base):
                 result[column.name] = value.value
             else:
                 result[column.name] = value
+        
+        # Handle relationships (for loaded related objects)
+        from sqlalchemy.inspection import inspect
+        relationships = inspect(self.__class__).relationships
+        for relationship in relationships:
+            if hasattr(self, relationship.key):
+                related_obj = getattr(self, relationship.key)
+                if related_obj is not None:
+                    if hasattr(related_obj, '__iter__') and not isinstance(related_obj, str):
+                        # Handle one-to-many relationships (lists)
+                        result[relationship.key] = [
+                            obj.to_dict() if hasattr(obj, 'to_dict') else str(obj) 
+                            for obj in related_obj
+                        ]
+                    else:
+                        # Handle one-to-one relationships
+                        if hasattr(related_obj, 'to_dict'):
+                            result[relationship.key] = related_obj.to_dict()
+                        else:
+                            result[relationship.key] = str(related_obj)
+        
         return result

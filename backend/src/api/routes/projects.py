@@ -41,7 +41,8 @@ def create_project(
                 repo.create_phase(new_project.id, phase_data.model_dump())
         
         # Return project with phases
-        return repo.get_with_phases(new_project.id)
+        project_with_phases = repo.get_with_phases(new_project.id)
+        return project_with_phases.to_dict() if project_with_phases else None
         
     except Exception as e:
         raise HTTPException(
@@ -73,7 +74,7 @@ def get_projects(
         projects = projects[skip:skip + limit]
         
         return ProjectListResponse(
-            projects=projects,
+            projects=[project.to_dict() for project in projects],
             total=total
         )
     except Exception as e:
@@ -94,7 +95,7 @@ def get_project(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Project not found"
         )
-    return project
+    return project.to_dict()
 
 @router.get("/{project_id}/stats")
 def get_project_stats(
@@ -132,7 +133,8 @@ def update_project(
     
     try:
         updated = repo.update(project_id, project.model_dump(exclude_unset=True))
-        return repo.get_with_phases(updated.id)
+        updated_with_phases = repo.get_with_phases(updated.id)
+        return updated_with_phases.to_dict()
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -175,7 +177,7 @@ def create_phase(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Project not found"
             )
-        return new_phase
+        return new_phase.to_dict()
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -205,7 +207,7 @@ def update_phase(
                 detail="Phase not found"
             )
         
-        return updated_phase
+        return updated_phase.to_dict()
         
     except Exception as e:
         raise HTTPException(
@@ -234,7 +236,8 @@ def execute_project_template(
                 detail="Template not found or execution failed"
             )
         
-        return repo.get_with_phases(project.id)
+        project_with_phases = repo.get_with_phases(project.id)
+        return project_with_phases.to_dict()
         
     except Exception as e:
         raise HTTPException(

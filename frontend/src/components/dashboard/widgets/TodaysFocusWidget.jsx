@@ -18,8 +18,10 @@ function TodaysFocusWidget({ widgetId, size = 'medium' }) {
     try {
       setLoading(true);
       const response = await taskService.getTasks();
+      // Handle both old format (array) and new format (object with tasks array)
+      const tasksArray = Array.isArray(response) ? response : response.tasks || [];
       // Get top 5 high priority active tasks
-      const priorityTasks = response
+      const priorityTasks = tasksArray
         .filter(task => task.status === 'active')
         .sort((a, b) => (b.urgency || 0) - (a.urgency || 0))
         .slice(0, 5);

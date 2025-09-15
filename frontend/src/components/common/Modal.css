@@ -45,6 +45,8 @@
   position: relative;
   animation: modal-content-enter var(--modal-animation-duration) var(--modal-animation-easing);
   transform-origin: center;
+  pointer-events: auto;
+  z-index: 1001;
 }
 
 /* Responsive behavior */
@@ -126,6 +128,21 @@
   flex: 1;
   padding: var(--modal-padding);
   min-height: 0; /* Important for flex overflow */
+  pointer-events: auto;
+  position: relative;
+  z-index: 1002;
+}
+
+/* Ensure all interactive elements within modal allow pointer events */
+.modal-content button,
+.modal-content input,
+.modal-content select,
+.modal-content textarea,
+.modal-content [role="button"],
+.modal-content .clickable {
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 1003;
 }
 
 .modal-body-scrollable {

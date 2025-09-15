@@ -1,7 +1,7 @@
 // Phase 2 UI Demo - Enhanced Scheduling Interface
 // NO EMOJIS
 import { useState } from 'react';
-import MultiLayerCalendar from '../components/schedule/MultiLayerCalendar';
+import FullCalendarView from '../components/schedule/FullCalendarView';
 import { Button, SecondaryButton } from '../components/common/FormComponents';
 
 function Phase2Demo() {
@@ -37,7 +37,7 @@ function Phase2Demo() {
       {/* Content */}
       {currentView === 'calendar' ? (
         <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          <MultiLayerCalendar />
+          <FullCalendarView />
         </div>
       ) : (
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">

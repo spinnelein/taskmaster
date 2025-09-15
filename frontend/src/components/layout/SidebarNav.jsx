@@ -4,11 +4,12 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import taskService from '../../services/taskService';
 import eventService from '../../services/eventService';
+import { useSidebar } from './ModernLayout';
 import './SidebarNav.css';
 
 function SidebarNav() {
   const location = useLocation();
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const { isSidebarCollapsed: isCollapsed, setIsSidebarCollapsed: setIsCollapsed } = useSidebar();
   const [expandedGroups, setExpandedGroups] = useState(['main']);
   const [taskCount, setTaskCount] = useState(0);
   const [eventCount, setEventCount] = useState(0);
@@ -185,11 +186,17 @@ function SidebarNav() {
         <button 
           className="collapse-btn"
           onClick={() => setIsCollapsed(!isCollapsed)}
+          title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-              d={isCollapsed ? "M13 5l7 7-7 7M5 5l7 7-7 7" : "M11 19l-7-7 7-7m8 14l-7-7 7-7"} />
-          </svg>
+          {/* Simple text icon that always works */}
+          <span style={{ 
+            fontSize: '14px', 
+            fontWeight: 'bold',
+            fontFamily: 'monospace',
+            color: 'currentColor'
+          }}>
+            {isCollapsed ? '›››' : '‹‹‹'}
+          </span>
         </button>
       </div>
 

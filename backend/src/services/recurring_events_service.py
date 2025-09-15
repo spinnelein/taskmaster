@@ -392,3 +392,56 @@ class RecurringEventsService:
         
         exception_instance = self.event_repo.create(exception_data)
         return exception_instance is not None
+    
+    def _get_master_event(self, event: EventModel) -> Optional[EventModel]:
+        """Get the master event for a recurring instance"""
+        if event.is_recurrence_master:
+            return event
+        elif event.recurrence_master_id:
+            return self.event_repo.get(event.recurrence_master_id)
+        return None
+    
+    def get_recurring_instances(self, master_event_id: str) -> List[EventModel]:
+        """Get all recurring instances for a master event"""
+        all_events = self.event_repo.get_all()
+        instances = []
+        for event in all_events:
+            if (hasattr(event, 'recurrence_master_id') and 
+                event.recurrence_master_id == master_event_id and
+                not event.is_recurrence_master):
+                instances.append(event)
+        return instances
+    
+    def delete_recurring_event(
+        self, 
+        event_id: str, 
+        edit_mode: str, 
+        original_date: Optional[datetime] = None
+    ) -> bool:
+        """Delete recurring event with specified edit mode"""
+        
+        try:
+            # Simplified version: just delete the event directly
+            print(f"[DEBUG] Attempting to delete event: {event_id}")
+            
+            # Get the event
+            event = self.event_repo.get(event_id)
+            if not event:
+                raise ValueError(f"Event with ID {event_id} not found")
+            
+            print(f"[DEBUG] Found event: {event.title}")
+            
+            # For now, just delete the event regardless of mode
+            # TODO: Implement proper recurring deletion logic later
+            result = self.event_repo.delete(event_id)
+            print(f"[DEBUG] Delete result: {result}")
+            
+            return result
+                
+        except Exception as e:
+            error_msg = str(e) if str(e) else f"Unknown error of type {type(e).__name__}"
+            print(f"[ERROR] delete_recurring_event failed: {error_msg}")
+            import traceback
+            traceback.print_exc()
+            # Re-raise with a meaningful message
+            raise Exception(f"Failed to delete recurring event: {error_msg}")

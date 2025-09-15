@@ -1,0 +1,227 @@
+{
+  "totalTests": 67,
+  "passedTests": 52,
+  "failedTests": 15,
+  "skippedTests": 0,
+  "errors": [],
+  "testResults": {
+    "Modal Opens Correctly": {
+      "status": "FAILED",
+      "error": "locator.waitFor: Timeout 3000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"modal\"], .modal, .modal-overlay') to be visible\u001b[22m\n"
+    },
+    "Modal Closing (ESC Key)": {
+      "status": "PASSED"
+    },
+    "Modal Closing (Backdrop Click)": {
+      "status": "FAILED",
+      "error": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.modal-overlay, .modal').first()\u001b[22m\n"
+    },
+    "Modal Height Constraints": {
+      "status": "PASSED"
+    },
+    "Focus Trap Functionality": {
+      "status": "FAILED",
+      "error": "Focus trap failed - focus moved outside modal"
+    },
+    "Form Accessibility": {
+      "status": "FAILED",
+      "error": "Modal element not found for accessibility testing"
+    },
+    "Responsive Behavior": {
+      "status": "PASSED"
+    },
+    "Multiple Modal Types": {
+      "status": "PASSED"
+    },
+    "Modal Scroll Behavior": {
+      "status": "PASSED"
+    },
+    "Form Grid Layout": {
+      "status": "PASSED"
+    },
+    "Form Field Rendering": {
+      "status": "PASSED"
+    },
+    "Form Validation": {
+      "status": "FAILED",
+      "error": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Create\"), button:has-text(\"Save\"), button[type=\"submit\"]').first()\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"btn btn-primary btn-medium   w-full\">Create New Task</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <button type=\"button\" class=\"duration-btn \">1.5h</button> from <div class=\"modal-backdrop\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <button type=\"button\" class=\"duration-btn \">1.5h</button> from <div class=\"modal-backdrop\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 100ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is not stable\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 100ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <button type=\"button\" class=\"duration-btn \">45m</button> from <div class=\"modal-backdrop\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m    13 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <button type=\"button\" class=\"duration-btn \">1.5h</button> from <div class=\"modal-backdrop\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m       - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <button type=\"button\" class=\"duration-btn \">45m</button> from <div class=\"modal-backdrop\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m       - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"modal-header\">…</div> from <div class=\"modal-backdrop\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m       - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"modal-header\">…</div> from <div class=\"modal-backdrop\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <button type=\"button\" class=\"duration-btn \">1.5h</button> from <div class=\"modal-backdrop\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <button type=\"button\" class=\"duration-btn \">45m</button> from <div class=\"modal-backdrop\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <div class=\"modal-header\">…</div> from <div class=\"modal-backdrop\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n"
+    },
+    "Progressive Disclosure": {
+      "status": "PASSED"
+    },
+    "Form Section Collapsing": {
+      "status": "PASSED"
+    },
+    "Priority Matrix": {
+      "status": "PASSED"
+    },
+    "Form Data Persistence": {
+      "status": "PASSED"
+    },
+    "Required Field Validation": {
+      "status": "PASSED"
+    },
+    "Input Type Support": {
+      "status": "PASSED"
+    },
+    "Form Responsiveness": {
+      "status": "PASSED"
+    },
+    "Widget Grid Rendering": {
+      "status": "PASSED"
+    },
+    "TodaysFocus Widget": {
+      "status": "PASSED"
+    },
+    "Calendar Snapshot Widget": {
+      "status": "PASSED"
+    },
+    "Widget Drag and Drop": {
+      "status": "PASSED"
+    },
+    "Widget API Integration": {
+      "status": "FAILED",
+      "error": "req.url is not a function"
+    },
+    "Widget Loading States": {
+      "status": "PASSED"
+    },
+    "Widget Error States": {
+      "status": "PASSED"
+    },
+    "Widget Interactions": {
+      "status": "PASSED"
+    },
+    "Widget Responsiveness": {
+      "status": "PASSED"
+    },
+    "Widget Customization": {
+      "status": "PASSED"
+    },
+    "Keyboard Shortcut Activation": {
+      "status": "PASSED"
+    },
+    "Palette Opening and Closing": {
+      "status": "PASSED"
+    },
+    "Search Functionality": {
+      "status": "FAILED",
+      "error": "locator.fill: Error: strict mode violation: locator('.command-palette input, .palette input, .search-input, input[placeholder*=\"search\" i], input[placeholder*=\"command\" i]') resolved to 2 elements:\n    1) <input type=\"text\" class=\"search-input\" placeholder=\"Search...\"/> aka getByRole('textbox', { name: 'Search...', exact: true })\n    2) <input value=\"\" type=\"text\" autocomplete=\"off\" spellcheck=\"false\" class=\"command-input\" placeholder=\"Type a command or search...\"/> aka getByRole('textbox', { name: 'Type a command or search...' })\n\nCall log:\n\u001b[2m  - waiting for locator('.command-palette input, .palette input, .search-input, input[placeholder*=\"search\" i], input[placeholder*=\"command\" i]')\u001b[22m\n"
+    },
+    "Fuzzy Search": {
+      "status": "FAILED",
+      "error": "locator.fill: Error: strict mode violation: locator('.command-palette input, .palette input, .search-input, input[placeholder*=\"search\" i]') resolved to 2 elements:\n    1) <input type=\"text\" class=\"search-input\" placeholder=\"Search...\"/> aka getByRole('textbox', { name: 'Search...', exact: true })\n    2) <input value=\"\" type=\"text\" autocomplete=\"off\" spellcheck=\"false\" class=\"command-input\" placeholder=\"Type a command or search...\"/> aka getByRole('textbox', { name: 'Type a command or search...' })\n\nCall log:\n\u001b[2m  - waiting for locator('.command-palette input, .palette input, .search-input, input[placeholder*=\"search\" i]')\u001b[22m\n"
+    },
+    "Navigation Commands": {
+      "status": "FAILED",
+      "error": "locator.fill: Error: strict mode violation: locator('.command-palette input, .palette input, .search-input') resolved to 2 elements:\n    1) <input type=\"text\" class=\"search-input\" placeholder=\"Search...\"/> aka getByRole('textbox', { name: 'Search...', exact: true })\n    2) <input value=\"\" type=\"text\" autocomplete=\"off\" spellcheck=\"false\" class=\"command-input\" placeholder=\"Type a command or search...\"/> aka getByRole('textbox', { name: 'Type a command or search...' })\n\nCall log:\n\u001b[2m  - waiting for locator('.command-palette input, .palette input, .search-input')\u001b[22m\n"
+    },
+    "Focus Management": {
+      "status": "FAILED",
+      "error": "locator.fill: Error: strict mode violation: locator('.command-palette input, .palette input, .search-input') resolved to 2 elements:\n    1) <input type=\"text\" class=\"search-input\" placeholder=\"Search...\"/> aka getByRole('textbox', { name: 'Search...', exact: true })\n    2) <input value=\"\" type=\"text\" autocomplete=\"off\" spellcheck=\"false\" class=\"command-input\" placeholder=\"Type a command or search...\"/> aka getByRole('textbox', { name: 'Type a command or search...' })\n\nCall log:\n\u001b[2m  - waiting for locator('.command-palette input, .palette input, .search-input')\u001b[22m\n"
+    },
+    "Escape Key Handling": {
+      "status": "PASSED"
+    },
+    "Command Execution": {
+      "status": "PASSED"
+    },
+    "Recent Commands": {
+      "status": "PASSED"
+    },
+    "Calendar Layer Rendering": {
+      "status": "PASSED"
+    },
+    "Five Layer System": {
+      "status": "PASSED"
+    },
+    "Time Axis Display": {
+      "status": "PASSED"
+    },
+    "Event Block Rendering": {
+      "status": "PASSED"
+    },
+    "Drag and Drop Movement": {
+      "status": "PASSED"
+    },
+    "Event Resizing": {
+      "status": "PASSED"
+    },
+    "Quick Event Creation": {
+      "status": "PASSED"
+    },
+    "Natural Language Parsing": {
+      "status": "PASSED"
+    },
+    "Conflict Detection": {
+      "status": "PASSED"
+    },
+    "Timeline Navigation": {
+      "status": "PASSED"
+    },
+    "Toast Notification Display": {
+      "status": "PASSED"
+    },
+    "Auto-Dismiss Functionality": {
+      "status": "PASSED"
+    },
+    "Manual Dismiss": {
+      "status": "PASSED"
+    },
+    "Progress Bar Notifications": {
+      "status": "PASSED"
+    },
+    "Action Button Functionality": {
+      "status": "PASSED"
+    },
+    "Multiple Notification Stacking": {
+      "status": "PASSED"
+    },
+    "Notification Types": {
+      "status": "PASSED"
+    },
+    "Position and Layout": {
+      "status": "PASSED"
+    },
+    "Animation and Transitions": {
+      "status": "PASSED"
+    },
+    "Backend API Connectivity": {
+      "status": "PASSED"
+    },
+    "Page Navigation Flow": {
+      "status": "PASSED"
+    },
+    "Task CRUD Integration": {
+      "status": "FAILED",
+      "error": "No create task button found on tasks page"
+    },
+    "Event CRUD Integration": {
+      "status": "FAILED",
+      "error": "No create event button found on events page"
+    },
+    "Modal to API Integration": {
+      "status": "FAILED",
+      "error": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Create\"), button:has-text(\"Save\")').first()\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"btn btn-primary btn-medium   w-full\">Create New Task</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <button type=\"button\" class=\"duration-btn \">1.5h</button> from <div class=\"modal-backdrop\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <button type=\"button\" class=\"duration-btn \">1.5h</button> from <div class=\"modal-backdrop\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 100ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is not stable\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 100ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <button type=\"button\" class=\"duration-btn \">45m</button> from <div class=\"modal-backdrop\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m    13 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <button type=\"button\" class=\"duration-btn \">1.5h</button> from <div class=\"modal-backdrop\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m       - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <button type=\"button\" class=\"duration-btn \">45m</button> from <div class=\"modal-backdrop\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m       - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"modal-header\">…</div> from <div class=\"modal-backdrop\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m       - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"modal-header\">…</div> from <div class=\"modal-backdrop\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <button type=\"button\" class=\"duration-btn \">1.5h</button> from <div class=\"modal-backdrop\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <button type=\"button\" class=\"duration-btn \">45m</button> from <div class=\"modal-backdrop\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <div class=\"modal-header\">…</div> from <div class=\"modal-backdrop\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n"
+    },
+    "Widget to API Integration": {
+      "status": "PASSED"
+    },
+    "Command Palette Navigation": {
+      "status": "FAILED",
+      "error": "locator.fill: Error: strict mode violation: locator('.command-palette input, .palette input, .search-input') resolved to 2 elements:\n    1) <input type=\"text\" class=\"search-input\" placeholder=\"Search...\"/> aka getByRole('textbox', { name: 'Search...', exact: true })\n    2) <input value=\"\" type=\"text\" autocomplete=\"off\" spellcheck=\"false\" class=\"command-input\" placeholder=\"Type a command or search...\"/> aka getByRole('textbox', { name: 'Type a command or search...' })\n\nCall log:\n\u001b[2m  - waiting for locator('.command-palette input, .palette input, .search-input')\u001b[22m\n"
+    },
+    "Cross-Page State Persistence": {
+      "status": "PASSED"
+    },
+    "Error Handling Integration": {
+      "status": "PASSED"
+    },
+    "Real User Workflow": {
+      "status": "FAILED",
+      "error": "page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('a[href=\"/tasks\"], button:has-text(\"Tasks\"), .nav-tasks')\u001b[22m\n\u001b[2m    - locator resolved to 3 elements. Proceeding with the first one: <a title=\"\" href=\"/tasks\" class=\"menu-item \" data-discover=\"true\">…</a>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - element is outside of the viewport\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    57 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - element is outside of the viewport\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n"
+    }
+  },
+  "startTime": "2025-09-14T17:30:18.058Z",
+  "endTime": "2025-09-14T17:36:34.492Z"
+}

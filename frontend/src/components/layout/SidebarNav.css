@@ -59,21 +59,23 @@
   align-items: center;
   justify-content: center;
   border: none;
-  background: var(--gray-100);
-  border-radius: var(--radius-lg);
+  background: var(--gray-100, #f3f4f6);
+  border-radius: var(--radius-lg, 8px);
   cursor: pointer;
-  color: var(--text-secondary);
-  transition: all var(--transition-fast);
+  color: var(--text-secondary, #6b7280);
+  transition: all var(--transition-fast, 150ms ease);
 }
 
 .collapse-btn:hover {
-  background: var(--gray-200);
-  color: var(--text-primary);
+  background: var(--gray-200, #e5e7eb);
+  color: var(--text-primary, #1f2937);
 }
 
 .collapse-btn svg {
   width: 16px;
   height: 16px;
+  stroke: currentColor;
+  fill: none;
 }
 
 /* Search */

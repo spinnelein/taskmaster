@@ -13,6 +13,10 @@
   transition: padding-left var(--transition-base);
 }
 
+.sidebar-layout.sidebar-collapsed {
+  padding-left: 80px; /* Collapsed sidebar width */
+}
+
 .main-content {
   flex: 1;
   display: flex;

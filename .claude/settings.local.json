@@ -41,7 +41,8 @@
       "Bash(del \"80a50274ef3e_add_notifications_enabled_field_to_.py\")",
       "Bash(rm:*)",
       "Bash(sqlite3:*)",
-      "Bash"
+      "Bash",
+      "WebFetch(domain:fullcalendar.io)"
     ],
     "deny": []
   }

@@ -116,6 +116,9 @@
   color: #6b7280;
   cursor: pointer;
   transition: all 0.2s;
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
 }
 
 .duration-btn:hover {

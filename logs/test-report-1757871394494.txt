@@ -1,0 +1,251 @@
+
+=== COMPREHENSIVE UI TEST RESULTS ===
+
+Execution Time: 376434ms
+Total Tests: 67
+Passed: 52
+Failed: 15  
+Skipped: 0
+Success Rate: 77.61%
+
+=== FAILED TESTS ===
+- Modal Opens Correctly: locator.waitFor: Timeout 3000ms exceeded.
+Call log:
+[2m  - waiting for locator('[data-testid="modal"], .modal, .modal-overlay') to be visible[22m
+
+- Modal Closing (Backdrop Click): locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('.modal-overlay, .modal').first()[22m
+
+- Focus Trap Functionality: Focus trap failed - focus moved outside modal
+- Form Accessibility: Modal element not found for accessibility testing
+- Form Validation: locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('button:has-text("Create"), button:has-text("Save"), button[type="submit"]').first()[22m
+[2m    - locator resolved to <button class="btn btn-primary btn-medium   w-full">Create New Task</button>[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <button type="button" class="duration-btn ">1.5h</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - <button type="button" class="duration-btn ">1.5h</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 100ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is not stable[22m
+[2m  - retrying click action[22m
+[2m    - waiting 100ms[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <button type="button" class="duration-btn ">45m</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m      - waiting 500ms[22m
+[2m    13 × waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <button type="button" class="duration-btn ">1.5h</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m       - waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <button type="button" class="duration-btn ">45m</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m       - waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <div class="modal-header">…</div> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m       - waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <div class="modal-header">…</div> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - <button type="button" class="duration-btn ">1.5h</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 500ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - <button type="button" class="duration-btn ">45m</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 500ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - <div class="modal-header">…</div> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 500ms[22m
+
+- Widget API Integration: req.url is not a function
+- Search Functionality: locator.fill: Error: strict mode violation: locator('.command-palette input, .palette input, .search-input, input[placeholder*="search" i], input[placeholder*="command" i]') resolved to 2 elements:
+    1) <input type="text" class="search-input" placeholder="Search..."/> aka getByRole('textbox', { name: 'Search...', exact: true })
+    2) <input value="" type="text" autocomplete="off" spellcheck="false" class="command-input" placeholder="Type a command or search..."/> aka getByRole('textbox', { name: 'Type a command or search...' })
+
+Call log:
+[2m  - waiting for locator('.command-palette input, .palette input, .search-input, input[placeholder*="search" i], input[placeholder*="command" i]')[22m
+
+- Fuzzy Search: locator.fill: Error: strict mode violation: locator('.command-palette input, .palette input, .search-input, input[placeholder*="search" i]') resolved to 2 elements:
+    1) <input type="text" class="search-input" placeholder="Search..."/> aka getByRole('textbox', { name: 'Search...', exact: true })
+    2) <input value="" type="text" autocomplete="off" spellcheck="false" class="command-input" placeholder="Type a command or search..."/> aka getByRole('textbox', { name: 'Type a command or search...' })
+
+Call log:
+[2m  - waiting for locator('.command-palette input, .palette input, .search-input, input[placeholder*="search" i]')[22m
+
+- Navigation Commands: locator.fill: Error: strict mode violation: locator('.command-palette input, .palette input, .search-input') resolved to 2 elements:
+    1) <input type="text" class="search-input" placeholder="Search..."/> aka getByRole('textbox', { name: 'Search...', exact: true })
+    2) <input value="" type="text" autocomplete="off" spellcheck="false" class="command-input" placeholder="Type a command or search..."/> aka getByRole('textbox', { name: 'Type a command or search...' })
+
+Call log:
+[2m  - waiting for locator('.command-palette input, .palette input, .search-input')[22m
+
+- Focus Management: locator.fill: Error: strict mode violation: locator('.command-palette input, .palette input, .search-input') resolved to 2 elements:
+    1) <input type="text" class="search-input" placeholder="Search..."/> aka getByRole('textbox', { name: 'Search...', exact: true })
+    2) <input value="" type="text" autocomplete="off" spellcheck="false" class="command-input" placeholder="Type a command or search..."/> aka getByRole('textbox', { name: 'Type a command or search...' })
+
+Call log:
+[2m  - waiting for locator('.command-palette input, .palette input, .search-input')[22m
+
+- Task CRUD Integration: No create task button found on tasks page
+- Event CRUD Integration: No create event button found on events page
+- Modal to API Integration: locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('button:has-text("Create"), button:has-text("Save")').first()[22m
+[2m    - locator resolved to <button class="btn btn-primary btn-medium   w-full">Create New Task</button>[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <button type="button" class="duration-btn ">1.5h</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - <button type="button" class="duration-btn ">1.5h</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 100ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is not stable[22m
+[2m  - retrying click action[22m
+[2m    - waiting 100ms[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <button type="button" class="duration-btn ">45m</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m      - waiting 500ms[22m
+[2m    13 × waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <button type="button" class="duration-btn ">1.5h</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m       - waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <button type="button" class="duration-btn ">45m</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m       - waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <div class="modal-header">…</div> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m       - waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <div class="modal-header">…</div> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - <button type="button" class="duration-btn ">1.5h</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 500ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - <button type="button" class="duration-btn ">45m</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 500ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - <div class="modal-header">…</div> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 500ms[22m
+
+- Command Palette Navigation: locator.fill: Error: strict mode violation: locator('.command-palette input, .palette input, .search-input') resolved to 2 elements:
+    1) <input type="text" class="search-input" placeholder="Search..."/> aka getByRole('textbox', { name: 'Search...', exact: true })
+    2) <input value="" type="text" autocomplete="off" spellcheck="false" class="command-input" placeholder="Type a command or search..."/> aka getByRole('textbox', { name: 'Type a command or search...' })
+
+Call log:
+[2m  - waiting for locator('.command-palette input, .palette input, .search-input')[22m
+
+- Real User Workflow: page.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('a[href="/tasks"], button:has-text("Tasks"), .nav-tasks')[22m
+[2m    - locator resolved to 3 elements. Proceeding with the first one: <a title="" href="/tasks" class="menu-item " data-discover="true">…</a>[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - element is outside of the viewport[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - element is outside of the viewport[22m
+[2m    - retrying click action[22m
+[2m      - waiting 100ms[22m
+[2m    57 × waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - element is outside of the viewport[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+
+
+=== ERRORS ENCOUNTERED ===
+
+
+Full logs: C:\Users\Aaron\Documents\Python Scripts\Taskmaster\logs\comprehensive-test-1757871018058.log
