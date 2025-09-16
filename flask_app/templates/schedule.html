@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TaskMaster Schedule</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- FullCalendar CSS -->
+    <link href='https://unpkg.com/fullcalendar@6.1.8/index.global.min.css' rel='stylesheet' />
+    
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            background: #f5f5f5; 
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #333;
+        }
+        .header h1 {
+            margin: 0;
+            color: #333;
+        }
+        .nav-links a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #007bff;
+            font-weight: 500;
+        }
+        .nav-links a.active {
+            color: #0056b3;
+            font-weight: bold;
+        }
+        .nav-links a:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+        }
+        #calendar { 
+            background: white;
+            border-radius: 5px;
+        }
+        .sidebar {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        .sidebar h3 {
+            margin-top: 0;
+            color: #495057;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        .task-item {
+            background: white;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #28a745;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .task-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .task-meta {
+            font-size: 0.9em;
+            color: #666;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .btn-success {
+            background: #28a745;
+        }
+        .btn-success:hover {
+            background: #218838;
+        }
+        .health-status {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+        }
+        
+        /* FullCalendar customizations and fallback styles */
+        .fc-event {
+            cursor: pointer;
+            font-size: 13px;
+            line-height: 1.3;
+            padding: 3px 5px !important;
+            overflow: hidden;
+        }
+        .fc-event-title {
+            font-weight: 500;
+        }
+        /* Ensure minimum height for readability */
+        .fc-timegrid-event {
+            min-height: 30px !important;
+        }
+        /* Make time slots taller for 20-minute intervals */
+        .fc-timegrid-slot {
+            height: 40px !important;
+        }
+        .fc-timegrid-slot-minor {
+            border-style: dotted;
+        }
+        /* Better time label visibility */
+        .fc-timegrid-slot-label {
+            font-size: 12px;
+            vertical-align: top;
+            padding-top: 2px;
+        }
+        /* Ensure event content is visible */
+        .fc-event-main {
+            padding: 2px;
+        }
+        .fc-event-time {
+            font-size: 11px;
+            font-weight: normal;
+        }
+        .fc-direction-ltr .fc-timegrid-slot-label-cushion {
+            padding-right: 5px;
+        }
+        
+        /* Basic FullCalendar fallback styles if CSS doesn't load */
+        .fc {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+        }
+        .fc-header-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            background: #f8f9fa;
+        }
+        .fc-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            margin: 0 2px;
+        }
+        .fc-button:hover {
+            background: #0056b3;
+        }
+        .fc-button-active {
+            background: #0056b3;
+        }
+        .fc-view-harness {
+            min-height: 400px;
+            background: white;
+        }
+        .fc-daygrid-day, .fc-timegrid-slot {
+            border: 1px solid #e0e0e0;
+        }
+        .fc-event {
+            background: #007bff;
+            border: 1px solid #007bff;
+            color: white;
+            padding: 2px 4px;
+            border-radius: 3px;
+            margin: 1px;
+        }
+        .fc-timegrid-axis {
+            border-right: 1px solid #ddd;
+            background: #f8f9fa;
+            width: 50px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            .header {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="health-status" id="health-status">🟢 Connected</div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>TaskMaster Schedule</h1>
+            <div class="nav-links">
+                <a href="/" class="active">Schedule</a>
+                <a href="/events">Events</a>
+                <a href="/tasks">Tasks</a>
+                <a href="/initiatives">Initiatives</a>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div>
+                <div id='calendar'></div>
+            </div>
+            
+            <div class="sidebar">
+                <h3>Active Tasks</h3>
+                <div id="tasks-list">
+                    <div style="text-align: center; color: #666; padding: 20px;">
+                        Loading tasks...
+                    </div>
+                </div>
+                <button class="btn" onclick="showAddTaskModal()">Add Task</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- FullCalendar JS -->
+    <script src='https://unpkg.com/fullcalendar@6.1.8/index.global.min.js'></script>
+    
+    <script>
+    // Global calendar variable
+    let calendar;
+    
+    // Initialize calendar when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeCalendar();
+        loadTasks();
+        checkHealth();
+    });
+    
+    function initializeCalendar() {
+        const calendarEl = document.getElementById('calendar');
+        
+        calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'timeGridWeek',
+            height: 'auto',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            slotMinTime: '07:00:00',
+            slotMaxTime: '22:00:00',
+            slotDuration: '00:20:00',
+            slotLabelInterval: '01:00',
+            expandRows: true,
+            eventMinHeight: 30,
+            allDaySlot: false,
+            editable: true,
+            selectable: true,
+            selectMirror: true,
+            
+            // Load events from API with calendar mode (expanded recurring events)
+            events: {
+                url: '/api/events',
+                extraParams: {
+                    mode: 'calendar'
+                }
+            },
+            
+            // Handle date selection for new events
+            select: function(info) {
+                const title = prompt('Event Title:');
+                if (title) {
+                    createEvent({
+                        title: title,
+                        start: info.startStr,
+                        end: info.endStr,
+                        is_blocking: confirm('Is this a blocking event? (blocks other tasks)')
+                    });
+                }
+                calendar.unselect();
+            },
+            
+            // Handle event clicks for deletion
+            eventClick: function(info) {
+                if (confirm('Delete "' + info.event.title + '"?')) {
+                    deleteEvent(info.event.id);
+                }
+            },
+            
+            // Handle event drag/resize
+            eventChange: function(info) {
+                updateEvent(info.event.id, {
+                    start: info.event.startStr,
+                    end: info.event.endStr
+                });
+            },
+            
+            // Error handling
+            eventSourceFailure: function(error) {
+                console.error('Failed to load events:', error);
+                document.getElementById('health-status').textContent = '🔴 Connection Error';
+                document.getElementById('health-status').style.background = '#dc3545';
+            }
+        });
+        
+        calendar.render();
+    }
+    
+    // Event management functions
+    function createEvent(eventData) {
+        fetch('/api/events', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(eventData)
+        })
+        .then(response => response.json())
+        .then(event => {
+            calendar.addEvent(event);
+        })
+        .catch(error => {
+            console.error('Error creating event:', error);
+            alert('Failed to create event');
+        });
+    }
+    
+    function updateEvent(eventId, updates) {
+        fetch(`/api/events/${eventId}`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(updates)
+        })
+        .catch(error => {
+            console.error('Error updating event:', error);
+            calendar.refetchEvents(); // Revert on error
+        });
+    }
+    
+    function deleteEvent(eventId) {
+        fetch(`/api/events/${eventId}`, {
+            method: 'DELETE'
+        })
+        .then(() => {
+            calendar.getEventById(eventId).remove();
+        })
+        .catch(error => {
+            console.error('Error deleting event:', error);
+            alert('Failed to delete event');
+        });
+    }
+    
+    // Task management functions
+    function loadTasks() {
+        fetch('/api/tasks')
+            .then(response => response.json())
+            .then(tasks => {
+                displayTasks(tasks);
+            })
+            .catch(error => {
+                console.error('Error loading tasks:', error);
+                document.getElementById('tasks-list').innerHTML = 
+                    '<div style="color: #dc3545;">Failed to load tasks</div>';
+            });
+    }
+    
+    function displayTasks(tasks) {
+        const tasksList = document.getElementById('tasks-list');
+        
+        if (tasks.length === 0) {
+            tasksList.innerHTML = '<div style="color: #666; text-align: center; padding: 20px;">No active tasks</div>';
+            return;
+        }
+        
+        tasksList.innerHTML = tasks.map(task => `
+            <div class="task-item">
+                <div class="task-title">${task.title}</div>
+                <div class="task-meta">
+                    ${task.duration} min | Priority: ${task.priority} | Urgency: ${task.urgency}/10
+                </div>
+                ${task.description ? `<div style="margin-top: 5px; font-size: 0.9em; color: #666;">${task.description}</div>` : ''}
+                <button class="btn btn-success" onclick="completeTask('${task.id}')">Complete</button>
+            </div>
+        `).join('');
+    }
+    
+    function completeTask(taskId) {
+        fetch(`/api/tasks/${taskId}/complete`, {
+            method: 'POST'
+        })
+        .then(() => {
+            loadTasks(); // Refresh task list
+        })
+        .catch(error => {
+            console.error('Error completing task:', error);
+            alert('Failed to complete task');
+        });
+    }
+    
+    function showAddTaskModal() {
+        const title = prompt('Task Title:');
+        if (!title) return;
+        
+        const duration = parseInt(prompt('Duration (minutes):', '30'));
+        const urgency = parseInt(prompt('Urgency (1-10):', '5'));
+        const description = prompt('Description (optional):') || '';
+        
+        const taskData = {
+            title: title,
+            duration: duration || 30,
+            urgency: urgency || 5,
+            description: description,
+            priority: urgency >= 8 ? 'high' : urgency >= 5 ? 'medium' : 'low'
+        };
+        
+        fetch('/api/tasks', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(taskData)
+        })
+        .then(response => response.json())
+        .then(() => {
+            loadTasks(); // Refresh task list
+        })
+        .catch(error => {
+            console.error('Error creating task:', error);
+            alert('Failed to create task');
+        });
+    }
+    
+    // Health check
+    function checkHealth() {
+        fetch('/health')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('health-status').textContent = '🟢 ' + data.service;
+                document.getElementById('health-status').style.background = '#28a745';
+            })
+            .catch(error => {
+                document.getElementById('health-status').textContent = '🔴 Connection Error';
+                document.getElementById('health-status').style.background = '#dc3545';
+            });
+    }
+    
+    // Refresh health check every 30 seconds
+    setInterval(checkHealth, 30000);
+    </script>
+</body>
+</html>

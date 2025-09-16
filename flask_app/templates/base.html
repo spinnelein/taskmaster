@@ -1,0 +1,52 @@
+<!-- flask_app/templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TaskMaster{% endblock %}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; background: #f4f4f4; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 10px; border-bottom: 2px solid #333; }
+        nav a { margin: 0 10px; text-decoration: none; color: #333; }
+        nav a:hover { color: #007bff; }
+        .schedule-grid { display: grid; grid-template-columns: 100px 1fr; gap: 0; }
+        .time-slot { padding: 10px; border-bottom: 1px solid #ddd; }
+        .event { background: #ffcccc; padding: 10px; margin: 2px; border-radius: 5px; }
+        .event.non-blocking { background: #cce5ff; }
+        .time-pool { background: #ccffcc; padding: 10px; margin: 2px; border-radius: 5px; }
+        .task-card { background: #fffacd; padding: 10px; margin: 5px 0; border-radius: 5px; }
+        form { margin: 20px 0; }
+        input, select, textarea { width: 100%; padding: 8px; margin: 5px 0; }
+        button { background: #007bff; color: white; padding: 10px 20px; border: none; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .flash { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .flash.success { background: #d4edda; color: #155724; }
+        .flash.error { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>TaskMaster</h1>
+            <nav>
+                <a href="{{ url_for('index') }}">Schedule</a>
+                <a href="{{ url_for('events.list_events') }}">Events</a>
+                <a href="{{ url_for('tasks.list_tasks') }}">Tasks</a>
+            </nav>
+        </div>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
