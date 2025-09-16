@@ -49,6 +49,30 @@ class TaskCreate(BaseModel):
         if v not in valid_weather:
             raise ValueError(f"Weather must be one of {valid_weather}")
         return v
+    
+    @field_validator('recurrence_pattern')
+    @classmethod
+    def validate_recurrence_pattern(cls, v):
+        if v is None:
+            return v
+        
+        if not isinstance(v, dict):
+            raise ValueError("Recurrence pattern must be a dictionary")
+        
+        # Check required fields
+        if 'frequency' not in v:
+            raise ValueError("Recurrence pattern must include 'frequency'")
+        
+        valid_frequencies = ["days", "weeks", "months", "years"]
+        if v['frequency'].lower() not in valid_frequencies:
+            raise ValueError(f"Frequency must be one of {valid_frequencies}")
+        
+        # Check interval
+        interval = v.get('interval', 1)
+        if not isinstance(interval, int) or interval <= 0:
+            raise ValueError("Interval must be a positive integer")
+        
+        return v
 
 class TaskUpdate(BaseModel):
     """Schema for updating a task"""
@@ -122,6 +146,30 @@ class TaskUpdate(BaseModel):
             valid_weather = ["any", "sunny", "cloudy", "rainy", "snowy", "clear", "windy"]
             if v not in valid_weather:
                 raise ValueError(f"Weather must be one of {valid_weather}")
+        return v
+    
+    @field_validator('recurrence_pattern')
+    @classmethod
+    def validate_recurrence_pattern(cls, v):
+        if v is None:
+            return v
+        
+        if not isinstance(v, dict):
+            raise ValueError("Recurrence pattern must be a dictionary")
+        
+        # Check required fields
+        if 'frequency' not in v:
+            raise ValueError("Recurrence pattern must include 'frequency'")
+        
+        valid_frequencies = ["days", "weeks", "months", "years"]
+        if v['frequency'].lower() not in valid_frequencies:
+            raise ValueError(f"Frequency must be one of {valid_frequencies}")
+        
+        # Check interval
+        interval = v.get('interval', 1)
+        if not isinstance(interval, int) or interval <= 0:
+            raise ValueError("Interval must be a positive integer")
+        
         return v
 
 class TaskResponse(BaseResponse):

@@ -77,6 +77,7 @@ class TaskModel(BaseModel):
     # Recurring task fields
     is_recurring = Column(Boolean, default=False)
     recurrence_pattern = Column(JSON, nullable=True)  # {"frequency": "daily", "interval": 1}
+    recurrence_days = Column(Integer, nullable=True)  # Simple recurring: days between occurrences
     parent_task_id = Column(String(36), ForeignKey("tasks.id"), nullable=True)
     last_completed_at = Column(DateTime, nullable=True)
     
@@ -88,12 +89,12 @@ class TaskModel(BaseModel):
     is_snoozed = Column(Boolean, default=False)
     snoozed_until = Column(DateTime, nullable=True)
     
-    # Relationships
-    initiative = relationship("InitiativeModel", back_populates="tasks")
-    project = relationship("ProjectModel", back_populates="tasks")
-    phase = relationship("ProjectPhaseModel", back_populates="tasks")
-    meal = relationship("MealModel", back_populates="generated_tasks")
-    parent_task = relationship("TaskModel", remote_side="TaskModel.id", backref="recurring_instances")
+    # Relationships - ONE WAY ONLY (remove back_populates to break circular dependencies)
+    initiative = relationship("InitiativeModel", lazy="noload")
+    project = relationship("ProjectModel", lazy="noload")
+    phase = relationship("ProjectPhaseModel", lazy="noload") 
+    meal = relationship("MealModel", lazy="noload")
+    parent_task = relationship("TaskModel", remote_side="TaskModel.id", lazy="noload")
     
     def __repr__(self):
         return f"<Task(id={self.id}, title='{self.title}', status={self.status.value})>"

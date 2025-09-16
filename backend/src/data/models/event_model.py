@@ -57,7 +57,16 @@ class EventModel(BaseModel):
     
     # Recurrence - Enhanced Master/Exception Pattern
     is_recurring = Column(Boolean, default=False)
-    recurrence_pattern = Column(JSON, nullable=True)
+    recurrence_pattern = Column(JSON, nullable=True)  # Legacy JSON format
+    recurrence_rrule = Column(Text, nullable=True)  # New RRULE format (RFC 5545)
+    recurrence_end = Column(DateTime, nullable=True)  # Series termination date
+    
+    # Timezone support
+    timezone = Column(String(50), default='America/Los_Angeles')  # Event timezone
+    
+    # RFC 5545 standard field names (for RRULE compatibility)
+    dtstart = Column(DateTime, nullable=True)  # Synonym for start_time
+    dtend = Column(DateTime, nullable=True)    # Synonym for end_time
     
     # Master/Instance relationship
     recurrence_master_id = Column(String(36), ForeignKey("events.id"), nullable=True)  # Points to master event
@@ -82,13 +91,13 @@ class EventModel(BaseModel):
     reminder_minutes_before = Column(JSON, nullable=True)  # Array of reminder times
     notifications_enabled = Column(Boolean, default=True)  # Enable/disable all notifications for this event
     
-    # Relationships
-    project = relationship("ProjectModel", back_populates="events")
-    meal = relationship("MealModel", back_populates="event", uselist=False, foreign_keys="MealModel.event_id")
+    # Relationships - ONE WAY ONLY (remove back_populates to break circular dependencies)
+    project = relationship("ProjectModel", lazy="noload")
+    meal = relationship("MealModel", uselist=False, foreign_keys="MealModel.event_id", lazy="noload")
     
-    # Recurring event relationships
-    recurrence_master = relationship("EventModel", remote_side="EventModel.id", back_populates="recurrence_instances")
-    recurrence_instances = relationship("EventModel", back_populates="recurrence_master", cascade="all, delete-orphan")
+    # Recurring event relationships - ONE WAY ONLY (remove back_populates to break circular dependencies)
+    recurrence_master = relationship("EventModel", remote_side="EventModel.id", lazy="noload")
+    recurrence_instances = relationship("EventModel", foreign_keys="EventModel.recurrence_master_id", cascade="all, delete-orphan", lazy="noload")
     
     def __repr__(self):
         return f"<Event(id={self.id}, title='{self.title}', is_blocking={self.is_blocking})>"

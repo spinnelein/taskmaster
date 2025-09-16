@@ -1,7 +1,8 @@
 // Schedule page
 // NO EMOJIS
 import { useState, useEffect } from 'react';
-import apiClient from '../services/api';
+import eventService from '../services/eventService';
+import { format } from 'date-fns';
 
 function Schedule() {
   const [schedule, setSchedule] = useState(null);
@@ -17,8 +18,58 @@ function Schedule() {
   const loadSchedule = async () => {
     try {
       setLoading(true);
-      const response = await apiClient.get(`/schedule/${selectedDate}`);
-      setSchedule(response.data);
+      
+      // Get all master events
+      const eventsResponse = await eventService.getEvents();
+      const masterEvents = eventsResponse.events;
+      
+      let allDayEvents = [];
+      
+      // Expand recurring events for the selected date
+      for (const event of masterEvents) {
+        if (event.is_recurring) {
+          try {
+            // Get occurrences for just this date
+            const expansionData = await eventService.getEventOccurrences(
+              event.id,
+              selectedDate,
+              selectedDate,
+              1 // Just need to know if it occurs on this date
+            );
+            
+            if (expansionData.occurrences && expansionData.occurrences.length > 0) {
+              const occurrence = expansionData.occurrences[0];
+              allDayEvents.push({
+                id: occurrence.id,
+                title: occurrence.title,
+                start_time: occurrence.start,
+                end_time: occurrence.end,
+                location: occurrence.location,
+                description: occurrence.description,
+                is_blocking: true // Assume blocking for now
+              });
+            }
+          } catch (expandError) {
+            console.warn(`Failed to expand ${event.title}:`, expandError);
+          }
+        } else {
+          // Non-recurring event - check if it's on this date
+          const eventDate = new Date(event.start_time).toISOString().split('T')[0];
+          if (eventDate === selectedDate) {
+            allDayEvents.push(event);
+          }
+        }
+      }
+      
+      // Sort events by start time
+      allDayEvents.sort((a, b) => new Date(a.start_time) - new Date(b.start_time));
+      
+      setSchedule({
+        date: selectedDate,
+        events: allDayEvents,
+        free_slots: [] // Will be calculated later
+      });
+      
     } catch (error) {
       console.error('Failed to load schedule:', error);
     } finally {

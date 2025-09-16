@@ -7,15 +7,35 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import rrulePlugin from '@fullcalendar/rrule';
 import eventService from '../../services/eventService';
+import { useRecurringEventEdit } from '../../hooks/useRecurringEventEdit';
+import { useSeriesManagement } from '../../hooks/useSeriesManagement';
+import RecurringEditModeModal from '../events/RecurringEditModeModal';
+import SeriesManagementModal from '../events/SeriesManagementModal';
 import { useSidebar } from '../layout/ModernLayout';
 import './FullCalendarView.css';
+import './ExceptionStyles.css';
 
 function FullCalendarView() {
   const { isSidebarCollapsed } = useSidebar();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
+  
+  const {
+    isEditModeModalOpen,
+    pendingEdit,
+    initiateEdit,
+    handleModeSelect,
+    cancelEdit
+  } = useRecurringEventEdit();
+  
+  const {
+    isSeriesModalOpen,
+    selectedSeries,
+    openSeriesModal,
+    closeSeriesModal
+  } = useSeriesManagement();
 
-  // Load events from API
+  // Load events from API using new RRULE-based expansion
   const loadEvents = useCallback(async () => {
     try {
       setLoading(true);
@@ -24,12 +44,13 @@ function FullCalendarView() {
       // Transform and expand events for FullCalendar format
       const transformedEvents = [];
       
-      response.events.forEach(event => {
+      // Calculate date range for expansion (show 30 days)
+      const today = new Date().toISOString().split('T')[0];
+      const thirtyDaysFromNow = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+      
+      // Process each master event
+      for (const event of response.events) {
         const baseEvent = {
-          id: event.id,
-          title: event.title,
-          start: event.start_time,
-          end: event.end_time,
           backgroundColor: getEventColor(event),
           borderColor: getEventColor(event),
           classNames: [`priority-${event.priority || 5}`, `status-${event.status || 'scheduled'}`],
@@ -40,55 +61,75 @@ function FullCalendarView() {
             status: event.status,
             priority: event.priority,
             is_blocking: event.is_blocking,
-            notifications_enabled: event.notifications_enabled
+            notifications_enabled: event.notifications_enabled,
+            is_master: !event.is_recurring // Track if this is a master or occurrence
           }
         };
         
-        // Handle recurring events by manually expanding them
-        if (event.is_recurring && event.recurrence_pattern) {
-          const pattern = event.recurrence_pattern;
-          const startDate = new Date(event.start_time);
-          const endDate = new Date(event.end_time);
-          const duration = endDate.getTime() - startDate.getTime();
-          
-          // Generate instances for the next 30 days
-          const currentDate = new Date();
-          const endRange = new Date(currentDate.getTime() + 30 * 24 * 60 * 60 * 1000);
-          
-          let instanceDate = new Date(startDate);
-          let instanceCount = 0;
-          const maxInstances = pattern.end_after_count || 50; // Limit to prevent infinite loops
-          
-          while (instanceDate <= endRange && instanceCount < maxInstances) {
-            // Only include instances that are today or in the future
-            if (instanceDate >= currentDate.setHours(0, 0, 0, 0)) {
-              const instanceStart = new Date(instanceDate);
-              const instanceEnd = new Date(instanceDate.getTime() + duration);
+        if (event.is_recurring) {
+          // Use new RRULE-based expansion API
+          try {
+            const expansionData = await eventService.getEventOccurrences(
+              event.id,
+              today,
+              thirtyDaysFromNow,
+              50 // Max occurrences to prevent overload
+            );
+            
+            // Add each occurrence to the calendar
+            expansionData.occurrences.forEach(occurrence => {
+              const eventColor = occurrence.is_exception ? 
+                '#f59e0b' : getEventColor(event); // Orange for exceptions
               
               transformedEvents.push({
                 ...baseEvent,
-                id: `${event.id}-${instanceDate.toISOString().split('T')[0]}`,
-                start: instanceStart.toISOString(),
-                end: instanceEnd.toISOString()
+                id: occurrence.id,
+                title: occurrence.title,
+                start: occurrence.start,
+                end: occurrence.end,
+                backgroundColor: eventColor,
+                borderColor: eventColor,
+                className: occurrence.is_exception ? 'fc-event-exception' : 'fc-event-normal',
+                extendedProps: {
+                  ...baseEvent.extendedProps,
+                  occurrence_date: occurrence.occurrence_date,
+                  is_exception: occurrence.is_exception,
+                  master_event_id: occurrence.master_event_id,
+                  is_master: false
+                }
               });
-            }
+            });
             
-            // Calculate next occurrence
-            if (pattern.pattern === 'daily') {
-              instanceDate.setDate(instanceDate.getDate() + (pattern.interval || 1));
-            } else if (pattern.pattern === 'weekly') {
-              instanceDate.setDate(instanceDate.getDate() + 7 * (pattern.interval || 1));
-            }
+            console.log(`Expanded ${event.title}: ${expansionData.total_occurrences} occurrences`);
             
-            instanceCount++;
+          } catch (expansionError) {
+            console.warn(`Failed to expand ${event.title}:`, expansionError);
+            // Fallback: show the master event once
+            transformedEvents.push({
+              ...baseEvent,
+              id: event.id,
+              title: `${event.title} (expansion failed)`,
+              start: event.start_time,
+              end: event.end_time,
+              backgroundColor: '#dc2626', // Red to indicate issue
+              borderColor: '#dc2626'
+            });
           }
         } else {
-          // Non-recurring event
-          transformedEvents.push(baseEvent);
+          // Non-recurring event - add directly
+          transformedEvents.push({
+            ...baseEvent,
+            id: event.id,
+            title: event.title,
+            start: event.start_time,
+            end: event.end_time
+          });
         }
-      });
+      }
       
+      console.log(`Calendar loaded: ${transformedEvents.length} total events (from ${response.events.length} masters)`);
       setEvents(transformedEvents);
+      
     } catch (error) {
       console.error('Failed to load events:', error);
     } finally {
@@ -117,15 +158,65 @@ function FullCalendarView() {
 
   // Handle event click for editing
   const handleEventClick = useCallback((info) => {
-    console.log('Event clicked:', info.event.title);
-    // TODO: Open event edit modal
-  }, []);
+    const event = info.event;
+    const extendedProps = event.extendedProps;
+    
+    console.log('Event clicked:', event.title);
+    
+    // For recurring events, show series management option
+    if (extendedProps.master_event_id || (!extendedProps.is_master && extendedProps.is_recurring)) {
+      const eventData = {
+        id: extendedProps.master_event_id || event.id,
+        title: event.title,
+        master_event_id: extendedProps.master_event_id,
+        is_recurring: true,
+        occurrence_date: extendedProps.occurrence_date
+      };
+      
+      // Show context menu or directly open series modal
+      // For now, open series modal directly for recurring events
+      openSeriesModal(eventData);
+    } else {
+      // Regular event editing would go here
+      console.log('Regular event editing not yet implemented');
+      // TODO: Open regular event edit modal
+    }
+  }, [openSeriesModal]);
 
   // Handle event drag/resize
-  const handleEventChange = useCallback((info) => {
-    console.log('Event changed:', info.event.title);
-    // TODO: Update event via API
-  }, []);
+  const handleEventChange = useCallback(async (info) => {
+    const event = info.event;
+    const extendedProps = event.extendedProps;
+    
+    console.log('Event changed:', event.title);
+    
+    // Calculate new start/end times
+    const updates = {
+      start_time: event.start.toISOString(),
+      end_time: event.end ? event.end.toISOString() : event.start.toISOString()
+    };
+    
+    try {
+      // Create event object for the hook
+      const eventData = {
+        id: extendedProps.master_event_id || event.id,
+        is_recurring: !extendedProps.is_master,
+        master_event_id: extendedProps.master_event_id,
+        title: event.title,
+        occurrence_date: extendedProps.occurrence_date
+      };
+      
+      await initiateEdit(eventData, updates, extendedProps.occurrence_date);
+      
+      // Reload events after successful update
+      await loadEvents();
+      
+    } catch (error) {
+      console.error('Failed to update event:', error);
+      // Revert the change in the calendar
+      info.revert();
+    }
+  }, [initiateEdit, loadEvents]);
 
   // Custom event content based on duration
   const renderEventContent = useCallback((eventInfo) => {
@@ -136,20 +227,27 @@ function FullCalendarView() {
     const title = event.title;
     const location = event.extendedProps.location;
     const eventType = event.extendedProps.event_type;
+    const isException = event.extendedProps.is_exception;
     
     // Smart content based on duration
     if (durationMinutes <= 30) {
       // Short events: Title + Time only
       return (
         <div className="fc-event-content-short">
-          <div className="fc-event-title-short">{title}</div>
+          <div className="fc-event-title-short">
+            {title}
+            {isException && <span className="exception-indicator"> *</span>}
+          </div>
         </div>
       );
     } else if (durationMinutes <= 60) {
       // Medium events: Title + Location (if available)
       return (
         <div className="fc-event-content-medium">
-          <div className="fc-event-title-medium">{title}</div>
+          <div className="fc-event-title-medium">
+            {title}
+            {isException && <span className="exception-indicator"> *</span>}
+          </div>
           {location && <div className="fc-event-location">{location}</div>}
         </div>
       );
@@ -157,7 +255,10 @@ function FullCalendarView() {
       // Long events: Title + Location + Type indicator
       return (
         <div className="fc-event-content-long">
-          <div className="fc-event-title-long">{title}</div>
+          <div className="fc-event-title-long">
+            {title}
+            {isException && <span className="exception-indicator"> *</span>}
+          </div>
           {location && <div className="fc-event-location">{location}</div>}
           {eventType && <div className="fc-event-type">{eventType}</div>}
         </div>
@@ -233,6 +334,28 @@ function FullCalendarView() {
           eventContent={renderEventContent}
         />
       </div>
+      
+      {/* Recurring Edit Mode Modal */}
+      <RecurringEditModeModal
+        isOpen={isEditModeModalOpen}
+        onClose={cancelEdit}
+        onModeSelect={handleModeSelect}
+        eventTitle={pendingEdit?.event.title || ''}
+        occurrenceDate={pendingEdit?.occurrenceDate || ''}
+      />
+      
+      {/* Series Management Modal */}
+      <SeriesManagementModal
+        isOpen={isSeriesModalOpen}
+        onClose={closeSeriesModal}
+        masterEventId={selectedSeries?.masterEventId}
+        eventTitle={selectedSeries?.title || ''}
+        onSeriesDeleted={() => {
+          // Reload events after series deletion
+          loadEvents();
+          closeSeriesModal();
+        }}
+      />
     </div>
   );
 }

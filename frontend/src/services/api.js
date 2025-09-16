@@ -5,9 +5,9 @@ import { portConfig } from '../utils/portConfig';
 
 // Determine backend URL based on environment
 const getBackendUrl = () => {
-  // In development, use environment variable or default
+  // In development, use relative URL to go through Vite proxy
   if (import.meta.env.DEV) {
-    return import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+    return import.meta.env.VITE_API_URL || '/api';
   }
   // In production, assume backend is on same domain
   return '/api';

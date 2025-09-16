@@ -9,7 +9,7 @@ from datetime import datetime
 import uuid
 
 from .base import BaseRepository
-from ..models.initiative_model import InitiativeModel, InitiativeStatus
+from ..models.initiative_model import InitiativeModel
 from ..models.task_model import TaskModel, TaskStatus
 
 class InitiativeRepository(BaseRepository[InitiativeModel]):
@@ -68,8 +68,18 @@ class InitiativeRepository(BaseRepository[InitiativeModel]):
     def get_active(self) -> List[InitiativeModel]:
         """Get all active initiatives"""
         return self.db.query(self.model).filter(
-            self.model.status == InitiativeStatus.ACTIVE
+            self.model.is_active == True
         ).all()
+    
+    def get_by_active_status(self, is_active: bool) -> List[InitiativeModel]:
+        """Get all initiatives by active status"""
+        return self.db.query(self.model).filter(
+            self.model.is_active == is_active
+        ).all()
+    
+    def count(self) -> int:
+        """Get total count of initiatives"""
+        return self.db.query(self.model).count()
     
     def get_with_task_count(self) -> List[Dict[str, Any]]:
         """Get initiatives with task counts"""

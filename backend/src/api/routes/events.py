@@ -14,7 +14,9 @@ from ...schemas.event_schemas import (
 )
 from ...schemas.base_schemas import MessageResponse
 from ...data.repositories.event_repo import EventRepository
-from ...services.recurring_events_service import RecurringEventsService
+from ...data.repositories.event_exception_repo import EventExceptionRepository
+# from ...services.recurring_events_service import RecurringEventsService  # Commented out to avoid import issues
+# Temporarily inline the expansion logic to avoid import issues
 from ..dependencies import get_db
 
 router = APIRouter(tags=["events"])
@@ -53,108 +55,36 @@ def get_events_for_schedule(
     date: Optional[date] = Query(None, description="Filter by date"),
     db: Session = Depends(get_db)
 ):
-    """Get all events for schedule view - expands recurring events to show actual instances"""
+    """Get all events for schedule view - simplified version without complex recurring expansion"""
     try:
         print("=== GET EVENTS FOR SCHEDULE DEBUG ===")
         repo = EventRepository(db)
-        recurring_service = RecurringEventsService(db)
         
         if date:
             events = repo.get_by_date(date)
-            start_date = date
-            end_date = date
         else:
             events = repo.get_all()
-            # If no date specified, expand recurring events for a 2-week window around today
-            from datetime import timedelta
-            today = date.today()
-            start_date = today - timedelta(days=7)
-            end_date = today + timedelta(days=14)
-            print(f"No date filter provided, expanding recurring events from {start_date} to {end_date}")
         
         print(f"Found {len(events)} total events")
         
-        expanded_events = []
+        # For now, just return all events as-is without complex recurring expansion
+        # This simplifies the logic while keeping the endpoint functional
+        filtered_events = []
         for event in events:
-            # Check if this is a proper master event (new system)
-            if getattr(event, 'is_recurrence_master', False):
-                # For recurring masters, manually create today's instance for testing
-                print(f"Processing master event: {event.title}")
-                
-                # Simple test: create today's instance of each recurring event
-                from datetime import datetime, timedelta
-                today_date = datetime.now().date()
-                
-                if start_date <= today_date <= end_date:
-                    # Calculate today's instance time
-                    original_time = event.start_time.time()
-                    today_start = datetime.combine(today_date, original_time)
-                    
-                    duration = event.end_time - event.start_time
-                    today_end = today_start + duration
-                    
-                    # Create a mock EventModel-like object for today's instance
-                    class MockEvent:
-                        def __init__(self):
-                            self.id = f"{event.id}-instance-{today_date.isoformat()}"
-                            self.created_at = event.created_at
-                            self.updated_at = event.updated_at
-                            self.title = event.title
-                            self.start_time = today_start
-                            self.end_time = today_end
-                            self.is_blocking = event.is_blocking
-                            self.location = event.location
-                            self.description = event.description
-                            self.notifications_enabled = getattr(event, 'notifications_enabled', True)
-                            self.is_recurring = False
-                            self.recurrence_pattern = None
-                            self.recurrence_master_id = event.id
-                            self.is_recurrence_master = False
-                            self.is_recurrence_exception = False
-                            self.recurrence_instance_date = today_start
-                    
-                    today_instance = MockEvent()
-                    expanded_events.append(today_instance)
-                    print(f"Created today's instance for {event.title} at {today_start}")
-                else:
-                    print(f"Today ({today_date}) not in range {start_date} to {end_date}")
-                
-                # DO NOT include the master event itself - only the generated instances
-                    
-            elif not getattr(event, 'recurrence_master_id', None):
-                # Include standalone events
-                # But exclude recurring masters (they should only show as instances)
-                if not getattr(event, 'is_recurrence_master', False):
-                    expanded_events.append(event)
-            # Skip individual instances that are properly linked to masters
+            # Include all events for schedule view
+            # Master events and standalone events
+            is_master = getattr(event, 'is_recurrence_master', False) or False
+            has_master_id = getattr(event, 'recurrence_master_id', None) is not None
+            
+            # Include master events and standalone events
+            # Exclude instance events (has_master_id = True) 
+            if is_master or not has_master_id:
+                filtered_events.append(event)
         
-        print(f"Expanded to {len(expanded_events)} events for schedule")
-        
-        # Add a test event to verify the endpoint is working
-        class TestEvent:
-            def __init__(self):
-                self.id = "test-event-123"
-                self.created_at = "2025-09-15T03:00:00"
-                self.updated_at = "2025-09-15T03:00:00" 
-                self.title = "TEST EVENT - Today"
-                self.start_time = datetime.now().replace(hour=14, minute=0, second=0, microsecond=0)
-                self.end_time = datetime.now().replace(hour=15, minute=0, second=0, microsecond=0)
-                self.is_blocking = True
-                self.location = None
-                self.description = "Test event to verify endpoint is working"
-                self.notifications_enabled = True
-                self.is_recurring = False
-                self.recurrence_pattern = None
-                self.recurrence_master_id = None
-                self.is_recurrence_master = False
-                self.is_recurrence_exception = False
-                self.recurrence_instance_date = None
-        
-        test_event = TestEvent()
-        expanded_events.append(test_event)
+        print(f"Filtered to {len(filtered_events)} events for schedule")
         
         event_responses = []
-        for event in expanded_events:
+        for event in filtered_events:
             try:
                 event_response = EventResponse.model_validate(event)
                 event_responses.append(event_response)
@@ -164,11 +94,13 @@ def get_events_for_schedule(
         
         return EventListResponse(
             events=event_responses,
-            total=len(expanded_events)
+            total=len(filtered_events)
         )
     except Exception as e:
         print(f"Error in get_events_for_schedule: {e}")
-        raise
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Schedule endpoint error: {str(e)}")
 
 @router.get("", response_model=EventListResponse)
 def get_events(
@@ -352,6 +284,192 @@ def update_event(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error updating event: {str(e)}")
 
+@router.get("/test-exceptions/{event_id}")
+def test_exceptions(
+    event_id: str,
+    db: Session = Depends(get_db)
+):
+    """Test endpoint to verify exception loading"""
+    exception_repo = EventExceptionRepository(db)
+    exceptions = exception_repo.get_exceptions_for_event(event_id)
+    
+    return {
+        "event_id": event_id,
+        "exception_count": len(exceptions),
+        "exceptions": [
+            {
+                "date": str(ex.occurrence_date),
+                "cancelled": ex.is_cancelled,
+                "rescheduled": ex.is_rescheduled
+            }
+            for ex in exceptions
+        ]
+    }
+
+@router.get("/expand/{event_id}")
+def get_event_occurrences(
+    event_id: str,
+    start_date: date = Query(..., description="Start date for occurrence range"),
+    end_date: date = Query(..., description="End date for occurrence range"),
+    max_occurrences: int = Query(365, description="Maximum number of occurrences to return"),
+    db: Session = Depends(get_db)
+):
+    """
+    Get expanded occurrences for a recurring event within a date range.
+    Uses RRULE-based runtime expansion for performance.
+    """
+    print(f"DEBUG: get_event_occurrences called with event_id={event_id}")
+    print(f"DEBUG: Date range: {start_date} to {end_date}")
+    
+    try:
+        repo = EventRepository(db)
+        event = repo.get(event_id)
+        
+        print(f"DEBUG: Found event: {event.title if event else 'None'}")
+        
+        if not event:
+            raise HTTPException(status_code=404, detail=f"Event not found: {event_id}")
+        
+        # Get exceptions for this event
+        exception_repo = EventExceptionRepository(db)
+        exceptions = exception_repo.get_exceptions_for_event(event_id, start_date, end_date)
+        
+        print(f"DEBUG: Found {len(exceptions)} exceptions for event {event_id}")
+        for ex in exceptions:
+            print(f"  - Exception on {ex.occurrence_date}: cancelled={ex.is_cancelled}, rescheduled={ex.is_rescheduled}")
+        
+        # Create a dict for quick exception lookups by date
+        exceptions_by_date = {ex.occurrence_date: ex for ex in exceptions}
+        print(f"DEBUG: Exception dates in dict: {list(exceptions_by_date.keys())}")
+        
+        # Inline RRULE expansion logic
+        try:
+            from dateutil.rrule import rrulestr
+            RRULE_AVAILABLE = True
+        except ImportError:
+            RRULE_AVAILABLE = False
+        
+        occurrences = []
+        
+        if event.is_recurring and event.recurrence_rrule and RRULE_AVAILABLE:
+            # Use RRULE expansion
+            try:
+                dtstart = event.dtstart or event.start_time
+                dtend = event.dtend or event.end_time
+                
+                if dtstart and dtend:
+                    # Parse RRULE
+                    rrule_obj = rrulestr(event.recurrence_rrule, dtstart=dtstart)
+                    
+                    # Calculate event duration
+                    duration = dtend - dtstart
+                    
+                    count = 0
+                    for occurrence_start in rrule_obj:
+                        if count >= max_occurrences:
+                            break
+                            
+                        occurrence_date = occurrence_start.date()
+                        
+                        print(f"DEBUG: Processing occurrence on {occurrence_date} (type: {type(occurrence_date)})")
+                        
+                        # Check if within requested range
+                        if occurrence_date > end_date:
+                            break
+                            
+                        if occurrence_date >= start_date:
+                            # Check for exceptions
+                            exception = exceptions_by_date.get(occurrence_date)
+                            
+                            print(f"DEBUG: Checking exception for {occurrence_date}: {exception}")
+                            
+                            if exception and exception.is_cancelled:
+                                # Skip cancelled occurrences
+                                print(f"DEBUG: Skipping cancelled occurrence on {occurrence_date}")
+                                continue
+                            
+                            occurrence_end = occurrence_start + duration
+                            title = event.title
+                            location = event.location
+                            description = event.description
+                            is_exception = False
+                            
+                            # Apply modifications from exception
+                            if exception:
+                                is_exception = True
+                                if exception.new_start:
+                                    occurrence_start = exception.new_start
+                                if exception.new_end:
+                                    occurrence_end = exception.new_end
+                                if exception.custom_title:
+                                    title = exception.custom_title
+                                if exception.custom_location:
+                                    location = exception.custom_location
+                                if exception.custom_description:
+                                    description = exception.custom_description
+                            
+                            occurrences.append({
+                                'id': f"{event.id}_{occurrence_date.isoformat()}",
+                                'title': title,
+                                'start': occurrence_start.isoformat(),
+                                'end': occurrence_end.isoformat(),
+                                'location': location,
+                                'description': description,
+                                'occurrence_date': occurrence_date.isoformat(),
+                                'is_exception': is_exception,
+                                'master_event_id': event.id
+                            })
+                        
+                        count += 1
+            except Exception as rrule_error:
+                print(f"RRULE error: {rrule_error}")
+                # Fallback to single occurrence
+                if event.start_time.date() >= start_date and event.start_time.date() <= end_date:
+                    occurrences = [{
+                        'id': event.id,
+                        'title': event.title,
+                        'start': event.start_time.isoformat(),
+                        'end': event.end_time.isoformat(),
+                        'location': event.location,
+                        'description': event.description,
+                        'occurrence_date': event.start_time.date().isoformat(),
+                        'is_exception': False,
+                        'master_event_id': None
+                    }]
+        else:
+            # Single event or no RRULE
+            if event.start_time.date() >= start_date and event.start_time.date() <= end_date:
+                occurrences = [{
+                    'id': event.id,
+                    'title': event.title,
+                    'start': event.start_time.isoformat(),
+                    'end': event.end_time.isoformat(),
+                    'location': event.location,
+                    'description': event.description,
+                    'occurrence_date': event.start_time.date().isoformat(),
+                    'is_exception': False,
+                    'master_event_id': None
+                }]
+        
+        return {
+            "master_event_id": event_id,
+            "start_date": start_date.isoformat(),
+            "end_date": end_date.isoformat(),
+            "total_occurrences": len(occurrences),
+            "occurrences": occurrences,
+            "rrule_available": RRULE_AVAILABLE,
+            "event_rrule": getattr(event, 'recurrence_rrule', None)
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"ERROR: {e}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Error expanding occurrences: {str(e)}")
+
+
 @router.get("/{event_id}", response_model=EventResponse)
 def get_event(
     event_id: str,
@@ -439,27 +557,40 @@ def get_recurring_event_info(
     db: Session = Depends(get_db)
 ):
     """Get information about a recurring event series"""
-    recurring_service = RecurringEventsService(db)
+    repo = EventRepository(db)
     
     try:
-        event = recurring_service.event_repo.get(event_id)
+        event = repo.get(event_id)
         if not event:
             raise HTTPException(status_code=404, detail="Event not found")
         
-        is_recurring = recurring_service.is_recurring_event(event_id)
-        master_event = recurring_service.get_master_event(event_id)
+        # Check if event is recurring using the event's own properties
+        is_recurring = getattr(event, 'is_recurring', False)
+        is_master = getattr(event, 'is_recurrence_master', False)
+        is_exception = getattr(event, 'is_recurrence_exception', False)
+        master_event_id = getattr(event, 'recurrence_master_id', None)
+        
+        # If this is an instance, get the master event
+        master_event = None
+        if master_event_id:
+            master_event = repo.get(master_event_id)
+        elif is_master:
+            master_event = event
         
         info = {
-            "is_recurring_event": is_recurring,
-            "is_master": event.is_recurrence_master if hasattr(event, 'is_recurrence_master') else False,
-            "is_exception": event.is_recurrence_exception if hasattr(event, 'is_recurrence_exception') else False,
-            "master_event_id": master_event.id if master_event else None,
-            "recurrence_pattern": master_event.recurrence_pattern if master_event else None
+            "is_recurring_event": is_recurring or is_master or master_event_id is not None,
+            "is_master": is_master,
+            "is_exception": is_exception,
+            "master_event_id": master_event_id or (event.id if is_master else None),
+            "recurrence_pattern": getattr(master_event, 'recurrence_pattern', None) if master_event else None
         }
         
         return info
         
     except Exception as e:
+        print(f"Error in get_recurring_event_info: {str(e)}")
+        import traceback
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Error getting recurring event info: {str(e)}")
 
 @router.delete("/{event_id}", response_model=MessageResponse)
@@ -469,14 +600,17 @@ def delete_event(
 ):
     """Delete an event (non-recurring or single instance)"""
     repo = EventRepository(db)
-    recurring_service = RecurringEventsService(db)
     
     event = repo.get(event_id)
     if not event:
         raise HTTPException(status_code=404, detail="Event not found")
     
-    # Check if this is part of a recurring series
-    if recurring_service.is_recurring_event(event_id):
+    # Check if this is part of a recurring series using event properties
+    is_recurring = getattr(event, 'is_recurring', False)
+    is_master = getattr(event, 'is_recurrence_master', False)
+    master_event_id = getattr(event, 'recurrence_master_id', None)
+    
+    if is_recurring or is_master or master_event_id:
         raise HTTPException(
             status_code=400, 
             detail="This is a recurring event. Use the recurring delete endpoint with edit mode."

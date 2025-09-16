@@ -4,6 +4,7 @@ Import all models for Alembic
 from .base_model import BaseModel
 from .task_model import TaskModel, TaskDependencyModel
 from .event_model import EventModel
+from .event_exception_model import EventExceptionModel, EventSeriesSplitModel
 from .initiative_model import InitiativeModel
 from .project_model import ProjectModel, ProjectPhaseModel
 from .project_template_model import ProjectTemplateModel, TemplateExecutionModel
@@ -18,6 +19,8 @@ __all__ = [
     "TaskModel", 
     "TaskDependencyModel",
     "EventModel",
+    "EventExceptionModel",
+    "EventSeriesSplitModel",
     "InitiativeModel",
     "ProjectModel", 
     "ProjectPhaseModel",

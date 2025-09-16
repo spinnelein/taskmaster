@@ -455,8 +455,24 @@ class TelegramService:
             await self.application.updater.start_polling()
             logger.info("Telegram bot started polling for messages")
         except Exception as e:
-            logger.error(f"Error starting Telegram polling: {e}")
-            raise
+            # Check if this is a Telegram conflict error
+            if "Conflict" in str(e) and "getUpdates" in str(e):
+                logger.error("Telegram bot conflict detected - another instance is already running!")
+                logger.error("Multiple bot instances detected. Shutting down this instance to prevent conflicts.")
+                
+                # Try to stop the application gracefully
+                try:
+                    await self.stop()
+                except:
+                    pass
+                
+                # Force exit to prevent multiple instances
+                logger.error("Exiting application due to Telegram bot conflict")
+                import os
+                os._exit(1)  # Force exit without cleanup to prevent multiple instances
+            else:
+                logger.error(f"Error starting Telegram polling: {e}")
+                raise
     
     async def stop(self):
         """Stop the bot with proper cleanup sequence"""

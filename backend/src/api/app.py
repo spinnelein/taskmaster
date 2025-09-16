@@ -12,7 +12,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from .routes import tasks, events, schedule, initiatives, projects, meals, dishes, schedules, reminders, task_queue, schedule_generation, weather
+from .routes import tasks, events, schedule, projects, meals, dishes, schedules, reminders, task_queue, schedule_generation, weather, event_exceptions
+from .routes import initiatives_minimal as initiatives
 from ..data.database import SessionLocal
 from ..services.telegram_service import initialize_telegram_service, get_telegram_service
 from ..services.weather_service import initialize_weather_service
@@ -42,7 +43,14 @@ async def lifespan(app: FastAPI):
             
             logger.info("Telegram service initialized and polling started")
         except Exception as e:
-            logger.error(f"Failed to initialize Telegram service: {e}")
+            # Check if this is a conflict error
+            if "Conflict" in str(e) and "getUpdates" in str(e):
+                logger.error("Telegram bot conflict detected during startup - another instance is already running!")
+                logger.error("Shutting down this instance to prevent conflicts.")
+                # Exit immediately to prevent multiple instances
+                os._exit(1)
+            else:
+                logger.error(f"Failed to initialize Telegram service: {e}")
     else:
         logger.warning("TELEGRAM_BOT_TOKEN not found, Telegram service disabled")
     
@@ -130,6 +138,7 @@ app.include_router(reminders.router, prefix="/api/reminders", tags=["reminders"]
 app.include_router(task_queue.router, prefix="/api", tags=["task-queue"])
 app.include_router(schedule_generation.router, prefix="/api", tags=["schedule-generation"])
 app.include_router(weather.router, prefix="/api/weather", tags=["weather"])
+app.include_router(event_exceptions.router, prefix="/api", tags=["event-exceptions"])
 
 # Health check endpoint
 @app.get("/health")

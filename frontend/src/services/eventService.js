@@ -17,6 +17,17 @@ const eventService = {
     return response.data;
   },
 
+  // Get expanded occurrences for a recurring event (NEW RRULE-based expansion)
+  getEventOccurrences: async (eventId, startDate, endDate, maxOccurrences = 365) => {
+    const params = {
+      start_date: startDate,
+      end_date: endDate,
+      max_occurrences: maxOccurrences
+    };
+    const response = await apiClient.get(`/events/expand/${eventId}`, { params });
+    return response.data;
+  },
+
   // Get single event
   getEvent: async (id) => {
     const response = await apiClient.get(`/events/${id}`);
@@ -63,6 +74,12 @@ const eventService = {
       const response = await apiClient.delete(`/events/${id}`);
       return response.data;
     }
+  },
+
+  // Update recurring event with specific mode
+  updateRecurringEvent: async (id, editRequest) => {
+    const response = await apiClient.put(`/events/${id}/recurring`, editRequest);
+    return response.data;
   },
 
   // Delete recurring event with specific mode

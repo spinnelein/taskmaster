@@ -18,14 +18,60 @@ function CalendarSnapshotWidget({ widgetId, size = 'large' }) {
   const loadEvents = async () => {
     try {
       setLoading(true);
+      
+      // Get master events first
+      const response = await eventService.getEvents();
+      const masterEvents = response.events.filter(event => event.is_recurring);
+      
+      // Expand recurring events for next 7 days
       const today = format(new Date(), 'yyyy-MM-dd');
-      const response = await eventService.getEvents(today);
-      // Get upcoming events for next 3 days
-      const upcoming = response.events
+      const nextWeek = format(addDays(new Date(), 7), 'yyyy-MM-dd');
+      
+      let allOccurrences = [];
+      
+      // For each recurring master event, get its occurrences
+      for (const masterEvent of masterEvents) {
+        try {
+          const occurrenceData = await eventService.getEventOccurrences(
+            masterEvent.id,
+            today,
+            nextWeek,
+            10 // Limit to prevent too many results
+          );
+          
+          // Add occurrences with proper date parsing
+          if (occurrenceData.occurrences) {
+            const eventOccurrences = occurrenceData.occurrences.map(occ => ({
+              ...occ,
+              start_time: occ.start,
+              end_time: occ.end,
+              is_occurrence: true,
+              master_event_id: masterEvent.id
+            }));
+            allOccurrences.push(...eventOccurrences);
+          }
+        } catch (occErr) {
+          console.warn(`Failed to expand event ${masterEvent.title}:`, occErr);
+          // Fallback to showing the master event once
+          allOccurrences.push({
+            ...masterEvent,
+            is_occurrence: false
+          });
+        }
+      }
+      
+      // Also include non-recurring events (if any)
+      const nonRecurringEvents = response.events.filter(event => !event.is_recurring);
+      allOccurrences.push(...nonRecurringEvents);
+      
+      // Filter for upcoming events and sort
+      const upcoming = allOccurrences
         .filter(event => new Date(event.start_time) >= new Date())
         .sort((a, b) => new Date(a.start_time) - new Date(b.start_time))
         .slice(0, 6);
+        
       setEvents(upcoming);
+      
     } catch (err) {
       console.error('Failed to load events:', err);
       setError('Failed to load events');

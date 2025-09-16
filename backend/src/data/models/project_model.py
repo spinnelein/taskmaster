@@ -47,12 +47,12 @@ class ProjectModel(BaseModel):
     tags = Column(JSON, nullable=True)  # Array of tags
     custom_fields = Column(JSON, nullable=True)  # Flexible custom data
     
-    # Relationships
-    initiative = relationship("InitiativeModel", back_populates="project")
-    template = relationship("ProjectTemplateModel", back_populates="projects")
-    phases = relationship("ProjectPhaseModel", back_populates="project", cascade="all, delete-orphan", order_by="ProjectPhaseModel.order")
-    tasks = relationship("TaskModel", back_populates="project")
-    events = relationship("EventModel", back_populates="project")
+    # Relationships - DISABLED to prevent circular dependency issues
+    # initiative = relationship("InitiativeModel", lazy="noload", overlaps="project")
+    template = relationship("ProjectTemplateModel", back_populates="projects", lazy="noload")
+    phases = relationship("ProjectPhaseModel", cascade="all, delete-orphan", order_by="ProjectPhaseModel.order", lazy="noload")
+    tasks = relationship("TaskModel", lazy="noload")
+    events = relationship("EventModel", lazy="noload")
     
     def __repr__(self):
         return f"<Project(id={self.id}, title='{self.title}', status={self.status.value})>"
@@ -80,9 +80,9 @@ class ProjectPhaseModel(BaseModel):
     # Foreign keys
     project_id = Column(String(36), ForeignKey("projects.id"), nullable=False)
     
-    # Relationships
-    project = relationship("ProjectModel", back_populates="phases")
-    tasks = relationship("TaskModel", back_populates="phase")
+    # Relationships - ONE WAY ONLY (remove back_populates to break circular dependencies)
+    project = relationship("ProjectModel", lazy="noload")
+    tasks = relationship("TaskModel", lazy="noload")
     
     def __repr__(self):
         return f"<ProjectPhase(id={self.id}, title='{self.title}', order={self.order})>"

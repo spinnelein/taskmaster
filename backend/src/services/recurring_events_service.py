@@ -10,7 +10,7 @@ from enum import Enum
 
 from ..data.repositories.event_repo import EventRepository
 from ..data.models.event_model import EventModel
-from ..utils.recurrence import generate_recurring_events
+from ..utils.recurrence import generate_recurring_events, json_to_rrule, generate_occurrences_from_rrule
 
 
 class RecurringEditMode(Enum):
@@ -29,7 +29,8 @@ class RecurringEventsService:
     
     def create_recurring_event(self, event_data: Dict[str, Any]) -> EventModel:
         """
-        Create a new recurring event with master/instance pattern
+        Create a new recurring event with master/instance pattern.
+        Uses RRULE standard - NO PRE-GENERATION of instances.
         
         Args:
             event_data: Event data including recurrence_pattern
@@ -40,17 +41,32 @@ class RecurringEventsService:
         if not event_data.get('is_recurring') or not event_data.get('recurrence_pattern'):
             raise ValueError("Event must be recurring with a valid recurrence pattern")
         
-        # Create the master event
+        # Create the master event - ONLY THE MASTER, NO INSTANCES
         master_data = event_data.copy()
         master_data['is_recurrence_master'] = True
         master_data['is_recurrence_exception'] = False
         master_data['recurrence_master_id'] = None
         master_data['recurrence_instance_date'] = None
         
+        # Convert JSON pattern to RRULE if available
+        if event_data.get('recurrence_pattern') and event_data.get('start_time'):
+            rrule_string = json_to_rrule(
+                event_data['recurrence_pattern'], 
+                event_data['start_time']
+            )
+            master_data['recurrence_rrule'] = rrule_string
+        
+        # Set RFC 5545 fields
+        master_data['dtstart'] = event_data.get('start_time')
+        master_data['dtend'] = event_data.get('end_time')
+        
+        # Set default timezone if not provided
+        if not master_data.get('timezone'):
+            master_data['timezone'] = 'America/Los_Angeles'
+        
         master_event = self.event_repo.create(master_data)
         
-        # Generate recurring instances
-        self._generate_instances_for_master(master_event)
+        # NO INSTANCE GENERATION - Runtime expansion only!
         
         return master_event
     
@@ -95,6 +111,87 @@ class RecurringEventsService:
         
         else:
             raise ValueError(f"Invalid edit mode: {edit_mode}")
+    
+    def expand_recurring_event(
+        self,
+        master_event: EventModel,
+        start_range: date,
+        end_range: date,
+        max_occurrences: int = 365
+    ) -> List[Dict[str, Any]]:
+        """
+        Expand a recurring master event into occurrences for a date range.
+        Uses RRULE-based expansion for performance.
+        
+        Args:
+            master_event: The master recurring event
+            start_range: Start date for expansion
+            end_range: End date for expansion
+            max_occurrences: Safety limit for occurrences
+            
+        Returns:
+            List of occurrence dictionaries with exception handling
+        """
+        if not master_event.is_recurrence_master:
+            # Single event
+            if (master_event.start_time.date() >= start_range and 
+                master_event.start_time.date() <= end_range):
+                return [{
+                    'id': master_event.id,
+                    'title': master_event.title,
+                    'start': master_event.start_time,
+                    'end': master_event.end_time,
+                    'location': master_event.location,
+                    'description': master_event.description,
+                    'occurrence_date': master_event.start_time.date(),
+                    'is_exception': False,
+                    'master_event_id': None
+                }]
+            return []
+        
+        # Get occurrences from RRULE
+        if master_event.recurrence_rrule:
+            # Use RRULE expansion
+            occurrences = generate_occurrences_from_rrule(
+                master_event.dtstart or master_event.start_time,
+                master_event.dtend or master_event.end_time,
+                master_event.recurrence_rrule,
+                start_range,
+                end_range,
+                max_occurrences
+            )
+        else:
+            # Fallback to single occurrence if no RRULE
+            if (master_event.start_time.date() >= start_range and 
+                master_event.start_time.date() <= end_range):
+                occurrences = [{
+                    'start': master_event.start_time,
+                    'end': master_event.end_time,
+                    'occurrence_date': master_event.start_time.date(),
+                    'is_exception': False
+                }]
+            else:
+                occurrences = []
+        
+        # Apply exceptions from event_exceptions table
+        # TODO: Load and apply exceptions from database
+        
+        # Format for API response
+        formatted_occurrences = []
+        for occ in occurrences:
+            formatted_occurrences.append({
+                'id': f"{master_event.id}_{occ['occurrence_date'].isoformat()}",
+                'title': master_event.title,
+                'start': occ['start'],
+                'end': occ['end'],
+                'location': master_event.location,
+                'description': master_event.description,
+                'occurrence_date': occ['occurrence_date'],
+                'is_exception': occ['is_exception'],
+                'master_event_id': master_event.id
+            })
+        
+        return formatted_occurrences
     
     def delete_recurring_event(
         self, 

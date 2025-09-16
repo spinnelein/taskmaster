@@ -1,38 +1,32 @@
 """
-Initiative database model
+Initiative database model - Simplified recurring task generator
 NO EMOJIS
 """
-from sqlalchemy import Column, String, Integer, Boolean, Text, DateTime, ForeignKey, Enum as SQLEnum
+from sqlalchemy import Column, String, Boolean, Text, JSON, ForeignKey
 from sqlalchemy.orm import relationship
 from .base_model import BaseModel
-import enum
-
-class InitiativeStatus(enum.Enum):
-    """Status options for initiatives"""
-    ACTIVE = "active"
-    PAUSED = "paused"
-    COMPLETED = "completed"
-    ARCHIVED = "archived"
 
 class InitiativeModel(BaseModel):
-    """Initiative table model - A container for related tasks and events"""
+    """Initiative table model - Simple recurring task generator"""
     __tablename__ = "initiatives"
     
     # Basic info
     title = Column(String(255), nullable=False)
     description = Column(Text, nullable=True)
     
-    # Status and control
-    status = Column(SQLEnum(InitiativeStatus), nullable=False, default=InitiativeStatus.ACTIVE)
-    is_template = Column(Boolean, default=False)  # If true, this is a template for creating new initiatives
+    # Status
+    is_active = Column(Boolean, default=True)
     
-    # Goal/target (optional)
-    target_completion_count = Column(Integer, nullable=True)  # e.g., "Complete 30 workouts"
-    current_completion_count = Column(Integer, default=0)
+    # Task templates stored as JSON
+    task_templates = Column(JSON, default=list)
+    # Example: [{"title": "Vacuum floor", "duration": 45, "recurrence_days": 2}]
     
-    # Relationships - The key part: initiatives contain tasks and can have projects
-    tasks = relationship("TaskModel", back_populates="initiative", cascade="all, delete-orphan")
-    project = relationship("ProjectModel", back_populates="initiative", uselist=False)
+    # Foreign keys for relationships  
+    project_id = Column(String(36), ForeignKey("projects.id"), nullable=True)
+    
+    # Relationships - ONE WAY ONLY (remove back_populates to break circular dependencies)
+    tasks = relationship("TaskModel", cascade="all, delete-orphan", lazy="noload", overlaps="initiative")
+    project = relationship("ProjectModel", uselist=False, lazy="noload", foreign_keys=[project_id], overlaps="initiative")
     
     def __repr__(self):
-        return f"<Initiative(id={self.id}, title='{self.title}', status={self.status.value}, tasks={len(self.tasks)})>"
+        return f"<Initiative(id={self.id}, title='{self.title}')>"

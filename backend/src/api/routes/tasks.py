@@ -355,7 +355,11 @@ def complete_task(
     task_id: str,
     db: Session = Depends(get_db)
 ):
-    """Mark a task as completed"""
+    """Mark a task as completed and generate recurring instance if needed"""
+    from datetime import datetime
+    
+    print("DEBUG: Task completion endpoint called")
+    
     repo = TaskRepository(db)
     task = repo.get(task_id)
     
@@ -363,17 +367,82 @@ def complete_task(
         raise HTTPException(status_code=404, detail="Task not found")
     
     try:
+        completion_date = datetime.now()
+        
         # Update task status to completed using repository pattern
         update_data = {
             "status": TaskStatus.COMPLETED,
-            "is_completed": True
+            "is_completed": True,
+            "last_completed_at": completion_date
         }
         updated_task = repo.update(task_id, update_data)
         
         if not updated_task:
             raise HTTPException(status_code=500, detail="Failed to update task")
+        
+        # Check if we should generate a recurring instance
+        recurring_task_id = None
+        print(f"DEBUG: Checking recurring task generation for task {task_id}")
+        print(f"DEBUG: Task initiative_id: {task.initiative_id}")
+        print(f"DEBUG: Task recurrence_pattern: {task.recurrence_pattern}")
+        print(f"DEBUG: Task parent_task_id: {task.parent_task_id}")
+        
+        # Check if this is an initiative task with recurrence_days for simple recurring logic
+        if task.initiative_id and hasattr(task, 'recurrence_days') and task.recurrence_days:
+            print(f"DEBUG: Task has initiative_id and recurrence_days: {task.recurrence_days}")
+            try:
+                from datetime import timedelta
+                
+                # Calculate next due date using simple recurrence_days
+                next_due_date = completion_date.date() + timedelta(days=task.recurrence_days)
+                print(f"DEBUG: Next due date calculated: {next_due_date}")
+                
+                # Create new task instance
+                recurring_task_data = {
+                    "title": task.title,
+                    "description": task.description,
+                    "duration": task.duration,
+                    "priority": task.priority,
+                    "urgency": task.urgency,
+                    "initiative_id": task.initiative_id,
+                    "project_id": task.project_id,
+                    "phase_id": task.phase_id,
+                    "is_recurring": True,
+                    "recurrence_days": task.recurrence_days,
+                    "parent_task_id": task_id,  # Link to completed task
+                    "due_date": next_due_date,
+                    "status": TaskStatus.ACTIVE,
+                    "is_completed": False
+                }
+                print(f"DEBUG: Recurring task data created: {recurring_task_data.get('title')}")
+                
+                # Create the new task
+                new_task = repo.create(recurring_task_data)
+                recurring_task_id = new_task.id
+                print(f"DEBUG: New recurring task created: {recurring_task_id}")
+                
+            except Exception as recurring_error:
+                # Log the error but don't fail the completion
+                print(f"ERROR creating recurring task: {recurring_error}")
+                import traceback
+                traceback.print_exc()
+        else:
+            print("DEBUG: Task should NOT generate recurring instance (no initiative_id or recurrence_days)")
+        
+        response = {
+            "message": "Task completed successfully", 
+            "task_id": task_id, 
+            "status": "completed",
+            "completed_at": completion_date.isoformat()
+        }
+        
+        if recurring_task_id:
+            response["recurring_task_created"] = True
+            response["recurring_task_id"] = recurring_task_id
+        else:
+            response["recurring_task_created"] = False
             
-        # Return a simple success message for now
-        return {"message": "Task completed successfully", "task_id": task_id, "status": "completed"}
+        return response
+        
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error completing task: {str(e)}")

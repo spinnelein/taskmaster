@@ -50,6 +50,7 @@ class InitiativeResponse(BaseResponse):
     is_template: bool
     target_completion_count: Optional[int]
     current_completion_count: int
+    task_count: Optional[int] = 0
     
     class Config:
         from_attributes = True
