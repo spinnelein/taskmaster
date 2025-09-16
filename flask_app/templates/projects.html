@@ -1,0 +1,2019 @@
+<!-- Macro for recursive task rendering (must be defined first) -->
+{% macro render_task_recursive(task, project_id, level) %}
+<div class="task-node {% if level > 0 %}task-level-{{ level if level <= 3 else 3 }}{% endif %}">
+    <input type="checkbox" 
+           onchange="completeTask('{{ project_id }}', '{{ task.id }}')"
+           {% if task.is_completed %}checked{% endif %}>
+    <span class="task-title">{{ task.title }}</span>
+    <span class="task-duration">({{ task.duration or 0 }}h)</span>
+    
+    {% if task.dependencies %}
+    <div class="dependency-info">
+        depends on: {{ task.dependencies | map(attribute='title') | join(', ') }}
+    </div>
+    {% endif %}
+</div>
+
+<!-- Render dependent tasks with increased indentation -->
+{% for dependent in task.dependents %}
+    {% if not dependent.is_completed %}
+        {{ render_task_recursive(dependent, project_id, level + 1) }}
+    {% endif %}
+{% endfor %}
+{% endmacro %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TaskMaster Projects</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            background: #f5f5f5; 
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #333;
+        }
+        .header h1 {
+            margin: 0;
+            color: #333;
+        }
+        .nav-links a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #007bff;
+            font-weight: 500;
+        }
+        .nav-links a:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+        .nav-links a.active {
+            color: #0056b3;
+            font-weight: bold;
+        }
+        .projects-controls {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #dee2e6;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.9em;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .btn-success {
+            background: #28a745;
+        }
+        .btn-success:hover {
+            background: #218838;
+        }
+        .health-status {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+        }
+        
+        /* Projects Tree Styles */
+        .projects-tree {
+            font-family: Arial, sans-serif;
+        }
+        
+        .project-node {
+            margin-bottom: 30px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            background: white;
+        }
+        
+        .project-header h2 {
+            margin: 0 0 10px 0;
+            font-size: 1.5em;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            color: white;
+            font-weight: 500;
+        }
+        
+        .status-badge.planning {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        .status-badge.active {
+            background: #28a745;
+        }
+        
+        .status-badge.completed {
+            background: #6c757d;
+        }
+        
+        .due-date {
+            font-size: 0.9em;
+            color: #666;
+            font-weight: normal;
+        }
+        
+        .phase-node {
+            margin-left: 20px;
+            margin-top: 15px;
+            border-left: 3px solid #007bff;
+            padding-left: 15px;
+            position: relative;
+        }
+        
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .collapse-btn {
+            background: none;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+            color: #007bff;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .phase-header h3 {
+            margin: 0;
+            font-size: 1.2em;
+            color: #555;
+            flex: 1;
+        }
+        
+        .dependency-indicator {
+            font-size: 0.9em;
+            color: #ffc107;
+            font-style: italic;
+        }
+        
+        .progress-bar {
+            width: 200px;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #28a745;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .tasks-container {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .task-node {
+            margin: 8px 0;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+        }
+        
+        .task-node input[type="checkbox"] {
+            transform: scale(1.2);
+        }
+        
+        .task-title {
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .task-duration {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .dependency-info {
+            margin-left: 20px;
+            margin-top: 4px;
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+            border-left: 2px solid #ffc107;
+            padding-left: 8px;
+            background: #fff8e1;
+        }
+        
+        /* Multi-level task indentation */
+        .task-level-1 {
+            margin-left: 20px;
+            background: #e3f2fd;
+            border-left: 3px solid #2196f3;
+        }
+        
+        .task-level-2 {
+            margin-left: 40px;
+            background: #f3e5f5;
+            border-left: 3px solid #9c27b0;
+        }
+        
+        .task-level-3 {
+            margin-left: 60px;
+            background: #e8f5e8;
+            border-left: 3px solid #4caf50;
+        }
+        
+        /* Connecting lines for dependencies */
+        .task-node::before {
+            content: '';
+            position: absolute;
+            left: -15px;
+            top: 50%;
+            width: 10px;
+            height: 1px;
+            background: #ccc;
+        }
+        
+        .task-level-1::before {
+            left: -35px;
+            width: 30px;
+        }
+        
+        .task-level-2::before {
+            left: -55px;
+            width: 50px;
+        }
+        
+        .task-level-3::before {
+            left: -75px;
+            width: 70px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: #666;
+            padding: 40px 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .phase-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="health-status" id="health-status">🟢 Connected</div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>Projects</h1>
+            <div class="nav-links">
+                <a href="/">Schedule</a>
+                <a href="/events">Events</a>
+                <a href="/tasks">Tasks</a>
+                <a href="/initiatives">Initiatives</a>
+                <a href="/projects" class="active">Projects</a>
+            </div>
+        </div>
+        
+        <div class="projects-controls">
+            <h3>Project Management</h3>
+            <button class="btn" onclick="showCreateProjectModal()">Create New Project</button>
+            <button class="btn btn-success" onclick="refreshProjects()">Refresh</button>
+        </div>
+        
+        <div class="projects-tree">
+            {% if projects %}
+                {% for project in projects %}
+                <div class="project-node">
+                    <div class="project-header">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div>
+                                <h2>
+                                    {{ project.title }}
+                                    {% if project.estimated_end_date %}
+                                    <span class="due-date">Due: {{ project.estimated_end_date.strftime('%Y-%m-%d') }}</span>
+                                    {% endif %}
+                                </h2>
+                                {% if project.description %}
+                                <p style="margin: 5px 0; color: #666;">{{ project.description }}</p>
+                                {% endif %}
+                            </div>
+                            <div class="project-actions" style="display: flex; gap: 8px;">
+                                <button class="btn" style="padding: 6px 12px; font-size: 0.8em;" onclick="showEditProjectModal('{{ project.id }}')">Edit</button>
+                                <button class="btn" style="background: #dc3545; padding: 6px 12px; font-size: 0.8em;" onclick="deleteProject('{{ project.id }}', '{{ project.title }}')">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="phases-container">
+                        {% for phase in project.phases %}
+                        <div class="phase-node">
+                            <div class="phase-header">
+                                <button class="collapse-btn" onclick="togglePhase('phase-{{ phase.id }}')">▼</button>
+                                <h3>
+                                    Phase {{ phase.order }}: {{ phase.title }}
+                                    {% if phase.has_dependencies %}
+                                    <span class="dependency-indicator">(depends on previous phase)</span>
+                                    {% endif %}
+                                </h3>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: {{ phase.completion_percentage }}%"></div>
+                                </div>
+                                <span style="font-size: 0.9em; color: #666;">{{ "%.0f"|format(phase.completion_percentage) }}%</span>
+                            </div>
+                            
+                            <div class="tasks-container" id="phase-{{ phase.id }}">
+                                {% for task in phase.root_tasks %}
+                                    {{ render_task_recursive(task, project.id, 0) }}
+                                {% endfor %}
+                                
+                                {% if not phase.root_tasks %}
+                                <div style="color: #666; font-style: italic; padding: 10px;">No active tasks in this phase</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                        
+                        {% if not project.phases %}
+                        <div style="color: #666; font-style: italic; margin-left: 20px;">No phases defined for this project</div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+            <div class="empty-state">
+                <h3>No Projects Found</h3>
+                <p>Create your first project to get started with project management.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <script>
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        checkHealth();
+    });
+    
+    function togglePhase(phaseId) {
+        const container = document.getElementById(phaseId);
+        const btn = container.previousElementSibling.querySelector('.collapse-btn');
+        
+        if (container.style.display === 'none') {
+            container.style.display = 'block';
+            btn.textContent = '▼';
+            localStorage.setItem('phase_' + phaseId, 'expanded');
+        } else {
+            container.style.display = 'none';
+            btn.textContent = '▶';
+            localStorage.setItem('phase_' + phaseId, 'collapsed');
+        }
+    }
+    
+    function completeTask(projectId, taskId) {
+        fetch(`/api/projects/${projectId}/tasks/${taskId}/complete`, {
+            method: 'POST'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // Refresh the page to show updated progress
+                setTimeout(() => location.reload(), 500);
+            }
+        })
+        .catch(error => {
+            console.error('Error completing task:', error);
+        });
+    }
+    
+    function showCreateProjectModal() {
+        // Create modal HTML
+        const createModalHTML = `
+            <div id="create-project-modal" style="
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                background: rgba(0,0,0,0.7); z-index: 1100; display: flex; 
+                align-items: center; justify-content: center;
+            ">
+                <div style="
+                    background: white; width: 90%; max-width: 500px; 
+                    border-radius: 8px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                ">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                        <h2 style="margin: 0; color: #333;">Create New Project</h2>
+                        <button onclick="closeCreateProjectModal()" style="
+                            background: #dc3545; color: white; border: none; 
+                            border-radius: 4px; padding: 8px 12px; cursor: pointer;
+                        ">×</button>
+                    </div>
+                    
+                    <form id="create-project-form" onsubmit="submitProjectCreate(event)">
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Title *</label>
+                            <input type="text" id="create-title" required style="
+                                width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+                                box-sizing: border-box; font-size: 14px;
+                            ">
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Description</label>
+                            <textarea id="create-description" rows="3" style="
+                                width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+                                box-sizing: border-box; font-size: 14px; resize: vertical;
+                            "></textarea>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Priority *</label>
+                                <select id="create-priority" required style="
+                                    width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+                                    box-sizing: border-box; font-size: 14px;
+                                ">
+                                    <option value="LOW">Low</option>
+                                    <option value="MEDIUM" selected>Medium</option>
+                                    <option value="HIGH">High</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Status *</label>
+                                <select id="create-status" required style="
+                                    width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+                                    box-sizing: border-box; font-size: 14px;
+                                ">
+                                    <option value="PLANNING" selected>Planning</option>
+                                    <option value="ACTIVE">Active</option>
+                                    <option value="COMPLETED">Completed</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Estimated Start Date</label>
+                                <input type="date" id="create-start-date" style="
+                                    width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+                                    box-sizing: border-box; font-size: 14px;
+                                ">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Estimated End Date</label>
+                                <input type="date" id="create-end-date" style="
+                                    width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+                                    box-sizing: border-box; font-size: 14px;
+                                ">
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                            <button type="button" onclick="closeCreateProjectModal()" style="
+                                background: #6c757d; color: white; border: none; border-radius: 4px; 
+                                padding: 10px 20px; cursor: pointer; font-size: 14px;
+                            ">Cancel</button>
+                            <button type="submit" style="
+                                background: #007bff; color: white; border: none; border-radius: 4px; 
+                                padding: 10px 20px; cursor: pointer; font-size: 14px;
+                            ">Create Project</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        `;
+        
+        // Add modal to page
+        document.body.insertAdjacentHTML('beforeend', createModalHTML);
+        
+        // Focus on title input
+        document.getElementById('create-title').focus();
+    }
+    
+    function closeCreateProjectModal() {
+        const modal = document.getElementById('create-project-modal');
+        if (modal) {
+            modal.remove();
+        }
+    }
+    
+    function submitProjectCreate(event) {
+        event.preventDefault();
+        
+        const projectData = {
+            title: document.getElementById('create-title').value,
+            description: document.getElementById('create-description').value,
+            priority: document.getElementById('create-priority').value,
+            status: document.getElementById('create-status').value,
+            estimated_start_date: document.getElementById('create-start-date').value || null,
+            estimated_end_date: document.getElementById('create-end-date').value || null
+        };
+        
+        fetch('/api/projects', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(projectData)
+        })
+        .then(response => response.json())
+        .then(() => {
+            closeCreateProjectModal();
+            location.reload(); // Refresh to show new project
+        })
+        .catch(error => {
+            console.error('Error creating project:', error);
+        });
+    }
+    
+    function refreshProjects() {
+        location.reload();
+    }
+    
+    function deleteProject(projectId, projectTitle) {
+        // Show confirmation dialog
+        const confirmMessage = `Are you sure you want to delete the project "${projectTitle}"?\n\nThis action cannot be undone and will delete all phases and tasks associated with this project.`;
+        
+        if (confirm(confirmMessage)) {
+            fetch(`/api/projects/${projectId}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Refresh the page to show updated projects list
+                    location.reload();
+                } else {
+                    throw new Error('Failed to delete project');
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting project:', error);
+                alert('Failed to delete project. Please try again.');
+            });
+        }
+    }
+    
+    function showEditProjectModal(projectId) {
+        // Fetch both project data and phases
+        Promise.all([
+            fetch(`/api/projects/${projectId}`).then(r => r.json()),
+            fetch(`/api/projects/${projectId}/phases`).then(r => r.json())
+        ])
+        .then(([project, phases]) => {
+            currentEditingProject = { id: projectId, ...project, phases: phases };
+            
+            // Create comprehensive edit modal HTML
+            const editModalHTML = `
+                <div id="edit-project-modal" style="
+                    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                    background: rgba(0,0,0,0.7); z-index: 1100; display: flex; 
+                    align-items: center; justify-content: center;
+                ">
+                    <div style="
+                        background: white; width: 95%; max-width: 1000px; max-height: 90vh;
+                        border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                        display: flex; flex-direction: column; overflow: hidden;
+                    ">
+                        <div style="padding: 20px; border-bottom: 1px solid #dee2e6; background: #f8f9fa;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <h2 style="margin: 0; color: #333;">Edit Project: ${project.title}</h2>
+                                <button onclick="closeEditProjectModal()" style="
+                                    background: #dc3545; color: white; border: none; 
+                                    border-radius: 4px; padding: 8px 12px; cursor: pointer;
+                                ">×</button>
+                            </div>
+                            
+                            <!-- Tab Navigation -->
+                            <div style="margin-top: 15px; display: flex; gap: 10px;">
+                                <button class="tab-btn active" onclick="switchTab('project-details')" id="tab-project-details">
+                                    Project Details
+                                </button>
+                                <button class="tab-btn" onclick="switchTab('phases')" id="tab-phases">
+                                    Phases & Tasks
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div style="flex: 1; overflow-y: auto; padding: 20px;">
+                            <!-- Project Details Tab -->
+                            <div id="tab-content-project-details" class="tab-content active">
+                                <form id="edit-project-form" onsubmit="submitProjectEdit(event, '${projectId}')">
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                                        <div>
+                                            <div style="margin-bottom: 15px;">
+                                                <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Title *</label>
+                                                <input type="text" id="edit-title" value="${project.title}" required style="
+                                                    width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+                                                    box-sizing: border-box; font-size: 14px;
+                                                ">
+                                            </div>
+                                            
+                                            <div style="margin-bottom: 15px;">
+                                                <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Priority *</label>
+                                                <select id="edit-priority" required style="
+                                                    width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+                                                    box-sizing: border-box; font-size: 14px;
+                                                ">
+                                                    <option value="LOW" ${project.priority === 'LOW' ? 'selected' : ''}>Low</option>
+                                                    <option value="MEDIUM" ${project.priority === 'MEDIUM' ? 'selected' : ''}>Medium</option>
+                                                    <option value="HIGH" ${project.priority === 'HIGH' ? 'selected' : ''}>High</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div style="margin-bottom: 15px;">
+                                                <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Status *</label>
+                                                <select id="edit-status" required style="
+                                                    width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+                                                    box-sizing: border-box; font-size: 14px;
+                                                ">
+                                                    <option value="PLANNING" ${project.status === 'PLANNING' ? 'selected' : ''}>Planning</option>
+                                                    <option value="ACTIVE" ${project.status === 'ACTIVE' ? 'selected' : ''}>Active</option>
+                                                    <option value="COMPLETED" ${project.status === 'COMPLETED' ? 'selected' : ''}>Completed</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        
+                                        <div>
+                                            <div style="margin-bottom: 15px;">
+                                                <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Estimated Start Date</label>
+                                                <input type="date" id="edit-start-date" value="${project.estimated_start_date ? project.estimated_start_date.split('T')[0] : ''}" style="
+                                                    width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+                                                    box-sizing: border-box; font-size: 14px;
+                                                ">
+                                            </div>
+                                            
+                                            <div style="margin-bottom: 15px;">
+                                                <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Estimated End Date</label>
+                                                <input type="date" id="edit-end-date" value="${project.estimated_end_date ? project.estimated_end_date.split('T')[0] : ''}" style="
+                                                    width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+                                                    box-sizing: border-box; font-size: 14px;
+                                                ">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="margin-bottom: 20px;">
+                                        <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Description</label>
+                                        <textarea id="edit-description" rows="4" style="
+                                            width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+                                            box-sizing: border-box; font-size: 14px; resize: vertical;
+                                        ">${project.description || ''}</textarea>
+                                    </div>
+                                </form>
+                            </div>
+                            
+                            <!-- Phases & Tasks Tab -->
+                            <div id="tab-content-phases" class="tab-content" style="display: none;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                    <h3 style="margin: 0;">Project Phases</h3>
+                                    <button class="btn" onclick="showAddPhaseModal('${projectId}')" style="padding: 6px 12px; font-size: 0.9em;">
+                                        Add Phase
+                                    </button>
+                                </div>
+                                
+                                <div id="phases-list">
+                                    ${renderPhasesList(phases)}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="padding: 16px 20px; background: #f8f9fa; border-top: 1px solid #dee2e6; display: flex; justify-content: flex-end; gap: 12px;">
+                            <button type="button" onclick="closeEditProjectModal()" style="
+                                background: #6c757d; color: white; border: none; border-radius: 4px; 
+                                padding: 10px 20px; cursor: pointer; font-size: 14px;
+                            ">Cancel</button>
+                            <button type="button" onclick="saveProjectChanges('${projectId}')" style="
+                                background: #007bff; color: white; border: none; border-radius: 4px; 
+                                padding: 10px 20px; cursor: pointer; font-size: 14px;
+                            ">Save All Changes</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add modal styles
+            const modalStyles = `
+                <style>
+                .tab-btn {
+                    background: #e9ecef; color: #495057; border: none; padding: 8px 16px;
+                    border-radius: 4px; cursor: pointer; font-size: 14px; transition: all 0.2s;
+                }
+                .tab-btn.active { background: #007bff; color: white; }
+                .tab-btn:hover:not(.active) { background: #dee2e6; }
+                .tab-content { display: none; }
+                .tab-content.active { display: block; }
+                .phase-item {
+                    border: 1px solid #dee2e6; border-radius: 6px; margin-bottom: 15px;
+                    background: #f8f9fa; overflow: hidden;
+                }
+                .phase-header {
+                    padding: 12px 15px; background: #e9ecef; display: flex;
+                    justify-content: space-between; align-items: center; cursor: pointer;
+                }
+                .phase-content { padding: 15px; display: none; background: white; }
+                .phase-content.expanded { display: block; }
+                .task-item {
+                    padding: 8px 12px; border: 1px solid #dee2e6; border-radius: 4px;
+                    margin-bottom: 8px; background: #f8f9fa; display: flex;
+                    justify-content: space-between; align-items: center;
+                }
+                </style>
+            `;
+            
+            // Add modal and styles to page
+            document.head.insertAdjacentHTML('beforeend', modalStyles);
+            document.body.insertAdjacentHTML('beforeend', editModalHTML);
+            
+            // Focus on title input
+            document.getElementById('edit-title').focus();
+        })
+        .catch(error => {
+            console.error('Error loading project data:', error);
+            alert('Failed to load project details for editing.');
+        });
+    }
+    
+    // Global variables for project editing
+    let currentEditingProject = null;
+    
+    function closeEditProjectModal() {
+        const modal = document.getElementById('edit-project-modal');
+        if (modal) {
+            modal.remove();
+        }
+        currentEditingProject = null;
+    }
+    
+    function switchTab(tabName) {
+        // Update tab buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`tab-${tabName}`).classList.add('active');
+        
+        // Update tab content
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+            content.style.display = 'none';
+        });
+        const activeContent = document.getElementById(`tab-content-${tabName}`);
+        activeContent.classList.add('active');
+        activeContent.style.display = 'block';
+    }
+    
+    function renderPhasesList(phases) {
+        if (!phases || phases.length === 0) {
+            return '<div style="text-align: center; color: #666; padding: 40px;">No phases defined. Click "Add Phase" to get started.</div>';
+        }
+        
+        return phases.map(phase => `
+            <div class="phase-item" data-phase-id="${phase.id}">
+                <div class="phase-header" onclick="togglePhaseContent('${phase.id}')">
+                    <div>
+                        <strong>${phase.title}</strong>
+                        <span style="margin-left: 10px; color: #666; font-size: 0.9em;">
+                            ${phase.status} | Order: ${phase.order}
+                        </span>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn" style="padding: 4px 8px; font-size: 0.8em;" onclick="event.stopPropagation(); editPhase('${phase.id}')">Edit</button>
+                        <button class="btn" style="background: #dc3545; padding: 4px 8px; font-size: 0.8em;" onclick="event.stopPropagation(); deletePhase('${phase.id}')">Delete</button>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                </div>
+                <div class="phase-content" id="phase-content-${phase.id}">
+                    <div style="margin-bottom: 15px;">
+                        <strong>Description:</strong> ${phase.description || 'No description'}
+                    </div>
+                    <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 15px;">
+                        <h4 style="margin: 0;">Tasks</h4>
+                        <button class="btn" style="padding: 4px 8px; font-size: 0.8em;" onclick="showAddTaskModal('${currentEditingProject?.id}', '${phase.id}')">Add Task</button>
+                    </div>
+                    <div id="tasks-${phase.id}">
+                        Loading tasks...
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    function togglePhaseContent(phaseId) {
+        const content = document.getElementById(`phase-content-${phaseId}`);
+        const icon = content.previousElementSibling.querySelector('.expand-icon');
+        
+        if (content.classList.contains('expanded')) {
+            content.classList.remove('expanded');
+            icon.textContent = '▶';
+        } else {
+            content.classList.add('expanded');
+            icon.textContent = '▼';
+            // Load tasks for this phase
+            loadPhaseTasks(currentEditingProject.id, phaseId);
+        }
+    }
+    
+    function loadPhaseTasks(projectId, phaseId) {
+        fetch(`/api/projects/${projectId}/phases/${phaseId}/tasks`)
+            .then(response => response.json())
+            .then(tasks => {
+                const tasksContainer = document.getElementById(`tasks-${phaseId}`);
+                if (tasks.length === 0) {
+                    tasksContainer.innerHTML = '<div style="color: #666; font-style: italic;">No tasks in this phase</div>';
+                } else {
+                    tasksContainer.innerHTML = tasks.map((task, index) => `
+                        <div class="task-item" data-task-id="${task.id}" data-task-index="${index}">
+                            <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
+                                <div style="display: flex; flex-direction: column; gap: 2px;">
+                                    <button class="btn" style="padding: 1px 4px; font-size: 0.6em; ${index === 0 ? 'opacity: 0.3; cursor: not-allowed;' : ''}" 
+                                            onclick="moveTaskUp('${task.id}', '${phaseId}', ${index})" ${index === 0 ? 'disabled' : ''}>↑</button>
+                                    <button class="btn" style="padding: 1px 4px; font-size: 0.6em; ${index === tasks.length - 1 ? 'opacity: 0.3; cursor: not-allowed;' : ''}" 
+                                            onclick="moveTaskDown('${task.id}', '${phaseId}', ${index})" ${index === tasks.length - 1 ? 'disabled' : ''}>↓</button>
+                                </div>
+                                <div style="flex: 1;">
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <strong>${task.title}</strong>
+                                        ${task.completed ? '<span style="color: #28a745; font-size: 0.8em;">✓ Completed</span>' : ''}
+                                    </div>
+                                    <div style="font-size: 0.8em; color: #888; font-family: monospace; margin: 2px 0;">
+                                        ID: <span onclick="copyToClipboard('${task.id}')" style="cursor: pointer; background: #f0f0f0; padding: 2px 4px; border-radius: 3px;" title="Click to copy">${task.id.substring(0, 8)}...</span>
+                                    </div>
+                                    <div style="font-size: 0.9em; color: #666;">
+                                        ${task.duration}min | ${task.priority} priority | ${task.status}
+                                        ${task.due_date ? ` | Due: ${task.due_date}` : ''}
+                                    </div>
+                                    ${task.dependencies && task.dependencies.length > 0 ? `
+                                        <div style="font-size: 0.8em; color: #007bff; margin-top: 4px;">
+                                            📌 Depends on: ${task.dependencies.map(dep => dep.title).join(', ')}
+                                        </div>
+                                    ` : ''}
+                                    ${task.dependents && task.dependents.length > 0 ? `
+                                        <div style="font-size: 0.8em; color: #28a745; margin-top: 4px;">
+                                            🔗 Blocks: ${task.dependents.map(dep => dep.title).join(', ')}
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 5px;">
+                                ${!task.completed ? `<button class="btn" style="background: #28a745; padding: 2px 6px; font-size: 0.7em;" onclick="completeTask('${currentEditingProject.id}', '${task.id}')">Complete</button>` : ''}
+                                <button class="btn" style="padding: 2px 6px; font-size: 0.7em;" onclick="editTask('${task.id}')">Edit</button>
+                                <button class="btn" style="background: #dc3545; padding: 2px 6px; font-size: 0.7em;" onclick="deleteTask('${task.id}', '${phaseId}')">Delete</button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            })
+            .catch(error => {
+                console.error('Error loading tasks:', error);
+                document.getElementById(`tasks-${phaseId}`).innerHTML = '<div style="color: #dc3545;">Error loading tasks</div>';
+            });
+    }
+    
+    function showAddPhaseModal(projectId) {
+        const modalHTML = `
+            <div id="add-phase-modal" style="
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                background: rgba(0,0,0,0.5); z-index: 1200; display: flex; 
+                align-items: center; justify-content: center;
+            ">
+                <div style="background: white; width: 90%; max-width: 500px; border-radius: 8px; padding: 20px;">
+                    <h3>Add New Phase</h3>
+                    <form onsubmit="submitNewPhase(event, '${projectId}')">
+                        <div style="margin-bottom: 15px;">
+                            <label>Title *</label>
+                            <input type="text" id="new-phase-title" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label>Description</label>
+                            <textarea id="new-phase-description" rows="3" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"></textarea>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label>Status</label>
+                            <select id="new-phase-status" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                <option value="PLANNING">Planning</option>
+                                <option value="ACTIVE">Active</option>
+                                <option value="COMPLETED">Completed</option>
+                            </select>
+                        </div>
+                        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                            <button type="button" onclick="closeAddPhaseModal()" style="background: #6c757d; color: white; border: none; padding: 8px 16px; border-radius: 4px;">Cancel</button>
+                            <button type="submit" style="background: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 4px;">Add Phase</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+        document.getElementById('new-phase-title').focus();
+    }
+    
+    function closeAddPhaseModal() {
+        const modal = document.getElementById('add-phase-modal');
+        if (modal) modal.remove();
+    }
+    
+    function submitNewPhase(event, projectId) {
+        event.preventDefault();
+        
+        const phaseData = {
+            title: document.getElementById('new-phase-title').value,
+            description: document.getElementById('new-phase-description').value,
+            status: document.getElementById('new-phase-status').value
+        };
+        
+        fetch(`/api/projects/${projectId}/phases`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(phaseData)
+        })
+        .then(response => response.json())
+        .then(newPhase => {
+            closeAddPhaseModal();
+            // Refresh the phases list
+            return fetch(`/api/projects/${projectId}/phases`);
+        })
+        .then(response => response.json())
+        .then(phases => {
+            currentEditingProject.phases = phases;
+            document.getElementById('phases-list').innerHTML = renderPhasesList(phases);
+        })
+        .catch(error => {
+            console.error('Error creating phase:', error);
+            alert('Failed to create phase');
+        });
+    }
+    
+    function deletePhase(phaseId) {
+        if (!confirm('Delete this phase and all its tasks?')) return;
+        
+        fetch(`/api/projects/${currentEditingProject.id}/phases/${phaseId}`, {
+            method: 'DELETE'
+        })
+        .then(() => {
+            // Refresh phases list
+            return fetch(`/api/projects/${currentEditingProject.id}/phases`);
+        })
+        .then(response => response.json())
+        .then(phases => {
+            currentEditingProject.phases = phases;
+            document.getElementById('phases-list').innerHTML = renderPhasesList(phases);
+        })
+        .catch(error => {
+            console.error('Error deleting phase:', error);
+            alert('Failed to delete phase');
+        });
+    }
+    
+    function saveProjectChanges(projectId) {
+        // Save project details from the form
+        const updates = {
+            title: document.getElementById('edit-title').value,
+            description: document.getElementById('edit-description').value,
+            priority: document.getElementById('edit-priority').value,
+            status: document.getElementById('edit-status').value,
+            estimated_start_date: document.getElementById('edit-start-date').value || null,
+            estimated_end_date: document.getElementById('edit-end-date').value || null
+        };
+        
+        fetch(`/api/projects/${projectId}`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(updates)
+        })
+        .then(response => {
+            if (response.ok) {
+                closeEditProjectModal();
+                location.reload(); // Refresh to show updated project
+            } else {
+                throw new Error('Failed to update project');
+            }
+        })
+        .catch(error => {
+            console.error('Error updating project:', error);
+            alert('Failed to update project. Please try again.');
+        });
+    }
+    
+    // Task management functions
+    function showAddTaskModal(projectId, phaseId) {
+        const modalHTML = `
+            <div id="add-task-modal" style="
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                background: rgba(0,0,0,0.5); z-index: 1200; display: flex; 
+                align-items: center; justify-content: center;
+            ">
+                <div style="background: white; width: 90%; max-width: 500px; border-radius: 8px; padding: 20px;">
+                    <h3>Add New Task</h3>
+                    <form onsubmit="submitNewTask(event, '${projectId}', '${phaseId}')">
+                        <div style="margin-bottom: 15px;">
+                            <label>Title *</label>
+                            <input type="text" id="new-task-title" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label>Description</label>
+                            <textarea id="new-task-description" rows="2" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"></textarea>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                            <div>
+                                <label>Duration (minutes)</label>
+                                <input type="number" id="new-task-duration" value="30" min="1" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                            </div>
+                            <div>
+                                <label>Urgency (1-10)</label>
+                                <input type="number" id="new-task-urgency" value="5" min="1" max="10" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                            <div>
+                                <label>Priority</label>
+                                <select id="new-task-priority" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                    <option value="low">Low</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label>Due Date</label>
+                                <input type="date" id="new-task-due-date" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                            <button type="button" onclick="closeAddTaskModal()" style="background: #6c757d; color: white; border: none; padding: 8px 16px; border-radius: 4px;">Cancel</button>
+                            <button type="submit" style="background: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 4px;">Add Task</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+        document.getElementById('new-task-title').focus();
+    }
+    
+    function closeAddTaskModal() {
+        const modal = document.getElementById('add-task-modal');
+        if (modal) modal.remove();
+    }
+    
+    function submitNewTask(event, projectId, phaseId) {
+        event.preventDefault();
+        
+        const taskData = {
+            title: document.getElementById('new-task-title').value,
+            description: document.getElementById('new-task-description').value,
+            duration: parseInt(document.getElementById('new-task-duration').value),
+            urgency: parseInt(document.getElementById('new-task-urgency').value),
+            priority: document.getElementById('new-task-priority').value,
+            due_date: document.getElementById('new-task-due-date').value || null
+        };
+        
+        fetch(`/api/projects/${projectId}/phases/${phaseId}/tasks`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(taskData)
+        })
+        .then(response => response.json())
+        .then(newTask => {
+            closeAddTaskModal();
+            // Refresh the tasks for this phase
+            loadPhaseTasks(projectId, phaseId);
+        })
+        .catch(error => {
+            console.error('Error creating task:', error);
+            alert('Failed to create task');
+        });
+    }
+    
+    function editTask(taskId) {
+        // First fetch the task data
+        fetch(`/api/tasks/${taskId}`)
+            .then(response => response.json())
+            .then(task => {
+                const modalHTML = `
+                    <div id="edit-task-modal" style="
+                        position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                        background: rgba(0,0,0,0.5); z-index: 1200; display: flex; 
+                        align-items: center; justify-content: center;
+                    ">
+                        <div style="background: white; width: 90%; max-width: 500px; border-radius: 8px; padding: 20px;">
+                            <h3>Edit Task</h3>
+                            <form onsubmit="submitTaskEdit(event, '${taskId}')">
+                                <div style="margin-bottom: 15px;">
+                                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">Title *</label>
+                                    <input type="text" id="edit-task-title" value="${task.title}" required style="
+                                        width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;
+                                    ">
+                                </div>
+                                
+                                <div style="margin-bottom: 15px;">
+                                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">Description</label>
+                                    <textarea id="edit-task-description" rows="3" style="
+                                        width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+                                        box-sizing: border-box; resize: vertical;
+                                    ">${task.description || ''}</textarea>
+                                </div>
+                                
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                                    <div>
+                                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Duration (minutes) *</label>
+                                        <input type="number" id="edit-task-duration" value="${task.duration}" min="1" required style="
+                                            width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;
+                                        ">
+                                    </div>
+                                    <div>
+                                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Urgency (1-10) *</label>
+                                        <input type="number" id="edit-task-urgency" value="${task.urgency}" min="1" max="10" required style="
+                                            width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;
+                                        ">
+                                    </div>
+                                </div>
+                                
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                                    <div>
+                                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Priority *</label>
+                                        <select id="edit-task-priority" required style="
+                                            width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;
+                                        ">
+                                            <option value="low" ${task.priority === 'low' ? 'selected' : ''}>Low</option>
+                                            <option value="medium" ${task.priority === 'medium' ? 'selected' : ''}>Medium</option>
+                                            <option value="high" ${task.priority === 'high' ? 'selected' : ''}>High</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Status</label>
+                                        <select id="edit-task-status" style="
+                                            width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;
+                                        ">
+                                            <option value="active" ${task.status === 'active' ? 'selected' : ''}>Active</option>
+                                            <option value="blocked" ${task.status === 'blocked' ? 'selected' : ''}>Blocked</option>
+                                            <option value="completed" ${task.status === 'completed' ? 'selected' : ''}>Completed</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div style="margin-bottom: 20px;">
+                                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">Due Date</label>
+                                    <input type="date" id="edit-task-due-date" value="${task.due_date || ''}" style="
+                                        width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;
+                                    ">
+                                </div>
+                                
+                                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                                    <button type="button" onclick="closeEditTaskModal()" style="
+                                        background: #6c757d; color: white; border: none; padding: 8px 16px; 
+                                        border-radius: 4px; cursor: pointer;
+                                    ">Cancel</button>
+                                    <button type="submit" style="
+                                        background: #007bff; color: white; border: none; padding: 8px 16px; 
+                                        border-radius: 4px; cursor: pointer;
+                                    ">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.insertAdjacentHTML('beforeend', modalHTML);
+                document.getElementById('edit-task-title').focus();
+            })
+            .catch(error => {
+                console.error('Error loading task:', error);
+                alert('Failed to load task details');
+            });
+    }
+    
+    function closeEditTaskModal() {
+        const modal = document.getElementById('edit-task-modal');
+        if (modal) modal.remove();
+    }
+    
+    function submitTaskEdit(event, taskId) {
+        event.preventDefault();
+        
+        const taskData = {
+            title: document.getElementById('edit-task-title').value,
+            description: document.getElementById('edit-task-description').value,
+            duration: parseInt(document.getElementById('edit-task-duration').value),
+            urgency: parseInt(document.getElementById('edit-task-urgency').value),
+            priority: document.getElementById('edit-task-priority').value,
+            status: document.getElementById('edit-task-status').value,
+            due_date: document.getElementById('edit-task-due-date').value || null
+        };
+        
+        fetch(`/api/projects/${currentEditingProject.id}/tasks/${taskId}`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(taskData)
+        })
+        .then(response => response.json())
+        .then(updatedTask => {
+            closeEditTaskModal();
+            // Refresh all expanded phases to show updated task
+            refreshAllExpandedPhases();
+        })
+        .catch(error => {
+            console.error('Error updating task:', error);
+            alert('Failed to update task');
+        });
+    }
+    
+    function refreshAllExpandedPhases() {
+        // Find all expanded phases and refresh their tasks
+        const expandedPhases = document.querySelectorAll('.phase-content.expanded');
+        expandedPhases.forEach(phaseContent => {
+            const phaseId = phaseContent.id.replace('phase-content-', '');
+            loadPhaseTasks(currentEditingProject.id, phaseId);
+        });
+    }
+    
+    function deleteTask(taskId, phaseId) {
+        if (!confirm('Delete this task?')) return;
+        
+        fetch(`/api/projects/${currentEditingProject.id}/tasks/${taskId}`, {
+            method: 'DELETE'
+        })
+        .then(() => {
+            // Refresh tasks for this phase
+            loadPhaseTasks(currentEditingProject.id, phaseId);
+        })
+        .catch(error => {
+            console.error('Error deleting task:', error);
+            alert('Failed to delete task');
+        });
+    }
+    
+    function editPhase(phaseId) {
+        // Find the phase data
+        const phase = currentEditingProject.phases.find(p => p.id === phaseId);
+        if (!phase) {
+            alert('Phase not found');
+            return;
+        }
+        
+        const modalHTML = `
+            <div id="edit-phase-modal" style="
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                background: rgba(0,0,0,0.5); z-index: 1200; display: flex; 
+                align-items: center; justify-content: center;
+            ">
+                <div style="background: white; width: 90%; max-width: 500px; border-radius: 8px; padding: 20px;">
+                    <h3>Edit Phase</h3>
+                    <form onsubmit="submitPhaseEdit(event, '${currentEditingProject.id}', '${phaseId}')">
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Title *</label>
+                            <input type="text" id="edit-phase-title" value="${phase.title}" required style="
+                                width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;
+                            ">
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Description</label>
+                            <textarea id="edit-phase-description" rows="3" style="
+                                width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+                                box-sizing: border-box; resize: vertical;
+                            ">${phase.description || ''}</textarea>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Status *</label>
+                                <select id="edit-phase-status" required style="
+                                    width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;
+                                ">
+                                    <option value="PLANNING" ${phase.status === 'PLANNING' ? 'selected' : ''}>Planning</option>
+                                    <option value="ACTIVE" ${phase.status === 'ACTIVE' ? 'selected' : ''}>Active</option>
+                                    <option value="COMPLETED" ${phase.status === 'COMPLETED' ? 'selected' : ''}>Completed</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Order</label>
+                                <input type="number" id="edit-phase-order" value="${phase.order}" min="1" style="
+                                    width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;
+                                ">
+                            </div>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Estimated Start Date</label>
+                                <input type="date" id="edit-phase-start-date" value="${phase.estimated_start_date ? phase.estimated_start_date.split('T')[0] : ''}" style="
+                                    width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;
+                                ">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Estimated End Date</label>
+                                <input type="date" id="edit-phase-end-date" value="${phase.estimated_end_date ? phase.estimated_end_date.split('T')[0] : ''}" style="
+                                    width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;
+                                ">
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                            <button type="button" onclick="closeEditPhaseModal()" style="
+                                background: #6c757d; color: white; border: none; padding: 8px 16px; 
+                                border-radius: 4px; cursor: pointer;
+                            ">Cancel</button>
+                            <button type="submit" style="
+                                background: #007bff; color: white; border: none; padding: 8px 16px; 
+                                border-radius: 4px; cursor: pointer;
+                            ">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+        document.getElementById('edit-phase-title').focus();
+    }
+    
+    function closeEditPhaseModal() {
+        const modal = document.getElementById('edit-phase-modal');
+        if (modal) modal.remove();
+    }
+    
+    function submitPhaseEdit(event, projectId, phaseId) {
+        event.preventDefault();
+        
+        const phaseData = {
+            title: document.getElementById('edit-phase-title').value,
+            description: document.getElementById('edit-phase-description').value,
+            status: document.getElementById('edit-phase-status').value,
+            estimated_start_date: document.getElementById('edit-phase-start-date').value || null,
+            estimated_end_date: document.getElementById('edit-phase-end-date').value || null
+        };
+        
+        // Handle order change (if different, we'll need to reorder)
+        const newOrder = parseInt(document.getElementById('edit-phase-order').value);
+        const currentPhase = currentEditingProject.phases.find(p => p.id === phaseId);
+        
+        fetch(`/api/projects/${projectId}/phases/${phaseId}`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(phaseData)
+        })
+        .then(response => response.json())
+        .then(updatedPhase => {
+            // If order changed, handle reordering
+            if (currentPhase && newOrder !== currentPhase.order) {
+                return handlePhaseReordering(projectId, phaseId, newOrder);
+            }
+            return Promise.resolve();
+        })
+        .then(() => {
+            closeEditPhaseModal();
+            // Refresh the phases list
+            return fetch(`/api/projects/${projectId}/phases`);
+        })
+        .then(response => response.json())
+        .then(phases => {
+            currentEditingProject.phases = phases;
+            document.getElementById('phases-list').innerHTML = renderPhasesList(phases);
+        })
+        .catch(error => {
+            console.error('Error updating phase:', error);
+            alert('Failed to update phase');
+        });
+    }
+    
+    function handlePhaseReordering(projectId, phaseId, newOrder) {
+        // Get current phases and reorder them
+        const phases = [...currentEditingProject.phases];
+        const currentPhase = phases.find(p => p.id === phaseId);
+        const oldOrder = currentPhase.order;
+        
+        // Remove the phase from its current position
+        phases.splice(oldOrder - 1, 1);
+        
+        // Insert it at the new position
+        phases.splice(newOrder - 1, 0, currentPhase);
+        
+        // Create new order array
+        const newPhaseOrder = phases.map(p => p.id);
+        
+        // Send reorder request
+        return fetch(`/api/projects/${projectId}/phases/reorder`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ phase_ids: newPhaseOrder })
+        });
+    }
+    
+    function submitProjectEdit(event, projectId) {
+        event.preventDefault();
+        
+        const updates = {
+            title: document.getElementById('edit-title').value,
+            description: document.getElementById('edit-description').value,
+            priority: document.getElementById('edit-priority').value,
+            status: document.getElementById('edit-status').value,
+            estimated_start_date: document.getElementById('edit-start-date').value || null,
+            estimated_end_date: document.getElementById('edit-end-date').value || null
+        };
+        
+        fetch(`/api/projects/${projectId}`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(updates)
+        })
+        .then(response => {
+            if (response.ok) {
+                closeEditProjectModal();
+                location.reload(); // Refresh to show updated project
+            } else {
+                throw new Error('Failed to update project');
+            }
+        })
+        .catch(error => {
+            console.error('Error updating project:', error);
+            alert('Failed to update project. Please try again.');
+        });
+    }
+    
+    // Health check
+    function checkHealth() {
+        fetch('/health')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('health-status').textContent = '🟢 ' + data.service;
+                document.getElementById('health-status').style.background = '#28a745';
+            })
+            .catch(error => {
+                document.getElementById('health-status').textContent = '🔴 Connection Error';
+                document.getElementById('health-status').style.background = '#dc3545';
+            });
+    }
+    
+    // Restore phase collapse state from localStorage
+    document.addEventListener('DOMContentLoaded', function() {
+        const phases = document.querySelectorAll('[id^="phase-"]');
+        phases.forEach(phase => {
+            const state = localStorage.getItem('phase_' + phase.id);
+            if (state === 'collapsed') {
+                phase.style.display = 'none';
+                const btn = phase.previousElementSibling.querySelector('.collapse-btn');
+                if (btn) btn.textContent = '▶';
+            }
+        });
+    });
+    
+    // Utility functions
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            // Show temporary feedback
+            const event = window.event;
+            const element = event.target;
+            const originalText = element.textContent;
+            element.textContent = 'Copied!';
+            element.style.background = '#28a745';
+            element.style.color = 'white';
+            setTimeout(() => {
+                element.textContent = originalText;
+                element.style.background = '#f0f0f0';
+                element.style.color = '';
+            }, 1000);
+        }).catch(err => {
+            console.error('Failed to copy: ', err);
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            alert('Task ID copied to clipboard');
+        });
+    }
+
+    // Task reordering functions
+    function moveTaskUp(taskId, phaseId, currentIndex) {
+        if (currentIndex === 0) return; // Already at top
+        
+        // Get all tasks in this phase
+        const tasksContainer = document.getElementById(`tasks-${phaseId}`);
+        const taskElements = Array.from(tasksContainer.children);
+        
+        if (taskElements.length < 2 || currentIndex >= taskElements.length) return;
+        
+        // Get the task IDs to swap
+        const currentTaskElement = taskElements[currentIndex];
+        const previousTaskElement = taskElements[currentIndex - 1];
+        
+        const currentTaskId = currentTaskElement.dataset.taskId;
+        const previousTaskId = previousTaskElement.dataset.taskId;
+        
+        // Call API to swap the tasks
+        fetch(`/api/projects/${currentEditingProject.id}/phases/${phaseId}/tasks/reorder`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                task_id_1: currentTaskId,
+                task_id_2: previousTaskId
+            })
+        })
+        .then(response => {
+            if (response.ok) {
+                // Reload the tasks to reflect new order
+                loadPhaseTasks(currentEditingProject.id, phaseId);
+            } else {
+                throw new Error('Failed to reorder tasks');
+            }
+        })
+        .catch(error => {
+            console.error('Error reordering tasks:', error);
+            alert('Failed to reorder tasks. Please try again.');
+        });
+    }
+    
+    function moveTaskDown(taskId, phaseId, currentIndex) {
+        // Get all tasks in this phase
+        const tasksContainer = document.getElementById(`tasks-${phaseId}`);
+        const taskElements = Array.from(tasksContainer.children);
+        
+        if (currentIndex >= taskElements.length - 1) return; // Already at bottom
+        
+        if (taskElements.length < 2 || currentIndex < 0) return;
+        
+        // Get the task IDs to swap
+        const currentTaskElement = taskElements[currentIndex];
+        const nextTaskElement = taskElements[currentIndex + 1];
+        
+        const currentTaskId = currentTaskElement.dataset.taskId;
+        const nextTaskId = nextTaskElement.dataset.taskId;
+        
+        // Call API to swap the tasks
+        fetch(`/api/projects/${currentEditingProject.id}/phases/${phaseId}/tasks/reorder`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                task_id_1: currentTaskId,
+                task_id_2: nextTaskId
+            })
+        })
+        .then(response => {
+            if (response.ok) {
+                // Reload the tasks to reflect new order
+                loadPhaseTasks(currentEditingProject.id, phaseId);
+            } else {
+                throw new Error('Failed to reorder tasks');
+            }
+        })
+        .catch(error => {
+            console.error('Error reordering tasks:', error);
+            alert('Failed to reorder tasks. Please try again.');
+        });
+    }
+
+    // Task management functions
+    function showAddTaskModal(projectId, phaseId) {
+        // First, get all tasks in the project to show as potential dependencies
+        fetch(`/api/projects/${projectId}/phases`)
+            .then(response => response.json())
+            .then(phases => {
+                // Get all tasks from all phases for dependency selection
+                const allTaskPromises = phases.map(phase => 
+                    fetch(`/api/projects/${projectId}/phases/${phase.id}/tasks`)
+                        .then(r => r.json())
+                        .then(tasks => tasks.map(task => ({...task, phaseName: phase.title})))
+                );
+                
+                return Promise.all(allTaskPromises);
+            })
+            .then(taskArrays => {
+                const allTasks = taskArrays.flat();
+                
+                const modalHTML = `
+                    <div id="add-task-modal" style="
+                        position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                        background: rgba(0,0,0,0.5); z-index: 1200; display: flex; 
+                        align-items: center; justify-content: center;
+                    ">
+                        <div style="background: white; width: 90%; max-width: 600px; border-radius: 8px; padding: 20px; max-height: 90vh; overflow-y: auto;">
+                            <h3>Add New Task</h3>
+                            <form onsubmit="submitNewTask(event, '${projectId}', '${phaseId}')">
+                                <div style="margin-bottom: 15px;">
+                                    <label>Title *</label>
+                                    <input type="text" id="new-task-title" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                </div>
+                                
+                                <div style="margin-bottom: 15px;">
+                                    <label>Description</label>
+                                    <textarea id="new-task-description" rows="3" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"></textarea>
+                                </div>
+                                
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                                    <div>
+                                        <label>Duration (minutes)</label>
+                                        <input type="number" id="new-task-duration" value="30" min="1" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                    </div>
+                                    <div>
+                                        <label>Urgency (1-10)</label>
+                                        <input type="number" id="new-task-urgency" value="5" min="1" max="10" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                    </div>
+                                </div>
+                                
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                                    <div>
+                                        <label>Priority</label>
+                                        <select id="new-task-priority" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                            <option value="low">Low</option>
+                                            <option value="medium" selected>Medium</option>
+                                            <option value="high">High</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label>Due Date</label>
+                                        <input type="date" id="new-task-due-date" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                    </div>
+                                </div>
+                                
+                                <div style="margin-bottom: 15px;">
+                                    <label>Dependencies</label>
+                                    <div style="font-size: 0.9em; color: #666; margin-bottom: 8px;">
+                                        Select tasks that must be completed before this task can start:
+                                    </div>
+                                    <select id="new-task-dependencies" multiple style="width: 100%; min-height: 120px; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                        ${allTasks.map(task => `
+                                            <option value="${task.id}" ${task.completed ? 'disabled style="color: #999;"' : ''}>
+                                                ${task.phaseName} → ${task.title} ${task.completed ? '(Completed)' : ''}
+                                            </option>
+                                        `).join('')}
+                                    </select>
+                                    <div style="font-size: 0.8em; color: #666; margin-top: 4px;">
+                                        Hold Ctrl/Cmd to select multiple tasks
+                                    </div>
+                                </div>
+                                
+                                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                                    <button type="button" onclick="closeAddTaskModal()" style="background: #6c757d; color: white; border: none; padding: 8px 16px; border-radius: 4px;">Cancel</button>
+                                    <button type="submit" style="background: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 4px;">Add Task</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                `;
+                document.body.insertAdjacentHTML('beforeend', modalHTML);
+                document.getElementById('new-task-title').focus();
+            })
+            .catch(error => {
+                console.error('Error loading tasks for dependencies:', error);
+                // Show simplified modal without dependencies
+                showSimpleAddTaskModal(projectId, phaseId);
+            });
+    }
+    
+    function showSimpleAddTaskModal(projectId, phaseId) {
+        const modalHTML = `
+            <div id="add-task-modal" style="
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                background: rgba(0,0,0,0.5); z-index: 1200; display: flex; 
+                align-items: center; justify-content: center;
+            ">
+                <div style="background: white; width: 90%; max-width: 500px; border-radius: 8px; padding: 20px;">
+                    <h3>Add New Task</h3>
+                    <form onsubmit="submitNewTask(event, '${projectId}', '${phaseId}')">
+                        <div style="margin-bottom: 15px;">
+                            <label>Title *</label>
+                            <input type="text" id="new-task-title" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label>Description</label>
+                            <textarea id="new-task-description" rows="3" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"></textarea>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                            <div>
+                                <label>Duration (minutes)</label>
+                                <input type="number" id="new-task-duration" value="30" min="1" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                            </div>
+                            <div>
+                                <label>Priority</label>
+                                <select id="new-task-priority" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                    <option value="low">Low</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                            <button type="button" onclick="closeAddTaskModal()" style="background: #6c757d; color: white; border: none; padding: 8px 16px; border-radius: 4px;">Cancel</button>
+                            <button type="submit" style="background: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 4px;">Add Task</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+        document.getElementById('new-task-title').focus();
+    }
+    
+    function closeAddTaskModal() {
+        const modal = document.getElementById('add-task-modal');
+        if (modal) modal.remove();
+    }
+    
+    function submitNewTask(event, projectId, phaseId) {
+        event.preventDefault();
+        
+        // Get selected dependencies
+        const dependenciesSelect = document.getElementById('new-task-dependencies');
+        const selectedDependencies = dependenciesSelect ? 
+            Array.from(dependenciesSelect.selectedOptions).map(option => option.value) : [];
+        
+        const taskData = {
+            title: document.getElementById('new-task-title').value,
+            description: document.getElementById('new-task-description').value,
+            duration: parseInt(document.getElementById('new-task-duration').value),
+            urgency: parseInt(document.getElementById('new-task-urgency')?.value || '5'),
+            priority: document.getElementById('new-task-priority').value,
+            due_date: document.getElementById('new-task-due-date')?.value || null,
+            depends_on_task_ids: selectedDependencies
+        };
+        
+        fetch(`/api/projects/${projectId}/phases/${phaseId}/tasks`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(taskData)
+        })
+        .then(response => {
+            if (response.ok) {
+                closeAddTaskModal();
+                // Refresh the tasks for this phase
+                loadPhaseTasks(projectId, phaseId);
+            } else {
+                throw new Error('Failed to create task');
+            }
+        })
+        .catch(error => {
+            console.error('Error creating task:', error);
+            alert('Failed to create task. Please try again.');
+        });
+    }
+    
+    function editTask(taskId) {
+        // Get current task data
+        const taskElement = document.querySelector(`[data-task-id="${taskId}"]`);
+        if (!taskElement) {
+            alert('Task not found');
+            return;
+        }
+        
+        // Find the task in the current project data by fetching it
+        fetch(`/api/projects/${currentEditingProject.id}/tasks/${taskId}`)
+            .then(response => response.json())
+            .then(task => {
+                // Get all tasks for dependency selection
+                return fetch(`/api/projects/${currentEditingProject.id}/phases`)
+                    .then(response => response.json())
+                    .then(phases => {
+                        const allTaskPromises = phases.map(phase => 
+                            fetch(`/api/projects/${currentEditingProject.id}/phases/${phase.id}/tasks`)
+                                .then(r => r.json())
+                                .then(tasks => tasks.map(t => ({...t, phaseName: phase.title})))
+                        );
+                        
+                        return Promise.all(allTaskPromises).then(taskArrays => {
+                            const allTasks = taskArrays.flat().filter(t => t.id !== taskId); // Exclude current task
+                            return { task, allTasks };
+                        });
+                    });
+            })
+            .then(({ task, allTasks }) => {
+                const currentDependencies = task.depends_on_task_ids ? 
+                    (typeof task.depends_on_task_ids === 'string' ? 
+                        JSON.parse(task.depends_on_task_ids) : task.depends_on_task_ids) : [];
+                
+                const modalHTML = `
+                    <div id="edit-task-modal" style="
+                        position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                        background: rgba(0,0,0,0.5); z-index: 1200; display: flex; 
+                        align-items: center; justify-content: center;
+                    ">
+                        <div style="background: white; width: 90%; max-width: 600px; border-radius: 8px; padding: 20px; max-height: 90vh; overflow-y: auto;">
+                            <h3>Edit Task</h3>
+                            <form onsubmit="submitTaskEdit(event, '${taskId}')">
+                                <div style="margin-bottom: 15px;">
+                                    <label>Title *</label>
+                                    <input type="text" id="edit-task-title" value="${task.title || ''}" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                </div>
+                                
+                                <div style="margin-bottom: 15px;">
+                                    <label>Description</label>
+                                    <textarea id="edit-task-description" rows="3" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">${task.description || ''}</textarea>
+                                </div>
+                                
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                                    <div>
+                                        <label>Duration (minutes)</label>
+                                        <input type="number" id="edit-task-duration" value="${task.duration || 30}" min="1" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                    </div>
+                                    <div>
+                                        <label>Urgency (1-10)</label>
+                                        <input type="number" id="edit-task-urgency" value="${task.urgency || 5}" min="1" max="10" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                    </div>
+                                </div>
+                                
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                                    <div>
+                                        <label>Priority</label>
+                                        <select id="edit-task-priority" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                            <option value="low" ${task.priority === 'low' ? 'selected' : ''}>Low</option>
+                                            <option value="medium" ${task.priority === 'medium' ? 'selected' : ''}>Medium</option>
+                                            <option value="high" ${task.priority === 'high' ? 'selected' : ''}>High</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label>Due Date</label>
+                                        <input type="date" id="edit-task-due-date" value="${task.due_date || ''}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                    </div>
+                                </div>
+                                
+                                <div style="margin-bottom: 15px;">
+                                    <label>Dependencies</label>
+                                    <div style="font-size: 0.9em; color: #666; margin-bottom: 8px;">
+                                        Select tasks that must be completed before this task can start:
+                                    </div>
+                                    <select id="edit-task-dependencies" multiple style="width: 100%; min-height: 120px; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                        ${allTasks.map(t => `
+                                            <option value="${t.id}" ${currentDependencies.includes(t.id) ? 'selected' : ''} ${t.completed ? 'disabled style="color: #999;"' : ''}>
+                                                ${t.phaseName} → ${t.title} ${t.completed ? '(Completed)' : ''}
+                                            </option>
+                                        `).join('')}
+                                    </select>
+                                    <div style="font-size: 0.8em; color: #666; margin-top: 4px;">
+                                        Hold Ctrl/Cmd to select multiple tasks
+                                    </div>
+                                </div>
+                                
+                                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                                    <button type="button" onclick="closeEditTaskModal()" style="background: #6c757d; color: white; border: none; padding: 8px 16px; border-radius: 4px;">Cancel</button>
+                                    <button type="submit" style="background: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 4px;">Update Task</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                `;
+                document.body.insertAdjacentHTML('beforeend', modalHTML);
+                document.getElementById('edit-task-title').focus();
+            })
+            .catch(error => {
+                console.error('Error loading task for editing:', error);
+                alert('Failed to load task details for editing.');
+            });
+    }
+    
+    function closeEditTaskModal() {
+        const modal = document.getElementById('edit-task-modal');
+        if (modal) modal.remove();
+    }
+    
+    function submitTaskEdit(event, taskId) {
+        event.preventDefault();
+        
+        // Get selected dependencies
+        const dependenciesSelect = document.getElementById('edit-task-dependencies');
+        const selectedDependencies = dependenciesSelect ? 
+            Array.from(dependenciesSelect.selectedOptions).map(option => option.value) : [];
+        
+        const updates = {
+            title: document.getElementById('edit-task-title').value,
+            description: document.getElementById('edit-task-description').value,
+            duration: parseInt(document.getElementById('edit-task-duration').value),
+            urgency: parseInt(document.getElementById('edit-task-urgency').value),
+            priority: document.getElementById('edit-task-priority').value,
+            due_date: document.getElementById('edit-task-due-date').value || null,
+            depends_on_task_ids: selectedDependencies
+        };
+        
+        fetch(`/api/projects/${currentEditingProject.id}/tasks/${taskId}`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(updates)
+        })
+        .then(response => {
+            if (response.ok) {
+                closeEditTaskModal();
+                // Refresh all phases to show updated dependencies
+                return fetch(`/api/projects/${currentEditingProject.id}/phases`);
+            } else {
+                throw new Error('Failed to update task');
+            }
+        })
+        .then(response => response.json())
+        .then(phases => {
+            // Refresh all expanded phases
+            phases.forEach(phase => {
+                const phaseContent = document.getElementById(`phase-content-${phase.id}`);
+                if (phaseContent && phaseContent.classList.contains('expanded')) {
+                    loadPhaseTasks(currentEditingProject.id, phase.id);
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error updating task:', error);
+            alert('Failed to update task. Please try again.');
+        });
+    }
+    
+    function deleteTask(taskId, phaseId) {
+        if (!confirm('Are you sure you want to delete this task?')) {
+            return;
+        }
+        
+        fetch(`/api/projects/${currentEditingProject.id}/tasks/${taskId}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (response.ok) {
+                // Refresh the tasks for this phase
+                loadPhaseTasks(currentEditingProject.id, phaseId);
+            } else {
+                throw new Error('Failed to delete task');
+            }
+        })
+        .catch(error => {
+            console.error('Error deleting task:', error);
+            alert('Failed to delete task. Please try again.');
+        });
+    }
+    
+    function completeTask(projectId, taskId) {
+        fetch(`/api/projects/${projectId}/tasks/${taskId}/complete`, {
+            method: 'POST'
+        })
+        .then(response => {
+            if (response.ok) {
+                // Find which phase this task belongs to and refresh it
+                const taskElement = document.querySelector(`[data-task-id="${taskId}"]`);
+                if (taskElement) {
+                    const tasksContainer = taskElement.closest('[id^="tasks-"]');
+                    if (tasksContainer) {
+                        const phaseId = tasksContainer.id.replace('tasks-', '');
+                        loadPhaseTasks(projectId, phaseId);
+                    }
+                }
+            } else {
+                throw new Error('Failed to complete task');
+            }
+        })
+        .catch(error => {
+            console.error('Error completing task:', error);
+            alert('Failed to complete task. Please try again.');
+        });
+    }
+
+    // Refresh health check every 30 seconds
+    setInterval(checkHealth, 30000);
+    </script>
+</body>
+</html>

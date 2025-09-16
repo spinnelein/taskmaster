@@ -3,6 +3,7 @@ from datetime import datetime, date, timedelta
 from models import db, Event, Task, Initiative
 from recurring_service import recurring_service
 import uuid
+import json
 
 api_bp = Blueprint('api', __name__, url_prefix='/api')
 
@@ -96,9 +97,55 @@ def delete_event(event_id):
 
 @api_bp.route('/tasks')
 def get_tasks():
-    """Get all tasks"""
-    tasks = Task.query.filter_by(is_completed=False).all()
-    return jsonify([t.to_dict() for t in tasks])
+    """Get available root tasks (accounting for snooze and dependencies)"""
+    # Get all tasks that are either:
+    # 1. Not completed, OR
+    # 2. Snoozed but snooze period has ended
+    current_time = datetime.utcnow()
+    available_tasks = Task.query.filter(
+        (Task.is_completed == False) &
+        ((Task.is_snoozed == False) | (Task.snoozed_until <= current_time))
+    ).all()
+    
+    # Auto-unsnooze tasks whose snooze period has ended
+    for task in available_tasks:
+        if task.is_snoozed and task.snoozed_until and task.snoozed_until <= current_time:
+            task.is_snoozed = False
+            task.snoozed_until = None
+            task.status = 'active'
+    
+    db.session.commit()
+    
+    # Build task lookup for dependency checking (include completed tasks for dependency resolution)
+    all_tasks_by_id = {task.id: task for task in Task.query.all()}
+    
+    # Filter to only include root tasks (no dependencies OR all dependencies completed)
+    root_tasks = []
+    for task in available_tasks:
+        is_root_task = True
+        
+        if task.depends_on_task_ids:
+            try:
+                # Handle JSON string or null values
+                if task.depends_on_task_ids and task.depends_on_task_ids != 'null':
+                    dep_ids = json.loads(task.depends_on_task_ids)
+                    if isinstance(dep_ids, list) and dep_ids:
+                        # Check if all dependencies are completed
+                        for dep_id in dep_ids:
+                            if dep_id in all_tasks_by_id:
+                                dep_task = all_tasks_by_id[dep_id]
+                                # Task is blocked if dependency is not completed AND not snoozed
+                                if not dep_task.is_completed and not dep_task.is_snoozed:
+                                    is_root_task = False
+                                    break
+            except (json.JSONDecodeError, TypeError):
+                # If dependency parsing fails, treat as root task
+                pass
+        
+        if is_root_task:
+            root_tasks.append(task)
+    
+    return jsonify([t.to_dict() for t in root_tasks])
 
 @api_bp.route('/tasks', methods=['POST'])
 def create_task():
@@ -175,47 +222,38 @@ def delete_task(task_id):
 
 @api_bp.route('/tasks/<task_id>/complete', methods=['POST'])
 def complete_task(task_id):
-    """Mark a task as completed and create next recurring instance if applicable"""
+    """Mark a task as completed or snooze if recurring"""
     task = Task.query.get_or_404(task_id)
     
-    # Mark current task as completed
-    task.is_completed = True
+    # Record completion time
     task.last_completed_at = datetime.utcnow()
-    task.status = 'completed'
+    task.updated_at = datetime.utcnow()
     
-    # Check if this is a recurring task that should generate a new instance
-    if task.initiative_id and task.recurrence_days and task.recurrence_days > 0:
-        from datetime import date, timedelta
+    # Handle recurring vs non-recurring tasks differently
+    if task.recurrence_days and task.recurrence_days > 0:
+        # Recurring task: snooze until next occurrence (don't mark completed)
+        from datetime import timedelta
+        task.is_snoozed = True
+        task.snoozed_until = datetime.utcnow() + timedelta(days=task.recurrence_days)
+        task.status = 'snoozed'
+        # Keep is_completed = False so task can reappear
         
-        # Calculate next due date
-        next_due_date = date.today() + timedelta(days=task.recurrence_days)
+        result = {
+            'task_snoozed': True,
+            'snoozed_until': task.snoozed_until.isoformat(),
+            'task': task.to_dict()
+        }
+    else:
+        # Non-recurring task: mark as completed normally
+        task.is_completed = True
+        task.status = 'completed'
         
-        # Create new task instance
-        new_task = Task(
-            id=str(uuid.uuid4()),
-            title=task.title,
-            description=task.description,
-            duration=task.duration,
-            urgency=task.urgency,
-            priority=task.priority,
-            status='active',
-            is_completed=False,
-            initiative_id=task.initiative_id,
-            recurrence_days=task.recurrence_days,
-            parent_task_id=task.id,  # Link to completed task
-            due_date=next_due_date,
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow()
-        )
-        
-        db.session.add(new_task)
+        result = {
+            'task_completed': True,
+            'task': task.to_dict()
+        }
     
     db.session.commit()
-    
-    # Return both completed task and new task (if created)
-    result = {'completed_task': task.to_dict()}
-    if task.initiative_id and task.recurrence_days and task.recurrence_days > 0:
-        result['next_task'] = new_task.to_dict()
     
     return jsonify(result)
 
