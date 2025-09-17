@@ -1,0 +1,10 @@
+[2025-09-16T01:16:19.121Z] ERROR   | Failed to load resource: the server responded with a status of 500 (INTERNAL SERVER ERROR)
+[2025-09-16T01:16:19.125Z] ERROR   | Failed to load events: Os: Request failed
+    at https://unpkg.com/fullcalendar@6.1.8/index.global.min.js:6:112058
+[2025-09-16T01:16:19.211Z] ERROR   | Failed to load resource: the server responded with a status of 500 (INTERNAL SERVER ERROR)
+[2025-09-16T01:16:19.212Z] ERROR   | Error loading tasks: SyntaxError: Unexpected token '<', "<!doctype "... is not valid JSON
+[2025-09-16T01:16:19.420Z] ERROR   | Failed to load resource: the server responded with a status of 404 (NOT FOUND)
+[2025-09-16T01:16:19.441Z] ERROR   | Failed to load resource: the server responded with a status of 500 (INTERNAL SERVER ERROR)
+[2025-09-16T01:16:19.705Z] ERROR   | Failed to load resource: the server responded with a status of 500 (INTERNAL SERVER ERROR)
+[2025-09-16T01:16:19.747Z] ERROR   | Failed to load resource: the server responded with a status of 500 (INTERNAL SERVER ERROR)
+[2025-09-16T01:16:20.041Z] ERROR   | Failed to load resource: the server responded with a status of 500 (INTERNAL SERVER ERROR)

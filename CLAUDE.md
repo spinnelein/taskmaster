@@ -5,26 +5,27 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 TaskMaster is a full-stack task and schedule management application with:
-- **Backend**: FastAPI 0.104.1 + SQLAlchemy 2.0 + SQLite/PostgreSQL (Python 3.8+)
-- **Frontend**: React 19 + Vite 7 + TypeScript 5.9 + Tailwind CSS 4.1
+- **Backend**: Flask + SQLAlchemy + SQLite (Python 3.8+)
+- **Frontend**: Server-side rendered HTML templates with vanilla JavaScript
+- **Migration Status**: Recently migrated from FastAPI/React to Flask for simplified deployment
 
 ## Architecture
 
-### Backend Structure (`backend/src/`)
-- **API Layer**: FastAPI app in `api/app.py` with routers in `api/routes/`
-- **Domain Layer**: Business logic in `domain/` (task.py, event.py, schedule.py)
-- **Data Layer**: SQLAlchemy models in `data/models/`, repositories in `data/repositories/`
-- **Schemas**: Pydantic models for API serialization in `schemas/`
-- **Services**: Business services in `services/` (telegram_service.py, reminder_service.py)
-- **Workers**: Background processing in `workers/` (reminder_worker.py with APScheduler)
-- **Base Model**: All models inherit from `BaseModel` with UUID primary keys and timestamps
+### Flask Application Structure (`flask_app/`)
+- **Main App**: Flask application factory in `app.py` with route definitions
+- **Models**: SQLAlchemy models in `models.py` (Event, Task, Initiative, Project, ProjectPhase)
+- **Routes**: Blueprint-based routing in `routes/` directory
+  - `api.py`: RESTful API endpoints for AJAX calls
+  - `events.py`: Event-specific routes
+  - `tasks.py`: Task-specific routes  
+  - `projects.py`: Project-specific routes
+- **Templates**: Jinja2 HTML templates in `templates/`
+- **Static Files**: CSS/JS assets in `static/`
+- **Services**: Background services in separate files (background_service.py, recurring_service.py)
 
-### Frontend Structure (`frontend/src/`)
-- **React Router**: Multi-page application with modern UI components
-- **State Management**: Local state with React hooks
-- **API Layer**: Axios-based services in `services/`
-- **Components**: Organized by feature (tasks/, events/, schedule/, common/)
-- **Modern Design**: Custom CSS with Tailwind, drag-and-drop scheduling
+### Legacy Backend Structure (`backend/src/`) - DEPRECATED
+- Previous FastAPI implementation - kept for reference during migration
+- Contains comprehensive business logic and services that may be ported to Flask
 
 ## Development Commands
 
@@ -33,66 +34,73 @@ cat CODING_STANDARDS.md
 
 ### Quick Start (Recommended)
 ```bash
-# Start both backend and frontend with consistent ports
-python dev.py
+# Start Flask application
+cd flask_app
+python app.py        # Starts on port 5000
 
-# Or specific services:
-python dev.py backend   # Backend only on port 8000
-python dev.py frontend  # Frontend only (auto-detects port 5173-5180)
-python dev.py status    # Check service status
-python dev.py stop      # Stop all services
-python dev.py clean     # Clean up ports and orphaned processes
+# Or use the legacy development script (may need updates)
+python dev.py flask  # If dev.py has been updated for Flask
 ```
 
-### Manual Commands (Alternative)
+### Flask Development Commands
 ```bash
-# Backend
-cd backend
-pip install -r requirements.txt
-uvicorn src.api.app:app --reload --host 0.0.0.0 --port 8000
+# Flask application
+cd flask_app
+pip install flask flask-sqlalchemy  # Install dependencies
+python app.py                       # Development server on port 5000
+flask run                          # Alternative startup method
 
-# Frontend
-cd frontend
-npm install
-npm run dev      # Development server
-npm run build    # Production build
-npm run lint     # ESLint
+# Database operations (if Flask-Migrate is added)
+flask db init       # Initialize migration repository
+flask db migrate    # Create migration
+flask db upgrade    # Apply migrations
 ```
 
 ### Testing
 ```bash
-cd backend
-python -m pytest                    # Run all tests
-python -m pytest tests/unit/        # Unit tests only
-python -m pytest tests/integration/ # Integration tests only
+# Flask application testing
+cd flask_app
+python -m pytest tests/             # Run Flask tests (if test directory exists)
 
-cd frontend
-npm run test:web                    # Playwright browser tests
-npm run test:ui                     # UI component tests
+# Test Flask endpoints directly
+curl http://localhost:5000/health   # Health check
+curl http://localhost:5000/api/events  # API endpoints
+
+# Playwright browser testing (works great with Flask!)
+npm run test:web                    # Playwright tests against Flask server
+npm run test:ui                     # UI component tests on server-rendered pages
+npm run debug:browser -- --head    # Interactive browser debugging
+
+# Legacy backend testing (from previous FastAPI setup)
+cd backend
+python -m pytest                    # Legacy backend tests for reference
 ```
 
 ## Key Patterns
 
 ### Database Models
-- All models extend `BaseModel` with UUID `id`, `created_at`, `updated_at`
-- Models are in `backend/src/data/models/` (task_model.py, event_model.py, etc.)
-- Use Alembic for migrations: `alembic revision --autogenerate -m "description"`
-- **Enum Handling**: Repository `create()` and `update()` methods handle string-to-enum conversion for fields like `status` and `priority`
+- All models in `flask_app/models.py` with UUID `id`, `created_at`, `updated_at`
+- Models: Event, Task, Initiative, Project, ProjectPhase
+- Uses Flask-SQLAlchemy with SQLite database
+- Models have `to_dict()` methods for JSON serialization
+- Database path: `taskmaster.db` in project root
 
 ### API Routes
-- Prefix: `/api/{resource}` (e.g., `/api/tasks`, `/api/events`)
-- CORS configured for localhost:5173 and localhost:3000
+- Flask blueprints in `flask_app/routes/` directory
+- RESTful API endpoints: `/api/{resource}` (e.g., `/api/tasks`, `/api/events`)
+- Page routes: `/`, `/events`, `/tasks`, `/initiatives`, `/projects`
 - Health check at `/health`
 
-### Domain Logic
-- Business rules in `domain/` classes (Task, Event, Schedule)
-- Repository pattern for data access
-- Domain objects are separate from SQLAlchemy models
+### Templates & Frontend
+- Jinja2 templates in `flask_app/templates/`
+- Server-side rendering with vanilla JavaScript for interactivity
+- FullCalendar integration for schedule views
+- Base template structure for consistent layout
 
-### Frontend Components
-- TypeScript preferred for new components
-- Use existing patterns in `components/` directories
-- API calls through service classes in `services/`
+### Data Access
+- Direct SQLAlchemy model usage (simplified from repository pattern)
+- Models handle their own serialization via `to_dict()` methods
+- Database session management through Flask-SQLAlchemy
 
 ## Important Notes
 
@@ -108,9 +116,19 @@ npm run test:ui                     # UI component tests
 - **enhanced-data-structures**: Current working branch with new models (dishes, meals, initiatives, projects)
 - **gui-overhaul**: UI/UX improvements branch
 
-## Current Development State (enhanced-data-structures branch)
+## Current Development State (flask-migration branch)
 
 ### ✅ Recently Completed (September 2025)
+
+**Major Architecture Migration (Sept 16, 2025):**
+- **FastAPI to Flask Migration**: Migrated from FastAPI/React to Flask with server-side rendering
+- **Simplified Deployment**: Single Flask application instead of separate backend/frontend
+- **Template-Based Frontend**: Jinja2 templates replace React components
+- **Consolidated Models**: All models moved to `flask_app/models.py`
+- **Blueprint Architecture**: Organized routes using Flask blueprints
+- **Database Preservation**: Maintained existing SQLite database and schema
+
+### ✅ Previously Completed (September 2025)
 
 **Major System Overhaul (Sept 13, 2025):**
 
@@ -386,113 +404,75 @@ npm run test:ui      # UI component tests
 
 ## Current File Structure (Key Files)
 
-### Backend (`backend/src/`)
+### Flask Application (`flask_app/`)
 ```
-├── main.py                          # FastAPI app entry point
-├── api/
-│   ├── app.py                       # FastAPI application setup
-│   └── routes/
-│       ├── tasks.py                 # Task CRUD endpoints
-│       ├── events.py                # Event CRUD endpoints  
-│       ├── initiatives.py           # Initiative CRUD endpoints
-│       ├── projects.py              # Project CRUD endpoints
-│       └── reminders.py             # Reminder management endpoints
-├── data/
-│   ├── database.py                  # SQLAlchemy configuration
-│   └── models/
-│       ├── base_model.py            # Base model with UUID/timestamps
-│       ├── task_model.py            # Enhanced task model with relationships
-│       ├── event_model.py           # Event model with master/instance relationships
-│       ├── initiative_model.py      # Initiative model with recurrence
-│       ├── project_model.py         # Project + ProjectPhase models
-│       ├── meal_model.py            # Meal planning models
-│       └── dish_model.py            # Recipe/dish models
-├── services/
-│   ├── telegram_service.py          # Telegram bot + event notifications
-│   ├── event_notification_service.py # Event-specific notification logic
-│   ├── reminder_service.py          # Task reminder management
-│   └── task_queue_service.py        # Task priority and queue management
-├── workers/
-│   └── reminder_worker.py           # APScheduler background jobs (tasks + events)
-└── schemas/
-    ├── task_schemas.py              # Task Pydantic schemas (Pydantic v2 ready)
-    ├── event_schemas.py             # Event Pydantic schemas
-    ├── initiative_schemas.py        # Initiative Pydantic v2 schemas (updated)
-    └── project_schemas.py           # Project Pydantic schemas
+├── app.py                           # Flask application factory and main routes
+├── models.py                        # SQLAlchemy models (Event, Task, Initiative, Project, ProjectPhase)
+├── background_service.py            # Background processing services
+├── recurring_service.py             # Recurring event management
+├── routes/
+│   ├── __init__.py                  # Blueprint initialization
+│   ├── api.py                       # RESTful API endpoints for AJAX
+│   ├── events.py                    # Event-specific routes
+│   ├── tasks.py                     # Task-specific routes
+│   └── projects.py                  # Project-specific routes
+├── templates/
+│   ├── base.html                    # Base Jinja2 template
+│   ├── schedule.html                # Main calendar/schedule page
+│   ├── events.html                  # Events management page
+│   ├── tasks.html                   # Tasks management page
+│   ├── initiatives.html             # Initiatives management page
+│   └── projects.html                # Projects management page
+└── static/
+    ├── css/
+    │   └── fullcalendar.min.css     # FullCalendar styles
+    └── js/
+        └── fullcalendar.min.js      # FullCalendar library
 ```
 
-### Frontend (`frontend/src/`)
+### Legacy Structure (DEPRECATED - kept for reference)
 ```
-├── main.jsx                         # React entry point
-├── App.jsx                          # Router configuration with all routes
-├── components/
-│   ├── layout/
-│   │   ├── SidebarNav.jsx           # Navigation with initiatives/projects
-│   │   └── ModernLayout.jsx         # Layout wrapper
-│   ├── common/
-│   │   ├── Modal.jsx                # Modal system with 90vh height limit
-│   │   └── FormComponents.jsx       # Reusable form components library
-│   ├── dashboard/
-│   │   ├── DashboardGrid.jsx        # Widget-based dashboard with drag-and-drop
-│   │   └── widgets/
-│   │       ├── TodaysFocusWidget.jsx    # Priority tasks widget
-│   │       └── CalendarSnapshotWidget.jsx # Upcoming events widget
-│   ├── navigation/
-│   │   └── CommandPalette.jsx       # Cmd+K global navigation
-│   ├── notifications/
-│   │   └── NotificationSystem.jsx   # Smart toast notifications
-│   ├── schedule/
-│   │   ├── MultiLayerCalendar.jsx   # Multi-layer calendar view
-│   │   ├── DragDropCalendarLayer.jsx # Enhanced drag-and-drop layer
-│   │   └── QuickEventModal.jsx      # Natural language event creation
-│   └── forms/
-│       ├── InitiativeForm.jsx       # Initiative create/edit form
-│       ├── ProjectForm.jsx          # Project create/edit form
-│       └── TaskForm.jsx             # Enhanced task form with progressive disclosure
-├── pages/
-│   ├── UIDemo.jsx                   # Phase 1 UI improvements demo
-│   ├── Phase2Demo.jsx               # Phase 2 scheduling demo
-│   ├── Phase3Demo.jsx               # Phase 3 dashboard demo
-│   ├── Initiatives.jsx              # Initiative listing page
-│   ├── Projects.jsx                 # Project listing page
-│   └── [other pages...]
-├── hooks/
-│   └── useCommandPalette.js         # Global command palette hook
-├── scripts/
-│   ├── browser-debug.js             # Playwright browser debugging
-│   └── test-ui-demo.js              # UI component testing
-└── services/
-    ├── api.js                       # Axios configuration
-    ├── taskService.js               # Task API calls
-    ├── eventService.js              # Event API calls
-    └── [other services...]
+backend/src/                         # Previous FastAPI implementation
+frontend/src/                        # Previous React implementation
+```
+
+### Root Directory
+```
+├── taskmaster.db                    # SQLite database (shared with Flask app)
+├── flask_app/                      # Current Flask application
+├── backend/                         # Legacy FastAPI backend (deprecated)
+├── frontend/                        # Legacy React frontend (deprecated)
+├── scripts/                         # Testing and utility scripts
+│   ├── browser-debug.js             # Playwright browser debugging (still useful!)
+│   └── test-ui-demo.js              # UI testing scripts
+└── logs/                           # Application and test logs
 ```
 
 ## Development Process Management
 
-### Restart Methods (USE THESE - NO DUPLICATE PROCESSES!)
+### Restart Methods (Flask Application)
 
-**CRITICAL**: Always use these restart methods instead of manually starting uvicorn/npm to prevent duplicate processes and port conflicts.
-
-**Backend Restart (Choose One):**
+**Flask Application Restart:**
 ```bash
-# Option 1: Python script (cross-platform, RECOMMENDED)
-cd backend && python restart.py
+# Simple restart (Ctrl+C then restart)
+cd flask_app
+python app.py                        # Starts on port 5000
 
-# Option 2: API endpoint (if server is running)
-curl http://localhost:8000/api/restart
+# Process cleanup if needed
+taskkill /f /im python.exe           # Windows - kills all Python processes
+pkill -f "python app.py"             # Linux/macOS - kills Flask specifically
 
-# Option 3: Manual process cleanup + start
-cd backend && taskkill /f /im uvicorn.exe && uvicorn src.api.app:app --reload --host 0.0.0.0 --port 8000
+# Alternative startup methods
+cd flask_app
+flask run                            # Using Flask CLI
+python -m flask run                  # Alternative Flask CLI
 ```
 
-**Frontend Restart:**
+**Legacy Methods (DEPRECATED - for FastAPI/React):**
 ```bash
-# Windows (recommended)
-cd frontend && restart-frontend.bat
-
-# Manual cross-platform
-cd frontend && taskkill /f /im node.exe && npm run dev
+# These were for the previous architecture
+cd backend && python restart.py     # Legacy FastAPI restart
+cd frontend && restart-frontend.bat # Legacy React restart
 ```
 
 **Process Cleanup Commands:**
@@ -511,24 +491,22 @@ cd frontend && taskkill /f /im node.exe && npm run dev
 
 ### Development Commands
 
-**Backend:**
+**Flask Application:**
 ```bash
-cd backend
-python restart.py              # PREFERRED - handles process cleanup
-# OR manually (not recommended):
-pip install -r requirements.txt
-uvicorn src.api.app:app --reload --host 0.0.0.0 --port 8000
+cd flask_app
+pip install flask flask-sqlalchemy    # Install dependencies
+python app.py                         # Start development server (port 5000)
+flask run                            # Alternative startup method
+
+# Database operations (manual for now)
+python -c "from app import app; from models import db; app.app_context().push(); db.create_all()"
 ```
 
-**Frontend:**
+**Legacy Commands (DEPRECATED):**
 ```bash
-cd frontend
-restart-frontend.bat           # PREFERRED - handles process cleanup  
-# OR manually (not recommended):
-npm install
-npm run dev                    # Development server
-npm run build                  # Production build
-npm run lint                   # ESLint
+# Previous FastAPI/React setup
+cd backend && python restart.py      # Legacy backend restart
+cd frontend && restart-frontend.bat  # Legacy frontend restart
 ```
 
 **Testing:**

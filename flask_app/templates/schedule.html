@@ -118,13 +118,129 @@
             font-size: 0.8em;
         }
         
+        /* Time Pool Styles */
+        .time-pool-item {
+            background: white;
+            margin: 15px 0;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .time-pool-header {
+            background: #f8f9fa;
+            padding: 12px 15px;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .time-pool-time {
+            font-weight: bold;
+            color: #495057;
+            font-size: 0.95em;
+        }
+        .time-pool-weather {
+            font-size: 0.85em;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .weather-icon {
+            font-size: 1.1em;
+        }
+        .time-pool-utilization {
+            padding: 10px 15px;
+            border-bottom: 1px solid #f1f3f4;
+        }
+        .utilization-bar {
+            width: 100%;
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 5px 0;
+        }
+        .utilization-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745 0%, #ffc107 70%, #dc3545 90%);
+            transition: width 0.3s ease;
+        }
+        .utilization-text {
+            font-size: 0.8em;
+            color: #6c757d;
+            display: flex;
+            justify-content: space-between;
+        }
+        .pool-task-item {
+            padding: 8px 15px;
+            border-bottom: 1px solid #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .pool-task-item:last-child {
+            border-bottom: none;
+        }
+        .pool-task-info {
+            flex: 1;
+        }
+        .pool-task-title {
+            font-weight: 500;
+            color: #333;
+            font-size: 0.9em;
+            margin-bottom: 2px;
+        }
+        .pool-task-duration {
+            font-size: 0.8em;
+            color: #6c757d;
+        }
+        .pool-task-actions {
+            margin-left: 10px;
+        }
+        .btn-small {
+            padding: 4px 8px;
+            font-size: 0.8em;
+            margin: 0;
+        }
+        .empty-pool {
+            padding: 15px;
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+            font-size: 0.9em;
+        }
+        .pool-status-available {
+            border-left: 4px solid #28a745;
+        }
+        .pool-status-partial {
+            border-left: 4px solid #ffc107;
+        }
+        .pool-status-full {
+            border-left: 4px solid #dc3545;
+        }
+        
         /* FullCalendar customizations and fallback styles */
         .fc-event {
             cursor: pointer;
             font-size: 13px;
             line-height: 1.3;
             padding: 3px 5px !important;
-            overflow: hidden;
+            min-height: 50px !important; /* Ensure enough height for time pools with tasks */
+        }
+        
+        /* Specific styling for time pool events */
+        .fc-event[id^="timepool-"] {
+            min-height: 60px !important;
+            padding: 5px !important;
+        }
+        
+        .fc-event[id^="timepool-"] .fc-event-main {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: visible;
         }
         .fc-event-title {
             font-weight: 500;
@@ -156,6 +272,212 @@
         }
         .fc-direction-ltr .fc-timegrid-slot-label-cushion {
             padding-right: 5px;
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: #fff;
+            margin: 2% auto;
+            padding: 0;
+            border: none;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+            max-height: 95vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .modal-header {
+            padding: 24px 30px;
+            background: #007bff;
+            color: white;
+            border-radius: 12px 12px 0 0;
+            position: relative;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 500;
+        }
+        
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 32px;
+            font-weight: 300;
+            color: white;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+        
+        .close:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .modal-body {
+            padding: 20px 30px;
+            overflow-y: auto;
+            flex: 1;
+        }
+        
+        #eventForm {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #e1e4e8;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .form-section {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid #e1e4e8;
+        }
+        
+        .form-section-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .checkbox-group label {
+            margin-bottom: 0;
+            font-weight: 400;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .recurring-options {
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+        
+        .modal-footer {
+            padding: 16px 30px;
+            background: #f8f9fa;
+            border-top: 1px solid #e1e4e8;
+            border-radius: 0 0 12px 12px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+        
+        .btn-primary {
+            background: #007bff;
+            color: white;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .help-text {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 5px;
         }
         
         /* Basic FullCalendar fallback styles if CSS doesn't load */
@@ -230,6 +552,8 @@
                 <a href="/events">Events</a>
                 <a href="/tasks">Tasks</a>
                 <a href="/initiatives">Initiatives</a>
+                <a href="/projects">Projects</a>
+                <button class="btn" onclick="showAddEventModal()" style="margin-left: 20px;">Add Event</button>
             </div>
         </div>
         
@@ -250,6 +574,129 @@
         </div>
     </div>
     
+    <!-- Event Modal -->
+    <div id="eventModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" onclick="closeEventModal()">&times;</span>
+                <h2>Create New Event</h2>
+            </div>
+            <form id="eventForm" onsubmit="submitEvent(event)">
+                <div class="modal-body">
+                    <!-- Basic Information -->
+                    <div class="form-group">
+                        <label for="eventTitle">Event Title *</label>
+                        <input type="text" id="eventTitle" name="title" required placeholder="Enter event title">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="eventStart">Start Date/Time *</label>
+                            <input type="datetime-local" id="eventStart" name="start" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="eventEnd">End Date/Time *</label>
+                            <input type="datetime-local" id="eventEnd" name="end" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventDescription">Description</label>
+                        <textarea id="eventDescription" name="description" placeholder="Add event details"></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="eventLocation">Location</label>
+                            <input type="text" id="eventLocation" name="location" placeholder="Where">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="eventType">Event Type</label>
+                            <select id="eventType" name="event_type">
+                                <option value="timed">Timed</option>
+                                <option value="all_day">All Day</option>
+                                <option value="instant">Instant</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Event Options -->
+                    <div class="form-section">
+                        <div class="form-section-title">Event Options</div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="eventBlocking" name="is_blocking" checked>
+                            <label for="eventBlocking">Blocking Event (prevents scheduling other tasks)</label>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="eventNotifications" name="notifications_enabled" checked>
+                            <label for="eventNotifications">Enable Notifications</label>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="eventRecurring" name="is_recurring" onchange="toggleRecurringOptions()">
+                            <label for="eventRecurring">Recurring Event</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Recurring Options (hidden by default) -->
+                    <div id="recurringOptions" class="recurring-options" style="display: none;">
+                        <div class="form-group">
+                            <label for="recurrencePattern">Recurrence Pattern</label>
+                            <select id="recurrencePattern" name="recurrence_pattern" onchange="updateRecurrenceDescription()">
+                                <option value="">Select pattern...</option>
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="biweekly">Every 2 weeks</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="yearly">Yearly</option>
+                                <option value="weekdays">Weekdays (Mon-Fri)</option>
+                                <option value="custom">Custom</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group" id="customRruleGroup" style="display: none;">
+                            <label for="customRrule">Custom RRULE</label>
+                            <input type="text" id="customRrule" name="recurrence_rrule" placeholder="FREQ=WEEKLY;BYDAY=MO,WE,FR">
+                            <div class="help-text">Enter a valid RRULE string for custom recurrence</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="recurrenceEnd">End Recurrence</label>
+                            <select id="recurrenceEndType" onchange="toggleRecurrenceEnd()">
+                                <option value="never">Never</option>
+                                <option value="date">On Date</option>
+                                <option value="count">After Occurrences</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group" id="recurrenceEndDateGroup" style="display: none;">
+                            <label for="recurrenceEndDate">End Date</label>
+                            <input type="date" id="recurrenceEndDate" name="recurrence_end">
+                        </div>
+                        
+                        <div class="form-group" id="recurrenceCountGroup" style="display: none;">
+                            <label for="recurrenceCount">Number of Occurrences</label>
+                            <input type="number" id="recurrenceCount" min="1" max="365" placeholder="10">
+                        </div>
+                        
+                        <div id="recurrenceDescription" class="help-text" style="margin-top: 10px;">
+                            Select a pattern to see recurrence description
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeEventModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Create Event</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
     <!-- FullCalendar JS -->
     <script src='https://unpkg.com/fullcalendar@6.1.8/index.global.min.js'></script>
     
@@ -260,7 +707,7 @@
     // Initialize calendar when page loads
     document.addEventListener('DOMContentLoaded', function() {
         initializeCalendar();
-        loadTasks();
+        loadActiveTasks();
         checkHealth();
     });
     
@@ -275,6 +722,8 @@
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
+            // Make week view start with today at the left
+            firstDay: new Date().getDay(),
             slotMinTime: '07:00:00',
             slotMaxTime: '22:00:00',
             slotDuration: '00:20:00',
@@ -296,22 +745,35 @@
             
             // Handle date selection for new events
             select: function(info) {
-                const title = prompt('Event Title:');
-                if (title) {
-                    createEvent({
-                        title: title,
-                        start: info.startStr,
-                        end: info.endStr,
-                        is_blocking: confirm('Is this a blocking event? (blocks other tasks)')
-                    });
-                }
+                // Pre-fill the modal with selected time range
+                const startDate = new Date(info.start);
+                const endDate = new Date(info.end);
+                
+                // Format dates for datetime-local input
+                document.getElementById('eventStart').value = formatDateTimeLocal(startDate);
+                document.getElementById('eventEnd').value = formatDateTimeLocal(endDate);
+                
+                // Show modal
+                showAddEventModal();
                 calendar.unselect();
             },
             
-            // Handle event clicks for deletion
+            // Handle event clicks 
             eventClick: function(info) {
-                if (confirm('Delete "' + info.event.title + '"?')) {
-                    deleteEvent(info.event.id);
+                if (info.event.extendedProps.isTimePool) {
+                    // Handle time pool click - show pool details
+                    const poolData = info.event.extendedProps.poolData;
+                    const taskList = info.event.extendedProps.taskList;
+                    const weather = info.event.extendedProps.weather;
+                    
+                    const weatherInfo = weather.weather_condition ? 
+                        `Weather: ${weather.weather_condition} (${weather.temp_high}°F)` : 
+                        'Weather: Unknown';
+                    
+                    alert(`Time Pool Details:\\n\\n${info.event.title}\\n${weatherInfo}\\n\\nAssigned Tasks:\\n${taskList}`);
+                } else {
+                    // Handle regular event click - edit event
+                    window.location.href = `/events/${info.event.id}/edit`;
                 }
             },
             
@@ -328,28 +790,70 @@
                 console.error('Failed to load events:', error);
                 document.getElementById('health-status').textContent = '🔴 Connection Error';
                 document.getElementById('health-status').style.background = '#dc3545';
+            },
+            
+            // Custom event rendering to show task assignments
+            eventDidMount: function(info) {
+                // Only customize time pool events
+                if (info.event.extendedProps.isTimePool) {
+                    console.log('Processing time pool:', info.event.title);
+                    console.log('Task list:', info.event.extendedProps.taskList);
+                    
+                    // Add task list to the event element
+                    const taskList = info.event.extendedProps.taskList;
+                    if (taskList && taskList !== 'No tasks assigned') {
+                        // Find the title container within FullCalendar's structure
+                        const titleContainer = info.el.querySelector('.fc-event-title-container');
+                        console.log('Title container found:', !!titleContainer);
+                        
+                        if (titleContainer) {
+                            // Create a div for tasks that fits within FullCalendar's structure
+                            const tasksDiv = document.createElement('div');
+                            tasksDiv.style.fontSize = '9px';
+                            tasksDiv.style.lineHeight = '1.1';
+                            tasksDiv.style.color = '#000';
+                            tasksDiv.style.fontWeight = '400';
+                            tasksDiv.style.marginTop = '2px';
+                            tasksDiv.style.padding = '1px 0';
+                            tasksDiv.style.maxHeight = 'none';
+                            tasksDiv.style.overflow = 'visible';
+                            
+                            // Convert task list to simple text display
+                            const taskLines = taskList.split('\\n');
+                            console.log('Task lines:', taskLines);
+                            
+                            taskLines.forEach(line => {
+                                if (line.trim()) {
+                                    const taskLine = document.createElement('div');
+                                    taskLine.textContent = line.replace('• ', '');  // Remove bullet
+                                    taskLine.style.fontSize = '9px';
+                                    taskLine.style.color = '#000';
+                                    taskLine.style.fontWeight = '400';
+                                    taskLine.style.marginBottom = '1px';
+                                    tasksDiv.appendChild(taskLine);
+                                }
+                            });
+                            
+                            // Append to title container (inside FullCalendar's structure)
+                            titleContainer.appendChild(tasksDiv);
+                            console.log('Tasks div appended to title container');
+                        }
+                    } else {
+                        console.log('No tasks to display or empty task list');
+                    }
+                }
             }
         });
         
         calendar.render();
+        
+        // Load time pools after calendar is rendered
+        setTimeout(() => {
+            loadTimePoolsAsEvents();
+        }, 500);
     }
     
     // Event management functions
-    function createEvent(eventData) {
-        fetch('/api/events', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(eventData)
-        })
-        .then(response => response.json())
-        .then(event => {
-            calendar.addEvent(event);
-        })
-        .catch(error => {
-            console.error('Error creating event:', error);
-            alert('Failed to create event');
-        });
-    }
     
     function updateEvent(eventId, updates) {
         fetch(`/api/events/${eventId}`, {
@@ -376,25 +880,27 @@
         });
     }
     
-    // Task management functions
-    function loadTasks() {
+    // Active Tasks management functions
+    function loadActiveTasks() {
         fetch('/api/tasks')
             .then(response => response.json())
             .then(tasks => {
-                displayTasks(tasks);
+                // Filter to active tasks only and limit to 10
+                const activeTasks = tasks.filter(task => task.status === 'active' && !task.completed).slice(0, 10);
+                displayActiveTasks(activeTasks);
             })
             .catch(error => {
-                console.error('Error loading tasks:', error);
+                console.error('Error loading active tasks:', error);
                 document.getElementById('tasks-list').innerHTML = 
                     '<div style="color: #dc3545;">Failed to load tasks</div>';
             });
     }
     
-    function displayTasks(tasks) {
+    function displayActiveTasks(tasks) {
         const tasksList = document.getElementById('tasks-list');
         
         if (tasks.length === 0) {
-            tasksList.innerHTML = '<div style="color: #666; text-align: center; padding: 20px;">No active tasks</div>';
+            tasksList.innerHTML = '<div style="color: #666; text-align: center; padding: 20px;">No active tasks available</div>';
             return;
         }
         
@@ -402,7 +908,7 @@
             <div class="task-item">
                 <div class="task-title">${task.title}</div>
                 <div class="task-meta">
-                    ${task.duration} min | Priority: ${task.priority} | Urgency: ${task.urgency}/10
+                    ${task.duration || 'No duration'} min | Priority: ${task.priority || 'None'} | Urgency: ${task.urgency || 0}/10
                 </div>
                 ${task.description ? `<div style="margin-top: 5px; font-size: 0.9em; color: #666;">${task.description}</div>` : ''}
                 <button class="btn btn-success" onclick="completeTask('${task.id}')">Complete</button>
@@ -415,7 +921,7 @@
             method: 'POST'
         })
         .then(() => {
-            loadTasks(); // Refresh task list
+            loadActiveTasks(); // Refresh task list
         })
         .catch(error => {
             console.error('Error completing task:', error);
@@ -423,20 +929,238 @@
         });
     }
     
-    function showAddTaskModal() {
-        const title = prompt('Task Title:');
-        if (!title) return;
+    // Time Pools as Calendar Events
+    function loadTimePoolsAsEvents() {
+        const currentView = calendar.view;
+        const startDate = currentView.currentStart.toISOString().split('T')[0];
+        const endDate = currentView.currentEnd.toISOString().split('T')[0];
         
-        const duration = parseInt(prompt('Duration (minutes):', '30'));
-        const urgency = parseInt(prompt('Urgency (1-10):', '5'));
-        const description = prompt('Description (optional):') || '';
+        fetch(`/api/time-pools?start_date=${startDate}&end_date=${endDate}&include_weather=true`)
+            .then(response => response.json())
+            .then(data => {
+                addTimePoolsToCalendar(data.pools || []);
+            })
+            .catch(error => {
+                console.error('Error loading time pools for calendar:', error);
+            });
+    }
+    
+    function addTimePoolsToCalendar(pools) {
+        // Remove existing time pool events
+        const existingPools = calendar.getEvents().filter(event => event.extendedProps.isTimePool);
+        existingPools.forEach(event => event.remove());
+        
+        // Get existing regular events to check for conflicts
+        const regularEvents = calendar.getEvents().filter(event => !event.extendedProps.isTimePool);
+        
+        // Add new time pool events
+        pools.forEach(pool => {
+            const poolDate = pool.pool_date;
+            
+            // Parse start and end times properly
+            let startTime, endTime;
+            if (pool.start_time.includes('T')) {
+                // Full datetime format
+                startTime = pool.start_time.split('T')[1].substring(0, 5);
+                endTime = pool.end_time.split('T')[1].substring(0, 5);
+            } else {
+                // Time only format
+                startTime = pool.start_time.substring(0, 5);
+                endTime = pool.end_time.substring(0, 5);
+            }
+            
+            // Create start and end datetime strings
+            const startDateTime = `${poolDate}T${startTime}:00`;
+            const endDateTime = `${poolDate}T${endTime}:00`;
+            
+            // Check for conflicts with existing events
+            const poolStart = new Date(startDateTime);
+            const poolEnd = new Date(endDateTime);
+            
+            const hasConflicts = regularEvents.some(event => {
+                const eventStart = new Date(event.start);
+                const eventEnd = new Date(event.end);
+                
+                // Check if times overlap
+                return (poolStart < eventEnd && poolEnd > eventStart);
+            });
+            
+            // Determine color based on utilization and conflicts
+            const allocatedMinutes = pool.allocated_minutes || 0;
+            const totalMinutes = pool.total_minutes || 1;
+            const utilization = allocatedMinutes / totalMinutes;
+            
+            let backgroundColor, borderColor, textColor = '#333';
+            
+            if (hasConflicts) {
+                // Conflicted pools - muted colors
+                backgroundColor = '#f8f9fa';
+                borderColor = '#6c757d';
+                textColor = '#6c757d';
+            } else if (utilization >= 0.9) {
+                backgroundColor = '#ffe6e6'; // Light red for full
+                borderColor = '#dc3545';
+            } else if (utilization >= 0.5) {
+                backgroundColor = '#fff3cd'; // Light yellow for partial
+                borderColor = '#ffc107';
+            } else {
+                backgroundColor = '#e8f5e8'; // Light green for available
+                borderColor = '#28a745';
+            }
+            
+            // Build task list for display
+            const assignments = pool.assignments || [];
+            const taskList = assignments.length > 0 ? 
+                assignments.map(a => `• ${a.task_title} (${a.allocated_minutes}m)`).join('\\n') :
+                'No tasks assigned';
+            
+            // Weather information
+            const weather = pool.weather || {};
+            const weatherIcon = weather.weather_condition ? 
+                (weather.weather_condition.toLowerCase().includes('sun') ? '☀️' : 
+                 weather.weather_condition.toLowerCase().includes('rain') ? '🌧️' : 
+                 weather.weather_condition.toLowerCase().includes('cloud') ? '☁️' : '🌤️') : '';
+            
+            // Title shows conflict status
+            const conflictText = hasConflicts ? ' (Conflicts!)' : '';
+            const poolTitle = `${weatherIcon} Time Pool (${allocatedMinutes}/${totalMinutes}m)${conflictText}`;
+            
+            const poolEvent = {
+                id: `timepool-${pool.id}`,
+                title: poolTitle,
+                start: startDateTime,
+                end: endDateTime,
+                backgroundColor: backgroundColor,
+                borderColor: borderColor,
+                textColor: textColor,
+                extendedProps: {
+                    isTimePool: true,
+                    poolData: pool,
+                    taskList: taskList,
+                    weather: weather,
+                    hasConflicts: hasConflicts
+                },
+                display: 'block'
+            };
+            
+            calendar.addEvent(poolEvent);
+        });
+    }
+    
+    function showAddTaskModal() {
+        // Create proper task modal HTML (same as tasks.html)
+        const createModalHTML = `
+            <div id="create-task-modal" style="
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                background: rgba(0,0,0,0.7); z-index: 1100; display: flex; 
+                align-items: center; justify-content: center;
+            ">
+                <div style="
+                    background: white; width: 90%; max-width: 500px; 
+                    border-radius: 8px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                ">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                        <h2 style="margin: 0; color: #333;">Create New Task</h2>
+                        <button onclick="closeCreateTaskModal()" style="
+                            background: #dc3545; color: white; border: none; 
+                            border-radius: 4px; padding: 8px 12px; cursor: pointer;
+                        ">×</button>
+                    </div>
+                    
+                    <form id="create-task-form" onsubmit="submitTaskCreate(event)">
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Title *</label>
+                            <input type="text" id="create-title" required style="
+                                width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+                                box-sizing: border-box; font-size: 14px;
+                            ">
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Description</label>
+                            <textarea id="create-description" rows="3" style="
+                                width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+                                box-sizing: border-box; font-size: 14px; resize: vertical;
+                            "></textarea>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Duration (minutes) *</label>
+                                <input type="number" id="create-duration" value="30" required min="1" style="
+                                    width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+                                    box-sizing: border-box; font-size: 14px;
+                                ">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Urgency (1-10) *</label>
+                                <input type="number" id="create-urgency" value="5" required min="1" max="10" style="
+                                    width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+                                    box-sizing: border-box; font-size: 14px;
+                                ">
+                            </div>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Priority *</label>
+                                <select id="create-priority" required style="
+                                    width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+                                    box-sizing: border-box; font-size: 14px;
+                                ">
+                                    <option value="low">Low</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Due Date</label>
+                                <input type="date" id="create-due-date" style="
+                                    width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+                                    box-sizing: border-box; font-size: 14px;
+                                ">
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                            <button type="button" onclick="closeCreateTaskModal()" style="
+                                background: #6c757d; color: white; border: none; border-radius: 4px; 
+                                padding: 10px 20px; cursor: pointer; font-size: 14px;
+                            ">Cancel</button>
+                            <button type="submit" style="
+                                background: #007bff; color: white; border: none; border-radius: 4px; 
+                                padding: 10px 20px; cursor: pointer; font-size: 14px;
+                            ">Create Task</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        `;
+        
+        // Add modal to page
+        document.body.insertAdjacentHTML('beforeend', createModalHTML);
+        
+        // Focus on title input
+        document.getElementById('create-title').focus();
+    }
+    
+    function closeCreateTaskModal() {
+        const modal = document.getElementById('create-task-modal');
+        if (modal) {
+            modal.remove();
+        }
+    }
+    
+    function submitTaskCreate(event) {
+        event.preventDefault();
         
         const taskData = {
-            title: title,
-            duration: duration || 30,
-            urgency: urgency || 5,
-            description: description,
-            priority: urgency >= 8 ? 'high' : urgency >= 5 ? 'medium' : 'low'
+            title: document.getElementById('create-title').value,
+            description: document.getElementById('create-description').value,
+            duration: parseInt(document.getElementById('create-duration').value),
+            urgency: parseInt(document.getElementById('create-urgency').value),
+            priority: document.getElementById('create-priority').value,
+            due_date: document.getElementById('create-due-date').value || null
         };
         
         fetch('/api/tasks', {
@@ -446,6 +1170,7 @@
         })
         .then(response => response.json())
         .then(() => {
+            closeCreateTaskModal();
             loadTasks(); // Refresh task list
         })
         .catch(error => {
@@ -470,6 +1195,163 @@
     
     // Refresh health check every 30 seconds
     setInterval(checkHealth, 30000);
+    
+    // Modal functions
+    function showAddEventModal() {
+        document.getElementById('eventModal').style.display = 'block';
+        document.getElementById('eventForm').reset();
+        document.getElementById('eventTitle').focus();
+    }
+    
+    function closeEventModal() {
+        document.getElementById('eventModal').style.display = 'none';
+    }
+    
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        const modal = document.getElementById('eventModal');
+        if (event.target == modal) {
+            closeEventModal();
+        }
+    }
+    
+    // Format date for datetime-local input
+    function formatDateTimeLocal(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+    }
+    
+    // Submit event form
+    function submitEvent(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(e.target);
+        const eventData = {
+            title: formData.get('title'),
+            description: formData.get('description') || '',
+            location: formData.get('location') || '',
+            start: formData.get('start'),
+            end: formData.get('end'),
+            event_type: formData.get('event_type'),
+            is_blocking: formData.get('is_blocking') === 'on',
+            notifications_enabled: formData.get('notifications_enabled') === 'on',
+            is_recurring: formData.get('is_recurring') === 'on'
+        };
+        
+        // Handle recurring event data
+        if (eventData.is_recurring) {
+            const pattern = formData.get('recurrence_pattern');
+            if (pattern === 'custom') {
+                eventData.recurrence_rrule = formData.get('recurrence_rrule');
+            } else {
+                eventData.recurrence_pattern = pattern;
+                // Generate RRULE from pattern
+                eventData.recurrence_rrule = generateRruleFromPattern(pattern);
+            }
+            
+            // Handle recurrence end
+            const endType = document.getElementById('recurrenceEndType').value;
+            if (endType === 'date') {
+                eventData.recurrence_end = formData.get('recurrence_end');
+            } else if (endType === 'count') {
+                const count = document.getElementById('recurrenceCount').value;
+                if (count) {
+                    eventData.recurrence_rrule += `;COUNT=${count}`;
+                }
+            }
+        }
+        
+        // If all day event type is selected, adjust times
+        if (eventData.event_type === 'all_day') {
+            const startDate = new Date(eventData.start);
+            const endDate = new Date(eventData.end);
+            startDate.setHours(0, 0, 0, 0);
+            endDate.setHours(23, 59, 59, 999);
+            eventData.start = startDate.toISOString();
+            eventData.end = endDate.toISOString();
+        }
+        
+        fetch('/api/events', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(eventData)
+        })
+        .then(response => response.json())
+        .then(event => {
+            calendar.refetchEvents(); // Refresh all events
+            closeEventModal();
+        })
+        .catch(error => {
+            console.error('Error creating event:', error);
+            alert('Failed to create event');
+        });
+    }
+    
+    // Toggle recurring options visibility
+    function toggleRecurringOptions() {
+        const checkbox = document.getElementById('eventRecurring');
+        const options = document.getElementById('recurringOptions');
+        options.style.display = checkbox.checked ? 'block' : 'none';
+    }
+    
+    // Update recurrence description based on pattern
+    function updateRecurrenceDescription() {
+        const pattern = document.getElementById('recurrencePattern').value;
+        const description = document.getElementById('recurrenceDescription');
+        const customGroup = document.getElementById('customRruleGroup');
+        
+        customGroup.style.display = pattern === 'custom' ? 'block' : 'none';
+        
+        const descriptions = {
+            daily: 'Repeats every day',
+            weekly: 'Repeats every week on the same day',
+            biweekly: 'Repeats every 2 weeks on the same day',
+            monthly: 'Repeats every month on the same date',
+            yearly: 'Repeats every year on the same date',
+            weekdays: 'Repeats Monday through Friday',
+            custom: 'Enter custom recurrence rule'
+        };
+        
+        description.textContent = descriptions[pattern] || 'Select a pattern to see recurrence description';
+    }
+    
+    // Toggle recurrence end options
+    function toggleRecurrenceEnd() {
+        const endType = document.getElementById('recurrenceEndType').value;
+        document.getElementById('recurrenceEndDateGroup').style.display = endType === 'date' ? 'block' : 'none';
+        document.getElementById('recurrenceCountGroup').style.display = endType === 'count' ? 'block' : 'none';
+    }
+    
+    // Generate RRULE from pattern
+    function generateRruleFromPattern(pattern) {
+        const patterns = {
+            daily: 'FREQ=DAILY',
+            weekly: 'FREQ=WEEKLY',
+            biweekly: 'FREQ=WEEKLY;INTERVAL=2',
+            monthly: 'FREQ=MONTHLY',
+            yearly: 'FREQ=YEARLY',
+            weekdays: 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR'
+        };
+        return patterns[pattern] || '';
+    }
+    
+    // Handle event type change
+    document.getElementById('eventType').addEventListener('change', function(e) {
+        const startInput = document.getElementById('eventStart');
+        const endInput = document.getElementById('eventEnd');
+        
+        if (e.target.value === 'all_day') {
+            startInput.type = 'date';
+            endInput.type = 'date';
+        } else {
+            startInput.type = 'datetime-local';
+            endInput.type = 'datetime-local';
+        }
+    });
     </script>
 </body>
 </html>

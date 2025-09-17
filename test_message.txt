@@ -1,0 +1,10 @@
+📅 **Event Starting Now:**
+
+*Timekeeper Test Event*
+
+Testing the Timekeeper notification service
+
+📍 Location: Test Location
+⏱️ Duration: 30m
+🏁 Ends at: 12:14
+🏷️ Type: Meeting

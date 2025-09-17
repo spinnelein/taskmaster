@@ -1,0 +1,11 @@
+[2025-09-14T23:33:09.305Z] NETWORK| Failed: GET http://localhost:5175/phase2-demo - net::ERR_CONNECTION_REFUSED
+
+[ERROR] page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5175/phase2-demo
+Call log:
+[2m  - navigating to "http://localhost:5175/phase2-demo", waiting until "networkidle"[22m
+
+page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5175/phase2-demo
+Call log:
+[2m  - navigating to "http://localhost:5175/phase2-demo", waiting until "networkidle"[22m
+
+    at debugBrowser (C:\Users\Aaron\Documents\Python Scripts\Taskmaster\scripts\browser-debug.js:87:16)

@@ -37,4 +37,3 @@ echo.
 echo Ports 8000-8020 and 5173-5180 should now be available.
 echo You can run start.bat to restart the services.
 echo.
-pause

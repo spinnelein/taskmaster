@@ -1,0 +1,788 @@
+[2025-09-14T16:39:35.563Z] [INFO] Starting comprehensive UI test suite
+[2025-09-14T16:39:35.566Z] [INFO] Setting up browser context
+[2025-09-14T16:39:38.085Z] [INFO] 
+=== Starting Modal System Tests ===
+[2025-09-14T16:39:38.269Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:39:38.298Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:39:38.460Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:39:50.707Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:39:50.715Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:39:50.792Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:39:53.188Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:39:53.219Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:39:53.285Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:40:25.144Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:40:25.179Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:40:25.240Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:40:27.800Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:40:27.831Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:40:27.886Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:40:33.266Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:40:33.299Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:40:33.337Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:40:35.204Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:40:35.232Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:40:35.281Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:40:38.074Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:40:38.139Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:40:38.194Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:40:40.700Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:40:40.724Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:40:40.783Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:40:43.193Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:40:43.201Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:40:43.274Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:41:15.195Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:41:15.212Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:41:15.299Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:41:18.196Z] [INFO] 
+=== Starting Form Components Tests ===
+[2025-09-14T16:41:18.236Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:41:18.270Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:41:18.316Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:41:20.251Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:41:20.275Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:41:20.322Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:41:22.251Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:41:22.270Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:41:22.328Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:41:54.208Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:41:54.259Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:41:54.362Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:41:56.261Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:41:56.280Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:41:56.342Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:41:59.003Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:41:59.039Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:41:59.118Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:42:01.363Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:42:01.395Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:42:01.433Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:42:05.102Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:42:05.128Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:42:05.173Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:42:07.407Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:42:07.422Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:42:07.492Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:42:10.201Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:42:10.244Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:42:10.292Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:42:13.170Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:42:13.202Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:42:13.249Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:42:15.793Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:42:15.821Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:42:15.870Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:42:18.263Z] [INFO] 
+=== Starting Dashboard Widgets Tests ===
+[2025-09-14T16:42:18.307Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:42:18.341Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:42:18.392Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:42:18.663Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:42:18.676Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:42:19.392Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:42:19.405Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:42:19.475Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:42:19.644Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:42:19.656Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:42:25.303Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:42:25.324Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:42:25.376Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:42:25.896Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:42:25.908Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:42:25.930Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:42:25.936Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:42:31.640Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:42:31.668Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:42:31.727Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:42:31.917Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:42:31.931Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:42:34.671Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:42:34.710Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:42:34.771Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:42:34.954Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:42:34.965Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:42:36.884Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:42:36.912Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:42:36.966Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:42:37.163Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:42:37.175Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:42:40.812Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:42:40.844Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:42:40.888Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:42:41.087Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:42:41.102Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:42:44.768Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:42:44.776Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:42:44.952Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:42:45.121Z] [CONSOLE] CONSOLE ERROR: Failed to load counts: AxiosError
+[2025-09-14T16:42:45.122Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: net::ERR_FAILED
+[2025-09-14T16:42:45.125Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: net::ERR_FAILED
+[2025-09-14T16:42:45.126Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: AxiosError
+[2025-09-14T16:42:45.127Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: net::ERR_FAILED
+[2025-09-14T16:42:45.129Z] [CONSOLE] CONSOLE ERROR: Failed to load counts: AxiosError
+[2025-09-14T16:42:45.130Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: net::ERR_FAILED
+[2025-09-14T16:42:45.131Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: net::ERR_FAILED
+[2025-09-14T16:42:45.131Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: AxiosError
+[2025-09-14T16:42:45.132Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: net::ERR_FAILED
+[2025-09-14T16:42:52.828Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:42:52.859Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:42:52.908Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:42:53.164Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:42:53.185Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:42:55.823Z] [CONSOLE] CONSOLE LOG: Dashboard layout changed: {todays-focus: Object, calendar-snapshot: Object, project-progress: Object, quick-actions: Object, recent-activity: Object}
+[2025-09-14T16:42:55.825Z] [CONSOLE] CONSOLE LOG: Dashboard layout changed: {todays-focus: Object, calendar-snapshot: Object, project-progress: Object, quick-actions: Object, recent-activity: Object}
+[2025-09-14T16:42:56.889Z] [CONSOLE] CONSOLE LOG: Dashboard layout changed: {todays-focus: Object, calendar-snapshot: Object, project-progress: Object, quick-actions: Object, recent-activity: Object}
+[2025-09-14T16:42:56.890Z] [CONSOLE] CONSOLE LOG: Dashboard layout changed: {todays-focus: Object, calendar-snapshot: Object, project-progress: Object, quick-actions: Object, recent-activity: Object}
+[2025-09-14T16:42:57.955Z] [CONSOLE] CONSOLE LOG: Dashboard layout changed: {todays-focus: Object, calendar-snapshot: Object, project-progress: Object, quick-actions: Object, recent-activity: Object}
+[2025-09-14T16:42:57.957Z] [CONSOLE] CONSOLE LOG: Dashboard layout changed: {todays-focus: Object, calendar-snapshot: Object, project-progress: Object, quick-actions: Object, recent-activity: Object}
+[2025-09-14T16:42:59.092Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:42:59.172Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:42:59.214Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:42:59.407Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:42:59.418Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:00.266Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:43:00.289Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:43:00.345Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:43:00.516Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:00.527Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:01.260Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:43:01.291Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:43:01.341Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:43:01.506Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:01.518Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:02.258Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:43:02.281Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:43:02.352Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:43:02.545Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:02.589Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:03.263Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:43:03.288Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:43:03.347Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:43:03.522Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:03.537Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:04.119Z] [INFO] 
+=== Starting Command Palette Tests ===
+[2025-09-14T16:43:04.145Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:43:04.168Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:43:04.226Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:43:04.421Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:04.423Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:04.441Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:04.443Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:05.803Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:43:05.856Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:43:05.892Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:43:06.080Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:06.081Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:06.104Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:06.105Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:08.454Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:43:08.471Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:43:08.529Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:43:08.737Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:08.744Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:08.765Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:08.771Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:10.015Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:43:10.043Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:43:10.097Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:43:10.290Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:10.299Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:10.311Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:10.313Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:11.605Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:43:11.631Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:43:11.678Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:43:11.853Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:11.870Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:11.880Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:11.884Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:13.336Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:43:13.369Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:43:13.442Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:43:13.633Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:13.654Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:13.667Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:13.690Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:14.949Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:43:14.972Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:43:15.025Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:43:15.232Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:15.233Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:15.250Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:15.266Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:19.557Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:43:19.569Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:43:19.632Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:43:19.814Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:19.830Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:19.873Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:19.877Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:22.706Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:43:22.717Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:43:22.782Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:43:22.978Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:22.990Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:23.011Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:23.013Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:30.154Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:30.159Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:30.202Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:30.233Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:32.235Z] [INFO] 
+=== Starting Calendar Layers Tests ===
+[2025-09-14T16:43:32.279Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:43:32.307Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:43:32.364Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:43:32.669Z] [CONSOLE] CONSOLE WARNING: Failed to load tasks: TypeError: tasksResponse.filter is not a function
+    at http://localhost:5173/src/components/schedule/MultiLayerCalendar.jsx:89:46
+[2025-09-14T16:43:32.670Z] [CONSOLE] CONSOLE WARNING: Failed to load tasks: TypeError: tasksResponse.filter is not a function
+    at http://localhost:5173/src/components/schedule/MultiLayerCalendar.jsx:89:46
+[2025-09-14T16:43:33.354Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:43:33.372Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:43:33.447Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:43:33.758Z] [CONSOLE] CONSOLE WARNING: Failed to load tasks: TypeError: tasksResponse.filter is not a function
+    at http://localhost:5173/src/components/schedule/MultiLayerCalendar.jsx:89:46
+[2025-09-14T16:43:33.759Z] [CONSOLE] CONSOLE WARNING: Failed to load tasks: TypeError: tasksResponse.filter is not a function
+    at http://localhost:5173/src/components/schedule/MultiLayerCalendar.jsx:89:46
+[2025-09-14T16:43:36.211Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:43:36.265Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:43:36.324Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:43:36.614Z] [CONSOLE] CONSOLE WARNING: Failed to load tasks: TypeError: tasksResponse.filter is not a function
+    at http://localhost:5173/src/components/schedule/MultiLayerCalendar.jsx:89:46
+[2025-09-14T16:43:36.615Z] [CONSOLE] CONSOLE WARNING: Failed to load tasks: TypeError: tasksResponse.filter is not a function
+    at http://localhost:5173/src/components/schedule/MultiLayerCalendar.jsx:89:46
+[2025-09-14T16:43:37.899Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:43:37.915Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:43:37.976Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:43:38.272Z] [CONSOLE] CONSOLE WARNING: Failed to load tasks: TypeError: tasksResponse.filter is not a function
+    at http://localhost:5173/src/components/schedule/MultiLayerCalendar.jsx:89:46
+[2025-09-14T16:43:38.273Z] [CONSOLE] CONSOLE WARNING: Failed to load tasks: TypeError: tasksResponse.filter is not a function
+    at http://localhost:5173/src/components/schedule/MultiLayerCalendar.jsx:89:46
+[2025-09-14T16:43:40.892Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:43:40.920Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:43:40.965Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:43:41.278Z] [CONSOLE] CONSOLE WARNING: Failed to load tasks: TypeError: tasksResponse.filter is not a function
+    at http://localhost:5173/src/components/schedule/MultiLayerCalendar.jsx:89:46
+[2025-09-14T16:43:41.342Z] [CONSOLE] CONSOLE WARNING: Failed to load tasks: TypeError: tasksResponse.filter is not a function
+    at http://localhost:5173/src/components/schedule/MultiLayerCalendar.jsx:89:46
+[2025-09-14T16:43:43.928Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:43:43.971Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:43:44.040Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:43:44.322Z] [CONSOLE] CONSOLE WARNING: Failed to load tasks: TypeError: tasksResponse.filter is not a function
+    at http://localhost:5173/src/components/schedule/MultiLayerCalendar.jsx:89:46
+[2025-09-14T16:43:44.324Z] [CONSOLE] CONSOLE WARNING: Failed to load tasks: TypeError: tasksResponse.filter is not a function
+    at http://localhost:5173/src/components/schedule/MultiLayerCalendar.jsx:89:46
+[2025-09-14T16:43:48.144Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:43:48.173Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:43:48.229Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:43:48.494Z] [CONSOLE] CONSOLE WARNING: Failed to load tasks: TypeError: tasksResponse.filter is not a function
+    at http://localhost:5173/src/components/schedule/MultiLayerCalendar.jsx:89:46
+[2025-09-14T16:43:48.495Z] [CONSOLE] CONSOLE WARNING: Failed to load tasks: TypeError: tasksResponse.filter is not a function
+    at http://localhost:5173/src/components/schedule/MultiLayerCalendar.jsx:89:46
+[2025-09-14T16:43:50.229Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:43:50.239Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:43:50.304Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:43:50.610Z] [CONSOLE] CONSOLE WARNING: Failed to load tasks: TypeError: tasksResponse.filter is not a function
+    at http://localhost:5173/src/components/schedule/MultiLayerCalendar.jsx:89:46
+[2025-09-14T16:43:50.613Z] [CONSOLE] CONSOLE WARNING: Failed to load tasks: TypeError: tasksResponse.filter is not a function
+    at http://localhost:5173/src/components/schedule/MultiLayerCalendar.jsx:89:46
+[2025-09-14T16:43:51.167Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:43:51.179Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:43:51.270Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:43:51.552Z] [CONSOLE] CONSOLE WARNING: Failed to load tasks: TypeError: tasksResponse.filter is not a function
+    at http://localhost:5173/src/components/schedule/MultiLayerCalendar.jsx:89:46
+[2025-09-14T16:43:51.554Z] [CONSOLE] CONSOLE WARNING: Failed to load tasks: TypeError: tasksResponse.filter is not a function
+    at http://localhost:5173/src/components/schedule/MultiLayerCalendar.jsx:89:46
+[2025-09-14T16:43:54.186Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:43:54.206Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:43:54.261Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:43:54.559Z] [CONSOLE] CONSOLE WARNING: Failed to load tasks: TypeError: tasksResponse.filter is not a function
+    at http://localhost:5173/src/components/schedule/MultiLayerCalendar.jsx:89:46
+[2025-09-14T16:43:54.562Z] [CONSOLE] CONSOLE WARNING: Failed to load tasks: TypeError: tasksResponse.filter is not a function
+    at http://localhost:5173/src/components/schedule/MultiLayerCalendar.jsx:89:46
+[2025-09-14T16:43:57.353Z] [INFO] 
+=== Starting Notifications Tests ===
+[2025-09-14T16:43:57.383Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:43:57.416Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:43:57.489Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:43:57.724Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:43:57.736Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:44:00.466Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:44:00.488Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:44:00.544Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:44:00.742Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:44:00.754Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:44:01.371Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:44:01.395Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:44:01.434Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:44:01.623Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:44:01.635Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:44:02.260Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:44:02.270Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:44:02.335Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:44:02.555Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:44:02.566Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:44:03.198Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:44:03.220Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:44:03.270Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:44:03.487Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:44:03.501Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:44:04.164Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:44:04.193Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:44:04.238Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:44:04.455Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:44:04.468Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:44:05.098Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:44:05.129Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:44:05.178Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:44:05.391Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:44:05.400Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:44:22.694Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:44:22.731Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:44:22.797Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:44:23.027Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:44:23.063Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: TypeError: response.filter is not a function
+    at loadTasks (http://localhost:5173/src/components/dashboard/widgets/TodaysFocusWidget.jsx:34:38)
+[2025-09-14T16:44:23.692Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:44:23.706Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:44:23.798Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:44:24.668Z] [INFO] 
+=== Starting Integration Tests ===
+[2025-09-14T16:44:24.702Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:44:24.735Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:44:24.785Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:44:28.711Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:44:28.764Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:44:28.866Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:44:30.336Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:44:30.360Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:44:30.410Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:44:31.856Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:44:31.894Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:44:31.932Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:44:33.292Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:44:33.313Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:44:33.357Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:44:33.609Z] [CONSOLE] CONSOLE WARNING: Failed to load tasks: TypeError: tasksResponse.filter is not a function
+    at http://localhost:5173/src/components/schedule/MultiLayerCalendar.jsx:89:46
+[2025-09-14T16:44:33.611Z] [CONSOLE] CONSOLE WARNING: Failed to load tasks: TypeError: tasksResponse.filter is not a function
+    at http://localhost:5173/src/components/schedule/MultiLayerCalendar.jsx:89:46
+[2025-09-14T16:44:34.761Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:44:34.795Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:44:34.838Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:44:36.142Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:44:36.188Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:44:36.218Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:44:36.349Z] [WARNING] HTTP 500: http://localhost:8000/api/projects/
+[2025-09-14T16:44:36.350Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+[2025-09-14T16:44:36.352Z] [CONSOLE] CONSOLE ERROR: Server error
+[2025-09-14T16:44:36.355Z] [CONSOLE] CONSOLE ERROR: Error loading projects: AxiosError
+[2025-09-14T16:44:36.359Z] [WARNING] HTTP 500: http://localhost:8000/api/projects/
+[2025-09-14T16:44:36.360Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+[2025-09-14T16:44:36.362Z] [CONSOLE] CONSOLE ERROR: Server error
+[2025-09-14T16:44:36.362Z] [CONSOLE] CONSOLE ERROR: Error loading projects: AxiosError
+[2025-09-14T16:44:37.515Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:44:37.538Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:44:37.582Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:44:38.859Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:44:38.892Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:44:38.932Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:44:39.254Z] [CONSOLE] CONSOLE WARNING: Failed to load tasks: TypeError: tasksResponse.filter is not a function
+    at http://localhost:5173/src/components/schedule/MultiLayerCalendar.jsx:89:46
+[2025-09-14T16:44:39.255Z] [CONSOLE] CONSOLE WARNING: Failed to load tasks: TypeError: tasksResponse.filter is not a function
+    at http://localhost:5173/src/components/schedule/MultiLayerCalendar.jsx:89:46
+[2025-09-14T16:44:40.423Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:44:40.446Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:44:40.506Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:44:41.930Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:44:41.962Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:44:42.008Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:44:42.782Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:44:42.808Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:44:42.850Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:44:43.722Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:44:43.760Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:44:43.799Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:44:49.899Z] [CONSOLE] CONSOLE DEBUG: [vite] hot updated: /src/components/schedule/MultiLayerCalendar.jsx
+[2025-09-14T16:45:15.706Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:45:15.740Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:45:15.795Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:45:19.671Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:45:19.695Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:45:19.754Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:45:21.332Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:45:21.342Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:45:21.422Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:45:23.822Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:45:23.860Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:45:23.900Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:45:24.966Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:45:24.994Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:45:25.044Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:45:27.209Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:45:27.228Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:45:27.285Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:45:28.355Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:45:28.376Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:45:28.423Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:45:28.455Z] [CONSOLE] CONSOLE WARNING: No routes matched location "/nonexistent-page-1757868328324" 
+[2025-09-14T16:45:28.457Z] [CONSOLE] CONSOLE WARNING: No routes matched location "/nonexistent-page-1757868328324" 
+[2025-09-14T16:45:29.040Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:45:29.047Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:45:29.256Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:45:29.319Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: net::ERR_FAILED
+[2025-09-14T16:45:29.335Z] [CONSOLE] CONSOLE ERROR: Failed to load counts: AxiosError
+[2025-09-14T16:45:29.336Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: net::ERR_FAILED
+[2025-09-14T16:45:29.337Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: net::ERR_FAILED
+[2025-09-14T16:45:29.338Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: AxiosError
+[2025-09-14T16:45:29.339Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: net::ERR_FAILED
+[2025-09-14T16:45:29.340Z] [CONSOLE] CONSOLE ERROR: Failed to load counts: AxiosError
+[2025-09-14T16:45:29.340Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: net::ERR_FAILED
+[2025-09-14T16:45:29.341Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: net::ERR_FAILED
+[2025-09-14T16:45:29.341Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: AxiosError
+[2025-09-14T16:45:29.349Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: net::ERR_FAILED
+[2025-09-14T16:45:34.033Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T16:45:34.041Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T16:45:34.129Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T16:46:06.337Z] [INFO] 
+=== COMPREHENSIVE UI TEST RESULTS ===
+
+Execution Time: 390773ms
+Total Tests: 67
+Passed: 51
+Failed: 16  
+Skipped: 0
+Success Rate: 76.12%
+
+=== FAILED TESTS ===
+- Modal Opens Correctly: locator.waitFor: Timeout 3000ms exceeded.
+Call log:
+[2m  - waiting for locator('[data-testid="modal"], .modal, .modal-overlay') to be visible[22m
+
+- Modal Closing (Backdrop Click): locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('.modal-overlay, .modal').first()[22m
+
+- Focus Trap Functionality: Focus trap failed - focus moved outside modal
+- Form Accessibility: Modal element not found for accessibility testing
+- Form Validation: locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('button:has-text("Create"), button:has-text("Save"), button[type="submit"]').first()[22m
+[2m    - locator resolved to <button class="btn btn-primary btn-medium   w-full">Create New Task</button>[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <button type="button" class="duration-btn ">1.5h</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - <button type="button" class="duration-btn ">1.5h</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 100ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is not stable[22m
+[2m  - retrying click action[22m
+[2m    - waiting 100ms[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <button type="button" class="duration-btn ">45m</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m      - waiting 500ms[22m
+[2m    13 × waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <button type="button" class="duration-btn ">1.5h</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m       - waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <button type="button" class="duration-btn ">45m</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m       - waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <div class="modal-header">…</div> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m       - waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <div class="modal-header">…</div> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - <button type="button" class="duration-btn ">1.5h</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 500ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - <button type="button" class="duration-btn ">45m</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 500ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - <div class="modal-header">…</div> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 500ms[22m
+
+- TodaysFocus Widget: locator.waitFor: Timeout 5000ms exceeded.
+Call log:
+[2m  - waiting for locator('[data-testid*="todays-focus"], [data-testid*="focus"], .todays-focus-widget, :has-text("Today\'s Focus")').first() to be visible[22m
+
+- Widget API Integration: req.url is not a function
+- Search Functionality: locator.fill: Error: strict mode violation: locator('.command-palette input, .palette input, .search-input, input[placeholder*="search" i], input[placeholder*="command" i]') resolved to 2 elements:
+    1) <input type="text" class="search-input" placeholder="Search..."/> aka getByRole('textbox', { name: 'Search...', exact: true })
+    2) <input value="" type="text" autocomplete="off" spellcheck="false" class="command-input" placeholder="Type a command or search..."/> aka getByRole('textbox', { name: 'Type a command or search...' })
+
+Call log:
+[2m  - waiting for locator('.command-palette input, .palette input, .search-input, input[placeholder*="search" i], input[placeholder*="command" i]')[22m
+
+- Fuzzy Search: locator.fill: Error: strict mode violation: locator('.command-palette input, .palette input, .search-input, input[placeholder*="search" i]') resolved to 2 elements:
+    1) <input type="text" class="search-input" placeholder="Search..."/> aka getByRole('textbox', { name: 'Search...', exact: true })
+    2) <input value="" type="text" autocomplete="off" spellcheck="false" class="command-input" placeholder="Type a command or search..."/> aka getByRole('textbox', { name: 'Type a command or search...' })
+
+Call log:
+[2m  - waiting for locator('.command-palette input, .palette input, .search-input, input[placeholder*="search" i]')[22m
+
+- Navigation Commands: locator.fill: Error: strict mode violation: locator('.command-palette input, .palette input, .search-input') resolved to 2 elements:
+    1) <input type="text" class="search-input" placeholder="Search..."/> aka getByRole('textbox', { name: 'Search...', exact: true })
+    2) <input value="" type="text" autocomplete="off" spellcheck="false" class="command-input" placeholder="Type a command or search..."/> aka getByRole('textbox', { name: 'Type a command or search...' })
+
+Call log:
+[2m  - waiting for locator('.command-palette input, .palette input, .search-input')[22m
+
+- Focus Management: locator.fill: Error: strict mode violation: locator('.command-palette input, .palette input, .search-input') resolved to 2 elements:
+    1) <input type="text" class="search-input" placeholder="Search..."/> aka getByRole('textbox', { name: 'Search...', exact: true })
+    2) <input value="" type="text" autocomplete="off" spellcheck="false" class="command-input" placeholder="Type a command or search..."/> aka getByRole('textbox', { name: 'Type a command or search...' })
+
+Call log:
+[2m  - waiting for locator('.command-palette input, .palette input, .search-input')[22m
+
+- Task CRUD Integration: No create task button found on tasks page
+- Event CRUD Integration: No create event button found on events page
+- Modal to API Integration: locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('button:has-text("Create"), button:has-text("Save")').first()[22m
+[2m    - locator resolved to <button class="btn btn-primary btn-medium   w-full">Create New Task</button>[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <button type="button" class="duration-btn ">1.5h</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - <button type="button" class="duration-btn ">1.5h</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 100ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is not stable[22m
+[2m  - retrying click action[22m
+[2m    - waiting 100ms[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <button type="button" class="duration-btn ">45m</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m      - waiting 500ms[22m
+[2m    13 × waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <button type="button" class="duration-btn ">1.5h</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m       - waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <button type="button" class="duration-btn ">45m</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m       - waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <div class="modal-header">…</div> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m       - waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <div class="modal-header">…</div> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - <button type="button" class="duration-btn ">1.5h</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 500ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - <button type="button" class="duration-btn ">45m</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 500ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - <div class="modal-header">…</div> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 500ms[22m
+
+- Command Palette Navigation: locator.fill: Error: strict mode violation: locator('.command-palette input, .palette input, .search-input') resolved to 2 elements:
+    1) <input type="text" class="search-input" placeholder="Search..."/> aka getByRole('textbox', { name: 'Search...', exact: true })
+    2) <input value="" type="text" autocomplete="off" spellcheck="false" class="command-input" placeholder="Type a command or search..."/> aka getByRole('textbox', { name: 'Type a command or search...' })
+
+Call log:
+[2m  - waiting for locator('.command-palette input, .palette input, .search-input')[22m
+
+- Real User Workflow: page.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('a[href="/tasks"], button:has-text("Tasks"), .nav-tasks')[22m
+[2m    - locator resolved to 3 elements. Proceeding with the first one: <a title="" href="/tasks" class="menu-item " data-discover="true">…</a>[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - element is outside of the viewport[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - element is outside of the viewport[22m
+[2m    - retrying click action[22m
+[2m      - waiting 100ms[22m
+[2m    57 × waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - element is outside of the viewport[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+
+
+=== ERRORS ENCOUNTERED ===
+
+
+Full logs: C:\Users\Aaron\Documents\Python Scripts\Taskmaster\logs\comprehensive-test-1757867975563.log
+
+[2025-09-14T16:46:06.342Z] [INFO] Detailed report saved: C:\Users\Aaron\Documents\Python Scripts\Taskmaster\logs\test-report-1757868366339.txt

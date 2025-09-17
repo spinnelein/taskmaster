@@ -1,0 +1,19 @@
+[2025-09-15T15:26:52.065Z] INFO    | Testing series management integration...
+[2025-09-15T15:26:52.067Z] INFO    | Navigating to schedule page...
+[2025-09-15T15:26:52.194Z] CONSOLE | DEBUG: [vite] connecting...
+[2025-09-15T15:26:52.511Z] CONSOLE | DEBUG: [vite] connected.
+[2025-09-15T15:26:53.894Z] CONSOLE | INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-15T15:26:56.428Z] CONSOLE | ERROR: Failed to load counts: AxiosError
+[2025-09-15T15:26:56.429Z] CONSOLE | ERROR: Failed to load resource: net::ERR_CONNECTION_REFUSED
+[2025-09-15T15:26:56.429Z] CONSOLE | ERROR: Failed to load resource: net::ERR_CONNECTION_REFUSED
+[2025-09-15T15:26:56.690Z] CONSOLE | ERROR: Failed to load counts: AxiosError
+[2025-09-15T15:26:56.690Z] CONSOLE | ERROR: Failed to load resource: net::ERR_CONNECTION_REFUSED
+[2025-09-15T15:26:58.779Z] CONSOLE | ERROR: Failed to load events: AxiosError
+[2025-09-15T15:26:58.780Z] CONSOLE | ERROR: Failed to load resource: net::ERR_CONNECTION_REFUSED
+[2025-09-15T15:27:01.138Z] CONSOLE | ERROR: Failed to load resource: net::ERR_CONNECTION_REFUSED
+[2025-09-15T15:27:01.401Z] CONSOLE | ERROR: Failed to load events: AxiosError
+[2025-09-15T15:27:01.402Z] CONSOLE | ERROR: Failed to load resource: net::ERR_CONNECTION_REFUSED
+[2025-09-15T15:27:01.912Z] INFO    | Waiting for events to load...
+[2025-09-15T15:27:05.153Z] INFO    | Screenshot saved: series-calendar-loaded.png
+[2025-09-15T15:27:05.161Z] INFO    | Found 0 events on calendar
+[2025-09-15T15:27:05.161Z] SUCCESS | Series management test completed

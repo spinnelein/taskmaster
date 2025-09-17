@@ -1,0 +1,19 @@
+[2025-09-16T01:15:13.717Z] HTTP   | 200 http://localhost:5000/
+[2025-09-16T01:15:13.864Z] NETWORK| Failed: GET https://unpkg.com/fullcalendar@6.1.8/index.global.min.css - net::ERR_BLOCKED_BY_ORB
+[2025-09-16T01:15:13.894Z] HTTP   | 200 https://unpkg.com/fullcalendar@6.1.8/index.global.min.js
+[2025-09-16T01:15:14.005Z] HTTP   | 200 http://localhost:5000/api/events?start=2025-09-14T00%3A00%3A00-07%3A00&end=2025-09-21T00%3A00%3A00-07%3A00
+[2025-09-16T01:15:14.232Z] HTTP   | 200 http://localhost:5000/api/tasks
+[2025-09-16T01:15:14.274Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T01:15:14.279Z] ERROR   | Failed to load resource: the server responded with a status of 404 (NOT FOUND)
+[2025-09-16T01:15:14.959Z] HTTP   | 200 http://localhost:5000/api/events
+[2025-09-16T01:15:15.281Z] HTTP   | 200 http://localhost:5000/api/tasks
+[2025-09-16T01:15:15.528Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T01:15:15.626Z] HTTP   | 200 http://localhost:5000/api/events
+[2025-09-16T01:15:37.269Z] HTTP   | 200 http://localhost:5000/api/events?start=2025-08-31T00%3A00%3A00-07%3A00&end=2025-10-12T00%3A00%3A00-07%3A00
+[2025-09-16T01:15:40.139Z] HTTP   | 308 http://localhost:5000/events
+[2025-09-16T01:15:40.542Z] HTTP   | 500 http://localhost:5000/events/
+[2025-09-16T01:15:40.545Z] ERROR   | Failed to load resource: the server responded with a status of 500 (INTERNAL SERVER ERROR)
+[2025-09-16T01:15:40.737Z] HTTP   | 200 http://localhost:5000/events/?__debugger__=yes&cmd=resource&f=style.css
+[2025-09-16T01:15:40.867Z] HTTP   | 200 http://localhost:5000/events/?__debugger__=yes&cmd=resource&f=debugger.js
+[2025-09-16T01:15:40.894Z] HTTP   | 200 http://localhost:5000/events/?__debugger__=yes&cmd=resource&f=console.png&s=Z2uil8ZyEbj8j7ceDY27
+[2025-09-16T01:15:41.204Z] HTTP   | 200 http://localhost:5000/events/?__debugger__=yes&cmd=resource&f=console.png

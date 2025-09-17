@@ -1,0 +1,10 @@
+
+[ERROR] page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL
+Call log:
+[2m  - navigating to "--head", waiting until "networkidle"[22m
+
+page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL
+Call log:
+[2m  - navigating to "--head", waiting until "networkidle"[22m
+
+    at debugBrowser (C:\Users\Aaron\Documents\Python Scripts\Taskmaster\scripts\browser-debug.js:87:16)

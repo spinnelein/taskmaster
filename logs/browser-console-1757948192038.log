@@ -1,0 +1,11 @@
+[2025-09-15T14:56:34.780Z] NETWORK| Failed: GET http://localhost:5173/schedule - net::ERR_CONNECTION_REFUSED
+
+[ERROR] page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/schedule
+Call log:
+[2m  - navigating to "http://localhost:5173/schedule", waiting until "networkidle"[22m
+
+page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/schedule
+Call log:
+[2m  - navigating to "http://localhost:5173/schedule", waiting until "networkidle"[22m
+
+    at debugBrowser (C:\Users\Aaron\Documents\Python Scripts\Taskmaster\scripts\browser-debug.js:87:16)

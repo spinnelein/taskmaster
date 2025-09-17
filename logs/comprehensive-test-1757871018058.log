@@ -1,0 +1,556 @@
+[2025-09-14T17:30:18.058Z] [INFO] Starting comprehensive UI test suite
+[2025-09-14T17:30:18.060Z] [INFO] Setting up browser context
+[2025-09-14T17:30:18.354Z] [INFO] 
+=== Starting Modal System Tests ===
+[2025-09-14T17:30:18.416Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:30:18.429Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:30:18.565Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:30:30.872Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:30:30.888Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:30:30.974Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:30:33.413Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:30:33.432Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:30:33.503Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:31:05.370Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:31:05.408Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:31:05.474Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:31:08.108Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:31:08.126Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:31:08.175Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:31:13.532Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:31:13.541Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:31:13.627Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:31:15.468Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:31:15.506Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:31:15.568Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:31:18.413Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:31:18.464Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:31:18.491Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:31:21.065Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:31:21.071Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:31:21.146Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:31:23.600Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:31:23.624Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:31:23.667Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:31:55.551Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:31:55.583Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:31:55.647Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:31:58.571Z] [INFO] 
+=== Starting Form Components Tests ===
+[2025-09-14T17:31:58.608Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:31:58.653Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:31:58.684Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:32:00.644Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:32:00.665Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:32:00.733Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:32:02.655Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:32:02.688Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:32:02.721Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:32:34.617Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:32:34.648Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:32:34.708Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:32:36.543Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:32:36.578Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:32:36.629Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:32:39.343Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:32:39.356Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:32:39.447Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:32:41.767Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:32:41.782Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:32:41.842Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:32:44.934Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:32:44.974Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:32:45.012Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:32:47.306Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:32:47.315Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:32:47.378Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:32:50.042Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:32:50.064Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:32:50.118Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:32:53.021Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:32:53.054Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:32:53.097Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:32:55.676Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:32:55.713Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:32:55.764Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:32:58.221Z] [INFO] 
+=== Starting Dashboard Widgets Tests ===
+[2025-09-14T17:32:58.263Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:32:58.282Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:32:58.350Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:32:59.374Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:32:59.408Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:32:59.451Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:33:02.387Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:33:02.408Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:33:02.517Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:33:05.399Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:33:05.415Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:33:05.474Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:33:07.616Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:33:07.649Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:33:07.680Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:33:11.501Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:33:11.527Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:33:11.580Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:33:15.465Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:33:15.492Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:33:15.662Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:33:15.857Z] [CONSOLE] CONSOLE ERROR: Failed to load counts: AxiosError
+[2025-09-14T17:33:15.859Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: net::ERR_FAILED
+[2025-09-14T17:33:15.860Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: net::ERR_FAILED
+[2025-09-14T17:33:15.862Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: AxiosError
+[2025-09-14T17:33:15.863Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: net::ERR_FAILED
+[2025-09-14T17:33:15.864Z] [CONSOLE] CONSOLE ERROR: Failed to load counts: AxiosError
+[2025-09-14T17:33:15.865Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: net::ERR_FAILED
+[2025-09-14T17:33:15.867Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: net::ERR_FAILED
+[2025-09-14T17:33:15.868Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: AxiosError
+[2025-09-14T17:33:15.868Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: net::ERR_FAILED
+[2025-09-14T17:33:19.956Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:33:19.979Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:33:20.038Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:33:23.138Z] [CONSOLE] CONSOLE LOG: Dashboard layout changed: {todays-focus: Object, calendar-snapshot: Object, project-progress: Object, quick-actions: Object, recent-activity: Object}
+[2025-09-14T17:33:23.139Z] [CONSOLE] CONSOLE LOG: Dashboard layout changed: {todays-focus: Object, calendar-snapshot: Object, project-progress: Object, quick-actions: Object, recent-activity: Object}
+[2025-09-14T17:33:24.201Z] [CONSOLE] CONSOLE LOG: Dashboard layout changed: {todays-focus: Object, calendar-snapshot: Object, project-progress: Object, quick-actions: Object, recent-activity: Object}
+[2025-09-14T17:33:24.202Z] [CONSOLE] CONSOLE LOG: Dashboard layout changed: {todays-focus: Object, calendar-snapshot: Object, project-progress: Object, quick-actions: Object, recent-activity: Object}
+[2025-09-14T17:33:25.268Z] [CONSOLE] CONSOLE LOG: Dashboard layout changed: {todays-focus: Object, calendar-snapshot: Object, project-progress: Object, quick-actions: Object, recent-activity: Object}
+[2025-09-14T17:33:25.269Z] [CONSOLE] CONSOLE LOG: Dashboard layout changed: {todays-focus: Object, calendar-snapshot: Object, project-progress: Object, quick-actions: Object, recent-activity: Object}
+[2025-09-14T17:33:26.464Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:33:26.493Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:33:26.522Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:33:27.603Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:33:27.615Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:33:27.680Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:33:28.665Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:33:28.698Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:33:28.754Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:33:29.741Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:33:29.756Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:33:29.827Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:33:30.816Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:33:30.817Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:33:30.907Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:33:31.780Z] [INFO] 
+=== Starting Command Palette Tests ===
+[2025-09-14T17:33:31.813Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:33:31.868Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:33:31.914Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:33:33.615Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:33:33.616Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:33:33.691Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:33:36.295Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:33:36.328Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:33:36.371Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:33:37.986Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:33:38.008Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:33:38.047Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:33:39.507Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:33:39.540Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:33:39.579Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:33:41.192Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:33:41.193Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:33:41.276Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:33:42.813Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:33:42.832Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:33:42.897Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:33:47.471Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:33:47.501Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:33:47.579Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:33:50.589Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:33:50.606Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:33:50.663Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:34:00.135Z] [INFO] 
+=== Starting Calendar Layers Tests ===
+[2025-09-14T17:34:00.173Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:34:00.210Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:34:00.265Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:34:01.290Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:34:01.302Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:34:01.357Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:34:04.188Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:34:04.197Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:34:04.271Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:34:05.882Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:34:05.917Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:34:05.971Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:34:08.918Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:34:08.938Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:34:08.998Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:34:12.042Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:34:12.076Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:34:12.122Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:34:16.164Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:34:16.193Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:34:16.232Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:34:18.240Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:34:18.275Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:34:18.317Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:34:19.236Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:34:19.263Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:34:19.313Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:34:22.252Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:34:22.269Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:34:22.329Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:34:25.371Z] [INFO] 
+=== Starting Notifications Tests ===
+[2025-09-14T17:34:25.435Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:34:25.440Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:34:25.550Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:34:28.438Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:34:28.453Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:34:28.525Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:34:29.372Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:34:29.395Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:34:29.456Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:34:30.273Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:34:30.309Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:34:30.342Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:34:31.200Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:34:31.238Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:34:31.284Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:34:32.103Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:34:32.145Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:34:32.184Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:34:33.035Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:34:33.070Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:34:33.113Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:34:50.603Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:34:50.664Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:34:50.705Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:34:51.585Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:34:51.612Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:34:51.663Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:34:52.526Z] [INFO] 
+=== Starting Integration Tests ===
+[2025-09-14T17:34:52.570Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:34:52.602Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:34:52.647Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:34:56.596Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:34:56.628Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:34:56.671Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:34:58.130Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:34:58.164Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:34:58.208Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:34:59.490Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:34:59.509Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:34:59.570Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:35:00.902Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:35:00.933Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:35:00.978Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:35:02.417Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:35:02.432Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:35:02.483Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:35:03.795Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:35:03.814Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:35:03.891Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:35:05.190Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:35:05.212Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:35:05.266Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:35:06.589Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:35:06.605Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:35:06.663Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:35:08.110Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:35:08.142Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:35:08.185Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:35:09.689Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:35:09.721Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:35:09.766Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:35:10.668Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:35:10.699Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:35:10.732Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:35:11.597Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:35:11.627Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:35:11.678Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:35:43.718Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:35:43.755Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:35:43.813Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:35:47.712Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:35:47.738Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:35:47.780Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:35:49.387Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:35:49.419Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:35:49.470Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:35:51.905Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:35:51.940Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:35:51.973Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:35:53.040Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:35:53.064Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:35:53.119Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:35:55.323Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:35:55.352Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:35:55.394Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:35:56.473Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:35:56.502Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:35:56.542Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:35:56.584Z] [CONSOLE] CONSOLE WARNING: No routes matched location "/nonexistent-page-1757871356443" 
+[2025-09-14T17:35:56.586Z] [CONSOLE] CONSOLE WARNING: No routes matched location "/nonexistent-page-1757871356443" 
+[2025-09-14T17:35:57.174Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:35:57.179Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:35:57.375Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:35:57.441Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: net::ERR_FAILED
+[2025-09-14T17:35:57.444Z] [CONSOLE] CONSOLE ERROR: Failed to load counts: AxiosError
+[2025-09-14T17:35:57.446Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: net::ERR_FAILED
+[2025-09-14T17:35:57.447Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: net::ERR_FAILED
+[2025-09-14T17:35:57.450Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: AxiosError
+[2025-09-14T17:35:57.451Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: net::ERR_FAILED
+[2025-09-14T17:35:57.452Z] [CONSOLE] CONSOLE ERROR: Failed to load counts: AxiosError
+[2025-09-14T17:35:57.453Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: net::ERR_FAILED
+[2025-09-14T17:35:57.455Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: net::ERR_FAILED
+[2025-09-14T17:35:57.457Z] [CONSOLE] CONSOLE ERROR: Failed to load tasks: AxiosError
+[2025-09-14T17:35:57.458Z] [CONSOLE] CONSOLE ERROR: Failed to load resource: net::ERR_FAILED
+[2025-09-14T17:36:02.249Z] [CONSOLE] CONSOLE DEBUG: [vite] connecting...
+[2025-09-14T17:36:02.287Z] [CONSOLE] CONSOLE DEBUG: [vite] connected.
+[2025-09-14T17:36:02.324Z] [CONSOLE] CONSOLE INFO: %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T17:36:34.493Z] [INFO] 
+=== COMPREHENSIVE UI TEST RESULTS ===
+
+Execution Time: 376434ms
+Total Tests: 67
+Passed: 52
+Failed: 15  
+Skipped: 0
+Success Rate: 77.61%
+
+=== FAILED TESTS ===
+- Modal Opens Correctly: locator.waitFor: Timeout 3000ms exceeded.
+Call log:
+[2m  - waiting for locator('[data-testid="modal"], .modal, .modal-overlay') to be visible[22m
+
+- Modal Closing (Backdrop Click): locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('.modal-overlay, .modal').first()[22m
+
+- Focus Trap Functionality: Focus trap failed - focus moved outside modal
+- Form Accessibility: Modal element not found for accessibility testing
+- Form Validation: locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('button:has-text("Create"), button:has-text("Save"), button[type="submit"]').first()[22m
+[2m    - locator resolved to <button class="btn btn-primary btn-medium   w-full">Create New Task</button>[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <button type="button" class="duration-btn ">1.5h</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - <button type="button" class="duration-btn ">1.5h</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 100ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is not stable[22m
+[2m  - retrying click action[22m
+[2m    - waiting 100ms[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <button type="button" class="duration-btn ">45m</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m      - waiting 500ms[22m
+[2m    13 × waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <button type="button" class="duration-btn ">1.5h</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m       - waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <button type="button" class="duration-btn ">45m</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m       - waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <div class="modal-header">…</div> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m       - waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <div class="modal-header">…</div> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - <button type="button" class="duration-btn ">1.5h</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 500ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - <button type="button" class="duration-btn ">45m</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 500ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - <div class="modal-header">…</div> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 500ms[22m
+
+- Widget API Integration: req.url is not a function
+- Search Functionality: locator.fill: Error: strict mode violation: locator('.command-palette input, .palette input, .search-input, input[placeholder*="search" i], input[placeholder*="command" i]') resolved to 2 elements:
+    1) <input type="text" class="search-input" placeholder="Search..."/> aka getByRole('textbox', { name: 'Search...', exact: true })
+    2) <input value="" type="text" autocomplete="off" spellcheck="false" class="command-input" placeholder="Type a command or search..."/> aka getByRole('textbox', { name: 'Type a command or search...' })
+
+Call log:
+[2m  - waiting for locator('.command-palette input, .palette input, .search-input, input[placeholder*="search" i], input[placeholder*="command" i]')[22m
+
+- Fuzzy Search: locator.fill: Error: strict mode violation: locator('.command-palette input, .palette input, .search-input, input[placeholder*="search" i]') resolved to 2 elements:
+    1) <input type="text" class="search-input" placeholder="Search..."/> aka getByRole('textbox', { name: 'Search...', exact: true })
+    2) <input value="" type="text" autocomplete="off" spellcheck="false" class="command-input" placeholder="Type a command or search..."/> aka getByRole('textbox', { name: 'Type a command or search...' })
+
+Call log:
+[2m  - waiting for locator('.command-palette input, .palette input, .search-input, input[placeholder*="search" i]')[22m
+
+- Navigation Commands: locator.fill: Error: strict mode violation: locator('.command-palette input, .palette input, .search-input') resolved to 2 elements:
+    1) <input type="text" class="search-input" placeholder="Search..."/> aka getByRole('textbox', { name: 'Search...', exact: true })
+    2) <input value="" type="text" autocomplete="off" spellcheck="false" class="command-input" placeholder="Type a command or search..."/> aka getByRole('textbox', { name: 'Type a command or search...' })
+
+Call log:
+[2m  - waiting for locator('.command-palette input, .palette input, .search-input')[22m
+
+- Focus Management: locator.fill: Error: strict mode violation: locator('.command-palette input, .palette input, .search-input') resolved to 2 elements:
+    1) <input type="text" class="search-input" placeholder="Search..."/> aka getByRole('textbox', { name: 'Search...', exact: true })
+    2) <input value="" type="text" autocomplete="off" spellcheck="false" class="command-input" placeholder="Type a command or search..."/> aka getByRole('textbox', { name: 'Type a command or search...' })
+
+Call log:
+[2m  - waiting for locator('.command-palette input, .palette input, .search-input')[22m
+
+- Task CRUD Integration: No create task button found on tasks page
+- Event CRUD Integration: No create event button found on events page
+- Modal to API Integration: locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('button:has-text("Create"), button:has-text("Save")').first()[22m
+[2m    - locator resolved to <button class="btn btn-primary btn-medium   w-full">Create New Task</button>[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <button type="button" class="duration-btn ">1.5h</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - <button type="button" class="duration-btn ">1.5h</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 100ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is not stable[22m
+[2m  - retrying click action[22m
+[2m    - waiting 100ms[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <button type="button" class="duration-btn ">45m</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m      - waiting 500ms[22m
+[2m    13 × waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <button type="button" class="duration-btn ">1.5h</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m       - waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <button type="button" class="duration-btn ">45m</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m       - waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <div class="modal-header">…</div> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m       - waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <div class="modal-header">…</div> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - <button type="button" class="duration-btn ">1.5h</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 500ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - <button type="button" class="duration-btn ">45m</button> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 500ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - <div class="modal-header">…</div> from <div class="modal-backdrop">…</div> subtree intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 500ms[22m
+
+- Command Palette Navigation: locator.fill: Error: strict mode violation: locator('.command-palette input, .palette input, .search-input') resolved to 2 elements:
+    1) <input type="text" class="search-input" placeholder="Search..."/> aka getByRole('textbox', { name: 'Search...', exact: true })
+    2) <input value="" type="text" autocomplete="off" spellcheck="false" class="command-input" placeholder="Type a command or search..."/> aka getByRole('textbox', { name: 'Type a command or search...' })
+
+Call log:
+[2m  - waiting for locator('.command-palette input, .palette input, .search-input')[22m
+
+- Real User Workflow: page.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('a[href="/tasks"], button:has-text("Tasks"), .nav-tasks')[22m
+[2m    - locator resolved to 3 elements. Proceeding with the first one: <a title="" href="/tasks" class="menu-item " data-discover="true">…</a>[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - element is outside of the viewport[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - element is outside of the viewport[22m
+[2m    - retrying click action[22m
+[2m      - waiting 100ms[22m
+[2m    57 × waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - element is outside of the viewport[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+
+
+=== ERRORS ENCOUNTERED ===
+
+
+Full logs: C:\Users\Aaron\Documents\Python Scripts\Taskmaster\logs\comprehensive-test-1757871018058.log
+
+[2025-09-14T17:36:34.496Z] [INFO] Detailed report saved: C:\Users\Aaron\Documents\Python Scripts\Taskmaster\logs\test-report-1757871394494.txt

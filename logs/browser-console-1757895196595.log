@@ -1,0 +1,485 @@
+[2025-09-15T00:13:16.797Z] DEBUG   | [vite] connecting...
+[2025-09-15T00:13:16.818Z] DEBUG   | [vite] connected.
+[2025-09-15T00:13:16.886Z] INFO    | %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-15T00:13:16.989Z] LOG     | MultiLayerCalendar: Loading events for date: 2025-09-14
+[2025-09-15T00:13:16.992Z] LOG     | MultiLayerCalendar: Loading events for date: 2025-09-14
+[2025-09-15T00:13:16.934Z] LOG     | MultiLayerCalendar layerData: {events: Array(0), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(0)}
+  {
+    "events": [],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": []
+  }
+[2025-09-15T00:13:16.935Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-15T00:13:16.936Z] LOG     | MultiLayerCalendar layerData: {events: Array(0), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(0)}
+  {
+    "events": [],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": []
+  }
+[2025-09-15T00:13:16.937Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-15T00:13:17.001Z] LOG     | MultiLayerCalendar layerData: {events: Array(0), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(0)}
+  {
+    "events": [],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": []
+  }
+[2025-09-15T00:13:17.002Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-15T00:13:17.002Z] LOG     | MultiLayerCalendar layerData: {events: Array(0), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(0)}
+  {
+    "events": [],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": []
+  }
+[2025-09-15T00:13:17.003Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-15T00:13:17.321Z] LOG     | MultiLayerCalendar: API events count: 1
+[2025-09-15T00:13:17.320Z] LOG     | MultiLayerCalendar: Events response: {events: Array(1), total: 1}
+  {
+    "events": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "created_at": "2025-09-13T02:33:09.976831",
+        "updated_at": "2025-09-14T16:00:06.253377",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "is_blocking": true,
+        "location": null,
+        "description": "",
+        "notifications_enabled": true,
+        "is_recurring": false,
+        "recurrence_pattern": null,
+        "recurrence_master_id": null,
+        "is_recurrence_master": null,
+        "is_recurrence_exception": null,
+        "recurrence_instance_date": null
+      }
+    ],
+    "total": 1
+  }
+[2025-09-15T00:13:17.323Z] LOG     | MultiLayerCalendar: Transformed events: [Object]
+  [
+    {
+      "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+      "title": "Test Daily Recurring",
+      "start_time": "2025-09-14T09:00:00",
+      "end_time": "2025-09-14T09:15:00",
+      "type": "events",
+      "layer": "personal",
+      "location": null,
+      "description": "",
+      "is_blocking": true,
+      "color": "#8b5cf6"
+    }
+  ]
+[2025-09-15T00:13:17.324Z] LOG     | MultiLayerCalendar layerData: {events: Array(1), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(1)}
+  {
+    "events": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ]
+  }
+[2025-09-15T00:13:17.325Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-15T00:13:17.353Z] LOG     | MultiLayerCalendar: API events count: 1
+[2025-09-15T00:13:17.328Z] LOG     | MultiLayerCalendar layerData: {events: Array(1), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(1)}
+  {
+    "events": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ]
+  }
+[2025-09-15T00:13:17.328Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-15T00:13:17.352Z] LOG     | MultiLayerCalendar: Events response: {events: Array(1), total: 1}
+  {
+    "events": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "created_at": "2025-09-13T02:33:09.976831",
+        "updated_at": "2025-09-14T16:00:06.253377",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "is_blocking": true,
+        "location": null,
+        "description": "",
+        "notifications_enabled": true,
+        "is_recurring": false,
+        "recurrence_pattern": null,
+        "recurrence_master_id": null,
+        "is_recurrence_master": null,
+        "is_recurrence_exception": null,
+        "recurrence_instance_date": null
+      }
+    ],
+    "total": 1
+  }
+[2025-09-15T00:13:17.353Z] LOG     | MultiLayerCalendar: Transformed events: [Object]
+  [
+    {
+      "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+      "title": "Test Daily Recurring",
+      "start_time": "2025-09-14T09:00:00",
+      "end_time": "2025-09-14T09:15:00",
+      "type": "events",
+      "layer": "personal",
+      "location": null,
+      "description": "",
+      "is_blocking": true,
+      "color": "#8b5cf6"
+    }
+  ]
+[2025-09-15T00:13:17.358Z] LOG     | MultiLayerCalendar layerData: {events: Array(1), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(1)}
+  {
+    "events": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ]
+  }
+[2025-09-15T00:13:17.358Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-15T00:13:17.359Z] LOG     | MultiLayerCalendar layerData: {events: Array(1), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(1)}
+  {
+    "events": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ]
+  }
+[2025-09-15T00:13:17.359Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-15T00:13:17.374Z] LOG     | MultiLayerCalendar layerData: {events: Array(1), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(1)}
+  {
+    "events": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ]
+  }
+[2025-09-15T00:13:17.375Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-15T00:13:17.376Z] LOG     | MultiLayerCalendar layerData: {events: Array(1), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(1)}
+  {
+    "events": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ]
+  }
+[2025-09-15T00:13:17.376Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-15T00:13:17.392Z] LOG     | MultiLayerCalendar layerData: {events: Array(1), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(1)}
+  {
+    "events": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ]
+  }
+[2025-09-15T00:13:17.392Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-15T00:13:17.393Z] LOG     | MultiLayerCalendar layerData: {events: Array(1), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(1)}
+  {
+    "events": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ]
+  }
+[2025-09-15T00:13:17.393Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }

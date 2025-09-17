@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Frontend Integration</title>
+</head>
+<body>
+    <h1>Test Frontend Integration</h1>
+    <p>Testing the updated CalendarSnapshotWidget with runtime expansion:</p>
+    
+    <script>
+        // Test the expansion API directly from frontend perspective
+        async function testExpansionAPI() {
+            try {
+                console.log('Testing expansion API...');
+                
+                // Test getting master events
+                const eventsResponse = await fetch('http://localhost:8000/api/events');
+                const eventsData = await eventsResponse.json();
+                console.log(`Found ${eventsData.total} master events`);
+                
+                // Find a recurring event
+                const recurringEvent = eventsData.events.find(e => e.is_recurring);
+                if (!recurringEvent) {
+                    console.log('No recurring events found');
+                    return;
+                }
+                
+                console.log(`Testing expansion for: ${recurringEvent.title}`);
+                
+                // Test expansion
+                const today = new Date().toISOString().split('T')[0];
+                const nextWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+                
+                const expansionResponse = await fetch(
+                    `http://localhost:8000/api/events/expand/${recurringEvent.id}?start_date=${today}&end_date=${nextWeek}&max_occurrences=10`
+                );
+                const expansionData = await expansionResponse.json();
+                
+                console.log(`Generated ${expansionData.total_occurrences} occurrences:`);
+                expansionData.occurrences.forEach((occ, i) => {
+                    console.log(`  ${i+1}. ${occ.occurrence_date} - ${occ.title}`);
+                });
+                
+                document.getElementById('results').innerHTML = `
+                    <h3>Success!</h3>
+                    <p>Frontend can successfully call the expansion API:</p>
+                    <ul>
+                        <li>Master events: ${eventsData.total}</li>
+                        <li>Test event: ${recurringEvent.title}</li>
+                        <li>Generated occurrences: ${expansionData.total_occurrences}</li>
+                        <li>Date range: ${today} to ${nextWeek}</li>
+                    </ul>
+                    <h4>Sample occurrences:</h4>
+                    <ul>
+                        ${expansionData.occurrences.slice(0, 3).map(occ => 
+                            `<li>${occ.occurrence_date} at ${occ.start.split('T')[1].substring(0,5)} - ${occ.title}</li>`
+                        ).join('')}
+                    </ul>
+                `;
+                
+            } catch (error) {
+                console.error('Test failed:', error);
+                document.getElementById('results').innerHTML = `
+                    <h3>Error</h3>
+                    <p>Test failed: ${error.message}</p>
+                `;
+            }
+        }
+        
+        // Run test when page loads
+        window.onload = testExpansionAPI;
+    </script>
+    
+    <div id="results">Testing...</div>
+    
+    <p>Check browser console for detailed logs.</p>
+    
+    <h2>Frontend Integration Status</h2>
+    <ul>
+        <li>✅ Backend runtime expansion working</li>
+        <li>✅ API endpoint accessible from frontend</li>
+        <li>✅ Event service updated with getEventOccurrences()</li>
+        <li>✅ CalendarSnapshotWidget updated to use expansion</li>
+        <li>⏳ Testing full integration...</li>
+    </ul>
+</body>
+</html>

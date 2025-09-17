@@ -1,0 +1,12 @@
+[2025-09-16T05:18:01.549Z] NETWORK| Failed: GET http://localhost:5175/ui-demo - net::ERR_CONNECTION_REFUSED
+
+[ERROR] page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5175/ui-demo
+Call log:
+[2m  - navigating to "http://localhost:5175/ui-demo", waiting until "networkidle"[22m
+
+page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5175/ui-demo
+Call log:
+[2m  - navigating to "http://localhost:5175/ui-demo", waiting until "networkidle"[22m
+
+    at debugBrowser (C:\Users\Aaron\Documents\Python Scripts\Taskmaster\scripts\browser-debug.js:87:16)
+    at async testUIDemo (C:\Users\Aaron\Documents\Python Scripts\Taskmaster\scripts\test-ui-demo.js:84:21)

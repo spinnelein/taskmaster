@@ -1,0 +1,18 @@
+[2025-09-16T01:19:22.751Z] HTTP   | 200 http://localhost:5000/
+[2025-09-16T01:19:22.891Z] NETWORK| Failed: GET https://unpkg.com/fullcalendar@6.1.8/index.global.min.css - net::ERR_BLOCKED_BY_ORB
+[2025-09-16T01:19:22.914Z] HTTP   | 200 https://unpkg.com/fullcalendar@6.1.8/index.global.min.js
+[2025-09-16T01:19:22.990Z] HTTP   | 200 http://localhost:5000/api/events?start=2025-09-14T00%3A00%3A00-07%3A00&end=2025-09-21T00%3A00%3A00-07%3A00
+[2025-09-16T01:19:23.089Z] HTTP   | 200 http://localhost:5000/api/tasks
+[2025-09-16T01:19:23.259Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T01:19:23.289Z] ERROR   | Failed to load resource: the server responded with a status of 404 (NOT FOUND)
+[2025-09-16T01:19:23.947Z] HTTP   | 200 http://localhost:5000/api/events
+[2025-09-16T01:19:24.272Z] HTTP   | 200 http://localhost:5000/api/tasks
+[2025-09-16T01:19:24.516Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T01:19:24.615Z] HTTP   | 200 http://localhost:5000/api/events
+[2025-09-16T01:19:32.625Z] HTTP   | 200 http://localhost:5000/api/events?start=2025-08-31T00%3A00%3A00-07%3A00&end=2025-10-12T00%3A00%3A00-07%3A00
+[2025-09-16T01:19:35.464Z] HTTP   | 404 http://localhost:5000/events
+[2025-09-16T01:19:35.470Z] ERROR   | Failed to load resource: the server responded with a status of 404 (NOT FOUND)
+
+[ERROR] page.waitForTimeout: Target page, context or browser has been closed
+page.waitForTimeout: Target page, context or browser has been closed
+    at testFlaskApp (C:\Users\Aaron\Documents\Python Scripts\Taskmaster\scripts\test-flask-app.js:245:16)

@@ -1,0 +1,5 @@
+[2025-09-15T02:56:11.082Z] DEBUG   | [vite] connecting...
+[2025-09-15T02:56:11.097Z] DEBUG   | [vite] connected.
+[2025-09-15T02:56:11.325Z] HTTP   | 404 http://localhost:5174/src/components/schedule/MultiLayerCalendar.jsx?t=1757904889412
+[2025-09-15T02:56:11.326Z] ERROR   | Failed to load resource: the server responded with a status of 404 (Not Found)
+[2025-09-15T02:56:11.329Z] NETWORK| Failed: GET http://localhost:5174/src/components/schedule/MultiLayerCalendar.jsx?t=1757904889412 - net::ERR_ABORTED

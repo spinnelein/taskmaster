@@ -104,28 +104,58 @@
             margin-bottom: 15px;
             line-height: 1.4;
         }
-        .progress-section {
+        .tasks-section {
             margin-bottom: 15px;
         }
-        .progress-bar {
-            width: 100%;
-            height: 20px;
-            background: #e9ecef;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 8px;
+        .task-list {
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            background: #f8f9fa;
         }
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #28a745, #20c997);
-            transition: width 0.3s ease;
-            border-radius: 10px;
-        }
-        .progress-text {
+        .task-item {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e9ecef;
             font-size: 0.9em;
+        }
+        .task-item:last-child {
+            border-bottom: none;
+        }
+        .task-name {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 3px;
+        }
+        .task-details {
             color: #666;
+            font-size: 0.8em;
             display: flex;
-            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .task-detail {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .sleeping-task {
+            opacity: 0.7;
+            background: #f8f9fa;
+            border-left: 3px solid #ffc107;
+        }
+        .sleep-indicator {
+            background: #ffc107;
+            color: #333;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 0.7em;
+            margin-left: 8px;
+            font-weight: bold;
+        }
+        .no-tasks {
+            text-align: center;
+            color: #666;
+            padding: 20px;
+            font-style: italic;
         }
         .initiative-actions {
             display: flex;
@@ -234,6 +264,7 @@
                 <a href="/events">Events</a>
                 <a href="/tasks">Tasks</a>
                 <a href="/initiatives" class="active">Initiatives</a>
+                <a href="/projects">Projects</a>
             </div>
         </div>
         
@@ -257,8 +288,8 @@
                 <div class="stat-label">Completed</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="avg-progress">0%</div>
-                <div class="stat-label">Avg Progress</div>
+                <div class="stat-number" id="active-tasks-count">0</div>
+                <div class="stat-label">Active Tasks</div>
             </div>
         </div>
         
@@ -316,8 +347,19 @@
     }
     
     function createInitiativeHTML(initiative) {
-        const progress = initiative.progress_percentage || 0;
         const statusClass = initiative.status.toLowerCase();
+        const activeTasks = initiative.active_tasks || [];
+        
+        let tasksHTML = '';
+        if (activeTasks.length > 0) {
+            tasksHTML = `
+                <div class="task-list">
+                    ${activeTasks.map(task => createTaskItemHTML(task)).join('')}
+                </div>
+            `;
+        } else {
+            tasksHTML = '<div class="no-tasks">No active tasks</div>';
+        }
         
         return `
             <div class="initiative-card">
@@ -328,23 +370,15 @@
                 
                 ${initiative.description ? `<div class="initiative-description">${initiative.description}</div>` : ''}
                 
-                <div class="progress-section">
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: ${progress}%"></div>
-                    </div>
-                    <div class="progress-text">
-                        <span>${initiative.current_completion_count} / ${initiative.target_completion_count}</span>
-                        <span>${progress}%</span>
-                    </div>
+                <div class="tasks-section">
+                    <h4 style="margin: 0 0 10px 0; color: #555; font-size: 1em;">Active Tasks (${activeTasks.length})</h4>
+                    ${tasksHTML}
                 </div>
                 
                 <div class="initiative-actions">
                     ${initiative.status === 'ACTIVE' ? `
                         <button class="btn btn-success btn-sm" onclick="createTaskFromInitiative('${initiative.id}')">
                             Add Task
-                        </button>
-                        <button class="btn btn-sm" onclick="viewInitiativeTasks('${initiative.id}')">
-                            View Tasks (${initiative.task_count || 0})
                         </button>
                     ` : ''}
                     <button class="btn btn-sm" onclick="editInitiative('${initiative.id}')">Edit</button>
@@ -354,17 +388,56 @@
         `;
     }
     
+    function createTaskItemHTML(task) {
+        const sleepingClass = task.is_sleeping ? 'sleeping-task' : '';
+        const statusIndicator = task.is_sleeping ? '💤' : '✅';
+        
+        return `
+            <div class="task-item ${sleepingClass}">
+                <div class="task-name">
+                    ${statusIndicator} ${task.title}
+                    ${task.is_sleeping ? `<span class="sleep-indicator">Sleeping</span>` : ''}
+                </div>
+                <div class="task-details">
+                    <div class="task-detail">
+                        <span>Last completed:</span>
+                        <strong>${task.last_completed_display}</strong>
+                    </div>
+                    <div class="task-detail">
+                        <span>Frequency:</span>
+                        <strong>${task.frequency_display}</strong>
+                    </div>
+                    ${task.is_sleeping ? `
+                        <div class="task-detail">
+                            <span>Wakes up:</span>
+                            <strong>${task.wake_up_time}</strong>
+                        </div>
+                    ` : ''}
+                    ${task.due_date && !task.is_sleeping ? `
+                        <div class="task-detail">
+                            <span>Due:</span>
+                            <strong>${task.due_date}</strong>
+                        </div>
+                    ` : ''}
+                    <div class="task-detail">
+                        <span>Status:</span>
+                        <strong>${task.status_display}</strong>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+    
     function updateStats(initiatives) {
         const totalCount = initiatives.length;
         const activeCount = initiatives.filter(i => i.status === 'ACTIVE').length;
         const completedCount = initiatives.filter(i => i.status === 'COMPLETED').length;
-        const avgProgress = totalCount > 0 ? 
-            Math.round(initiatives.reduce((sum, i) => sum + (i.progress_percentage || 0), 0) / totalCount) : 0;
+        const activeTasksCount = initiatives.reduce((sum, i) => sum + (i.active_tasks || []).length, 0);
         
         document.getElementById('total-count').textContent = totalCount;
         document.getElementById('active-count').textContent = activeCount;
         document.getElementById('completed-count').textContent = completedCount;
-        document.getElementById('avg-progress').textContent = avgProgress + '%';
+        document.getElementById('active-tasks-count').textContent = activeTasksCount;
     }
     
     function incrementInitiative(initiativeId) {

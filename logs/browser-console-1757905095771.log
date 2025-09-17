@@ -1,0 +1,5 @@
+[2025-09-15T02:58:17.551Z] DEBUG   | [vite] connecting...
+[2025-09-15T02:58:17.621Z] DEBUG   | [vite] connected.
+[2025-09-15T02:58:19.021Z] HTTP   | 500 http://localhost:5175/src/pages/Phase2Demo.jsx
+[2025-09-15T02:58:19.022Z] ERROR   | Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+[2025-09-15T02:58:19.033Z] NETWORK| Failed: GET http://localhost:5175/src/pages/Phase2Demo.jsx - net::ERR_ABORTED

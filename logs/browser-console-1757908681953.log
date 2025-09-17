@@ -1,0 +1,20 @@
+[2025-09-15T03:58:02.607Z] DEBUG   | [vite] connecting...
+[2025-09-15T03:58:02.697Z] DEBUG   | [vite] connected.
+[2025-09-15T03:58:03.102Z] INFO    | %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-15T03:58:04.328Z] ERROR  | Cannot read properties of undefined (reading 'n')
+TypeError: Cannot read properties of undefined (reading 'n')
+    at parseOptions (http://localhost:5175/node_modules/.vite/deps/@fullcalendar_rrule.js?v=eda64313:1465:17)
+    at new RRule2 (http://localhost:5175/node_modules/.vite/deps/@fullcalendar_rrule.js?v=eda64313:2385:27)
+    at parseRRuleObject (http://localhost:5175/node_modules/.vite/deps/@fullcalendar_rrule.js?v=eda64313:2978:19)
+    at parseEventRRule (http://localhost:5175/node_modules/.vite/deps/@fullcalendar_rrule.js?v=eda64313:2940:15)
+    at Object.parse (http://localhost:5175/node_modules/.vite/deps/@fullcalendar_rrule.js?v=eda64313:2899:28)
+    at parseRecurring (http://localhost:5175/node_modules/.vite/deps/chunk-L2FPYQUQ.js?v=eda64313:3256:37)
+    at parseEvent (http://localhost:5175/node_modules/.vite/deps/chunk-L2FPYQUQ.js?v=eda64313:3329:22)
+    at parseEvents (http://localhost:5175/node_modules/.vite/deps/chunk-L2FPYQUQ.js?v=eda64313:3442:17)
+    at resetRawEvents (http://localhost:5175/node_modules/.vite/deps/chunk-L2FPYQUQ.js?v=eda64313:3695:23)
+    at reduceEventStore (http://localhost:5175/node_modules/.vite/deps/chunk-L2FPYQUQ.js?v=eda64313:3648:14)
+[2025-09-15T03:58:04.330Z] WARNING | %s
+
+%s
+ An error occurred in the <FullCalendar> component. Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.

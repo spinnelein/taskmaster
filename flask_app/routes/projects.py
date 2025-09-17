@@ -285,7 +285,7 @@ def get_phase_tasks(project_id, phase_id):
         (Task.phase_id == phase_id) & 
         (Task.project_id == project_id) &
         (Task.is_completed == False) &
-        ((Task.is_snoozed == False) | (Task.snoozed_until <= current_time))
+        ((Task.is_snoozed.is_(None)) | (Task.is_snoozed == False) | (Task.snoozed_until <= current_time))
     ).order_by(Task.created_at).all()
     
     # Auto-unsnooze tasks whose snooze period has ended

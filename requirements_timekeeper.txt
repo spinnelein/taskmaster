@@ -1,0 +1,17 @@
+# Minimal dependencies for Timekeeper service
+# Event notification service for Telegram
+
+# Telegram Bot API
+python-telegram-bot==20.6
+
+# Task scheduling
+APScheduler==3.10.4
+
+# Environment variables
+python-dotenv==1.0.0
+
+# HTTP client for API requests
+aiohttp==3.9.1
+
+# Note: sqlite3 is included with Python standard library
+# Note: asyncio, logging, datetime, pathlib are included with Python standard library

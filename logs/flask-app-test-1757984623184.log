@@ -1,0 +1,20 @@
+[2025-09-16T01:03:44.273Z] HTTP   | 200 http://localhost:5000/
+[2025-09-16T01:03:44.373Z] NETWORK| Failed: GET https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/main.min.css - net::ERR_BLOCKED_BY_ORB
+[2025-09-16T01:03:44.411Z] NETWORK| Failed: GET https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/main.min.js - net::ERR_BLOCKED_BY_ORB
+[2025-09-16T01:03:44.416Z] ERROR  | FullCalendar is not defined
+ReferenceError: FullCalendar is not defined
+    at initializeCalendar (http://localhost:5000/:183:9)
+    at HTMLDocument.<anonymous> (http://localhost:5000/:175:9)
+[2025-09-16T01:03:44.510Z] ERROR   | Failed to load resource: the server responded with a status of 404 (NOT FOUND)
+
+[ERROR] page.waitForSelector: Timeout 10000ms exceeded.
+Call log:
+[2m  - waiting for locator('#calendar') to be visible[22m
+[2m    24 × locator resolved to hidden <div id="calendar"></div>[22m
+
+page.waitForSelector: Timeout 10000ms exceeded.
+Call log:
+[2m  - waiting for locator('#calendar') to be visible[22m
+[2m    24 × locator resolved to hidden <div id="calendar"></div>[22m
+
+    at testFlaskApp (C:\Users\Aaron\Documents\Python Scripts\Taskmaster\scripts\test-flask-app.js:76:16)

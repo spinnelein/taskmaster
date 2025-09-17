@@ -1,0 +1,9 @@
+INFO:     Will watch for changes in these directories: ['C:\\Users\\Aaron\\Documents\\Python Scripts\\Taskmaster\\backend']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [40772] using WatchFiles
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\Aaron\anaconda3\Lib\multiprocessing\spawn.py", line 108, in spawn_main
+    source_process = _winapi.OpenProcess(
+                     ^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 87] The parameter is incorrect

@@ -1,0 +1,225 @@
+[2025-09-14T23:37:15.864Z] DEBUG   | [vite] connecting...
+[2025-09-14T23:37:15.878Z] DEBUG   | [vite] connected.
+[2025-09-14T23:37:15.974Z] INFO    | %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-14T23:37:16.192Z] LOG     | MultiLayerCalendar: Loading events for date: 2025-09-14
+[2025-09-14T23:37:16.197Z] LOG     | MultiLayerCalendar: Loading events for date: 2025-09-14
+[2025-09-14T23:37:16.054Z] LOG     | MultiLayerCalendar layerData: {events: Array(0), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(0)}
+  {
+    "events": [],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": []
+  }
+[2025-09-14T23:37:16.055Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-14T23:37:16.062Z] LOG     | MultiLayerCalendar layerData: {events: Array(0), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(0)}
+  {
+    "events": [],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": []
+  }
+[2025-09-14T23:37:16.063Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-14T23:37:16.215Z] LOG     | MultiLayerCalendar layerData: {events: Array(0), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(0)}
+  {
+    "events": [],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": []
+  }
+[2025-09-14T23:37:16.216Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-14T23:37:16.217Z] LOG     | MultiLayerCalendar layerData: {events: Array(0), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(0)}
+  {
+    "events": [],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": []
+  }
+[2025-09-14T23:37:16.217Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-14T23:37:18.568Z] NETWORK| Failed: GET http://localhost:8000/api/tasks - net::ERR_CONNECTION_REFUSED
+[2025-09-14T23:37:18.569Z] ERROR   | Failed to load resource: net::ERR_CONNECTION_REFUSED
+[2025-09-14T23:37:18.570Z] NETWORK| Failed: GET http://localhost:8000/api/events - net::ERR_CONNECTION_REFUSED
+[2025-09-14T23:37:18.570Z] ERROR   | Failed to load resource: net::ERR_CONNECTION_REFUSED
+[2025-09-14T23:37:18.571Z] NETWORK| Failed: GET http://localhost:8000/api/events/schedule?date=2025-09-14 - net::ERR_CONNECTION_REFUSED
+[2025-09-14T23:37:18.571Z] ERROR   | Failed to load resource: net::ERR_CONNECTION_REFUSED
+[2025-09-14T23:37:18.567Z] ERROR   | Failed to load counts: AxiosError
+  {
+    "name": "AxiosError"
+  }
+[2025-09-14T23:37:18.571Z] ERROR   | Failed to load calendar data: AxiosError
+  {
+    "name": "AxiosError"
+  }
+[2025-09-14T23:37:18.572Z] LOG     | MultiLayerCalendar layerData: {events: Array(0), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(0)}
+  {
+    "events": [],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": []
+  }
+[2025-09-14T23:37:18.572Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-14T23:37:18.572Z] LOG     | MultiLayerCalendar layerData: {events: Array(0), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(0)}
+  {
+    "events": [],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": []
+  }
+[2025-09-14T23:37:18.572Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-14T23:37:18.591Z] LOG     | MultiLayerCalendar layerData: {events: Array(0), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(0)}
+  {
+    "events": [],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": []
+  }
+[2025-09-14T23:37:18.591Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-14T23:37:18.591Z] LOG     | MultiLayerCalendar layerData: {events: Array(0), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(0)}
+  {
+    "events": [],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": []
+  }
+[2025-09-14T23:37:18.592Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-14T23:37:18.828Z] NETWORK| Failed: GET http://localhost:8000/api/tasks - net::ERR_CONNECTION_REFUSED
+[2025-09-14T23:37:18.829Z] ERROR   | Failed to load resource: net::ERR_CONNECTION_REFUSED
+[2025-09-14T23:37:18.828Z] ERROR   | Failed to load counts: AxiosError
+  {
+    "name": "AxiosError"
+  }
+[2025-09-14T23:37:20.924Z] NETWORK| Failed: GET http://localhost:8000/api/events - net::ERR_CONNECTION_REFUSED
+[2025-09-14T23:37:20.925Z] ERROR   | Failed to load resource: net::ERR_CONNECTION_REFUSED
+[2025-09-14T23:37:20.926Z] NETWORK| Failed: GET http://localhost:8000/api/events/schedule?date=2025-09-14 - net::ERR_CONNECTION_REFUSED
+[2025-09-14T23:37:20.927Z] ERROR   | Failed to load resource: net::ERR_CONNECTION_REFUSED
+[2025-09-14T23:37:20.926Z] ERROR   | Failed to load calendar data: AxiosError
+  {
+    "name": "AxiosError"
+  }
+[2025-09-14T23:37:20.930Z] LOG     | MultiLayerCalendar layerData: {events: Array(0), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(0)}
+  {
+    "events": [],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": []
+  }
+[2025-09-14T23:37:20.930Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-14T23:37:20.933Z] LOG     | MultiLayerCalendar layerData: {events: Array(0), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(0)}
+  {
+    "events": [],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": []
+  }
+[2025-09-14T23:37:20.933Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-14T23:37:20.939Z] LOG     | MultiLayerCalendar layerData: {events: Array(0), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(0)}
+  {
+    "events": [],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": []
+  }
+[2025-09-14T23:37:20.939Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-14T23:37:20.940Z] LOG     | MultiLayerCalendar layerData: {events: Array(0), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(0)}
+  {
+    "events": [],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": []
+  }
+[2025-09-14T23:37:20.940Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }

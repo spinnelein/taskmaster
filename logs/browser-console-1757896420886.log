@@ -1,0 +1,2149 @@
+[2025-09-15T00:33:41.365Z] DEBUG   | [vite] connecting...
+[2025-09-15T00:33:41.452Z] DEBUG   | [vite] connected.
+[2025-09-15T00:33:41.664Z] INFO    | %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-15T00:33:42.060Z] LOG     | MultiLayerCalendar: Loading events for date: 2025-09-14
+[2025-09-15T00:33:42.064Z] LOG     | MultiLayerCalendar: Loading events for date: 2025-09-14
+[2025-09-15T00:33:41.833Z] LOG     | MultiLayerCalendar layerData: {events: Array(0), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(0)}
+  {
+    "events": [],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": []
+  }
+[2025-09-15T00:33:41.835Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-15T00:33:41.843Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:41.844Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:41.845Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:41.851Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:41.852Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:41.853Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:41.854Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:41.862Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:41.863Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:41.864Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:41.864Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:41.865Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:41.866Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:41.867Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:41.868Z] LOG     | MultiLayerCalendar layerData: {events: Array(0), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(0)}
+  {
+    "events": [],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": []
+  }
+[2025-09-15T00:33:41.869Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-15T00:33:41.869Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:41.870Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:41.870Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:41.871Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:41.878Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:41.879Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:41.881Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:41.883Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:41.884Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:41.885Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:41.885Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:41.886Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:41.887Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:41.887Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.169Z] LOG     | MultiLayerCalendar layerData: {events: Array(0), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(0)}
+  {
+    "events": [],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": []
+  }
+[2025-09-15T00:33:42.169Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-15T00:33:42.170Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.170Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.171Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.171Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.171Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.172Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.172Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.181Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.182Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.183Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.184Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.184Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.185Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.186Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.187Z] LOG     | MultiLayerCalendar layerData: {events: Array(0), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(0)}
+  {
+    "events": [],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": []
+  }
+[2025-09-15T00:33:42.187Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-15T00:33:42.188Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.189Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.189Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.190Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.191Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.191Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.192Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.192Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.193Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.194Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.195Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.195Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.196Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.197Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.403Z] LOG     | MultiLayerCalendar: API events count: 1
+[2025-09-15T00:33:42.402Z] LOG     | MultiLayerCalendar: Events response: {events: Array(1), total: 1}
+  {
+    "events": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "created_at": "2025-09-13T02:33:09.976831",
+        "updated_at": "2025-09-14T16:00:06.253377",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "is_blocking": true,
+        "location": null,
+        "description": "",
+        "notifications_enabled": true,
+        "is_recurring": false,
+        "recurrence_pattern": null,
+        "recurrence_master_id": null,
+        "is_recurrence_master": null,
+        "is_recurrence_exception": null,
+        "recurrence_instance_date": null
+      }
+    ],
+    "total": 1
+  }
+[2025-09-15T00:33:42.406Z] LOG     | MultiLayerCalendar: Transformed events: [Object]
+  [
+    {
+      "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+      "title": "Test Daily Recurring",
+      "start_time": "2025-09-14T09:00:00",
+      "end_time": "2025-09-14T09:15:00",
+      "type": "events",
+      "layer": "personal",
+      "location": null,
+      "description": "",
+      "is_blocking": true,
+      "color": "#8b5cf6"
+    }
+  ]
+[2025-09-15T00:33:42.409Z] LOG     | MultiLayerCalendar layerData: {events: Array(1), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(1)}
+  {
+    "events": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ]
+  }
+[2025-09-15T00:33:42.410Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-15T00:33:42.413Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-14T07:00:00.000Z, isSame: true}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-14T07:00:00.000Z",
+    "isSame": true
+  }
+[2025-09-15T00:33:42.414Z] LOG     | Rendering events layer with items: [Object]
+  [
+    {
+      "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+      "title": "Test Daily Recurring",
+      "start_time": "2025-09-14T09:00:00",
+      "end_time": "2025-09-14T09:15:00",
+      "type": "events",
+      "layer": "personal",
+      "location": null,
+      "description": "",
+      "is_blocking": true,
+      "color": "#8b5cf6"
+    }
+  ]
+[2025-09-15T00:33:42.415Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-14T07:00:00.000Z, isSame: true}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-14T07:00:00.000Z",
+    "isSame": true
+  }
+[2025-09-15T00:33:42.416Z] LOG     | Rendering personal layer with items: [Object]
+  [
+    {
+      "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+      "title": "Test Daily Recurring",
+      "start_time": "2025-09-14T09:00:00",
+      "end_time": "2025-09-14T09:15:00",
+      "type": "events",
+      "layer": "personal",
+      "location": null,
+      "description": "",
+      "is_blocking": true,
+      "color": "#8b5cf6"
+    }
+  ]
+[2025-09-15T00:33:42.423Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-15T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-15T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.424Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.424Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-15T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-15T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.424Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.424Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-16T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-16T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.425Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.425Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-16T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-16T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.426Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.434Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-17T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-17T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.435Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.436Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-17T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-17T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.436Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.437Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-18T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-18T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.437Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.544Z] LOG     | MultiLayerCalendar: API events count: 1
+[2025-09-15T00:33:42.438Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-18T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-18T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.439Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.440Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-19T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-19T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.440Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.441Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-19T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-19T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.442Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.454Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-20T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-20T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.455Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.455Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-20T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-20T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.457Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.457Z] LOG     | MultiLayerCalendar layerData: {events: Array(1), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(1)}
+  {
+    "events": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ]
+  }
+[2025-09-15T00:33:42.458Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-15T00:33:42.459Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-14T07:00:00.000Z, isSame: true}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-14T07:00:00.000Z",
+    "isSame": true
+  }
+[2025-09-15T00:33:42.459Z] LOG     | Rendering events layer with items: [Object]
+  [
+    {
+      "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+      "title": "Test Daily Recurring",
+      "start_time": "2025-09-14T09:00:00",
+      "end_time": "2025-09-14T09:15:00",
+      "type": "events",
+      "layer": "personal",
+      "location": null,
+      "description": "",
+      "is_blocking": true,
+      "color": "#8b5cf6"
+    }
+  ]
+[2025-09-15T00:33:42.460Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-14T07:00:00.000Z, isSame: true}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-14T07:00:00.000Z",
+    "isSame": true
+  }
+[2025-09-15T00:33:42.461Z] LOG     | Rendering personal layer with items: [Object]
+  [
+    {
+      "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+      "title": "Test Daily Recurring",
+      "start_time": "2025-09-14T09:00:00",
+      "end_time": "2025-09-14T09:15:00",
+      "type": "events",
+      "layer": "personal",
+      "location": null,
+      "description": "",
+      "is_blocking": true,
+      "color": "#8b5cf6"
+    }
+  ]
+[2025-09-15T00:33:42.461Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-15T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-15T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.462Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.463Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-15T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-15T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.465Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.477Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-16T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-16T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.478Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.479Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-16T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-16T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.480Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.482Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-17T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-17T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.483Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.484Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-17T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-17T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.485Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.485Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-18T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-18T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.486Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.486Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-18T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-18T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.487Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.487Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-19T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-19T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.488Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.488Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-19T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-19T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.489Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.489Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-20T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-20T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.489Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.489Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-20T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-20T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.489Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.490Z] LOG     | timeToPixels debug: {timeString: 2025-09-14T09:00:00, date: 2025-09-14T16:00:00.000Z, hours: 9, minutes: 0, pixels: 540}
+  {
+    "timeString": "2025-09-14T09:00:00",
+    "date": "2025-09-14T16:00:00.000Z",
+    "hours": 9,
+    "minutes": 0,
+    "pixels": 540
+  }
+[2025-09-15T00:33:42.490Z] LOG     | events layer rendering item: {item: Test Daily Recurring, start_time: 2025-09-14T09:00:00, end_time: 2025-09-14T09:15:00, position: Object}
+  {
+    "item": "Test Daily Recurring",
+    "start_time": "2025-09-14T09:00:00",
+    "end_time": "2025-09-14T09:15:00",
+    "position": {
+      "top": "540px",
+      "height": "30px",
+      "left": "4px",
+      "right": "4px",
+      "position": "absolute"
+    }
+  }
+[2025-09-15T00:33:42.521Z] LOG     | timeToPixels debug: {timeString: 2025-09-14T09:00:00, date: 2025-09-14T16:00:00.000Z, hours: 9, minutes: 0, pixels: 540}
+  {
+    "timeString": "2025-09-14T09:00:00",
+    "date": "2025-09-14T16:00:00.000Z",
+    "hours": 9,
+    "minutes": 0,
+    "pixels": 540
+  }
+[2025-09-15T00:33:42.523Z] LOG     | events layer rendering item: {item: Test Daily Recurring, start_time: 2025-09-14T09:00:00, end_time: 2025-09-14T09:15:00, position: Object}
+  {
+    "item": "Test Daily Recurring",
+    "start_time": "2025-09-14T09:00:00",
+    "end_time": "2025-09-14T09:15:00",
+    "position": {
+      "top": "540px",
+      "height": "30px",
+      "left": "4px",
+      "right": "4px",
+      "position": "absolute"
+    }
+  }
+[2025-09-15T00:33:42.532Z] LOG     | timeToPixels debug: {timeString: 2025-09-14T09:00:00, date: 2025-09-14T16:00:00.000Z, hours: 9, minutes: 0, pixels: 540}
+  {
+    "timeString": "2025-09-14T09:00:00",
+    "date": "2025-09-14T16:00:00.000Z",
+    "hours": 9,
+    "minutes": 0,
+    "pixels": 540
+  }
+[2025-09-15T00:33:42.533Z] LOG     | personal layer rendering item: {item: Test Daily Recurring, start_time: 2025-09-14T09:00:00, end_time: 2025-09-14T09:15:00, position: Object}
+  {
+    "item": "Test Daily Recurring",
+    "start_time": "2025-09-14T09:00:00",
+    "end_time": "2025-09-14T09:15:00",
+    "position": {
+      "top": "540px",
+      "height": "30px",
+      "left": "4px",
+      "right": "4px",
+      "position": "absolute"
+    }
+  }
+[2025-09-15T00:33:42.533Z] LOG     | timeToPixels debug: {timeString: 2025-09-14T09:00:00, date: 2025-09-14T16:00:00.000Z, hours: 9, minutes: 0, pixels: 540}
+  {
+    "timeString": "2025-09-14T09:00:00",
+    "date": "2025-09-14T16:00:00.000Z",
+    "hours": 9,
+    "minutes": 0,
+    "pixels": 540
+  }
+[2025-09-15T00:33:42.534Z] LOG     | personal layer rendering item: {item: Test Daily Recurring, start_time: 2025-09-14T09:00:00, end_time: 2025-09-14T09:15:00, position: Object}
+  {
+    "item": "Test Daily Recurring",
+    "start_time": "2025-09-14T09:00:00",
+    "end_time": "2025-09-14T09:15:00",
+    "position": {
+      "top": "540px",
+      "height": "30px",
+      "left": "4px",
+      "right": "4px",
+      "position": "absolute"
+    }
+  }
+[2025-09-15T00:33:42.543Z] LOG     | MultiLayerCalendar: Events response: {events: Array(1), total: 1}
+  {
+    "events": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "created_at": "2025-09-13T02:33:09.976831",
+        "updated_at": "2025-09-14T16:00:06.253377",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "is_blocking": true,
+        "location": null,
+        "description": "",
+        "notifications_enabled": true,
+        "is_recurring": false,
+        "recurrence_pattern": null,
+        "recurrence_master_id": null,
+        "is_recurrence_master": null,
+        "is_recurrence_exception": null,
+        "recurrence_instance_date": null
+      }
+    ],
+    "total": 1
+  }
+[2025-09-15T00:33:42.545Z] LOG     | MultiLayerCalendar: Transformed events: [Object]
+  [
+    {
+      "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+      "title": "Test Daily Recurring",
+      "start_time": "2025-09-14T09:00:00",
+      "end_time": "2025-09-14T09:15:00",
+      "type": "events",
+      "layer": "personal",
+      "location": null,
+      "description": "",
+      "is_blocking": true,
+      "color": "#8b5cf6"
+    }
+  ]
+[2025-09-15T00:33:42.573Z] LOG     | MultiLayerCalendar layerData: {events: Array(1), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(1)}
+  {
+    "events": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ]
+  }
+[2025-09-15T00:33:42.574Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-15T00:33:42.588Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-14T07:00:00.000Z, isSame: true}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-14T07:00:00.000Z",
+    "isSame": true
+  }
+[2025-09-15T00:33:42.588Z] LOG     | Rendering events layer with items: [Object]
+  [
+    {
+      "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+      "title": "Test Daily Recurring",
+      "start_time": "2025-09-14T09:00:00",
+      "end_time": "2025-09-14T09:15:00",
+      "type": "events",
+      "layer": "personal",
+      "location": null,
+      "description": "",
+      "is_blocking": true,
+      "color": "#8b5cf6"
+    }
+  ]
+[2025-09-15T00:33:42.588Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-14T07:00:00.000Z, isSame: true}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-14T07:00:00.000Z",
+    "isSame": true
+  }
+[2025-09-15T00:33:42.589Z] LOG     | Rendering personal layer with items: [Object]
+  [
+    {
+      "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+      "title": "Test Daily Recurring",
+      "start_time": "2025-09-14T09:00:00",
+      "end_time": "2025-09-14T09:15:00",
+      "type": "events",
+      "layer": "personal",
+      "location": null,
+      "description": "",
+      "is_blocking": true,
+      "color": "#8b5cf6"
+    }
+  ]
+[2025-09-15T00:33:42.589Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-15T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-15T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.589Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.590Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-15T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-15T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.590Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.590Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-16T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-16T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.591Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.591Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-16T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-16T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.592Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.592Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-17T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-17T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.592Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.593Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-17T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-17T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.593Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.593Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-18T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-18T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.594Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.594Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-18T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-18T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.595Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.595Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-19T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-19T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.596Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.597Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-19T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-19T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.597Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.597Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-20T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-20T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.597Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.598Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-20T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-20T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.598Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.599Z] LOG     | MultiLayerCalendar layerData: {events: Array(1), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(1)}
+  {
+    "events": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ]
+  }
+[2025-09-15T00:33:42.600Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-15T00:33:42.600Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-14T07:00:00.000Z, isSame: true}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-14T07:00:00.000Z",
+    "isSame": true
+  }
+[2025-09-15T00:33:42.601Z] LOG     | Rendering events layer with items: [Object]
+  [
+    {
+      "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+      "title": "Test Daily Recurring",
+      "start_time": "2025-09-14T09:00:00",
+      "end_time": "2025-09-14T09:15:00",
+      "type": "events",
+      "layer": "personal",
+      "location": null,
+      "description": "",
+      "is_blocking": true,
+      "color": "#8b5cf6"
+    }
+  ]
+[2025-09-15T00:33:42.601Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-14T07:00:00.000Z, isSame: true}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-14T07:00:00.000Z",
+    "isSame": true
+  }
+[2025-09-15T00:33:42.602Z] LOG     | Rendering personal layer with items: [Object]
+  [
+    {
+      "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+      "title": "Test Daily Recurring",
+      "start_time": "2025-09-14T09:00:00",
+      "end_time": "2025-09-14T09:15:00",
+      "type": "events",
+      "layer": "personal",
+      "location": null,
+      "description": "",
+      "is_blocking": true,
+      "color": "#8b5cf6"
+    }
+  ]
+[2025-09-15T00:33:42.602Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-15T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-15T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.603Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.603Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-15T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-15T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.603Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.604Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-16T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-16T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.604Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.605Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-16T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-16T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.605Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.606Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-17T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-17T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.606Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.606Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-17T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-17T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.607Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.607Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-18T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-18T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.607Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.608Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-18T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-18T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.608Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.609Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-19T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-19T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.609Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.628Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-19T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-19T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.628Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.629Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-20T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-20T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.629Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.630Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-20T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-20T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.630Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.631Z] LOG     | timeToPixels debug: {timeString: 2025-09-14T09:00:00, date: 2025-09-14T16:00:00.000Z, hours: 9, minutes: 0, pixels: 540}
+  {
+    "timeString": "2025-09-14T09:00:00",
+    "date": "2025-09-14T16:00:00.000Z",
+    "hours": 9,
+    "minutes": 0,
+    "pixels": 540
+  }
+[2025-09-15T00:33:42.632Z] LOG     | events layer rendering item: {item: Test Daily Recurring, start_time: 2025-09-14T09:00:00, end_time: 2025-09-14T09:15:00, position: Object}
+  {
+    "item": "Test Daily Recurring",
+    "start_time": "2025-09-14T09:00:00",
+    "end_time": "2025-09-14T09:15:00",
+    "position": {
+      "top": "540px",
+      "height": "30px",
+      "left": "4px",
+      "right": "4px",
+      "position": "absolute"
+    }
+  }
+[2025-09-15T00:33:42.633Z] LOG     | timeToPixels debug: {timeString: 2025-09-14T09:00:00, date: 2025-09-14T16:00:00.000Z, hours: 9, minutes: 0, pixels: 540}
+  {
+    "timeString": "2025-09-14T09:00:00",
+    "date": "2025-09-14T16:00:00.000Z",
+    "hours": 9,
+    "minutes": 0,
+    "pixels": 540
+  }
+[2025-09-15T00:33:42.634Z] LOG     | events layer rendering item: {item: Test Daily Recurring, start_time: 2025-09-14T09:00:00, end_time: 2025-09-14T09:15:00, position: Object}
+  {
+    "item": "Test Daily Recurring",
+    "start_time": "2025-09-14T09:00:00",
+    "end_time": "2025-09-14T09:15:00",
+    "position": {
+      "top": "540px",
+      "height": "30px",
+      "left": "4px",
+      "right": "4px",
+      "position": "absolute"
+    }
+  }
+[2025-09-15T00:33:42.635Z] LOG     | timeToPixels debug: {timeString: 2025-09-14T09:00:00, date: 2025-09-14T16:00:00.000Z, hours: 9, minutes: 0, pixels: 540}
+  {
+    "timeString": "2025-09-14T09:00:00",
+    "date": "2025-09-14T16:00:00.000Z",
+    "hours": 9,
+    "minutes": 0,
+    "pixels": 540
+  }
+[2025-09-15T00:33:42.636Z] LOG     | personal layer rendering item: {item: Test Daily Recurring, start_time: 2025-09-14T09:00:00, end_time: 2025-09-14T09:15:00, position: Object}
+  {
+    "item": "Test Daily Recurring",
+    "start_time": "2025-09-14T09:00:00",
+    "end_time": "2025-09-14T09:15:00",
+    "position": {
+      "top": "540px",
+      "height": "30px",
+      "left": "4px",
+      "right": "4px",
+      "position": "absolute"
+    }
+  }
+[2025-09-15T00:33:42.636Z] LOG     | timeToPixels debug: {timeString: 2025-09-14T09:00:00, date: 2025-09-14T16:00:00.000Z, hours: 9, minutes: 0, pixels: 540}
+  {
+    "timeString": "2025-09-14T09:00:00",
+    "date": "2025-09-14T16:00:00.000Z",
+    "hours": 9,
+    "minutes": 0,
+    "pixels": 540
+  }
+[2025-09-15T00:33:42.637Z] LOG     | personal layer rendering item: {item: Test Daily Recurring, start_time: 2025-09-14T09:00:00, end_time: 2025-09-14T09:15:00, position: Object}
+  {
+    "item": "Test Daily Recurring",
+    "start_time": "2025-09-14T09:00:00",
+    "end_time": "2025-09-14T09:15:00",
+    "position": {
+      "top": "540px",
+      "height": "30px",
+      "left": "4px",
+      "right": "4px",
+      "position": "absolute"
+    }
+  }
+[2025-09-15T00:33:42.740Z] LOG     | MultiLayerCalendar layerData: {events: Array(1), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(1)}
+  {
+    "events": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ]
+  }
+[2025-09-15T00:33:42.741Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-15T00:33:42.741Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-14T07:00:00.000Z, isSame: true}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-14T07:00:00.000Z",
+    "isSame": true
+  }
+[2025-09-15T00:33:42.742Z] LOG     | Rendering events layer with items: [Object]
+  [
+    {
+      "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+      "title": "Test Daily Recurring",
+      "start_time": "2025-09-14T09:00:00",
+      "end_time": "2025-09-14T09:15:00",
+      "type": "events",
+      "layer": "personal",
+      "location": null,
+      "description": "",
+      "is_blocking": true,
+      "color": "#8b5cf6"
+    }
+  ]
+[2025-09-15T00:33:42.743Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-14T07:00:00.000Z, isSame: true}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-14T07:00:00.000Z",
+    "isSame": true
+  }
+[2025-09-15T00:33:42.744Z] LOG     | Rendering personal layer with items: [Object]
+  [
+    {
+      "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+      "title": "Test Daily Recurring",
+      "start_time": "2025-09-14T09:00:00",
+      "end_time": "2025-09-14T09:15:00",
+      "type": "events",
+      "layer": "personal",
+      "location": null,
+      "description": "",
+      "is_blocking": true,
+      "color": "#8b5cf6"
+    }
+  ]
+[2025-09-15T00:33:42.745Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-15T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-15T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.746Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.746Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-15T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-15T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.748Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.749Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-16T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-16T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.749Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.750Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-16T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-16T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.751Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.752Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-17T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-17T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.752Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.753Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-17T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-17T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.754Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.755Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-18T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-18T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.755Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.756Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-18T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-18T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.756Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.757Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-19T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-19T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.757Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.757Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-19T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-19T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.758Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.758Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-20T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-20T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.758Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.759Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-20T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-20T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.759Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.760Z] LOG     | MultiLayerCalendar layerData: {events: Array(1), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(1)}
+  {
+    "events": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ]
+  }
+[2025-09-15T00:33:42.760Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-15T00:33:42.760Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-14T07:00:00.000Z, isSame: true}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-14T07:00:00.000Z",
+    "isSame": true
+  }
+[2025-09-15T00:33:42.761Z] LOG     | Rendering events layer with items: [Object]
+  [
+    {
+      "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+      "title": "Test Daily Recurring",
+      "start_time": "2025-09-14T09:00:00",
+      "end_time": "2025-09-14T09:15:00",
+      "type": "events",
+      "layer": "personal",
+      "location": null,
+      "description": "",
+      "is_blocking": true,
+      "color": "#8b5cf6"
+    }
+  ]
+[2025-09-15T00:33:42.782Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-14T07:00:00.000Z, isSame: true}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-14T07:00:00.000Z",
+    "isSame": true
+  }
+[2025-09-15T00:33:42.782Z] LOG     | Rendering personal layer with items: [Object]
+  [
+    {
+      "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+      "title": "Test Daily Recurring",
+      "start_time": "2025-09-14T09:00:00",
+      "end_time": "2025-09-14T09:15:00",
+      "type": "events",
+      "layer": "personal",
+      "location": null,
+      "description": "",
+      "is_blocking": true,
+      "color": "#8b5cf6"
+    }
+  ]
+[2025-09-15T00:33:42.783Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-15T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-15T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.784Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.784Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-15T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-15T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.785Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.785Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-16T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-16T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.786Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.786Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-16T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-16T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.786Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.786Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-17T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-17T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.786Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.787Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-17T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-17T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.787Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.787Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-18T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-18T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.788Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.788Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-18T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-18T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.788Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.789Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-19T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-19T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.789Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.789Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-19T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-19T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.790Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.790Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-20T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-20T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.790Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.791Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-20T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-20T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.791Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.792Z] LOG     | timeToPixels debug: {timeString: 2025-09-14T09:00:00, date: 2025-09-14T16:00:00.000Z, hours: 9, minutes: 0, pixels: 540}
+  {
+    "timeString": "2025-09-14T09:00:00",
+    "date": "2025-09-14T16:00:00.000Z",
+    "hours": 9,
+    "minutes": 0,
+    "pixels": 540
+  }
+[2025-09-15T00:33:42.792Z] LOG     | events layer rendering item: {item: Test Daily Recurring, start_time: 2025-09-14T09:00:00, end_time: 2025-09-14T09:15:00, position: Object}
+  {
+    "item": "Test Daily Recurring",
+    "start_time": "2025-09-14T09:00:00",
+    "end_time": "2025-09-14T09:15:00",
+    "position": {
+      "top": "540px",
+      "height": "30px",
+      "left": "4px",
+      "right": "4px",
+      "position": "absolute"
+    }
+  }
+[2025-09-15T00:33:42.793Z] LOG     | timeToPixels debug: {timeString: 2025-09-14T09:00:00, date: 2025-09-14T16:00:00.000Z, hours: 9, minutes: 0, pixels: 540}
+  {
+    "timeString": "2025-09-14T09:00:00",
+    "date": "2025-09-14T16:00:00.000Z",
+    "hours": 9,
+    "minutes": 0,
+    "pixels": 540
+  }
+[2025-09-15T00:33:42.794Z] LOG     | events layer rendering item: {item: Test Daily Recurring, start_time: 2025-09-14T09:00:00, end_time: 2025-09-14T09:15:00, position: Object}
+  {
+    "item": "Test Daily Recurring",
+    "start_time": "2025-09-14T09:00:00",
+    "end_time": "2025-09-14T09:15:00",
+    "position": {
+      "top": "540px",
+      "height": "30px",
+      "left": "4px",
+      "right": "4px",
+      "position": "absolute"
+    }
+  }
+[2025-09-15T00:33:42.794Z] LOG     | timeToPixels debug: {timeString: 2025-09-14T09:00:00, date: 2025-09-14T16:00:00.000Z, hours: 9, minutes: 0, pixels: 540}
+  {
+    "timeString": "2025-09-14T09:00:00",
+    "date": "2025-09-14T16:00:00.000Z",
+    "hours": 9,
+    "minutes": 0,
+    "pixels": 540
+  }
+[2025-09-15T00:33:42.794Z] LOG     | personal layer rendering item: {item: Test Daily Recurring, start_time: 2025-09-14T09:00:00, end_time: 2025-09-14T09:15:00, position: Object}
+  {
+    "item": "Test Daily Recurring",
+    "start_time": "2025-09-14T09:00:00",
+    "end_time": "2025-09-14T09:15:00",
+    "position": {
+      "top": "540px",
+      "height": "30px",
+      "left": "4px",
+      "right": "4px",
+      "position": "absolute"
+    }
+  }
+[2025-09-15T00:33:42.795Z] LOG     | timeToPixels debug: {timeString: 2025-09-14T09:00:00, date: 2025-09-14T16:00:00.000Z, hours: 9, minutes: 0, pixels: 540}
+  {
+    "timeString": "2025-09-14T09:00:00",
+    "date": "2025-09-14T16:00:00.000Z",
+    "hours": 9,
+    "minutes": 0,
+    "pixels": 540
+  }
+[2025-09-15T00:33:42.795Z] LOG     | personal layer rendering item: {item: Test Daily Recurring, start_time: 2025-09-14T09:00:00, end_time: 2025-09-14T09:15:00, position: Object}
+  {
+    "item": "Test Daily Recurring",
+    "start_time": "2025-09-14T09:00:00",
+    "end_time": "2025-09-14T09:15:00",
+    "position": {
+      "top": "540px",
+      "height": "30px",
+      "left": "4px",
+      "right": "4px",
+      "position": "absolute"
+    }
+  }
+[2025-09-15T00:33:42.800Z] LOG     | MultiLayerCalendar layerData: {events: Array(1), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(1)}
+  {
+    "events": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ]
+  }
+[2025-09-15T00:33:42.801Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-15T00:33:42.801Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-14T07:00:00.000Z, isSame: true}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-14T07:00:00.000Z",
+    "isSame": true
+  }
+[2025-09-15T00:33:42.802Z] LOG     | Rendering events layer with items: [Object]
+  [
+    {
+      "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+      "title": "Test Daily Recurring",
+      "start_time": "2025-09-14T09:00:00",
+      "end_time": "2025-09-14T09:15:00",
+      "type": "events",
+      "layer": "personal",
+      "location": null,
+      "description": "",
+      "is_blocking": true,
+      "color": "#8b5cf6"
+    }
+  ]
+[2025-09-15T00:33:42.802Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-14T07:00:00.000Z, isSame: true}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-14T07:00:00.000Z",
+    "isSame": true
+  }
+[2025-09-15T00:33:42.803Z] LOG     | Rendering personal layer with items: [Object]
+  [
+    {
+      "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+      "title": "Test Daily Recurring",
+      "start_time": "2025-09-14T09:00:00",
+      "end_time": "2025-09-14T09:15:00",
+      "type": "events",
+      "layer": "personal",
+      "location": null,
+      "description": "",
+      "is_blocking": true,
+      "color": "#8b5cf6"
+    }
+  ]
+[2025-09-15T00:33:42.803Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-15T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-15T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.803Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.804Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-15T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-15T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.804Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.804Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-16T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-16T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.829Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.830Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-16T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-16T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.830Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.831Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-17T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-17T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.831Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.832Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-17T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-17T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.832Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.833Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-18T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-18T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.833Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.833Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-18T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-18T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.834Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.834Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-19T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-19T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.834Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.835Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-19T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-19T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.835Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.835Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-20T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-20T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.836Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.836Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-20T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-20T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.836Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.837Z] LOG     | MultiLayerCalendar layerData: {events: Array(1), work: Array(0), meals: Array(0), tasks: Array(0), personal: Array(1)}
+  {
+    "events": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ],
+    "work": [],
+    "meals": [],
+    "tasks": [],
+    "personal": [
+      {
+        "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+        "title": "Test Daily Recurring",
+        "start_time": "2025-09-14T09:00:00",
+        "end_time": "2025-09-14T09:15:00",
+        "type": "events",
+        "layer": "personal",
+        "location": null,
+        "description": "",
+        "is_blocking": true,
+        "color": "#8b5cf6"
+      }
+    ]
+  }
+[2025-09-15T00:33:42.837Z] LOG     | LayerVisibility: {events: true, tasks: true, meals: false, personal: true, work: true}
+  {
+    "events": true,
+    "tasks": true,
+    "meals": false,
+    "personal": true,
+    "work": true
+  }
+[2025-09-15T00:33:42.837Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-14T07:00:00.000Z, isSame: true}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-14T07:00:00.000Z",
+    "isSame": true
+  }
+[2025-09-15T00:33:42.838Z] LOG     | Rendering events layer with items: [Object]
+  [
+    {
+      "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+      "title": "Test Daily Recurring",
+      "start_time": "2025-09-14T09:00:00",
+      "end_time": "2025-09-14T09:15:00",
+      "type": "events",
+      "layer": "personal",
+      "location": null,
+      "description": "",
+      "is_blocking": true,
+      "color": "#8b5cf6"
+    }
+  ]
+[2025-09-15T00:33:42.838Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-14T07:00:00.000Z, isSame: true}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-14T07:00:00.000Z",
+    "isSame": true
+  }
+[2025-09-15T00:33:42.838Z] LOG     | Rendering personal layer with items: [Object]
+  [
+    {
+      "id": "795adce8-1a47-4870-b7f9-da2faac37dbe",
+      "title": "Test Daily Recurring",
+      "start_time": "2025-09-14T09:00:00",
+      "end_time": "2025-09-14T09:15:00",
+      "type": "events",
+      "layer": "personal",
+      "location": null,
+      "description": "",
+      "is_blocking": true,
+      "color": "#8b5cf6"
+    }
+  ]
+[2025-09-15T00:33:42.838Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-15T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-15T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.839Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.839Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-15T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-15T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.839Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.840Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-16T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-16T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.840Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.840Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-16T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-16T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.841Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.841Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-17T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-17T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.841Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.842Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-17T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-17T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.842Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.842Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-18T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-18T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.842Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.843Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-18T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-18T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.843Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.843Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-19T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-19T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.844Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.844Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-19T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-19T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.844Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.845Z] LOG     | Day filtering for events: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-20T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-20T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.845Z] LOG     | Rendering events layer with items: []
+  []
+[2025-09-15T00:33:42.845Z] LOG     | Day filtering for personal: {item: Test Daily Recurring, itemDate: 2025-09-14T16:00:00.000Z, dayDate: 2025-09-20T07:00:00.000Z, isSame: false}
+  {
+    "item": "Test Daily Recurring",
+    "itemDate": "2025-09-14T16:00:00.000Z",
+    "dayDate": "2025-09-20T07:00:00.000Z",
+    "isSame": false
+  }
+[2025-09-15T00:33:42.846Z] LOG     | Rendering personal layer with items: []
+  []
+[2025-09-15T00:33:42.846Z] LOG     | timeToPixels debug: {timeString: 2025-09-14T09:00:00, date: 2025-09-14T16:00:00.000Z, hours: 9, minutes: 0, pixels: 540}
+  {
+    "timeString": "2025-09-14T09:00:00",
+    "date": "2025-09-14T16:00:00.000Z",
+    "hours": 9,
+    "minutes": 0,
+    "pixels": 540
+  }
+[2025-09-15T00:33:42.846Z] LOG     | events layer rendering item: {item: Test Daily Recurring, start_time: 2025-09-14T09:00:00, end_time: 2025-09-14T09:15:00, position: Object}
+  {
+    "item": "Test Daily Recurring",
+    "start_time": "2025-09-14T09:00:00",
+    "end_time": "2025-09-14T09:15:00",
+    "position": {
+      "top": "540px",
+      "height": "30px",
+      "left": "4px",
+      "right": "4px",
+      "position": "absolute"
+    }
+  }
+[2025-09-15T00:33:42.847Z] LOG     | timeToPixels debug: {timeString: 2025-09-14T09:00:00, date: 2025-09-14T16:00:00.000Z, hours: 9, minutes: 0, pixels: 540}
+  {
+    "timeString": "2025-09-14T09:00:00",
+    "date": "2025-09-14T16:00:00.000Z",
+    "hours": 9,
+    "minutes": 0,
+    "pixels": 540
+  }
+[2025-09-15T00:33:42.847Z] LOG     | events layer rendering item: {item: Test Daily Recurring, start_time: 2025-09-14T09:00:00, end_time: 2025-09-14T09:15:00, position: Object}
+  {
+    "item": "Test Daily Recurring",
+    "start_time": "2025-09-14T09:00:00",
+    "end_time": "2025-09-14T09:15:00",
+    "position": {
+      "top": "540px",
+      "height": "30px",
+      "left": "4px",
+      "right": "4px",
+      "position": "absolute"
+    }
+  }
+[2025-09-15T00:33:42.848Z] LOG     | timeToPixels debug: {timeString: 2025-09-14T09:00:00, date: 2025-09-14T16:00:00.000Z, hours: 9, minutes: 0, pixels: 540}
+  {
+    "timeString": "2025-09-14T09:00:00",
+    "date": "2025-09-14T16:00:00.000Z",
+    "hours": 9,
+    "minutes": 0,
+    "pixels": 540
+  }
+[2025-09-15T00:33:42.848Z] LOG     | personal layer rendering item: {item: Test Daily Recurring, start_time: 2025-09-14T09:00:00, end_time: 2025-09-14T09:15:00, position: Object}
+  {
+    "item": "Test Daily Recurring",
+    "start_time": "2025-09-14T09:00:00",
+    "end_time": "2025-09-14T09:15:00",
+    "position": {
+      "top": "540px",
+      "height": "30px",
+      "left": "4px",
+      "right": "4px",
+      "position": "absolute"
+    }
+  }
+[2025-09-15T00:33:42.849Z] LOG     | timeToPixels debug: {timeString: 2025-09-14T09:00:00, date: 2025-09-14T16:00:00.000Z, hours: 9, minutes: 0, pixels: 540}
+  {
+    "timeString": "2025-09-14T09:00:00",
+    "date": "2025-09-14T16:00:00.000Z",
+    "hours": 9,
+    "minutes": 0,
+    "pixels": 540
+  }
+[2025-09-15T00:33:42.849Z] LOG     | personal layer rendering item: {item: Test Daily Recurring, start_time: 2025-09-14T09:00:00, end_time: 2025-09-14T09:15:00, position: Object}
+  {
+    "item": "Test Daily Recurring",
+    "start_time": "2025-09-14T09:00:00",
+    "end_time": "2025-09-14T09:15:00",
+    "position": {
+      "top": "540px",
+      "height": "30px",
+      "left": "4px",
+      "right": "4px",
+      "position": "absolute"
+    }
+  }

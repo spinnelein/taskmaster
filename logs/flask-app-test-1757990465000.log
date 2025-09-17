@@ -1,0 +1,157 @@
+[2025-09-16T02:41:05.747Z] HTTP   | 200 http://localhost:5000/
+[2025-09-16T02:41:05.887Z] HTTP   | 200 https://unpkg.com/fullcalendar@6.1.8/index.global.min.js
+[2025-09-16T02:41:05.898Z] NETWORK| Failed: GET https://unpkg.com/fullcalendar@6.1.8/index.global.min.css - net::ERR_BLOCKED_BY_ORB
+[2025-09-16T02:41:06.011Z] HTTP   | 200 http://localhost:5000/api/events?mode=calendar&start=2025-09-14T00%3A00%3A00-07%3A00&end=2025-09-21T00%3A00%3A00-07%3A00
+[2025-09-16T02:41:06.072Z] HTTP   | 200 http://localhost:5000/api/tasks
+[2025-09-16T02:41:06.240Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T02:41:06.285Z] ERROR   | Failed to load resource: the server responded with a status of 404 (NOT FOUND)
+[2025-09-16T02:41:07.017Z] HTTP   | 200 http://localhost:5000/api/events
+[2025-09-16T02:41:07.346Z] HTTP   | 200 http://localhost:5000/api/tasks
+[2025-09-16T02:41:07.606Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T02:41:07.711Z] HTTP   | 200 http://localhost:5000/api/events
+
+[ERROR] locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('button:has-text("Add Task")')[22m
+[2m    - locator resolved to <button class="btn" onclick="showAddTaskModal()">Add Task</button>[22m
+[2m  - attempting click action[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - performing click action[22m
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('button:has-text("Add Task")')[22m
+[2m    - locator resolved to <button class="btn" onclick="showAddTaskModal()">Add Task</button>[22m
+[2m  - attempting click action[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - performing click action[22m
+
+    at testFlaskApp (C:\Users\Aaron\Documents\Python Scripts\Taskmaster\scripts\test-flask-app.js:148:22)
+[2025-09-16T02:51:13.699Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T02:51:35.923Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T02:52:06.241Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T02:52:35.920Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T02:53:06.237Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T02:53:35.926Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T02:54:06.242Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T02:54:35.927Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T02:55:06.237Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T02:55:35.922Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T02:56:06.229Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T02:56:35.923Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T02:57:06.234Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T02:57:36.245Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T02:58:06.236Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T02:58:35.921Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T02:59:06.241Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T02:59:35.932Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:00:06.248Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:00:35.930Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:01:06.240Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:01:35.929Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:02:06.232Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:02:35.930Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:03:06.240Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:03:35.930Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:04:06.238Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:04:35.924Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:05:06.234Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:05:35.924Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:06:06.229Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:06:35.932Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:07:06.232Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:07:35.932Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:08:06.236Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:08:35.935Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:09:06.240Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:09:35.934Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:10:06.245Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:10:35.934Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:11:06.236Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:11:35.928Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:12:06.235Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:12:35.926Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:13:06.242Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:13:35.931Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:14:06.235Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:14:35.923Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:15:06.240Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:15:35.925Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:16:06.244Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:16:35.924Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:17:06.231Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:17:35.925Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:18:06.236Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:18:35.934Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:19:06.236Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:19:35.933Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:20:06.237Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:20:35.922Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:21:06.233Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:21:35.918Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:22:06.240Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:22:35.929Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:23:06.230Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:23:35.926Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:24:06.228Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:24:35.933Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:25:06.233Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:25:35.930Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:26:06.239Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:26:35.922Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:27:06.247Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:27:35.924Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:28:06.247Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:28:35.918Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:29:06.248Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:29:35.921Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:30:06.229Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:30:35.933Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:31:06.238Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:31:35.925Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:32:06.231Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:32:35.924Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:33:06.234Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:33:35.923Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:34:06.242Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:34:35.922Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:35:06.245Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:35:35.930Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:36:06.234Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:36:35.930Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:37:06.247Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:37:35.925Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:38:06.240Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:38:35.923Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:39:06.241Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:39:35.924Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:40:06.237Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:40:35.921Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:41:06.241Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:41:35.934Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:42:06.244Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:42:35.928Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:43:06.242Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:43:35.928Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:44:06.226Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:44:35.923Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:45:06.240Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:45:35.927Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:46:06.240Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:46:35.934Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:47:06.239Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:47:36.542Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:48:06.241Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:48:35.931Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:49:06.244Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:49:35.925Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:50:06.249Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:50:35.918Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:51:06.245Z] HTTP   | 200 http://localhost:5000/health
+[2025-09-16T03:51:36.246Z] HTTP   | 200 http://localhost:5000/health

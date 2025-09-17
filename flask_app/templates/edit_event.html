@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Event - TaskMaster</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            background: #f5f5f5; 
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #333;
+        }
+        .header h1 {
+            margin: 0;
+            color: #333;
+        }
+        .nav-links a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #007bff;
+            font-weight: 500;
+        }
+        .nav-links a:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+        .form-section {
+            margin-bottom: 30px;
+        }
+        .form-section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e1e4e8;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e4e8;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        .checkbox-group label {
+            margin-bottom: 0;
+            font-weight: 400;
+            cursor: pointer;
+            user-select: none;
+        }
+        .recurring-options {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 1px solid #e1e4e8;
+        }
+        .recurring-options.hidden {
+            display: none;
+        }
+        .help-text {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e1e4e8;
+        }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: background 0.2s;
+        }
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        .current-value {
+            font-size: 12px;
+            color: #6c757d;
+            font-style: italic;
+            margin-bottom: 5px;
+        }
+        .event-info {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            border-left: 4px solid #007bff;
+        }
+        .event-info strong {
+            color: #0056b3;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                padding: 20px;
+            }
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Edit Event</h1>
+            <div class="nav-links">
+                <a href="/">Schedule</a>
+                <a href="/events">Back to Events</a>
+                <a href="/tasks">Tasks</a>
+                <a href="/initiatives">Initiatives</a>
+                <a href="/projects">Projects</a>
+            </div>
+        </div>
+        
+        <div class="event-info">
+            <strong>Current Event:</strong> {{ event.title }}<br>
+            <strong>Type:</strong> {{ event.event_type.title() if event.event_type else 'Timed' }}<br>
+            <strong>Created:</strong> {{ event.created_at.strftime('%Y-%m-%d %H:%M') if event.created_at else 'Unknown' }}<br>
+            {% if event.is_recurring %}
+            <strong>Recurring:</strong> Yes ({{ event.recurrence_pattern or 'Custom pattern' }})
+            {% endif %}
+            {% if instance_date %}
+            <br><strong style="color: #dc3545;">Editing Recurring Event Instance:</strong> {{ instance_date }}<br>
+            <em>Note: Changes will be applied to the master event and affect all instances.</em>
+            {% endif %}
+        </div>
+        
+        <form id="editEventForm" onsubmit="submitEventUpdate(event)">
+            <!-- Basic Information -->
+            <div class="form-section">
+                <div class="form-section-title">Basic Information</div>
+                
+                <div class="form-group">
+                    <label for="eventTitle">Event Title *</label>
+                    <div class="current-value">Current: {{ event.title }}</div>
+                    <input type="text" id="eventTitle" name="title" value="{{ event.title }}" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="eventStart">Start Date/Time *</label>
+                        <div class="current-value">Current: {{ event.start_time.strftime('%Y-%m-%d %H:%M') if event.start_time else 'Not set' }}</div>
+                        <input type="datetime-local" id="eventStart" name="start" 
+                               value="{{ event.start_time.strftime('%Y-%m-%dT%H:%M') if event.start_time else '' }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventEnd">End Date/Time *</label>
+                        <div class="current-value">Current: {{ event.end_time.strftime('%Y-%m-%d %H:%M') if event.end_time else 'Not set' }}</div>
+                        <input type="datetime-local" id="eventEnd" name="end" 
+                               value="{{ event.end_time.strftime('%Y-%m-%dT%H:%M') if event.end_time else '' }}" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="eventDescription">Description</label>
+                    <div class="current-value">Current: {{ event.description or 'No description' }}</div>
+                    <textarea id="eventDescription" name="description" placeholder="Add event details">{{ event.description or '' }}</textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="eventLocation">Location</label>
+                        <div class="current-value">Current: {{ event.location or 'No location set' }}</div>
+                        <input type="text" id="eventLocation" name="location" value="{{ event.location or '' }}" placeholder="Where">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventType">Event Type</label>
+                        <div class="current-value">Current: {{ event.event_type.title() if event.event_type else 'Timed' }}</div>
+                        <select id="eventType" name="event_type">
+                            <option value="timed" {{ 'selected' if event.event_type == 'timed' else '' }}>Timed</option>
+                            <option value="all_day" {{ 'selected' if event.event_type == 'all_day' else '' }}>All Day</option>
+                            <option value="instant" {{ 'selected' if event.event_type == 'instant' else '' }}>Instant</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Event Options -->
+            <div class="form-section">
+                <div class="form-section-title">Event Options</div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="eventBlocking" name="is_blocking" 
+                           {{ 'checked' if event.is_blocking else '' }}>
+                    <label for="eventBlocking">Blocking Event (prevents scheduling other tasks)</label>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="eventNotifications" name="notifications_enabled" 
+                           {{ 'checked' if event.notifications_enabled else '' }}>
+                    <label for="eventNotifications">Enable Notifications</label>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="eventRecurring" name="is_recurring" 
+                           {{ 'checked' if event.is_recurring else '' }} onchange="toggleRecurringOptions()">
+                    <label for="eventRecurring">Recurring Event</label>
+                </div>
+            </div>
+            
+            <!-- Recurring Options -->
+            <div id="recurringOptions" class="recurring-options {{ 'hidden' if not event.is_recurring else '' }}">
+                <div class="form-section-title">Recurrence Settings</div>
+                
+                <div class="form-group">
+                    <label for="recurrencePattern">Recurrence Pattern</label>
+                    <div class="current-value">Current: {{ event.recurrence_pattern or 'Custom RRULE' }}</div>
+                    <select id="recurrencePattern" name="recurrence_pattern" onchange="updateRecurrenceDescription()">
+                        <option value="">Select pattern...</option>
+                        <option value="daily" {{ 'selected' if event.recurrence_pattern == 'daily' else '' }}>Daily</option>
+                        <option value="weekly" {{ 'selected' if event.recurrence_pattern == 'weekly' else '' }}>Weekly</option>
+                        <option value="biweekly" {{ 'selected' if event.recurrence_pattern == 'biweekly' else '' }}>Every 2 weeks</option>
+                        <option value="monthly" {{ 'selected' if event.recurrence_pattern == 'monthly' else '' }}>Monthly</option>
+                        <option value="yearly" {{ 'selected' if event.recurrence_pattern == 'yearly' else '' }}>Yearly</option>
+                        <option value="weekdays" {{ 'selected' if event.recurrence_pattern == 'weekdays' else '' }}>Weekdays (Mon-Fri)</option>
+                        <option value="custom" {{ 'selected' if not event.recurrence_pattern and event.recurrence_rrule else '' }}>Custom</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="customRruleGroup" style="{{ 'display: block;' if not event.recurrence_pattern and event.recurrence_rrule else 'display: none;' }}">
+                    <label for="customRrule">Custom RRULE</label>
+                    <div class="current-value">Current: {{ event.recurrence_rrule or 'No RRULE set' }}</div>
+                    <input type="text" id="customRrule" name="recurrence_rrule" 
+                           value="{{ event.recurrence_rrule or '' }}" placeholder="FREQ=WEEKLY;BYDAY=MO,WE,FR">
+                    <div class="help-text">Enter a valid RRULE string for custom recurrence</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="recurrenceEnd">End Recurrence</label>
+                    <div class="current-value">Current: {{ event.recurrence_end.strftime('%Y-%m-%d') if event.recurrence_end else 'Never ends' }}</div>
+                    <select id="recurrenceEndType" onchange="toggleRecurrenceEnd()">
+                        <option value="never" {{ 'selected' if not event.recurrence_end else '' }}>Never</option>
+                        <option value="date" {{ 'selected' if event.recurrence_end else '' }}>On Date</option>
+                        <option value="count">After Occurrences</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="recurrenceEndDateGroup" style="{{ 'display: block;' if event.recurrence_end else 'display: none;' }}">
+                    <label for="recurrenceEndDate">End Date</label>
+                    <input type="date" id="recurrenceEndDate" name="recurrence_end" 
+                           value="{{ event.recurrence_end.strftime('%Y-%m-%d') if event.recurrence_end else '' }}">
+                </div>
+                
+                <div class="form-group" id="recurrenceCountGroup" style="display: none;">
+                    <label for="recurrenceCount">Number of Occurrences</label>
+                    <input type="number" id="recurrenceCount" min="1" max="365" placeholder="10">
+                </div>
+                
+                <div id="recurrenceDescription" class="help-text">
+                    {% if event.recurrence_pattern == 'daily' %}
+                        Repeats every day
+                    {% elif event.recurrence_pattern == 'weekly' %}
+                        Repeats every week on the same day
+                    {% elif event.recurrence_pattern == 'biweekly' %}
+                        Repeats every 2 weeks on the same day
+                    {% elif event.recurrence_pattern == 'monthly' %}
+                        Repeats every month on the same date
+                    {% elif event.recurrence_pattern == 'yearly' %}
+                        Repeats every year on the same date
+                    {% elif event.recurrence_pattern == 'weekdays' %}
+                        Repeats Monday through Friday
+                    {% elif event.recurrence_rrule %}
+                        Custom recurrence rule: {{ event.recurrence_rrule }}
+                    {% else %}
+                        Select a pattern to see recurrence description
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <a href="/events" class="btn btn-secondary">Cancel</a>
+                <button type="button" class="btn btn-danger" onclick="deleteEvent()">Delete Event</button>
+                <button type="submit" class="btn btn-primary">Update Event</button>
+            </div>
+        </form>
+    </div>
+    
+    <script>
+    // Form submission handler
+    function submitEventUpdate(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(e.target);
+        const eventData = {
+            title: formData.get('title'),
+            description: formData.get('description') || '',
+            location: formData.get('location') || '',
+            start: formData.get('start'),
+            end: formData.get('end'),
+            event_type: formData.get('event_type'),
+            is_blocking: formData.get('is_blocking') === 'on',
+            notifications_enabled: formData.get('notifications_enabled') === 'on',
+            is_recurring: formData.get('is_recurring') === 'on'
+        };
+        
+        // Handle recurring event data
+        if (eventData.is_recurring) {
+            const pattern = formData.get('recurrence_pattern');
+            if (pattern === 'custom') {
+                eventData.recurrence_rrule = formData.get('recurrence_rrule');
+            } else {
+                eventData.recurrence_pattern = pattern;
+                eventData.recurrence_rrule = generateRruleFromPattern(pattern);
+            }
+            
+            // Handle recurrence end
+            const endType = document.getElementById('recurrenceEndType').value;
+            if (endType === 'date') {
+                eventData.recurrence_end = formData.get('recurrence_end');
+            } else if (endType === 'count') {
+                const count = document.getElementById('recurrenceCount').value;
+                if (count) {
+                    eventData.recurrence_rrule += `;COUNT=${count}`;
+                }
+            }
+        }
+        
+        // Update the event
+        const eventId = '{{ event.id }}';
+        fetch(`/api/events/${eventId}`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(eventData)
+        })
+        .then(response => response.json())
+        .then(event => {
+            alert('Event updated successfully!');
+            window.location.href = '/events';
+        })
+        .catch(error => {
+            console.error('Error updating event:', error);
+            alert('Failed to update event');
+        });
+    }
+    
+    // Delete event
+    function deleteEvent() {
+        if (confirm('Are you sure you want to delete this event? This action cannot be undone.')) {
+            const eventId = '{{ event.id }}';
+            fetch(`/api/events/${eventId}`, {
+                method: 'DELETE'
+            })
+            .then(() => {
+                alert('Event deleted successfully!');
+                window.location.href = '/events';
+            })
+            .catch(error => {
+                console.error('Error deleting event:', error);
+                alert('Failed to delete event');
+            });
+        }
+    }
+    
+    // Toggle recurring options visibility
+    function toggleRecurringOptions() {
+        const checkbox = document.getElementById('eventRecurring');
+        const options = document.getElementById('recurringOptions');
+        if (checkbox.checked) {
+            options.classList.remove('hidden');
+        } else {
+            options.classList.add('hidden');
+        }
+    }
+    
+    // Update recurrence description based on pattern
+    function updateRecurrenceDescription() {
+        const pattern = document.getElementById('recurrencePattern').value;
+        const description = document.getElementById('recurrenceDescription');
+        const customGroup = document.getElementById('customRruleGroup');
+        
+        customGroup.style.display = pattern === 'custom' ? 'block' : 'none';
+        
+        const descriptions = {
+            daily: 'Repeats every day',
+            weekly: 'Repeats every week on the same day',
+            biweekly: 'Repeats every 2 weeks on the same day',
+            monthly: 'Repeats every month on the same date',
+            yearly: 'Repeats every year on the same date',
+            weekdays: 'Repeats Monday through Friday',
+            custom: 'Enter custom recurrence rule'
+        };
+        
+        description.textContent = descriptions[pattern] || 'Select a pattern to see recurrence description';
+    }
+    
+    // Toggle recurrence end options
+    function toggleRecurrenceEnd() {
+        const endType = document.getElementById('recurrenceEndType').value;
+        document.getElementById('recurrenceEndDateGroup').style.display = endType === 'date' ? 'block' : 'none';
+        document.getElementById('recurrenceCountGroup').style.display = endType === 'count' ? 'block' : 'none';
+    }
+    
+    // Generate RRULE from pattern
+    function generateRruleFromPattern(pattern) {
+        const patterns = {
+            daily: 'FREQ=DAILY',
+            weekly: 'FREQ=WEEKLY',
+            biweekly: 'FREQ=WEEKLY;INTERVAL=2',
+            monthly: 'FREQ=MONTHLY',
+            yearly: 'FREQ=YEARLY',
+            weekdays: 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR'
+        };
+        return patterns[pattern] || '';
+    }
+    
+    // Handle event type change
+    document.getElementById('eventType').addEventListener('change', function(e) {
+        const startInput = document.getElementById('eventStart');
+        const endInput = document.getElementById('eventEnd');
+        
+        if (e.target.value === 'all_day') {
+            startInput.type = 'date';
+            endInput.type = 'date';
+        } else {
+            startInput.type = 'datetime-local';
+            endInput.type = 'datetime-local';
+        }
+    });
+    </script>
+</body>
+</html>

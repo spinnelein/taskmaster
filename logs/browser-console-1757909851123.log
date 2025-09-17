@@ -1,0 +1,45 @@
+[2025-09-15T04:17:33.224Z] DEBUG   | [vite] connecting...
+[2025-09-15T04:17:33.245Z] DEBUG   | [vite] connected.
+[2025-09-15T04:17:33.413Z] INFO    | %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-15T04:17:34.706Z] LOG     | Raw events from API: 13
+[2025-09-15T04:17:34.709Z] LOG     | Transformed events for FullCalendar: 153
+[2025-09-15T04:17:34.710Z] LOG     | Sample transformed event: {id: d77aaa83-2dcf-4097-a6d3-d04f2571d54e-2025-09-14, title: Wake Up, start: 2025-09-14T14:00:00.000Z, end: 2025-09-14T15:00:00.000Z, backgroundColor: #3b82f6}
+  {
+    "id": "d77aaa83-2dcf-4097-a6d3-d04f2571d54e-2025-09-14",
+    "title": "Wake Up",
+    "start": "2025-09-14T14:00:00.000Z",
+    "end": "2025-09-14T15:00:00.000Z",
+    "backgroundColor": "#3b82f6",
+    "borderColor": "#3b82f6",
+    "classNames": [
+      "priority-5",
+      "status-scheduled"
+    ],
+    "extendedProps": {
+      "description": "",
+      "location": null,
+      "is_blocking": true,
+      "notifications_enabled": true
+    }
+  }
+[2025-09-15T04:17:35.369Z] LOG     | Raw events from API: 13
+[2025-09-15T04:17:35.370Z] LOG     | Transformed events for FullCalendar: 153
+[2025-09-15T04:17:35.372Z] LOG     | Sample transformed event: {id: d77aaa83-2dcf-4097-a6d3-d04f2571d54e-2025-09-14, title: Wake Up, start: 2025-09-14T14:00:00.000Z, end: 2025-09-14T15:00:00.000Z, backgroundColor: #3b82f6}
+  {
+    "id": "d77aaa83-2dcf-4097-a6d3-d04f2571d54e-2025-09-14",
+    "title": "Wake Up",
+    "start": "2025-09-14T14:00:00.000Z",
+    "end": "2025-09-14T15:00:00.000Z",
+    "backgroundColor": "#3b82f6",
+    "borderColor": "#3b82f6",
+    "classNames": [
+      "priority-5",
+      "status-scheduled"
+    ],
+    "extendedProps": {
+      "description": "",
+      "location": null,
+      "is_blocking": true,
+      "notifications_enabled": true
+    }
+  }

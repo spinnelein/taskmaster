@@ -1,0 +1,31 @@
+[2025-09-15T07:36:21.950Z] DEBUG   | [vite] connecting...
+[2025-09-15T07:36:21.982Z] DEBUG   | [vite] connected.
+[2025-09-15T07:36:22.137Z] INFO    | %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[2025-09-15T07:36:22.842Z] LOG     | Expanded Wake Up: 31 occurrences
+[2025-09-15T07:36:22.850Z] LOG     | Expanded Breakfast/Get Ready: 31 occurrences
+[2025-09-15T07:36:22.853Z] LOG     | Expanded Wake Up: 31 occurrences
+[2025-09-15T07:36:22.859Z] LOG     | Expanded Take Kids to School: 31 occurrences
+[2025-09-15T07:36:22.864Z] LOG     | Expanded Breakfast/Get Ready: 31 occurrences
+[2025-09-15T07:36:22.869Z] LOG     | Expanded Sleep: 31 occurrences
+[2025-09-15T07:36:22.874Z] LOG     | Expanded Take Kids to School: 31 occurrences
+[2025-09-15T07:36:22.879Z] LOG     | Expanded Make Dinner: 31 occurrences
+[2025-09-15T07:36:22.885Z] LOG     | Expanded Sleep: 31 occurrences
+[2025-09-15T07:36:22.890Z] LOG     | Expanded Eat Dinner: 31 occurrences
+[2025-09-15T07:36:22.895Z] LOG     | Expanded Make Dinner: 31 occurrences
+[2025-09-15T07:36:22.900Z] LOG     | Expanded Chore Time: 31 occurrences
+[2025-09-15T07:36:22.904Z] LOG     | Expanded Eat Dinner: 31 occurrences
+[2025-09-15T07:36:22.911Z] LOG     | Expanded Ryan Reading in Bed: 31 occurrences
+[2025-09-15T07:36:22.916Z] LOG     | Expanded Chore Time: 31 occurrences
+[2025-09-15T07:36:22.924Z] LOG     | Expanded Ryan TIME! TV and Snacks/Choice Time: 0 occurrences
+[2025-09-15T07:36:22.927Z] LOG     | Expanded Ryan Reading in Bed: 31 occurrences
+[2025-09-15T07:36:22.932Z] LOG     | Expanded Get In Bed! Reading: 0 occurrences
+[2025-09-15T07:36:22.937Z] LOG     | Expanded Ryan TIME! TV and Snacks/Choice Time: 0 occurrences
+[2025-09-15T07:36:22.940Z] LOG     | Expanded Make Dinner: 31 occurrences
+[2025-09-15T07:36:22.944Z] LOG     | Expanded Get In Bed! Reading: 0 occurrences
+[2025-09-15T07:36:22.949Z] LOG     | Expanded Sleep: 31 occurrences
+[2025-09-15T07:36:22.954Z] LOG     | Expanded Make Dinner: 31 occurrences
+[2025-09-15T07:36:22.958Z] LOG     | Expanded Get Ready For Bed: 4 occurrences
+[2025-09-15T07:36:22.958Z] LOG     | Calendar loaded: 314 total events (from 13 masters)
+[2025-09-15T07:36:23.138Z] LOG     | Expanded Sleep: 31 occurrences
+[2025-09-15T07:36:23.145Z] LOG     | Expanded Get Ready For Bed: 4 occurrences
+[2025-09-15T07:36:23.146Z] LOG     | Calendar loaded: 314 total events (from 13 masters)

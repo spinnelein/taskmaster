@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "C:\Users\Aaron\Documents\Python Scripts\Taskmaster\flask_app\app.py", line 69, in <module>
+    app = create_app()
+          ^^^^^^^^^^^^
+  File "C:\Users\Aaron\Documents\Python Scripts\Taskmaster\flask_app\app.py", line 58, in create_app
+    @app.before_first_request
+     ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Flask' object has no attribute 'before_first_request'. Did you mean: '_got_first_request'?
