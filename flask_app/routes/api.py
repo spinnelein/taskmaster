@@ -1309,6 +1309,98 @@ def bulk_assign_tasks_api():
             'unassigned_tasks': []
         }), 500
 
+# Enhanced Task Queue endpoints using ProjectAwarePriorityService
+@api_bp.route('/task-queue/enhanced')
+def get_enhanced_task_queue():
+    """Get enhanced task queue with ProjectAwarePriorityService scoring"""
+    limit = int(request.args.get('limit', 100))
+    
+    try:
+        from services.enhanced_task_queue_service import get_enhanced_task_queue_service
+        
+        enhanced_service = get_enhanced_task_queue_service()
+        enhanced_queue = enhanced_service.get_enhanced_task_queue(limit)
+        
+        return jsonify({
+            'enhanced_task_queue': enhanced_queue,
+            'count': len(enhanced_queue),
+            'scoring_method': 'ProjectAwarePriorityService'
+        })
+    except Exception as e:
+        return jsonify({
+            'error': str(e),
+            'enhanced_task_queue': [],
+            'count': 0
+        }), 500
+
+@api_bp.route('/task-queue/enhanced/available')
+def get_enhanced_available_queue():
+    """Get available enhanced task queue"""
+    limit = int(request.args.get('limit', 100))
+    
+    try:
+        from services.enhanced_task_queue_service import get_enhanced_task_queue_service
+        
+        enhanced_service = get_enhanced_task_queue_service()
+        available_queue = enhanced_service.get_available_enhanced_queue(limit)
+        
+        return jsonify({
+            'enhanced_available_tasks': available_queue,
+            'count': len(available_queue),
+            'scoring_method': 'ProjectAwarePriorityService'
+        })
+    except Exception as e:
+        return jsonify({
+            'error': str(e),
+            'enhanced_available_tasks': [],
+            'count': 0
+        }), 500
+
+@api_bp.route('/task-queue/enhanced/context/<task_id>')
+def get_enhanced_task_context(task_id):
+    """Get detailed task context analysis"""
+    try:
+        from services.enhanced_task_queue_service import get_enhanced_task_queue_service
+        
+        enhanced_service = get_enhanced_task_queue_service()
+        context = enhanced_service.get_task_context_analysis(task_id)
+        
+        return jsonify({
+            'task_context': context,
+            'has_analysis': 'priority_analysis' in context
+        })
+    except Exception as e:
+        return jsonify({
+            'error': str(e),
+            'task_context': {},
+            'has_analysis': False
+        }), 500
+
+@api_bp.route('/task-queue/enhanced/compare', methods=['POST'])
+def compare_enhanced_task_priorities():
+    """Compare priority scores for multiple tasks"""
+    try:
+        data = request.json
+        task_ids = data.get('task_ids', [])
+        
+        if not task_ids:
+            return jsonify({'error': 'task_ids required'}), 400
+        
+        from services.enhanced_task_queue_service import get_enhanced_task_queue_service
+        
+        enhanced_service = get_enhanced_task_queue_service()
+        comparisons = enhanced_service.compare_task_priorities(task_ids)
+        
+        return jsonify({
+            'task_comparisons': comparisons,
+            'count': len(comparisons)
+        })
+    except Exception as e:
+        return jsonify({
+            'error': str(e),
+            'task_comparisons': [],
+            'count': 0
+        }), 500
 # Dishes API endpoints
 @api_bp.route('/dishes', methods=['GET'])
 def get_dishes():
