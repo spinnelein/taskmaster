@@ -2,3 +2,4 @@
 nul
 backend/nul
 .env.production
+timekeeper.log
