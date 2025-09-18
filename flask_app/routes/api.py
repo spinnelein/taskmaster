@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from datetime import datetime, date, timedelta
-from models import db, Event, Task, Initiative, TimePool, WeatherForecast, TaskAssignment
+from models import db, Event, Task, Initiative, TimePool, WeatherForecast, TaskAssignment, Dish, Recipe, Meal, MealDish
 from recurring_service import recurring_service
 from weather_service import get_flask_weather_service
 from task_queue_service import get_task_queue_service
@@ -102,6 +102,20 @@ def create_event():
     start_time = start_time.replace(tzinfo=None)
     end_time = end_time.replace(tzinfo=None)
     
+    # Handle all-day events - ensure proper timestamps
+    event_type = data.get('event_type', 'timed')
+    if event_type == 'all_day':
+        # For all-day events, set start time to 00:00:00 and end time to 23:59:59
+        start_time = start_time.replace(hour=0, minute=0, second=0, microsecond=0)
+        end_time = end_time.replace(hour=23, minute=59, second=59, microsecond=0)
+    
+    # Validate meal_id if provided
+    meal_id = data.get('meal_id')
+    if meal_id:
+        meal = Meal.query.get(meal_id)
+        if not meal:
+            return jsonify({'error': 'Invalid meal_id - meal does not exist'}), 400
+
     event = Event(
         id=str(uuid.uuid4()),  # Generate UUID for ID
         title=data['title'],
@@ -110,7 +124,8 @@ def create_event():
         is_blocking=data.get('is_blocking', True),
         description=data.get('description', ''),
         location=data.get('location', ''),
-        event_type=data.get('event_type', 'timed'),
+        event_type=event_type,
+        meal_id=meal_id,
         notifications_enabled=data.get('notifications_enabled', True),
         created_at=datetime.utcnow(),
         updated_at=datetime.utcnow()
@@ -137,7 +152,11 @@ def create_event():
     # Trigger time pool regeneration
     _trigger_pool_regeneration()
     
-    return jsonify(event.to_dict())
+    # Return event with meal data if it's a dinner event
+    if event.meal_id:
+        return jsonify(event.to_dict_with_meal())
+    else:
+        return jsonify(event.to_dict())
 
 @api_bp.route('/events/<event_id>', methods=['PUT'])
 def update_event(event_id):
@@ -180,6 +199,16 @@ def update_event(event_id):
     if 'notifications_enabled' in data:
         event.notifications_enabled = data['notifications_enabled']
     
+    # Handle meal_id for dinner events
+    if 'meal_id' in data:
+        meal_id = data['meal_id']
+        if meal_id:
+            # Validate that the meal exists
+            meal = Meal.query.get(meal_id)
+            if not meal:
+                return jsonify({'error': 'Invalid meal_id - meal does not exist'}), 400
+        event.meal_id = meal_id
+    
     # Handle recurring event fields
     if 'is_recurring' in data:
         event.is_recurring = data['is_recurring']
@@ -211,7 +240,11 @@ def update_event(event_id):
     # Trigger time pool regeneration
     _trigger_pool_regeneration()
     
-    return jsonify(event.to_dict())
+    # Return event with meal data if it's a dinner event
+    if event.meal_id:
+        return jsonify(event.to_dict_with_meal())
+    else:
+        return jsonify(event.to_dict())
 
 @api_bp.route('/events/<event_id>', methods=['DELETE'])
 def delete_event(event_id):
@@ -307,6 +340,7 @@ def create_task():
         is_snoozed=is_snoozed,
         snoozed_until=start_datetime,
         due_date=due_date,
+        required_weather=data.get('required_weather'),
         created_at=datetime.utcnow(),
         updated_at=datetime.utcnow()
     )
@@ -338,6 +372,8 @@ def update_task(task_id):
         task.priority = data['priority']
     if 'recurrence_days' in data:
         task.recurrence_days = data['recurrence_days']
+    if 'required_weather' in data:
+        task.required_weather = data['required_weather']
     if 'due_date' in data:
         if data['due_date']:
             task.due_date = datetime.fromisoformat(data['due_date']).date()
@@ -1272,3 +1308,398 @@ def bulk_assign_tasks_api():
             'pools_used': 0,
             'unassigned_tasks': []
         }), 500
+
+# Dishes API endpoints
+@api_bp.route('/dishes', methods=['GET'])
+def get_dishes():
+    """Get all dishes with recipe data"""
+    try:
+        dishes = Dish.query.order_by(Dish.title).all()
+        return jsonify([dish.to_dict_with_recipe() for dish in dishes])
+    except Exception as e:
+        logger.error(f"Error getting dishes: {e}")
+        return jsonify({'error': f"Failed to get dishes: {str(e)}"}), 500
+
+@api_bp.route('/dishes/<dish_id>', methods=['GET'])
+def get_dish(dish_id):
+    """Get a specific dish with recipe data"""
+    try:
+        dish = Dish.query.get_or_404(dish_id)
+        return jsonify(dish.to_dict_with_recipe())
+    except Exception as e:
+        logger.error(f"Error getting dish {dish_id}: {e}")
+        return jsonify({'error': f"Failed to get dish: {str(e)}"}), 500
+
+@api_bp.route('/dishes', methods=['POST'])
+def create_dish():
+    """Create a new dish"""
+    try:
+        data = request.json
+        
+        # Validate required fields
+        if not data.get('title'):
+            return jsonify({'error': 'Title is required'}), 400
+        if not data.get('dish_type'):
+            return jsonify({'error': 'Dish type is required'}), 400
+        if not data.get('difficulty'):
+            return jsonify({'error': 'Difficulty is required'}), 400
+        if not data.get('ingredients') or len(data.get('ingredients', [])) == 0:
+            return jsonify({'error': 'Ingredients are required'}), 400
+        if not data.get('instructions') or len(data.get('instructions', [])) == 0:
+            return jsonify({'error': 'Instructions are required'}), 400
+        
+        # Handle dietary tags
+        dietary_tags = data.get('dietary_tags', [])
+        if isinstance(dietary_tags, list):
+            dietary_tags_json = json.dumps(dietary_tags)
+        else:
+            dietary_tags_json = None
+        
+        # Create recipe first
+        recipe_id = str(uuid.uuid4())
+        recipe = Recipe(
+            id=recipe_id,
+            title=data['title'] + " Recipe",
+            description=data.get('description', ''),
+            ingredients=json.dumps(data['ingredients']),
+            instructions=json.dumps(data['instructions']),
+            created_at=datetime.utcnow(),
+            updated_at=datetime.utcnow()
+        )
+        
+        dish = Dish(
+            id=str(uuid.uuid4()),
+            title=data['title'],
+            description=data.get('description'),
+            dish_type=data['dish_type'],
+            difficulty=data['difficulty'],
+            cuisine=data.get('cuisine'),
+            prep_time_minutes=data.get('prep_time_minutes'),
+            cook_time_minutes=data.get('cook_time_minutes'),
+            total_time_minutes=data.get('total_time_minutes'),
+            advance_prep_hours=data.get('advance_prep_hours'),
+            advance_prep_description=data.get('advance_prep_description'),
+            default_servings=data.get('default_servings'),
+            calories_per_serving=data.get('calories_per_serving'),
+            estimated_cost_per_serving=data.get('estimated_cost_per_serving'),
+            dietary_tags=dietary_tags_json,
+            recipe_id=recipe_id,
+            created_at=datetime.utcnow(),
+            updated_at=datetime.utcnow()
+        )
+        
+        db.session.add(recipe)
+        db.session.add(dish)
+        db.session.commit()
+        
+        return jsonify(dish.to_dict_with_recipe()), 201
+        
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Error creating dish: {e}")
+        return jsonify({'error': f"Failed to create dish: {str(e)}"}), 500
+
+@api_bp.route('/dishes/<dish_id>', methods=['PUT'])
+def update_dish(dish_id):
+    """Update a dish"""
+    try:
+        dish = Dish.query.get_or_404(dish_id)
+        data = request.json
+        
+        # Update fields if provided
+        if 'title' in data:
+            dish.title = data['title']
+        if 'description' in data:
+            dish.description = data['description']
+        if 'dish_type' in data:
+            dish.dish_type = data['dish_type']
+        if 'difficulty' in data:
+            dish.difficulty = data['difficulty']
+        if 'cuisine' in data:
+            dish.cuisine = data['cuisine']
+        if 'prep_time_minutes' in data:
+            dish.prep_time_minutes = data['prep_time_minutes']
+        if 'cook_time_minutes' in data:
+            dish.cook_time_minutes = data['cook_time_minutes']
+        if 'total_time_minutes' in data:
+            dish.total_time_minutes = data['total_time_minutes']
+        if 'advance_prep_hours' in data:
+            dish.advance_prep_hours = data['advance_prep_hours']
+        if 'advance_prep_description' in data:
+            dish.advance_prep_description = data['advance_prep_description']
+        if 'default_servings' in data:
+            dish.default_servings = data['default_servings']
+        if 'calories_per_serving' in data:
+            dish.calories_per_serving = data['calories_per_serving']
+        if 'estimated_cost_per_serving' in data:
+            dish.estimated_cost_per_serving = data['estimated_cost_per_serving']
+        if 'dietary_tags' in data:
+            dietary_tags = data['dietary_tags']
+            if isinstance(dietary_tags, list):
+                dish.dietary_tags = json.dumps(dietary_tags)
+            else:
+                dish.dietary_tags = None
+        if 'recipe_id' in data:
+            dish.recipe_id = data['recipe_id']
+        
+        # Handle recipe updates
+        if 'ingredients' in data or 'instructions' in data:
+            recipe = dish.get_recipe()
+            if recipe:
+                # Update existing recipe
+                if 'ingredients' in data:
+                    recipe.ingredients = json.dumps(data['ingredients'])
+                if 'instructions' in data:
+                    recipe.instructions = json.dumps(data['instructions'])
+                recipe.updated_at = datetime.utcnow()
+            else:
+                # Create new recipe if none exists
+                recipe_id = str(uuid.uuid4())
+                recipe = Recipe(
+                    id=recipe_id,
+                    title=dish.title + " Recipe",
+                    description=dish.description or '',
+                    ingredients=json.dumps(data.get('ingredients', [])),
+                    instructions=json.dumps(data.get('instructions', [])),
+                    created_at=datetime.utcnow(),
+                    updated_at=datetime.utcnow()
+                )
+                dish.recipe_id = recipe_id
+                db.session.add(recipe)
+        
+        dish.updated_at = datetime.utcnow()
+        db.session.commit()
+        
+        return jsonify(dish.to_dict_with_recipe())
+        
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Error updating dish {dish_id}: {e}")
+        return jsonify({'error': f"Failed to update dish: {str(e)}"}), 500
+
+@api_bp.route('/dishes/<dish_id>', methods=['DELETE'])
+def delete_dish(dish_id):
+    """Delete a dish"""
+    try:
+        dish = Dish.query.get_or_404(dish_id)
+        db.session.delete(dish)
+        db.session.commit()
+        return jsonify({'status': 'success', 'message': 'Dish deleted successfully'})
+        
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Error deleting dish {dish_id}: {e}")
+        return jsonify({'error': f"Failed to delete dish: {str(e)}"}), 500
+
+# Meals endpoints
+@api_bp.route('/meals', methods=['GET'])
+def get_meals():
+    """Get all meals"""
+    try:
+        meals = Meal.query.all()
+        return jsonify([meal.to_dict_with_dishes() for meal in meals])
+    except Exception as e:
+        logger.error(f"Error fetching meals: {e}")
+        return jsonify({'error': f"Failed to fetch meals: {str(e)}"}), 500
+
+@api_bp.route('/meals/<meal_id>', methods=['GET'])
+def get_meal(meal_id):
+    """Get a specific meal with dishes"""
+    try:
+        meal = Meal.query.get_or_404(meal_id)
+        return jsonify(meal.to_dict_with_dishes())
+    except Exception as e:
+        logger.error(f"Error fetching meal {meal_id}: {e}")
+        return jsonify({'error': f"Failed to fetch meal: {str(e)}"}), 500
+
+@api_bp.route('/meals', methods=['POST'])
+def create_meal():
+    """Create a new meal"""
+    try:
+        data = request.get_json()
+        
+        # Create meal
+        meal_id = str(uuid.uuid4())
+        meal = Meal(
+            id=meal_id,
+            title=data['title'],
+            description=data.get('description', ''),
+            meal_type=data['meal_type'],
+            status=data.get('status', 'planned'),
+            serves_count=data.get('serves_count'),
+            planned_date=datetime.fromisoformat(data['planned_date']) if data.get('planned_date') else None,
+            prep_start_time=datetime.fromisoformat(data['prep_start_time']) if data.get('prep_start_time') else None,
+            cook_start_time=datetime.fromisoformat(data['cook_start_time']) if data.get('cook_start_time') else None,
+            serve_time=datetime.fromisoformat(data['serve_time']) if data.get('serve_time') else None,
+            estimated_calories_per_serving=data.get('estimated_calories_per_serving'),
+            dietary_tags=json.dumps(data.get('dietary_tags', [])) if data.get('dietary_tags') else None,
+            estimated_cost=data.get('estimated_cost'),
+            actual_cost=data.get('actual_cost'),
+            event_id=data.get('event_id'),
+            created_at=datetime.utcnow(),
+            updated_at=datetime.utcnow()
+        )
+        
+        db.session.add(meal)
+        
+        # Add dishes to meal if provided
+        if 'dish_ids' in data and data['dish_ids']:
+            for dish_id in data['dish_ids']:
+                meal_dish = MealDish(
+                    id=str(uuid.uuid4()),
+                    meal_id=meal_id,
+                    dish_id=dish_id,
+                    created_at=datetime.utcnow(),
+                    updated_at=datetime.utcnow()
+                )
+                db.session.add(meal_dish)
+        
+        db.session.commit()
+        return jsonify(meal.to_dict_with_dishes()), 201
+        
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Error creating meal: {e}")
+        return jsonify({'error': f"Failed to create meal: {str(e)}"}), 500
+
+@api_bp.route('/meals/<meal_id>', methods=['PUT'])
+def update_meal(meal_id):
+    """Update a meal"""
+    try:
+        meal = Meal.query.get_or_404(meal_id)
+        data = request.get_json()
+        
+        # Update meal fields
+        if 'title' in data:
+            meal.title = data['title']
+        if 'description' in data:
+            meal.description = data['description']
+        if 'meal_type' in data:
+            meal.meal_type = data['meal_type']
+        if 'status' in data:
+            meal.status = data['status']
+        if 'serves_count' in data:
+            meal.serves_count = data['serves_count']
+        if 'planned_date' in data:
+            meal.planned_date = datetime.fromisoformat(data['planned_date']) if data['planned_date'] else None
+        if 'prep_start_time' in data:
+            meal.prep_start_time = datetime.fromisoformat(data['prep_start_time']) if data['prep_start_time'] else None
+        if 'cook_start_time' in data:
+            meal.cook_start_time = datetime.fromisoformat(data['cook_start_time']) if data['cook_start_time'] else None
+        if 'serve_time' in data:
+            meal.serve_time = datetime.fromisoformat(data['serve_time']) if data['serve_time'] else None
+        if 'estimated_calories_per_serving' in data:
+            meal.estimated_calories_per_serving = data['estimated_calories_per_serving']
+        if 'dietary_tags' in data:
+            meal.dietary_tags = json.dumps(data['dietary_tags']) if data['dietary_tags'] else None
+        if 'estimated_cost' in data:
+            meal.estimated_cost = data['estimated_cost']
+        if 'actual_cost' in data:
+            meal.actual_cost = data['actual_cost']
+        if 'event_id' in data:
+            meal.event_id = data['event_id']
+        
+        meal.updated_at = datetime.utcnow()
+        db.session.commit()
+        
+        return jsonify(meal.to_dict_with_dishes())
+        
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Error updating meal {meal_id}: {e}")
+        return jsonify({'error': f"Failed to update meal: {str(e)}"}), 500
+
+@api_bp.route('/meals/<meal_id>', methods=['DELETE'])
+def delete_meal(meal_id):
+    """Delete a meal"""
+    try:
+        meal = Meal.query.get_or_404(meal_id)
+        
+        # Delete associated meal_dishes records
+        MealDish.query.filter_by(meal_id=meal_id).delete()
+        
+        # Delete the meal
+        db.session.delete(meal)
+        db.session.commit()
+        
+        return jsonify({'status': 'success', 'message': 'Meal deleted successfully'})
+        
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Error deleting meal {meal_id}: {e}")
+        return jsonify({'error': f"Failed to delete meal: {str(e)}"}), 500
+
+@api_bp.route('/meals/<meal_id>/dishes', methods=['POST'])
+def add_dish_to_meal(meal_id):
+    """Add a dish to a meal"""
+    try:
+        meal = Meal.query.get_or_404(meal_id)
+        data = request.get_json()
+        dish_id = data['dish_id']
+        
+        # Check if dish exists
+        dish = Dish.query.get_or_404(dish_id)
+        
+        # Check if dish is already in meal
+        existing = MealDish.query.filter_by(meal_id=meal_id, dish_id=dish_id).first()
+        if existing:
+            return jsonify({'error': 'Dish is already in this meal'}), 400
+        
+        # Add dish to meal
+        meal_dish = MealDish(
+            id=str(uuid.uuid4()),
+            meal_id=meal_id,
+            dish_id=dish_id,
+            notes=data.get('notes', ''),
+            created_at=datetime.utcnow(),
+            updated_at=datetime.utcnow()
+        )
+        
+        db.session.add(meal_dish)
+        db.session.commit()
+        
+        return jsonify(meal.to_dict_with_dishes())
+        
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Error adding dish to meal {meal_id}: {e}")
+        return jsonify({'error': f"Failed to add dish to meal: {str(e)}"}), 500
+
+@api_bp.route('/meals/<meal_id>/dishes/<dish_id>', methods=['DELETE'])
+def remove_dish_from_meal(meal_id, dish_id):
+    """Remove a dish from a meal"""
+    try:
+        meal_dish = MealDish.query.filter_by(meal_id=meal_id, dish_id=dish_id).first_or_404()
+        
+        db.session.delete(meal_dish)
+        db.session.commit()
+        
+        meal = Meal.query.get(meal_id)
+        return jsonify(meal.to_dict_with_dishes())
+        
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Error removing dish from meal {meal_id}: {e}")
+        return jsonify({'error': f"Failed to remove dish from meal: {str(e)}"}), 500
+
+# Dinner Event convenience endpoints
+@api_bp.route('/events/dinner', methods=['GET'])
+def get_dinner_events():
+    """Get all dinner events (events with meals)"""
+    try:
+        dinner_events = Event.query.filter(Event.meal_id.isnot(None)).all()
+        return jsonify([event.to_dict_with_meal() for event in dinner_events])
+    except Exception as e:
+        logger.error(f"Error fetching dinner events: {e}")
+        return jsonify({'error': f"Failed to fetch dinner events: {str(e)}"}), 500
+
+@api_bp.route('/meals/<meal_id>/events', methods=['GET'])
+def get_meal_events(meal_id):
+    """Get all events using a specific meal"""
+    try:
+        meal = Meal.query.get_or_404(meal_id)
+        events = meal.get_events()
+        return jsonify([event.to_dict() for event in events])
+    except Exception as e:
+        logger.error(f"Error fetching events for meal {meal_id}: {e}")
+        return jsonify({'error': f"Failed to fetch events for meal: {str(e)}"}), 500

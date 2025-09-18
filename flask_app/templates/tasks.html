@@ -189,6 +189,8 @@
                 <a href="/tasks" class="active">Tasks</a>
                 <a href="/initiatives">Initiatives</a>
                 <a href="/projects">Projects</a>
+                <a href="/dishes">Dishes</a>
+                <a href="/meals">Meals</a>
             </div>
         </div>
         
@@ -268,15 +270,18 @@
     function displayActiveTasks(tasks) {
         const activeTasksContainer = document.getElementById('active-tasks');
         
-        if (tasks.length === 0) {
+        // Filter to active tasks only (same as schedule page)
+        const activeTasks = tasks.filter(task => task.status === 'active' && !task.completed);
+        
+        if (activeTasks.length === 0) {
             activeTasksContainer.innerHTML = '<div style="color: #666; text-align: center; padding: 20px;">No active tasks</div>';
             return;
         }
         
         // Sort tasks by urgency (highest first)
-        tasks.sort((a, b) => (b.urgency || 0) - (a.urgency || 0));
+        activeTasks.sort((a, b) => (b.urgency || 0) - (a.urgency || 0));
         
-        activeTasksContainer.innerHTML = tasks.map(task => `
+        activeTasksContainer.innerHTML = activeTasks.map(task => `
             <div class="task-item ${getPriorityClass(task.priority)}">
                 <div class="task-title">${task.title}</div>
                 <div class="task-meta">
@@ -302,11 +307,13 @@
     }
     
     function updateStats(tasks) {
-        const activeCount = tasks.length;
-        const highPriorityCount = tasks.filter(t => t.priority === 'high').length;
-        const totalDuration = tasks.reduce((sum, t) => sum + (t.duration || 0), 0);
+        // Filter to active tasks only (same as schedule page)
+        const activeTasks = tasks.filter(task => task.status === 'active' && !task.completed);
+        const activeCount = activeTasks.length;
+        const highPriorityCount = activeTasks.filter(t => t.priority === 'high').length;
+        const totalDuration = activeTasks.reduce((sum, t) => sum + (t.duration || 0), 0);
         const avgUrgency = activeCount > 0 ? 
-            Math.round(tasks.reduce((sum, t) => sum + (t.urgency || 5), 0) / activeCount * 10) / 10 : 0;
+            Math.round(activeTasks.reduce((sum, t) => sum + (t.urgency || 5), 0) / activeCount * 10) / 10 : 0;
         
         document.getElementById('active-count').textContent = activeCount;
         document.getElementById('high-priority-count').textContent = highPriorityCount;
@@ -424,6 +431,16 @@
                             </div>
                         </div>
                         
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: flex; align-items: center; cursor: pointer; font-weight: bold; color: #555;">
+                                <input type="checkbox" id="edit-outdoor" ${task.required_weather === 'outdoor' ? 'checked' : ''} style="
+                                    margin-right: 10px; width: 18px; height: 18px; cursor: pointer;
+                                ">
+                                Outdoor Task (requires good weather)
+                            </label>
+                            <small style="color: #666; font-size: 12px; margin-left: 28px;">Check this if the task needs to be done outdoors</small>
+                        </div>
+                        
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
                             <div>
                                 <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Start Date</label>
@@ -478,7 +495,8 @@
             urgency: parseInt(document.getElementById('edit-urgency').value),
             priority: document.getElementById('edit-priority').value,
             start_date: document.getElementById('edit-start-date').value || null,
-            due_date: document.getElementById('edit-due-date').value || null
+            due_date: document.getElementById('edit-due-date').value || null,
+            required_weather: document.getElementById('edit-outdoor').checked ? 'outdoor' : null
         };
         
         // Only include recurrence_days if a value was provided

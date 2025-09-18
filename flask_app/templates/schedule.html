@@ -553,6 +553,8 @@
                 <a href="/tasks">Tasks</a>
                 <a href="/initiatives">Initiatives</a>
                 <a href="/projects">Projects</a>
+                <a href="/dishes">Dishes</a>
+                <a href="/meals">Meals</a>
                 <button class="btn" onclick="showAddEventModal()" style="margin-left: 20px;">Add Event</button>
             </div>
         </div>
@@ -730,7 +732,9 @@
             slotLabelInterval: '01:00',
             expandRows: true,
             eventMinHeight: 30,
-            allDaySlot: false,
+            allDaySlot: true,
+            allDayText: 'All Day',
+            dayMaxEvents: true,
             editable: true,
             selectable: true,
             selectMirror: true,

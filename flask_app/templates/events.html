@@ -416,6 +416,8 @@
                 <a href="/tasks">Tasks</a>
                 <a href="/initiatives">Initiatives</a>
                 <a href="/projects">Projects</a>
+                <a href="/dishes">Dishes</a>
+                <a href="/meals">Meals</a>
             </div>
         </div>
         
@@ -489,6 +491,14 @@
                                 <option value="instant">Instant</option>
                             </select>
                         </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventMeal">Meal (optional)</label>
+                        <select id="eventMeal" name="meal_id">
+                            <option value="">No meal - regular event</option>
+                        </select>
+                        <div class="help-text">Select a meal to create a dinner event</div>
                     </div>
                     
                     <!-- Event Options -->
@@ -572,6 +582,7 @@
     // Initialize when page loads
     document.addEventListener('DOMContentLoaded', function() {
         loadEvents();
+        loadMeals();
         checkHealth();
     });
     
@@ -586,6 +597,27 @@
                 console.error('Error loading events:', error);
                 document.getElementById('events-list').innerHTML = 
                     '<div class="empty-state" style="color: #dc3545;">Failed to load events</div>';
+            });
+    }
+    
+    function loadMeals() {
+        fetch('/api/meals')
+            .then(response => response.json())
+            .then(meals => {
+                const mealSelect = document.getElementById('eventMeal');
+                // Clear existing options except the first one
+                mealSelect.innerHTML = '<option value="">No meal - regular event</option>';
+                
+                // Add meals to dropdown
+                meals.forEach(meal => {
+                    const option = document.createElement('option');
+                    option.value = meal.id;
+                    option.textContent = `${meal.name} (${meal.dish_count || 0} dishes)`;
+                    mealSelect.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error loading meals:', error);
             });
     }
     
@@ -624,6 +656,9 @@
         if (event.is_recurrence_master) {
             badges.push('<span class="event-type master">Master</span>');
         }
+        if (event.meal_id || event.is_dinner_event) {
+            badges.push('<span class="event-type" style="background: #fd7e14;">🍽️ Dinner</span>');
+        }
         
         return `
             <div class="event-item" data-event-id="${event.id}" data-upcoming="${isUpcoming}" data-past="${isPast}" data-blocking="${event.is_blocking}" data-recurring="${event.is_recurring || false}">
@@ -646,6 +681,7 @@
                         <div class="event-detail">
                             <strong>Status:</strong> ${isPast ? 'Completed' : isUpcoming ? 'Upcoming' : 'In Progress'}
                         </div>
+                        ${event.meal_id ? `<div class="event-detail"><strong>Meal:</strong> <span style="color: #fd7e14;">🍽️ Dinner Event</span></div>` : ''}
                     </div>
                     ${event.description ? `<div class="event-description">${event.description}</div>` : ''}
                     <div class="event-actions">
@@ -799,6 +835,12 @@
             notifications_enabled: formData.get('notifications_enabled') === 'on',
             is_recurring: formData.get('is_recurring') === 'on'
         };
+        
+        // Add meal_id if selected
+        const mealId = formData.get('meal_id');
+        if (mealId) {
+            eventData.meal_id = mealId;
+        }
         
         // Handle recurring event data
         if (eventData.is_recurring) {
