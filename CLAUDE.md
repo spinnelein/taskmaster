@@ -66,10 +66,21 @@ python -m pytest tests/             # Run Flask tests (if test directory exists)
 curl http://localhost:5000/health   # Health check
 curl http://localhost:5000/api/events  # API endpoints
 
-# Playwright browser testing (works great with Flask!)
-npm run test:web                    # Playwright tests against Flask server
-npm run test:ui                     # UI component tests on server-rendered pages
-npm run debug:browser -- --head    # Interactive browser debugging
+# Comprehensive Web Testing Infrastructure
+npm run test:web                    # HTTP endpoint validation (no browser needed)
+npm run test:ui                     # Automated UI interaction testing with Playwright
+npm run debug:browser -- --head    # Interactive browser debugging with console capture
+
+# Advanced Playwright Testing
+node scripts/simple-web-test.js     # Quick HTTP health checks
+node scripts/browser-debug.js [url] # Custom browser automation with logging
+node scripts/comprehensive-ui-tests.js  # Full UI workflow testing
+
+# Testing Output Locations
+# - Console logs: logs/browser-console-{timestamp}.log
+# - Screenshots: logs/*.png for visual validation
+# - Network monitoring: Request/response capture
+# - JavaScript error detection: Runtime error tracking
 
 # Legacy backend testing (from previous FastAPI setup)
 cd backend
