@@ -1,0 +1,68 @@
+{
+  "task_id": "bd6ac40a-11b8-484c-b6fa-b5d899f68053",
+  "analyzed_at": "2025-09-21T12:54:09.780235",
+  "complexity_assessment": {
+    "complexity_score": 4,
+    "complexity_level": "medium",
+    "estimated_duration_minutes": 15,
+    "time_confidence": "medium",
+    "time_multiplier": 1.0,
+    "factors": [],
+    "final_complexity_score": 4.5
+  },
+  "dependency_insights": {
+    "has_dependencies": false,
+    "dependency_signals": [],
+    "time_references": [],
+    "task_references": [],
+    "existing_dependencies": [],
+    "suggested_dependencies": [],
+    "dependency_confidence": "low"
+  },
+  "context_enhancement": {
+    "extracted_tags": [],
+    "categories": [],
+    "action_words": [
+      "test"
+    ],
+    "priority_indicators": [],
+    "skill_requirements": [],
+    "location_context": [],
+    "enhancement_confidence": "medium"
+  },
+  "smart_suggestions": [
+    {
+      "type": "scheduling",
+      "priority": "medium",
+      "suggestion": "Add due date for this important task",
+      "reasoning": "Important tasks benefit from explicit deadlines",
+      "implementation": "Set appropriate due date based on priority"
+    }
+  ],
+  "ai_confidence": 0.8,
+  "analysis_source": "hybrid",
+  "ai_insights": {
+    "complexity_assessment": {
+      "ai_complexity_score": 5,
+      "ai_estimated_duration": 60,
+      "ai_confidence": 0.7,
+      "complexity_factors": []
+    },
+    "dependency_insights": {
+      "ai_detected_dependencies": [],
+      "dependency_signals": [],
+      "sequential_vs_parallel": "unknown",
+      "ai_confidence": 0.8
+    },
+    "context_enhancement": {
+      "ai_generated_tags": [],
+      "skill_requirements": [],
+      "resource_requirements": [],
+      "optimal_timing": "anytime",
+      "ai_confidence": 0.85
+    },
+    "smart_suggestions": [],
+    "confidence": 0.8,
+    "raw_response": "{\n  \"duration_analysis\": {\n    \"recommended_minutes\": 20,\n    \"confidence\": \"high\",\n    \"reasoning\": \"The task description indicates a current duration of 15 minutes, but given the nature of testing and the need to validate the task's functionality, an additional 5 minutes of buffer time is recommended to account for potential troubleshooting or unexpected issues.\"\n  },\n  \"task_structure\": {\n    \"is_divisible\": false,\n    \"min_chunk_minutes\": null,\n    \"natural_breakpoints\": null\n  },\n  \"energy_requirements\": {\n    \"energy_level\": \"medium\",\n    \"energy_type\": \"mental\",\n    \"cognitive_load\": \"medium\"\n  },\n  \"environment\": {\n    \"location\": \"flexible\",\n    \"weather_dependent\": false,\n    \"weather_requirements\": null\n  },\n  \"scheduling\": {\n    \"urgency_assessment\": 8,\n    \"urgency_reasoning\": \"The task has a high urgency level of 8/10, indicating that it should be completed in a timely manner to ensure the availability of the Timekeeper feature.\",\n    \"optimal_time\": \"anytime\",\n    \"time_sensitivity\": \"This task should be completed as soon as possible to ensure the Timekeeper feature is functioning correctly.\"\n  },\n  \"resources\": {\n    \"equipment_needed\": [\"Timekeeper interface\", \"test data\"],\n    \"preparation_time\": 5,\n    \"location_requirements\": \"A workspace with access to the Timekeeper interface and necessary test data.\"\n  }\n}"
+  }
+}

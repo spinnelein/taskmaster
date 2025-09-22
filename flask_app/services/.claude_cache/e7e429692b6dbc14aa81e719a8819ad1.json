@@ -1,0 +1,39 @@
+{
+  "task_id": "test-task-008",
+  "analyzed_at": "2025-09-18T15:56:06.587102",
+  "complexity_assessment": {
+    "complexity_score": 5,
+    "complexity_level": "medium",
+    "estimated_duration_minutes": 45,
+    "time_confidence": "medium",
+    "time_multiplier": 1.0,
+    "factors": []
+  },
+  "dependency_insights": {
+    "has_dependencies": false,
+    "dependency_signals": [],
+    "time_references": [],
+    "task_references": [],
+    "existing_dependencies": [],
+    "suggested_dependencies": [],
+    "dependency_confidence": "low"
+  },
+  "context_enhancement": {
+    "extracted_tags": [],
+    "categories": [
+      "communication"
+    ],
+    "action_words": [
+      "meet"
+    ],
+    "priority_indicators": [],
+    "skill_requirements": [
+      "meeting"
+    ],
+    "location_context": [],
+    "enhancement_confidence": "medium"
+  },
+  "smart_suggestions": [],
+  "ai_confidence": 0.0,
+  "analysis_source": "rules"
+}

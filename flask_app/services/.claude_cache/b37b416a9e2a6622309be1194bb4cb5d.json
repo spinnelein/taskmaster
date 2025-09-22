@@ -1,0 +1,73 @@
+{
+  "task_id": "60be3dda-aa8e-4c72-a4a9-6d347b8c5d09",
+  "analyzed_at": "2025-09-21T15:50:54.314311",
+  "complexity_assessment": {
+    "complexity_score": 7,
+    "complexity_level": "high",
+    "estimated_duration_minutes": 480,
+    "time_confidence": "medium",
+    "time_multiplier": 1.0,
+    "factors": [],
+    "final_complexity_score": 6.0
+  },
+  "dependency_insights": {
+    "has_dependencies": false,
+    "dependency_signals": [],
+    "time_references": [],
+    "task_references": [],
+    "existing_dependencies": [],
+    "suggested_dependencies": [],
+    "dependency_confidence": "low"
+  },
+  "context_enhancement": {
+    "extracted_tags": [],
+    "categories": [],
+    "action_words": [],
+    "priority_indicators": [],
+    "skill_requirements": [],
+    "location_context": [],
+    "enhancement_confidence": "medium"
+  },
+  "smart_suggestions": [
+    {
+      "type": "chunking",
+      "priority": "high",
+      "suggestion": "Consider breaking this long task into smaller chunks for better focus",
+      "reasoning": "Task duration of 480 minutes may lead to fatigue",
+      "implementation": "Enable task chunking or create sub-tasks"
+    },
+    {
+      "type": "clarity",
+      "priority": "medium",
+      "suggestion": "Add more detailed description for better planning",
+      "reasoning": "Detailed descriptions improve estimation and execution",
+      "implementation": "Expand description with specific steps or requirements"
+    }
+  ],
+  "ai_confidence": 0.8,
+  "analysis_source": "hybrid",
+  "ai_insights": {
+    "complexity_assessment": {
+      "ai_complexity_score": 5,
+      "ai_estimated_duration": 60,
+      "ai_confidence": 0.7,
+      "complexity_factors": []
+    },
+    "dependency_insights": {
+      "ai_detected_dependencies": [],
+      "dependency_signals": [],
+      "sequential_vs_parallel": "unknown",
+      "ai_confidence": 0.8
+    },
+    "context_enhancement": {
+      "ai_generated_tags": [],
+      "skill_requirements": [],
+      "resource_requirements": [],
+      "optimal_timing": "anytime",
+      "ai_confidence": 0.85
+    },
+    "smart_suggestions": [],
+    "confidence": 0.8,
+    "raw_response": "{\n  \"duration_analysis\": {\n    \"recommended_minutes\": 360,\n    \"confidence\": \"medium\",\n    \"reasoning\": \"Tiling a shower typically takes between 6-8 hours for an experienced DIYer, but the current estimate of 480 minutes (8 hours) seems reasonable given the task complexity.\"\n  },\n  \"task_structure\": {\n    \"is_divisible\": true,\n    \"min_chunk_minutes\": 60,\n    \"natural_breakpoints\": \"The task can be divided into smaller chunks such as preparing the surface, laying the tiles, and grouting. Each of these subtasks can be completed in 1-2 hour sessions.\"\n  },\n  \"energy_requirements\": {\n    \"energy_level\": \"high\",\n    \"energy_type\": \"physical\",\n    \"cognitive_load\": \"medium\"\n  },\n  \"environment\": {\n    \"location\": \"indoor\",\n    \"weather_dependent\": false,\n    \"weather_requirements\": null\n  },\n  \"scheduling\": {\n    \"urgency_assessment\": 5,\n    \"urgency_reasoning\": \"The task is not time-sensitive, but it should be completed before the shower can be used again.\",\n    \"optimal_time\": \"anytime\",\n    \"time_sensitivity\": \"No specific time constraints, but it's best to avoid scheduling during periods of high household activity.\"\n  },\n  \"resources\": {\n    \"equipment_needed\": [\"tile cutter\", \"grout float\", \"tile adhesive\", \"tile spacers\", \"sponge\", \"bucket\"],\n    \"preparation_time\": 60,\n    \"location_requirements\": \"A clean, well-lit, and ventilated indoor space with access to water and electricity.\"\n  }\n}"
+  }
+}

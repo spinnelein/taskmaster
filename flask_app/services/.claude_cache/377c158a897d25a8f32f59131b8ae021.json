@@ -1,0 +1,66 @@
+{
+  "task_id": "90ad28d0-92d7-4096-9125-f3d597ac107b",
+  "analyzed_at": "2025-09-21T09:59:00.377389",
+  "complexity_assessment": {
+    "complexity_score": 4,
+    "complexity_level": "medium",
+    "estimated_duration_minutes": 30,
+    "time_confidence": "medium",
+    "time_multiplier": 1.0,
+    "factors": [],
+    "final_complexity_score": 4.5
+  },
+  "dependency_insights": {
+    "has_dependencies": false,
+    "dependency_signals": [],
+    "time_references": [],
+    "task_references": [],
+    "existing_dependencies": [],
+    "suggested_dependencies": [],
+    "dependency_confidence": "low"
+  },
+  "context_enhancement": {
+    "extracted_tags": [],
+    "categories": [],
+    "action_words": [],
+    "priority_indicators": [],
+    "skill_requirements": [],
+    "location_context": [],
+    "enhancement_confidence": "medium"
+  },
+  "smart_suggestions": [
+    {
+      "type": "clarity",
+      "priority": "medium",
+      "suggestion": "Add more detailed description for better planning",
+      "reasoning": "Detailed descriptions improve estimation and execution",
+      "implementation": "Expand description with specific steps or requirements"
+    }
+  ],
+  "ai_confidence": 0.8,
+  "analysis_source": "hybrid",
+  "ai_insights": {
+    "complexity_assessment": {
+      "ai_complexity_score": 5,
+      "ai_estimated_duration": 60,
+      "ai_confidence": 0.7,
+      "complexity_factors": []
+    },
+    "dependency_insights": {
+      "ai_detected_dependencies": [],
+      "dependency_signals": [],
+      "sequential_vs_parallel": "unknown",
+      "ai_confidence": 0.8
+    },
+    "context_enhancement": {
+      "ai_generated_tags": [],
+      "skill_requirements": [],
+      "resource_requirements": [],
+      "optimal_timing": "anytime",
+      "ai_confidence": 0.85
+    },
+    "smart_suggestions": [],
+    "confidence": 0.8,
+    "raw_response": "{\n  \"duration_analysis\": {\n    \"recommended_minutes\": 45,\n    \"confidence\": \"medium\",\n    \"reasoning\": \"The initial 30-minute estimate is likely on the lower end for a 'dog fence' task, which may involve measuring, digging, installing posts, attaching fencing, and ensuring proper fit and security. A 45-minute duration would provide more realistic time for a thorough job.\"\n  },\n  \"task_structure\": {\n    \"is_divisible\": true,\n    \"min_chunk_minutes\": 15,\n    \"natural_breakpoints\": \"The task can be divided into smaller chunks, such as measuring and planning (15 mins), digging and installing posts (15 mins), and attaching fencing (15 mins).\"\n  },\n  \"energy_requirements\": {\n    \"energy_level\": \"medium\",\n    \"energy_type\": \"physical\",\n    \"cognitive_load\": \"medium\"\n  },\n  \"environment\": {\n    \"location\": \"outdoor\",\n    \"weather_dependent\": true,\n    \"weather_requirements\": \"Dry conditions, no heavy rain or wind\"\n  },\n  \"scheduling\": {\n    \"urgency_assessment\": 5,\n    \"urgency_reasoning\": \"The task has a moderate level of urgency, as it may be important to secure the property but does not require immediate action.\",\n    \"optimal_time\": \"afternoon\",\n    \"time_sensitivity\": \"Avoid scheduling during heavy rain or extreme heat/cold, as these conditions could impact the work.\"\n  },\n  \"resources\": {\n    \"equipment_needed\": [\"measuring tape\", \"shovel\", \"post hole digger\", \"fence posts\", \"fencing material\", \"hammer\", \"screwdriver\"],\n    \"preparation_time\": 15,\n    \"location_requirements\": \"Flat, clear area with access to the fence location\"\n  }\n}"
+  }
+}

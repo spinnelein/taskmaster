@@ -1,0 +1,66 @@
+{
+  "task_id": "66270cb6-6260-4fa4-b580-36dd24f4cdf4",
+  "analyzed_at": "2025-09-19T10:08:04.439756",
+  "complexity_assessment": {
+    "complexity_score": 3,
+    "complexity_level": "low",
+    "estimated_duration_minutes": 8,
+    "time_confidence": "medium",
+    "time_multiplier": 0.8,
+    "factors": [],
+    "final_complexity_score": 4.0
+  },
+  "dependency_insights": {
+    "has_dependencies": false,
+    "dependency_signals": [],
+    "time_references": [],
+    "task_references": [],
+    "existing_dependencies": [],
+    "suggested_dependencies": [],
+    "dependency_confidence": "low"
+  },
+  "context_enhancement": {
+    "extracted_tags": [],
+    "categories": [],
+    "action_words": [],
+    "priority_indicators": [],
+    "skill_requirements": [],
+    "location_context": [],
+    "enhancement_confidence": "medium"
+  },
+  "smart_suggestions": [
+    {
+      "type": "clarity",
+      "priority": "medium",
+      "suggestion": "Add more detailed description for better planning",
+      "reasoning": "Detailed descriptions improve estimation and execution",
+      "implementation": "Expand description with specific steps or requirements"
+    }
+  ],
+  "ai_confidence": 0.8,
+  "analysis_source": "hybrid",
+  "ai_insights": {
+    "complexity_assessment": {
+      "ai_complexity_score": 5,
+      "ai_estimated_duration": 60,
+      "ai_confidence": 0.7,
+      "complexity_factors": []
+    },
+    "dependency_insights": {
+      "ai_detected_dependencies": [],
+      "dependency_signals": [],
+      "sequential_vs_parallel": "unknown",
+      "ai_confidence": 0.8
+    },
+    "context_enhancement": {
+      "ai_generated_tags": [],
+      "skill_requirements": [],
+      "resource_requirements": [],
+      "optimal_timing": "anytime",
+      "ai_confidence": 0.85
+    },
+    "smart_suggestions": [],
+    "confidence": 0.8,
+    "raw_response": "{\n  \"complexity_assessment\": {\n    \"complexity_score\": 3,\n    \"time_estimate_minutes\": 15,\n    \"confidence_level\": \"high\",\n    \"complexity_factors\": [\n      \"Straightforward task with minimal steps\"\n    ]\n  },\n  \"dependency_insights\": {\n    \"likely_dependencies\": [\n      \"Obtain Walter Flea Drops\",\n      \"Prepare pet for application\"\n    ],\n    \"dependency_signals\": [\n      \"Current Duration Estimate\"\n    ],\n    \"sequential_vs_parallel\": \"sequential\"\n  },\n  \"context_enhancement\": {\n    \"suggested_tags\": [\n      \"pet_care\",\n      \"pest_control\"\n    ],\n    \"skill_requirements\": [\n      \"basic_pet_care\"\n    ],\n    \"resource_requirements\": [\n      \"Walter Flea Drops\",\n      \"pet_grooming_tools\"\n    ],\n    \"optimal_time_of_day\": \"anytime\"\n  },\n  \"optimization_suggestions\": {\n    \"breaking_down\": false,\n    \"prioritization_advice\": \"This task has a medium urgency level, so it should be scheduled based on other high-priority tasks and your pet's needs.\",\n    \"efficiency_tips\": [\n      \"Ensure you have all necessary supplies on hand before starting\",\n      \"Follow the instructions carefully for proper application\"\n    ]\n  }\n}"
+  }
+}

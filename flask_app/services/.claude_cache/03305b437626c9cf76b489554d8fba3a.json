@@ -1,0 +1,66 @@
+{
+  "task_id": "c81dfd67-35cd-4020-902b-dd2402ef4ba9",
+  "analyzed_at": "2025-09-20T10:19:09.839911",
+  "complexity_assessment": {
+    "complexity_score": 4,
+    "complexity_level": "medium",
+    "estimated_duration_minutes": 30,
+    "time_confidence": "medium",
+    "time_multiplier": 1.0,
+    "factors": [],
+    "final_complexity_score": 4.5
+  },
+  "dependency_insights": {
+    "has_dependencies": false,
+    "dependency_signals": [],
+    "time_references": [],
+    "task_references": [],
+    "existing_dependencies": [],
+    "suggested_dependencies": [],
+    "dependency_confidence": "low"
+  },
+  "context_enhancement": {
+    "extracted_tags": [],
+    "categories": [],
+    "action_words": [],
+    "priority_indicators": [],
+    "skill_requirements": [],
+    "location_context": [],
+    "enhancement_confidence": "medium"
+  },
+  "smart_suggestions": [
+    {
+      "type": "clarity",
+      "priority": "medium",
+      "suggestion": "Add more detailed description for better planning",
+      "reasoning": "Detailed descriptions improve estimation and execution",
+      "implementation": "Expand description with specific steps or requirements"
+    }
+  ],
+  "ai_confidence": 0.8,
+  "analysis_source": "hybrid",
+  "ai_insights": {
+    "complexity_assessment": {
+      "ai_complexity_score": 5,
+      "ai_estimated_duration": 60,
+      "ai_confidence": 0.7,
+      "complexity_factors": []
+    },
+    "dependency_insights": {
+      "ai_detected_dependencies": [],
+      "dependency_signals": [],
+      "sequential_vs_parallel": "unknown",
+      "ai_confidence": 0.8
+    },
+    "context_enhancement": {
+      "ai_generated_tags": [],
+      "skill_requirements": [],
+      "resource_requirements": [],
+      "optimal_timing": "anytime",
+      "ai_confidence": 0.85
+    },
+    "smart_suggestions": [],
+    "confidence": 0.8,
+    "raw_response": "{\n  \"complexity_assessment\": {\n    \"complexity_score\": 3,\n    \"time_estimate_minutes\": 20,\n    \"confidence_level\": \"high\",\n    \"complexity_factors\": [\n      \"Relatively simple task\",\n      \"Straightforward execution\"\n    ]\n  },\n  \"dependency_insights\": {\n    \"likely_dependencies\": [\n      \"Access to vehicle for transportation\",\n      \"Knowledge of location of chainsaw\"\n    ],\n    \"dependency_signals\": [\n      \"Pick up\"\n    ],\n    \"sequential_vs_parallel\": \"sequential\"\n  },\n  \"context_enhancement\": {\n    \"suggested_tags\": [\n      \"equipment\",\n      \"household\",\n      \"outdoor\"\n    ],\n    \"skill_requirements\": [\n      \"Ability to operate a chainsaw\",\n      \"Knowledge of safety protocols\"\n    ],\n    \"resource_requirements\": [\n      \"Access to a vehicle\",\n      \"Availability of the chainsaw\"\n    ],\n    \"optimal_time_of_day\": \"anytime\"\n  },\n  \"optimization_suggestions\": {\n    \"breaking_down\": false,\n    \"prioritization_advice\": \"Prioritize based on upcoming need for the chainsaw and other ongoing tasks\",\n    \"efficiency_tips\": [\n      \"Combine trip to pick up chainsaw with other errands\",\n      \"Ensure vehicle is fueled and ready for the trip\"\n    ]\n  }\n}"
+  }
+}

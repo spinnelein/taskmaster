@@ -1,0 +1,60 @@
+{
+  "task_id": "8f80b0ca-13ac-4b82-bebe-62344ce4919d",
+  "analyzed_at": "2025-09-19T11:11:45.383780",
+  "complexity_assessment": {
+    "complexity_score": 5,
+    "complexity_level": "medium",
+    "estimated_duration_minutes": 45,
+    "time_confidence": "medium",
+    "time_multiplier": 1.0,
+    "factors": [],
+    "final_complexity_score": 5.0
+  },
+  "dependency_insights": {
+    "has_dependencies": false,
+    "dependency_signals": [],
+    "time_references": [],
+    "task_references": [],
+    "existing_dependencies": [],
+    "suggested_dependencies": [],
+    "dependency_confidence": "low"
+  },
+  "context_enhancement": {
+    "extracted_tags": [],
+    "categories": [],
+    "action_words": [
+      "test"
+    ],
+    "priority_indicators": [],
+    "skill_requirements": [],
+    "location_context": [],
+    "enhancement_confidence": "medium"
+  },
+  "smart_suggestions": [],
+  "ai_confidence": 0.8,
+  "analysis_source": "hybrid",
+  "ai_insights": {
+    "complexity_assessment": {
+      "ai_complexity_score": 5,
+      "ai_estimated_duration": 60,
+      "ai_confidence": 0.7,
+      "complexity_factors": []
+    },
+    "dependency_insights": {
+      "ai_detected_dependencies": [],
+      "dependency_signals": [],
+      "sequential_vs_parallel": "unknown",
+      "ai_confidence": 0.8
+    },
+    "context_enhancement": {
+      "ai_generated_tags": [],
+      "skill_requirements": [],
+      "resource_requirements": [],
+      "optimal_timing": "anytime",
+      "ai_confidence": 0.85
+    },
+    "smart_suggestions": [],
+    "confidence": 0.8,
+    "raw_response": "{\n  \"complexity_assessment\": {\n    \"complexity_score\": 7,\n    \"time_estimate_minutes\": 60,\n    \"confidence_level\": \"medium\",\n    \"complexity_factors\": [\n      \"Integration with external system (YOLO)\",\n      \"Cognitive load assessment requirements\",\n      \"Potential technical challenges with YOLO integration\"\n    ]\n  },\n  \"dependency_insights\": {\n    \"likely_dependencies\": [\n      \"Research YOLO integration\",\n      \"Set up YOLO environment\",\n      \"Understand cognitive load assessment criteria\"\n    ],\n    \"dependency_signals\": [\n      \"Testing YOLO integration\",\n      \"Cognitive load assessment\"\n    ],\n    \"sequential_vs_parallel\": \"sequential\"\n  },\n  \"context_enhancement\": {\n    \"suggested_tags\": [\n      \"YOLO\",\n      \"Cognitive Load\",\n      \"Integration\",\n      \"Testing\"\n    ],\n    \"skill_requirements\": [\n      \"Technical skills (programming, APIs, etc.)\",\n      \"Understanding of cognitive science and human factors\",\n      \"Analytical and problem-solving abilities\"\n    ],\n    \"resource_requirements\": [\n      \"Access to YOLO library/framework\",\n      \"Cognitive load assessment tools or data\",\n      \"Computational resources for testing\"\n    ],\n    \"optimal_time_of_day\": \"anytime\"\n  },\n  \"optimization_suggestions\": {\n    \"breaking_down\": true,\n    \"prioritization_advice\": \"High priority due to potential impact, but may need to be scheduled around prerequisite tasks\",\n    \"efficiency_tips\": [\n      \"Thoroughly plan and document the integration steps\",\n      \"Automate testing and data collection where possible\",\n      \"Collaborate with subject matter experts on cognitive load assessment\"\n    ]\n  }\n}"
+  }
+}

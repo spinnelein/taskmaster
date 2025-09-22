@@ -1,0 +1,35 @@
+# Performance Optimization Dependencies for TaskMaster
+# Install with: pip install -r requirements_performance.txt
+
+# Redis caching (optional but recommended)
+redis>=4.5.0
+
+# Flask caching support
+Flask-Caching>=2.0.0
+
+# System monitoring and performance metrics
+psutil>=5.9.0
+
+# HTTP load testing and benchmarking
+requests>=2.28.0
+
+# Async support for enhanced performance
+aiohttp>=3.8.0
+
+# JSON serialization optimization (optional)
+orjson>=3.8.0
+
+# Memory profiling (development)
+memory-profiler>=0.60.0
+
+# Performance timing utilities
+py-cpuinfo>=9.0.0
+
+# Database query optimization
+sqlparse>=0.4.0
+
+# Compression support
+zstandard>=0.19.0
+
+# Monitoring and metrics collection
+prometheus-client>=0.16.0

@@ -64,10 +64,24 @@
             border: 1px solid #dee2e6;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             overflow: hidden;
-            transition: box-shadow 0.2s;
+            transition: all 0.2s;
+            position: relative;
         }
         .dish-card:hover {
             box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .dish-card.selected {
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+        }
+        .dish-checkbox {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            z-index: 10;
         }
         .dish-header {
             background: #f8f9fa;
@@ -193,12 +207,59 @@
         .type-main { background: linear-gradient(135deg, #f8d7da 0%, #f8f9fa 100%); }
         .type-side { background: linear-gradient(135deg, #d4edda 0%, #f8f9fa 100%); }
         
+        .floating-action-bar {
+            position: fixed;
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: bottom 0.3s ease;
+            z-index: 1000;
+        }
+        .floating-action-bar.visible {
+            bottom: 30px;
+        }
+        .selection-count {
+            font-weight: bold;
+        }
+        .selection-controls {
+            margin-bottom: 10px;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #007bff;
+            color: #007bff;
+        }
+        .btn-outline:hover {
+            background: #007bff;
+            color: white;
+        }
+        
         @media (max-width: 768px) {
             .dishes-grid {
                 grid-template-columns: 1fr;
             }
             .dish-meta {
                 grid-template-columns: 1fr;
+            }
+            .floating-action-bar {
+                bottom: -120px;
+                left: 10px;
+                right: 10px;
+                transform: none;
+                border-radius: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .floating-action-bar.visible {
+                bottom: 20px;
             }
         }
     </style>
@@ -217,13 +278,18 @@
                 <a href="/projects">Projects</a>
                 <a href="/dishes" class="active">Dishes</a>
                 <a href="/meals">Meals</a>
+                <a href="/meal-plan">Meal Plan</a>
             </div>
         </div>
         
         <div class="dishes-controls">
             <h3>Dish Controls</h3>
-            <button class="btn" onclick="showCreateDishModal()">Create New Dish</button>
-            <button class="btn btn-success" onclick="refreshDishes()">Refresh Dishes</button>
+            <div class="selection-controls">
+                <button class="btn" onclick="showCreateDishModal()">Create New Dish</button>
+                <button class="btn btn-success" onclick="refreshDishes()">Refresh Dishes</button>
+                <button class="btn btn-outline" onclick="selectAllDishes()">Select All</button>
+                <button class="btn btn-outline" onclick="clearSelection()">Clear Selection</button>
+            </div>
         </div>
         
         <div class="stats" id="dish-stats">
@@ -248,10 +314,22 @@
         </div>
     </div>
     
+    <!-- Floating Action Bar -->
+    <div class="floating-action-bar" id="floating-action-bar">
+        <span class="selection-count"><span id="selection-count">0</span> dishes selected</span>
+        <button class="btn btn-success" onclick="createMealFromSelected()">Create Meal</button>
+        <button class="btn btn-sm" onclick="clearSelection()">Clear</button>
+    </div>
+    
     <script>
+    let selectedDishes = new Set();
+    let allDishesData = []; // Store dish data for selected dishes
+    let allTags = new Set(); // Cache unique tags from all meals
+    
     // Initialize when page loads
     document.addEventListener('DOMContentLoaded', function() {
         loadAllDishes();
+        loadAllMealTags(); // Load tags for meal creation
         checkHealth();
     });
     
@@ -259,6 +337,7 @@
         fetch('/api/dishes')
             .then(response => response.json())
             .then(dishes => {
+                allDishesData = dishes; // Store for later use
                 displayDishes(dishes);
                 updateStats(dishes);
             })
@@ -281,7 +360,11 @@
         dishes.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
         
         dishesGrid.innerHTML = dishes.map(dish => `
-            <div class="dish-card ${getDifficultyClass(dish.difficulty)} ${getTypeClass(dish.dish_type)}">
+            <div class="dish-card ${getDifficultyClass(dish.difficulty)} ${getTypeClass(dish.dish_type)} ${selectedDishes.has(dish.id) ? 'selected' : ''}" 
+                 data-dish-id="${dish.id}" onclick="toggleDishSelection(event, '${dish.id}')">
+                <input type="checkbox" class="dish-checkbox" 
+                       ${selectedDishes.has(dish.id) ? 'checked' : ''}
+                       onclick="event.stopPropagation(); toggleDishSelection(event, '${dish.id}')">
                 <div class="dish-header">
                     <div class="dish-title">${dish.title}</div>
                     <div class="dish-type">${formatDishType(dish.dish_type)} • ${formatDifficulty(dish.difficulty)}</div>
@@ -850,6 +933,290 @@
                 document.getElementById('health-status').textContent = '🔴 Connection Error';
                 document.getElementById('health-status').style.background = '#dc3545';
             });
+    }
+    
+    // Selection management
+    function toggleDishSelection(event, dishId) {
+        // Prevent event bubbling when clicking on action buttons
+        if (event.target.classList.contains('btn')) {
+            return;
+        }
+        
+        const card = document.querySelector(`[data-dish-id="${dishId}"]`);
+        const checkbox = card.querySelector('.dish-checkbox');
+        
+        if (selectedDishes.has(dishId)) {
+            selectedDishes.delete(dishId);
+            card.classList.remove('selected');
+            checkbox.checked = false;
+        } else {
+            selectedDishes.add(dishId);
+            card.classList.add('selected');
+            checkbox.checked = true;
+        }
+        
+        updateSelectionUI();
+    }
+    
+    function selectAllDishes() {
+        const allCards = document.querySelectorAll('.dish-card');
+        allCards.forEach(card => {
+            const dishId = card.dataset.dishId;
+            selectedDishes.add(dishId);
+            card.classList.add('selected');
+            card.querySelector('.dish-checkbox').checked = true;
+        });
+        updateSelectionUI();
+    }
+    
+    function clearSelection() {
+        selectedDishes.clear();
+        const allCards = document.querySelectorAll('.dish-card');
+        allCards.forEach(card => {
+            card.classList.remove('selected');
+            card.querySelector('.dish-checkbox').checked = false;
+        });
+        updateSelectionUI();
+    }
+    
+    function updateSelectionUI() {
+        const count = selectedDishes.size;
+        document.getElementById('selection-count').textContent = count;
+        
+        const actionBar = document.getElementById('floating-action-bar');
+        if (count > 0) {
+            actionBar.classList.add('visible');
+        } else {
+            actionBar.classList.remove('visible');
+        }
+    }
+    
+    function createMealFromSelected() {
+        if (selectedDishes.size === 0) {
+            alert('Please select at least one dish');
+            return;
+        }
+        
+        // Get selected dish objects
+        const selectedDishObjects = allDishesData.filter(dish => selectedDishes.has(dish.id));
+        
+        // Show create meal modal with pre-selected dishes
+        showCreateMealModalWithDishes(selectedDishObjects);
+    }
+    
+    function showCreateMealModalWithDishes(preselectedDishes) {
+        // Create modal HTML with pre-selected dishes
+        const createModalHTML = `
+            <div id="create-meal-modal" style="
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                background: rgba(0,0,0,0.7); z-index: 1100; display: flex; 
+                align-items: center; justify-content: center;
+            ">
+                <div style="
+                    background: white; width: 95%; max-width: 600px; max-height: 95vh;
+                    border-radius: 8px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                    overflow-y: auto;
+                ">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                        <h2 style="margin: 0; color: #333;">Create Meal from Selected Dishes</h2>
+                        <button onclick="closeCreateMealModal()" style="
+                            background: #dc3545; color: white; border: none; 
+                            border-radius: 4px; padding: 8px 12px; cursor: pointer;
+                        ">×</button>
+                    </div>
+                    
+                    <form id="create-meal-form" onsubmit="submitMealCreateFromDishes(event, ${JSON.stringify(preselectedDishes.map(d => d.id)).replace(/"/g, '&quot;')})">
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Title *</label>
+                            <input type="text" id="create-title" required style="
+                                width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+                                box-sizing: border-box; font-size: 14px;
+                            ">
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Description</label>
+                            <textarea id="create-description" rows="3" style="
+                                width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+                                box-sizing: border-box; font-size: 14px; resize: vertical;
+                            "></textarea>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 15px; margin-bottom: 15px;">
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Meal Type *</label>
+                                <select id="create-meal-type" required style="
+                                    width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+                                    box-sizing: border-box; font-size: 14px;
+                                ">
+                                    <option value="">Select type...</option>
+                                    <option value="breakfast">Breakfast</option>
+                                    <option value="lunch">Lunch</option>
+                                    <option value="dinner">Dinner</option>
+                                    <option value="snack">Snack</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Serves</label>
+                                <input type="number" id="create-serves-count" min="1" value="4" style="
+                                    width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+                                    box-sizing: border-box; font-size: 14px;
+                                ">
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: bold; color: #555;">Tags</label>
+                            <div id="create-tags-container">
+                                ${createTagSelectionUI()}
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; margin-bottom: 10px; font-weight: bold; color: #555;">Selected Dishes (${preselectedDishes.length}):</label>
+                            <div style="border: 1px solid #ddd; border-radius: 4px; padding: 10px; background: #f9f9f9;">
+                                ${preselectedDishes.map(dish => `
+                                    <div style="padding: 5px 0; border-bottom: 1px solid #eee;">
+                                        <strong>${dish.title}</strong> 
+                                        <span style="color: #666; font-size: 0.9em;">(${dish.dish_type})</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                            <button type="button" onclick="closeCreateMealModal()" style="
+                                background: #6c757d; color: white; border: none; border-radius: 4px; 
+                                padding: 10px 20px; cursor: pointer; font-size: 14px;
+                            ">Cancel</button>
+                            <button type="submit" style="
+                                background: #007bff; color: white; border: none; border-radius: 4px; 
+                                padding: 10px 20px; cursor: pointer; font-size: 14px;
+                            ">Create Meal</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', createModalHTML);
+        document.getElementById('create-title').focus();
+    }
+    
+    function closeCreateMealModal() {
+        const modal = document.getElementById('create-meal-modal');
+        if (modal) {
+            modal.remove();
+        }
+    }
+    
+    function submitMealCreateFromDishes(event, dishIds) {
+        event.preventDefault();
+        
+        // Get tags from checkboxes
+        const selectedTags = Array.from(document.querySelectorAll('#create-tags-container .tag-checkbox:checked'))
+            .map(checkbox => checkbox.value);
+        
+        // Get custom tags
+        const customTagsInput = document.querySelector('#create-tags-container .custom-tags-input').value;
+        const customTags = customTagsInput ? customTagsInput.split(',').map(tag => tag.trim()).filter(tag => tag) : [];
+        
+        // Combine all tags
+        const allUniqueTags = [...new Set([...selectedTags, ...customTags])];
+        
+        const mealData = {
+            title: document.getElementById('create-title').value,
+            description: document.getElementById('create-description').value,
+            meal_type: document.getElementById('create-meal-type').value,
+            serves_count: parseInt(document.getElementById('create-serves-count').value) || 4,
+            dietary_tags: allUniqueTags,
+            status: 'planned'
+        };
+        
+        // First create the meal
+        fetch('/api/meals', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(mealData)
+        })
+        .then(response => response.json())
+        .then(meal => {
+            // Then add all dishes to the meal
+            const dishPromises = dishIds.map(dishId => 
+                fetch(`/api/meals/${meal.id}/dishes`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ dish_id: dishId })
+                })
+            );
+            
+            return Promise.all(dishPromises).then(() => meal);
+        })
+        .then(meal => {
+            closeCreateMealModal();
+            clearSelection();
+            alert(`Meal "${meal.title}" created successfully with ${dishIds.length} dishes!`);
+            // Optionally redirect to meals page
+            if (confirm('Would you like to view the meals page?')) {
+                window.location.href = '/meals';
+            }
+        })
+        .catch(error => {
+            console.error('Error creating meal:', error);
+            alert('Failed to create meal');
+        });
+    }
+    
+    // Load meal tags for tag selection UI
+    function loadAllMealTags() {
+        fetch('/api/meals')
+            .then(response => response.json())
+            .then(meals => {
+                // Collect all unique tags
+                allTags.clear();
+                meals.forEach(meal => {
+                    if (meal.dietary_tags && Array.isArray(meal.dietary_tags)) {
+                        meal.dietary_tags.forEach(tag => allTags.add(tag));
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error loading meal tags:', error);
+            });
+    }
+    
+    // Create tag selection UI (same as in meals.html)
+    function createTagSelectionUI(selectedTags = []) {
+        const sortedTags = Array.from(allTags).sort();
+        const popularTags = ['Mexican', 'Italian', 'Asian', 'American', 'Mediterranean', 
+                           'Healthy', 'Quick', 'Vegetarian', 'Vegan', 'Gluten-Free',
+                           'Bowl', 'Comfort Food', 'Light', 'Heavy', 'Spicy'];
+        
+        // Combine popular tags with existing tags
+        const combinedTags = [...new Set([...popularTags, ...sortedTags])];
+        
+        return `
+            <div style="border: 1px solid #ddd; border-radius: 4px; padding: 10px; background: #f9f9f9;">
+                <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; max-height: 150px; overflow-y: auto;">
+                    ${combinedTags.map(tag => `
+                        <label style="display: inline-flex; align-items: center; cursor: pointer;">
+                            <input type="checkbox" value="${tag}" 
+                                ${selectedTags.includes(tag) ? 'checked' : ''} 
+                                style="margin-right: 5px;" class="tag-checkbox">
+                            <span style="font-size: 14px;">${tag}</span>
+                        </label>
+                    `).join('')}
+                </div>
+                <div style="border-top: 1px solid #ddd; padding-top: 10px; margin-top: 10px;">
+                    <label style="display: block; margin-bottom: 5px; font-size: 13px; color: #666;">
+                        Add custom tags (comma-separated):
+                    </label>
+                    <input type="text" class="custom-tags-input" 
+                        placeholder="e.g. Fusion, Street Food, Date Night" 
+                        style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px;">
+                </div>
+            </div>
+        `;
     }
     
     // Refresh health check every 30 seconds

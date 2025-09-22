@@ -1,0 +1,68 @@
+{
+  "task_id": null,
+  "analyzed_at": "2025-09-19T08:28:48.764245",
+  "complexity_assessment": {
+    "complexity_score": 5,
+    "complexity_level": "medium",
+    "estimated_duration_minutes": 60,
+    "time_confidence": "medium",
+    "time_multiplier": 1.0,
+    "factors": [
+      "learning_required"
+    ],
+    "final_complexity_score": 5.0
+  },
+  "dependency_insights": {
+    "has_dependencies": false,
+    "dependency_signals": [],
+    "time_references": [],
+    "task_references": [],
+    "existing_dependencies": [],
+    "suggested_dependencies": [],
+    "dependency_confidence": "low"
+  },
+  "context_enhancement": {
+    "extracted_tags": [],
+    "categories": [
+      "research"
+    ],
+    "action_words": [
+      "create",
+      "design",
+      "implement"
+    ],
+    "priority_indicators": [],
+    "skill_requirements": [
+      "design"
+    ],
+    "location_context": [],
+    "enhancement_confidence": "medium"
+  },
+  "smart_suggestions": [],
+  "ai_confidence": 0.8,
+  "analysis_source": "hybrid",
+  "ai_insights": {
+    "complexity_assessment": {
+      "ai_complexity_score": 5,
+      "ai_estimated_duration": 60,
+      "ai_confidence": 0.7,
+      "complexity_factors": []
+    },
+    "dependency_insights": {
+      "ai_detected_dependencies": [],
+      "dependency_signals": [],
+      "sequential_vs_parallel": "unknown",
+      "ai_confidence": 0.8
+    },
+    "context_enhancement": {
+      "ai_generated_tags": [],
+      "skill_requirements": [],
+      "resource_requirements": [],
+      "optimal_timing": "anytime",
+      "ai_confidence": 0.85
+    },
+    "smart_suggestions": [],
+    "confidence": 0.8,
+    "raw_response": "{\n  \"complexity_assessment\": {\n    \"complexity_score\": 7,\n    \"time_estimate_minutes\": 120,\n    \"confidence_level\": \"medium\",\n    \"complexity_factors\": [\n      \"Requires knowledge of machine learning and neural networks\",\n      \"Need to understand TensorFlow framework\",\n      \"Image classification task can be computationally intensive\"\n    ]\n  },\n  \"dependency_insights\": {\n    \"likely_dependencies\": [\n      \"Familiarize with TensorFlow library\",\n      \"Obtain and prepare image dataset for training\"\n    ],\n    \"dependency_signals\": [\n      \"Create a neural network\",\n      \"Using TensorFlow\"\n    ],\n    \"sequential_vs_parallel\": \"sequential\"\n  },\n  \"context_enhancement\": {\n    \"suggested_tags\": [\n      \"machine learning\",\n      \"image classification\",\n      \"tensorflow\"\n    ],\n    \"skill_requirements\": [\n      \"Python programming\",\n      \"Machine learning concepts\",\n      \"TensorFlow framework\"\n    ],\n    \"resource_requirements\": [\n      \"Access to a computer with sufficient computing power\",\n      \"Image dataset for training the model\"\n    ],\n    \"optimal_time_of_day\": \"anytime\"\n  },\n  \"optimization_suggestions\": {\n    \"breaking_down\": true,\n    \"prioritization_advice\": \"This task should be prioritized as it is moderately complex and can provide valuable insights for future projects.\",\n    \"efficiency_tips\": [\n      \"Break down the task into smaller, manageable steps\",\n      \"Leverage existing TensorFlow tutorials and examples\",\n      \"Optimize hyperparameters and model architecture iteratively\"\n    ]\n  }\n}"
+  }
+}

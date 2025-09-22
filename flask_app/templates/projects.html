@@ -308,6 +308,475 @@
             border: 1px solid #dee2e6;
         }
         
+        /* Tab Navigation Styles */
+        .tab-navigation {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .tab-btn {
+            background: #f8f9fa;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            border-radius: 8px 8px 0 0;
+            font-weight: 500;
+            color: #666;
+            transition: all 0.2s ease;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab-btn:hover {
+            background: #e9ecef;
+            color: #333;
+        }
+        
+        .tab-btn.active {
+            background: white;
+            color: #007bff;
+            border-bottom: 3px solid #007bff;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Template Styles */
+        .template-card {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: box-shadow 0.2s ease;
+        }
+        
+        .template-card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .template-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+        
+        .template-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+        
+        
+        .template-description {
+            color: #666;
+            margin: 8px 0;
+            line-height: 1.4;
+        }
+        
+        .template-stats {
+            display: flex;
+            gap: 16px;
+            font-size: 0.9em;
+            color: #666;
+            margin: 12px 0;
+        }
+        
+        .template-stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .template-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        .btn-template {
+            background: #17a2b8;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85em;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.2s ease;
+        }
+        
+        .btn-template:hover {
+            background: #138496;
+        }
+        
+        .btn-edit {
+            background: #6c757d;
+        }
+        
+        .btn-edit:hover {
+            background: #5a6268;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 50px auto;
+            padding: 0;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            margin: 0;
+            font-size: 1.3em;
+            color: #333;
+        }
+        
+        .close {
+            font-size: 28px;
+            font-weight: bold;
+            color: #aaa;
+            cursor: pointer;
+            line-height: 1;
+        }
+        
+        .close:hover {
+            color: #333;
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+        }
+        
+        .form-control[readonly] {
+            background-color: #f8f9fa;
+            color: #666;
+        }
+        
+        /* Template Creation Form Styles */
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+        
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+        }
+        
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 60%;
+            right: -40%;
+            height: 2px;
+            background: #dee2e6;
+            z-index: 1;
+        }
+        
+        .step.active:not(:last-child)::after {
+            background: #007bff;
+        }
+        
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #dee2e6;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .step.active .step-number {
+            background: #007bff;
+            color: white;
+        }
+        
+        .step.completed .step-number {
+            background: #28a745;
+            color: white;
+        }
+        
+        .step-label {
+            font-size: 0.85em;
+            color: #6c757d;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .step.active .step-label {
+            color: #007bff;
+        }
+        
+        .step-content {
+            display: none;
+            min-height: 400px;
+            padding: 20px 0;
+        }
+        
+        .step-content.active {
+            display: block;
+        }
+        
+        .step-content h3 {
+            margin: 0 0 20px 0;
+            color: #333;
+            font-size: 1.3em;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        
+        .form-help {
+            color: #6c757d;
+            font-size: 0.85em;
+            margin-top: 4px;
+            display: block;
+        }
+        
+        .step-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .step-buttons-right {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        /* Phase/Task Builder Styles */
+        .phase-builder {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+        }
+        
+        .phase-builder.collapsed .phase-tasks {
+            display: none;
+        }
+        
+        .phase-header-builder {
+            padding: 15px;
+            background: #fff;
+            border-bottom: 1px solid #dee2e6;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .phase-title-section {
+            flex: 1;
+            margin-right: 15px;
+        }
+        
+        .phase-actions-builder {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .phase-tasks {
+            padding: 15px;
+        }
+        
+        .task-builder {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+        
+        .task-header-builder {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .task-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .add-task-section {
+            text-align: center;
+            padding: 15px;
+        }
+        
+        .btn-small {
+            padding: 4px 8px;
+            font-size: 0.8em;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #007bff;
+            color: #007bff;
+        }
+        
+        .btn-outline:hover {
+            background: #007bff;
+            color: white;
+        }
+        
+        /* Review Section */
+        .review-section {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .review-item {
+            margin-bottom: 15px;
+        }
+        
+        .review-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 5px;
+        }
+        
+        .review-value {
+            color: #333;
+        }
+        
+        .review-phases {
+            margin-top: 20px;
+        }
+        
+        .review-phase {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .review-phase-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .review-tasks {
+            margin-left: 20px;
+        }
+        
+        .review-task {
+            padding: 8px 0;
+            border-bottom: 1px solid #f1f3f4;
+        }
+        
+        .review-task:last-child {
+            border-bottom: none;
+        }
+        
         @media (max-width: 768px) {
             .header {
                 flex-direction: column;
@@ -316,6 +785,19 @@
             .phase-header {
                 flex-direction: column;
                 align-items: flex-start;
+            }
+            .template-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .template-stats {
+                flex-wrap: wrap;
+            }
+            .modal-content {
+                margin: 20px auto;
+                width: 95%;
+                max-height: 90vh;
             }
         }
     </style>
@@ -332,16 +814,50 @@
                 <a href="/tasks">Tasks</a>
                 <a href="/initiatives">Initiatives</a>
                 <a href="/projects" class="active">Projects</a>
-                <a href="/dishes">Dishes</a>
-                <a href="/meals">Meals</a>
+                <a href="/meals">Food</a>
             </div>
         </div>
         
-        <div class="projects-controls">
-            <h3>Project Management</h3>
-            <button class="btn" onclick="showCreateProjectModal()">Create New Project</button>
-            <button class="btn btn-success" onclick="refreshProjects()">Refresh</button>
+        <!-- Tab Navigation -->
+        <div class="tab-navigation" style="margin-bottom: 20px; border-bottom: 1px solid #dee2e6;">
+            <button class="tab-btn active" onclick="showTab('projects')" id="projects-tab">Projects</button>
+            <button class="tab-btn" onclick="showTab('templates')" id="templates-tab">Templates</button>
         </div>
+        
+        <!-- Projects Tab Content -->
+        <div id="projects-content" class="tab-content active">
+            <div class="projects-controls">
+                <h3>Project Management</h3>
+                <button class="btn" onclick="showCreateProjectModal()">Create New Project</button>
+                <button class="btn" onclick="showCreateFromTemplateModal()" style="background: #17a2b8;">Create from Template</button>
+                <button class="btn btn-success" onclick="refreshProjects()">Refresh</button>
+            </div>
+        </div>
+        
+        <!-- Templates Tab Content -->
+        <div id="templates-content" class="tab-content" style="display: none;">
+            <div class="projects-controls">
+                <h3>Project Templates</h3>
+                <button class="btn" onclick="showCreateTemplateModal()">Create New Template</button>
+                <button class="btn btn-success" onclick="refreshTemplates()">Refresh</button>
+            </div>
+            
+            <div class="templates-list" id="templates-list">
+                <!-- Templates will be loaded here -->
+            </div>
+        </div>
+        
+        <!-- Move projects tree inside projects content -->
+        <script>
+        // Move the projects tree inside the projects content div
+        document.addEventListener('DOMContentLoaded', function() {
+            const projectsTree = document.querySelector('.projects-tree');
+            const projectsContent = document.getElementById('projects-content');
+            if (projectsTree && projectsContent) {
+                projectsContent.appendChild(projectsTree);
+            }
+        });
+        </script>
         
         <div class="projects-tree">
             {% if projects %}
@@ -364,6 +880,9 @@
                                 <button class="btn" style="padding: 6px 12px; font-size: 0.8em;" onclick="showEditProjectModal('{{ project.id }}')">Edit</button>
                                 <button class="btn" style="background: #dc3545; padding: 6px 12px; font-size: 0.8em;" onclick="deleteProject('{{ project.id }}', '{{ project.title }}')">Delete</button>
                             </div>
+                            <div style="margin-top: 10px;">
+                                <button class="btn" style="padding: 6px 12px; font-size: 0.8em;" onclick="showAddPhaseModal('{{ project.id }}')">Add Phase</button>
+                            </div>
                         </div>
                     </div>
                     
@@ -373,11 +892,23 @@
                             <div class="phase-header">
                                 <button class="collapse-btn" onclick="togglePhase('phase-{{ phase.id }}')">▼</button>
                                 <h3>
+                                    {% if phase.order == 0 or not phase.has_dependencies %}
+                                    <span style="color: #28a745; font-size: 0.9em; margin-right: 8px;">⚡</span>
+                                    {% endif %}
+                                    {% if phase.order == 0 %}
+                                    Anytime: {{ phase.title }}
+                                    {% else %}
                                     Phase {{ phase.order }}: {{ phase.title }}
+                                    {% endif %}
                                     {% if phase.has_dependencies %}
-                                    <span class="dependency-indicator">(depends on previous phase)</span>
+                                    <span class="dependency-indicator">(depends on previous phases)</span>
+                                    {% elif phase.order != 0 %}
+                                    <span class="dependency-indicator" style="color: #28a745;">(independent)</span>
                                     {% endif %}
                                 </h3>
+                                <div class="phase-actions" style="display: flex; gap: 4px;">
+                                    <button class="btn" style="padding: 4px 8px; font-size: 0.75em;" onclick="editPhase('{{ project.id }}', '{{ phase.id }}')">Edit</button>
+                                </div>
                                 <div class="progress-bar">
                                     <div class="progress-fill" style="width: {{ phase.completion_percentage }}%"></div>
                                 </div>
@@ -1295,89 +1826,131 @@
         });
     }
     
-    function editPhase(phaseId) {
-        // Find the phase data
-        const phase = currentEditingProject.phases.find(p => p.id === phaseId);
-        if (!phase) {
-            alert('Phase not found');
-            return;
-        }
-        
-        const modalHTML = `
-            <div id="edit-phase-modal" style="
-                position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-                background: rgba(0,0,0,0.5); z-index: 1200; display: flex; 
-                align-items: center; justify-content: center;
-            ">
-                <div style="background: white; width: 90%; max-width: 500px; border-radius: 8px; padding: 20px;">
-                    <h3>Edit Phase</h3>
-                    <form onsubmit="submitPhaseEdit(event, '${currentEditingProject.id}', '${phaseId}')">
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Title *</label>
-                            <input type="text" id="edit-phase-title" value="${phase.title}" required style="
-                                width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;
-                            ">
-                        </div>
-                        
-                        <div style="margin-bottom: 15px;">
-                            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Description</label>
-                            <textarea id="edit-phase-description" rows="3" style="
-                                width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
-                                box-sizing: border-box; resize: vertical;
-                            ">${phase.description || ''}</textarea>
-                        </div>
-                        
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
-                            <div>
-                                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Status *</label>
-                                <select id="edit-phase-status" required style="
+    function editPhase(projectId, phaseId) {
+        // First, fetch the latest phase data and all phases for dependencies
+        Promise.all([
+            fetch(`/api/projects/${projectId}/phases`).then(r => r.json())
+        ])
+        .then(([phases]) => {
+            const phase = phases.find(p => p.id === phaseId);
+            if (!phase) {
+                alert('Phase not found');
+                return;
+            }
+            
+            // Parse current dependencies
+            let currentDependencies = [];
+            try {
+                if (phase.depends_on_phase_ids && phase.depends_on_phase_ids !== 'null') {
+                    currentDependencies = JSON.parse(phase.depends_on_phase_ids);
+                }
+            } catch (e) {
+                console.error('Error parsing dependencies:', e);
+            }
+            
+            const modalHTML = `
+                <div id="edit-phase-modal" style="
+                    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                    background: rgba(0,0,0,0.5); z-index: 1200; display: flex; 
+                    align-items: center; justify-content: center;
+                ">
+                    <div style="background: white; width: 90%; max-width: 600px; border-radius: 8px; padding: 20px; max-height: 90vh; overflow-y: auto;">
+                        <h3>Edit Phase</h3>
+                        <form onsubmit="submitPhaseEdit(event, '${projectId}', '${phaseId}')">
+                            <div style="margin-bottom: 15px;">
+                                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Title *</label>
+                                <input type="text" id="edit-phase-title" value="${phase.title}" required style="
                                     width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;
                                 ">
-                                    <option value="PLANNING" ${phase.status === 'PLANNING' ? 'selected' : ''}>Planning</option>
-                                    <option value="ACTIVE" ${phase.status === 'ACTIVE' ? 'selected' : ''}>Active</option>
-                                    <option value="COMPLETED" ${phase.status === 'COMPLETED' ? 'selected' : ''}>Completed</option>
+                            </div>
+                            
+                            <div style="margin-bottom: 15px;">
+                                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Description</label>
+                                <textarea id="edit-phase-description" rows="3" style="
+                                    width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+                                    box-sizing: border-box; resize: vertical;
+                                ">${phase.description || ''}</textarea>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                                <div>
+                                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">Status *</label>
+                                    <select id="edit-phase-status" required style="
+                                        width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;
+                                    ">
+                                        <option value="PLANNING" ${phase.status === 'PLANNING' ? 'selected' : ''}>Planning</option>
+                                        <option value="ACTIVE" ${phase.status === 'ACTIVE' ? 'selected' : ''}>Active</option>
+                                        <option value="COMPLETED" ${phase.status === 'COMPLETED' ? 'selected' : ''}>Completed</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">Order</label>
+                                    <input type="number" id="edit-phase-order" value="${phase.order}" min="0" style="
+                                        width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;
+                                    ">
+                                    <div style="font-size: 0.8em; color: #666; margin-top: 4px;">
+                                        Use 0 for "anytime" phases that can run in parallel
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-bottom: 15px;">
+                                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Phase Dependencies</label>
+                                <div style="font-size: 0.9em; color: #666; margin-bottom: 8px;">
+                                    Select phases that must be completed before this phase can start. Leave empty for independent/anytime phases.
+                                </div>
+                                <select id="edit-phase-dependencies" multiple style="
+                                    width: 100%; min-height: 100px; padding: 8px; border: 1px solid #ddd; 
+                                    border-radius: 4px; box-sizing: border-box;
+                                ">
+                                    ${phases.filter(p => p.id !== phaseId).map(p => `
+                                        <option value="${p.id}" ${currentDependencies.includes(p.id) ? 'selected' : ''}>
+                                            Phase ${p.order}: ${p.title}
+                                        </option>
+                                    `).join('')}
                                 </select>
+                                <div style="font-size: 0.8em; color: #666; margin-top: 4px;">
+                                    Hold Ctrl/Cmd to select multiple phases
+                                </div>
                             </div>
-                            <div>
-                                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Order</label>
-                                <input type="number" id="edit-phase-order" value="${phase.order}" min="1" style="
-                                    width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;
-                                ">
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                                <div>
+                                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">Estimated Start Date</label>
+                                    <input type="date" id="edit-phase-start-date" value="${phase.estimated_start_date ? phase.estimated_start_date.split('T')[0] : ''}" style="
+                                        width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;
+                                    ">
+                                </div>
+                                <div>
+                                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">Estimated End Date</label>
+                                    <input type="date" id="edit-phase-end-date" value="${phase.estimated_end_date ? phase.estimated_end_date.split('T')[0] : ''}" style="
+                                        width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;
+                                    ">
+                                </div>
                             </div>
-                        </div>
-                        
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
-                            <div>
-                                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Estimated Start Date</label>
-                                <input type="date" id="edit-phase-start-date" value="${phase.estimated_start_date ? phase.estimated_start_date.split('T')[0] : ''}" style="
-                                    width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;
-                                ">
+                            
+                            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                                <button type="button" onclick="closeEditPhaseModal()" style="
+                                    background: #6c757d; color: white; border: none; padding: 8px 16px; 
+                                    border-radius: 4px; cursor: pointer;
+                                ">Cancel</button>
+                                <button type="submit" style="
+                                    background: #007bff; color: white; border: none; padding: 8px 16px; 
+                                    border-radius: 4px; cursor: pointer;
+                                ">Save Changes</button>
                             </div>
-                            <div>
-                                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Estimated End Date</label>
-                                <input type="date" id="edit-phase-end-date" value="${phase.estimated_end_date ? phase.estimated_end_date.split('T')[0] : ''}" style="
-                                    width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;
-                                ">
-                            </div>
-                        </div>
-                        
-                        <div style="display: flex; gap: 10px; justify-content: flex-end;">
-                            <button type="button" onclick="closeEditPhaseModal()" style="
-                                background: #6c757d; color: white; border: none; padding: 8px 16px; 
-                                border-radius: 4px; cursor: pointer;
-                            ">Cancel</button>
-                            <button type="submit" style="
-                                background: #007bff; color: white; border: none; padding: 8px 16px; 
-                                border-radius: 4px; cursor: pointer;
-                            ">Save Changes</button>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
-            </div>
-        `;
-        
-        document.body.insertAdjacentHTML('beforeend', modalHTML);
-        document.getElementById('edit-phase-title').focus();
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            document.getElementById('edit-phase-title').focus();
+        })
+        .catch(error => {
+            console.error('Error loading phase data:', error);
+            alert('Failed to load phase details for editing.');
+        });
     }
     
     function closeEditPhaseModal() {
@@ -1388,17 +1961,22 @@
     function submitPhaseEdit(event, projectId, phaseId) {
         event.preventDefault();
         
+        // Get selected dependencies
+        const dependenciesSelect = document.getElementById('edit-phase-dependencies');
+        const selectedDependencies = dependenciesSelect ? 
+            Array.from(dependenciesSelect.selectedOptions).map(option => option.value) : [];
+        
         const phaseData = {
             title: document.getElementById('edit-phase-title').value,
             description: document.getElementById('edit-phase-description').value,
             status: document.getElementById('edit-phase-status').value,
             estimated_start_date: document.getElementById('edit-phase-start-date').value || null,
-            estimated_end_date: document.getElementById('edit-phase-end-date').value || null
+            estimated_end_date: document.getElementById('edit-phase-end-date').value || null,
+            depends_on_phase_ids: selectedDependencies  // This will be JSON.stringify'd in the API
         };
         
         // Handle order change (if different, we'll need to reorder)
         const newOrder = parseInt(document.getElementById('edit-phase-order').value);
-        const currentPhase = currentEditingProject.phases.find(p => p.id === phaseId);
         
         fetch(`/api/projects/${projectId}/phases/${phaseId}`, {
             method: 'PUT',
@@ -1407,21 +1985,9 @@
         })
         .then(response => response.json())
         .then(updatedPhase => {
-            // If order changed, handle reordering
-            if (currentPhase && newOrder !== currentPhase.order) {
-                return handlePhaseReordering(projectId, phaseId, newOrder);
-            }
-            return Promise.resolve();
-        })
-        .then(() => {
             closeEditPhaseModal();
-            // Refresh the phases list
-            return fetch(`/api/projects/${projectId}/phases`);
-        })
-        .then(response => response.json())
-        .then(phases => {
-            currentEditingProject.phases = phases;
-            document.getElementById('phases-list').innerHTML = renderPhasesList(phases);
+            // Refresh the page to show updated phase dependencies and order
+            location.reload();
         })
         .catch(error => {
             console.error('Error updating phase:', error);
@@ -2014,8 +2580,1141 @@
         });
     }
 
+    function showAddPhaseModal(projectId) {
+        const modalHTML = `
+            <div id="add-phase-modal" style="
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                background: rgba(0,0,0,0.5); z-index: 1200; display: flex; 
+                align-items: center; justify-content: center;
+            ">
+                <div style="background: white; width: 90%; max-width: 500px; border-radius: 8px; padding: 20px;">
+                    <h3>Add New Phase</h3>
+                    <form onsubmit="submitNewPhase(event, '${projectId}')">
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Title *</label>
+                            <input type="text" id="new-phase-title" required style="
+                                width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;
+                            ">
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Description</label>
+                            <textarea id="new-phase-description" rows="3" style="
+                                width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; 
+                                box-sizing: border-box; resize: vertical;
+                            "></textarea>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Status *</label>
+                                <select id="new-phase-status" required style="
+                                    width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;
+                                ">
+                                    <option value="PLANNING" selected>Planning</option>
+                                    <option value="ACTIVE">Active</option>
+                                    <option value="COMPLETED">Completed</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Phase Type</label>
+                                <select id="new-phase-type" onchange="handlePhaseTypeChange()" style="
+                                    width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;
+                                ">
+                                    <option value="sequential">Sequential (depends on previous phases)</option>
+                                    <option value="anytime">Anytime (independent, can run in parallel)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                            <button type="button" onclick="closeAddPhaseModal()" style="
+                                background: #6c757d; color: white; border: none; padding: 8px 16px; 
+                                border-radius: 4px; cursor: pointer;
+                            ">Cancel</button>
+                            <button type="submit" style="
+                                background: #007bff; color: white; border: none; padding: 8px 16px; 
+                                border-radius: 4px; cursor: pointer;
+                            ">Add Phase</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+        document.getElementById('new-phase-title').focus();
+    }
+    
+    function closeAddPhaseModal() {
+        const modal = document.getElementById('add-phase-modal');
+        if (modal) modal.remove();
+    }
+    
+    function handlePhaseTypeChange() {
+        const typeSelect = document.getElementById('new-phase-type');
+        // For now, just provide visual feedback - the actual logic is handled on submit
+    }
+    
+    function submitNewPhase(event, projectId) {
+        event.preventDefault();
+        
+        const phaseType = document.getElementById('new-phase-type').value;
+        
+        const phaseData = {
+            title: document.getElementById('new-phase-title').value,
+            description: document.getElementById('new-phase-description').value,
+            status: document.getElementById('new-phase-status').value,
+            depends_on_phase_ids: phaseType === 'anytime' ? [] : null  // Empty array for anytime, null for sequential (backend will handle)
+        };
+        
+        fetch(`/api/projects/${projectId}/phases`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(phaseData)
+        })
+        .then(response => {
+            if (response.ok) {
+                closeAddPhaseModal();
+                location.reload(); // Refresh to show new phase
+            } else {
+                throw new Error('Failed to create phase');
+            }
+        })
+        .catch(error => {
+            console.error('Error creating phase:', error);
+            alert('Failed to create phase. Please try again.');
+        });
+    }
+
     // Refresh health check every 30 seconds
     setInterval(checkHealth, 30000);
+    
+    // ===============================
+    // TEMPLATES FUNCTIONALITY
+    // ===============================
+    
+    // Tab Management
+    function showTab(tabName) {
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+            content.style.display = 'none';
+        });
+        
+        // Remove active class from all tab buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // Show selected tab content
+        const targetContent = document.getElementById(tabName + '-content');
+        if (targetContent) {
+            targetContent.classList.add('active');
+            targetContent.style.display = 'block';
+        }
+        
+        // Add active class to selected tab button
+        const targetButton = document.getElementById(tabName + '-tab');
+        if (targetButton) {
+            targetButton.classList.add('active');
+        }
+        
+        // Load templates if templates tab is selected
+        if (tabName === 'templates') {
+            loadTemplates();
+        }
+    }
+    
+    // Load and display templates
+    function loadTemplates() {
+        fetch('/api/project-templates')
+            .then(response => response.json())
+            .then(templates => {
+                const templatesList = document.getElementById('templates-list');
+                
+                if (templates.length === 0) {
+                    templatesList.innerHTML = `
+                        <div class="empty-state">
+                            <h3>No Templates Found</h3>
+                            <p>Create your first project template to reuse project structures.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                templatesList.innerHTML = templates.map(template => `
+                    <div class="template-card">
+                        <div class="template-header">
+                            <div>
+                                <h3 class="template-title">${template.name}</h3>
+                            </div>
+                        </div>
+                        
+                        <div class="template-description">
+                            ${template.description}
+                        </div>
+                        
+                        <div class="template-stats">
+                            <div class="template-stat">
+                                <span>📊</span> ${template.summary.phase_count} phases
+                            </div>
+                            <div class="template-stat">
+                                <span>✅</span> ${template.summary.task_count} tasks
+                            </div>
+                            <div class="template-stat">
+                                <span>📅</span> ${template.estimated_duration_days} days
+                            </div>
+                            <div class="template-stat">
+                                <span>🔄</span> Used ${template.usage_count} times
+                            </div>
+                        </div>
+                        
+                        <div class="template-actions">
+                            <button class="btn-template" onclick="instantiateTemplate('${template.id}', '${template.name}')">
+                                Create Project
+                            </button>
+                            <button class="btn-template btn-edit" onclick="viewTemplate('${template.id}')">
+                                View Details
+                            </button>
+                            <button class="btn-template btn-edit" onclick="editTemplate('${template.id}')">
+                                Edit
+                            </button>
+                            <button class="btn-template btn-danger" onclick="deleteTemplate('${template.id}', '${template.name}')">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            })
+            .catch(error => {
+                console.error('Error loading templates:', error);
+                document.getElementById('templates-list').innerHTML = `
+                    <div class="empty-state">
+                        <h3>Error Loading Templates</h3>
+                        <p>Unable to load templates. Please try again.</p>
+                    </div>
+                `;
+            });
+    }
+    
+    // Refresh templates
+    function refreshTemplates() {
+        loadTemplates();
+    }
+    
+    // Create from Template Modal
+    function showCreateFromTemplateModal() {
+        fetch('/api/project-templates')
+            .then(response => response.json())
+            .then(templates => {
+                if (templates.length === 0) {
+                    alert('No templates available. Create a template first.');
+                    return;
+                }
+                
+                const templateOptions = templates.map(template => 
+                    `<option value="${template.id}">${template.name}</option>`
+                ).join('');
+                
+                const modalHTML = `
+                    <div id="create-from-template-modal" class="modal" style="display: block;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title">Create Project from Template</h2>
+                                <span class="close" onclick="closeCreateFromTemplateModal()">&times;</span>
+                            </div>
+                            <div class="modal-body">
+                                <form onsubmit="submitCreateFromTemplate(event)">
+                                    <div class="form-group">
+                                        <label class="form-label">Select Template:</label>
+                                        <select id="selected-template" class="form-control" onchange="updateTemplatePreview()" required>
+                                            <option value="">Choose a template...</option>
+                                            ${templateOptions}
+                                        </select>
+                                    </div>
+                                    
+                                    <div id="template-preview" style="display: none; background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                                        <!-- Template preview will be inserted here -->
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label">Project Name:</label>
+                                        <input type="text" id="project-name" class="form-control" placeholder="Enter project name..." required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label">Due Date:</label>
+                                        <input type="date" id="project-due-date" class="form-control" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label">Initiative (Optional):</label>
+                                        <select id="project-initiative" class="form-control">
+                                            <option value="">No initiative</option>
+                                            <!-- Will be populated with initiatives -->
+                                        </select>
+                                    </div>
+                                    
+                                    <div style="text-align: right; margin-top: 20px; padding-top: 15px; border-top: 1px solid #dee2e6;">
+                                        <button type="button" class="btn" style="background: #6c757d; margin-right: 10px;" onclick="closeCreateFromTemplateModal()">Cancel</button>
+                                        <button type="submit" class="btn">Create Project</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.insertAdjacentHTML('beforeend', modalHTML);
+                
+                // Load initiatives for the dropdown
+                loadInitiativesForSelect();
+                
+                // Set default due date to 30 days from now
+                const defaultDate = new Date();
+                defaultDate.setDate(defaultDate.getDate() + 30);
+                document.getElementById('project-due-date').value = defaultDate.toISOString().split('T')[0];
+            })
+            .catch(error => {
+                console.error('Error loading templates:', error);
+                alert('Failed to load templates. Please try again.');
+            });
+    }
+    
+    function updateTemplatePreview() {
+        const templateSelect = document.getElementById('selected-template');
+        const templateId = templateSelect.value;
+        const previewDiv = document.getElementById('template-preview');
+        
+        if (!templateId) {
+            previewDiv.style.display = 'none';
+            return;
+        }
+        
+        fetch(`/api/project-templates/${templateId}`)
+            .then(response => response.json())
+            .then(template => {
+                const phaseCount = template.template_data.phases ? template.template_data.phases.length : 0;
+                const taskCount = template.template_data.phases ? 
+                    template.template_data.phases.reduce((total, phase) => total + (phase.tasks ? phase.tasks.length : 0), 0) : 0;
+                
+                previewDiv.innerHTML = `
+                    <h4 style="margin: 0 0 10px 0;">${template.name}</h4>
+                    <p style="margin: 0 0 10px 0; color: #666;">${template.description}</p>
+                    <div style="display: flex; gap: 15px; font-size: 0.9em;">
+                        <span><strong>Phases:</strong> ${phaseCount}</span>
+                        <span><strong>Tasks:</strong> ${taskCount}</span>
+                        <span><strong>Duration:</strong> ${template.estimated_duration_days} days</span>
+                    </div>
+                `;
+                previewDiv.style.display = 'block';
+                
+                // Update project name if it's empty
+                const projectNameInput = document.getElementById('project-name');
+                if (!projectNameInput.value) {
+                    projectNameInput.value = template.name.replace('Template', '').trim();
+                }
+            })
+            .catch(error => {
+                console.error('Error loading template details:', error);
+                previewDiv.innerHTML = '<p style="color: #dc3545;">Error loading template details</p>';
+                previewDiv.style.display = 'block';
+            });
+    }
+    
+    function loadInitiativesForSelect() {
+        fetch('/api/initiatives')
+            .then(response => response.json())
+            .then(initiatives => {
+                const select = document.getElementById('project-initiative');
+                const currentOptions = select.innerHTML;
+                
+                const initiativeOptions = initiatives.map(initiative => 
+                    `<option value="${initiative.id}">${initiative.title}</option>`
+                ).join('');
+                
+                select.innerHTML = currentOptions + initiativeOptions;
+            })
+            .catch(error => {
+                console.error('Error loading initiatives:', error);
+            });
+    }
+    
+    function submitCreateFromTemplate(event) {
+        event.preventDefault();
+        
+        const formData = {
+            due_date: document.getElementById('project-due-date').value,
+            project_name: document.getElementById('project-name').value,
+            initiative_id: document.getElementById('project-initiative').value || null
+        };
+        
+        const templateId = document.getElementById('selected-template').value;
+        
+        fetch(`/api/project-templates/${templateId}/instantiate`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Failed to create project from template');
+        })
+        .then(result => {
+            closeCreateFromTemplateModal();
+            alert(`Project "${result.project.title}" created successfully with ${result.phases_created} phases and ${result.tasks_created} tasks!`);
+            
+            // Switch to projects tab and refresh
+            showTab('projects');
+            refreshProjects();
+        })
+        .catch(error => {
+            console.error('Error creating project from template:', error);
+            alert('Failed to create project from template. Please try again.');
+        });
+    }
+    
+    function closeCreateFromTemplateModal() {
+        const modal = document.getElementById('create-from-template-modal');
+        if (modal) modal.remove();
+    }
+    
+    // Instantiate template (from templates list)
+    function instantiateTemplate(templateId, templateName) {
+        const projectName = prompt(`Enter name for the new project based on "${templateName}":`);
+        if (!projectName) return;
+        
+        const dueDate = prompt('Enter due date (YYYY-MM-DD):');
+        if (!dueDate) return;
+        
+        const formData = {
+            due_date: dueDate,
+            project_name: projectName,
+            initiative_id: null
+        };
+        
+        fetch(`/api/project-templates/${templateId}/instantiate`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Failed to create project from template');
+        })
+        .then(result => {
+            alert(`Project "${result.project.title}" created successfully!`);
+            showTab('projects');
+            refreshProjects();
+        })
+        .catch(error => {
+            console.error('Error creating project from template:', error);
+            alert('Failed to create project from template. Please try again.');
+        });
+    }
+    
+    // View template details
+    function viewTemplate(templateId) {
+        fetch(`/api/project-templates/${templateId}`)
+            .then(response => response.json())
+            .then(template => {
+                const modalHTML = `
+                    <div id="view-template-modal" class="modal" style="display: block;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title">Template: ${template.name}</h2>
+                                <span class="close" onclick="closeViewTemplateModal()">&times;</span>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label class="form-label">Description:</label>
+                                    <p>${template.description}</p>
+                                </div>
+                                
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Estimated Duration:</label>
+                                    <p>${template.estimated_duration_days} days</p>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Usage Count:</label>
+                                    <p>${template.usage_count} times</p>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Template Structure:</label>
+                                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                                        <pre style="margin: 0; white-space: pre-wrap; font-size: 0.9em;">${JSON.stringify(template.template_data, null, 2)}</pre>
+                                    </div>
+                                </div>
+                                
+                                <div style="text-align: right; margin-top: 20px; padding-top: 15px; border-top: 1px solid #dee2e6;">
+                                    <button class="btn" onclick="closeViewTemplateModal()">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.insertAdjacentHTML('beforeend', modalHTML);
+            })
+            .catch(error => {
+                console.error('Error loading template:', error);
+                alert('Failed to load template details.');
+            });
+    }
+    
+    function closeViewTemplateModal() {
+        const modal = document.getElementById('view-template-modal');
+        if (modal) modal.remove();
+    }
+    
+    // Create new template modal
+    function showCreateTemplateModal() {
+        const modalHTML = `
+            <div id="create-template-modal" class="modal" style="display: block;">
+                <div class="modal-content" style="max-width: 900px;">
+                    <div class="modal-header">
+                        <h2 class="modal-title">Create Project Template</h2>
+                        <span class="close" onclick="closeCreateTemplateModal()">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Step Indicator -->
+                        <div class="step-indicator">
+                            <div class="step active" data-step="1">
+                                <div class="step-number">1</div>
+                                <div class="step-label">Template Info</div>
+                            </div>
+                            <div class="step" data-step="2">
+                                <div class="step-number">2</div>
+                                <div class="step-label">Project Setup</div>
+                            </div>
+                            <div class="step" data-step="3">
+                                <div class="step-number">3</div>
+                                <div class="step-label">Phases & Tasks</div>
+                            </div>
+                            <div class="step" data-step="4">
+                                <div class="step-number">4</div>
+                                <div class="step-label">Review</div>
+                            </div>
+                        </div>
+                        
+                        <form id="template-creation-form">
+                            <!-- Step 1: Template Information -->
+                            <div class="step-content active" data-step="1">
+                                <h3>Template Information</h3>
+                                <div class="form-group">
+                                    <label class="form-label">Template Name *</label>
+                                    <input type="text" id="template-name" class="form-control" placeholder="e.g., Marketing Campaign Template" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Description</label>
+                                    <textarea id="template-description" class="form-control" rows="3" placeholder="Describe what this template is for and when to use it..."></textarea>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">Estimated Duration (days) *</label>
+                                        <input type="number" id="template-duration" class="form-control" min="1" max="365" placeholder="30" required>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 2: Project Setup -->
+                            <div class="step-content" data-step="2">
+                                <h3>Project Configuration</h3>
+                                <div class="form-group">
+                                    <label class="form-label">Default Project Title *</label>
+                                    <input type="text" id="project-title" class="form-control" placeholder="e.g., Marketing Campaign" required>
+                                    <small class="form-help">This will be the default name for projects created from this template</small>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Project Description</label>
+                                    <textarea id="project-description" class="form-control" rows="2" placeholder="Default description for projects created from this template..."></textarea>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">Default Priority</label>
+                                        <select id="project-priority" class="form-control">
+                                            <option value="LOW">Low</option>
+                                            <option value="MEDIUM" selected>Medium</option>
+                                            <option value="HIGH">High</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 3: Phases and Tasks -->
+                            <div class="step-content" data-step="3">
+                                <h3>Phases and Tasks</h3>
+                                <div class="phases-container" id="phases-container">
+                                    <!-- Phases will be added here dynamically -->
+                                </div>
+                                
+                                <div class="add-phase-section">
+                                    <button type="button" class="btn" onclick="addPhaseToTemplate()">+ Add Phase</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 4: Review -->
+                            <div class="step-content" data-step="4">
+                                <h3>Review Template</h3>
+                                <div id="template-review">
+                                    <!-- Review content will be generated here -->
+                                </div>
+                            </div>
+                        </form>
+                        
+                        <!-- Navigation Buttons -->
+                        <div class="step-navigation">
+                            <button type="button" class="btn btn-secondary" id="prev-step" onclick="previousStep()" style="display: none;">Previous</button>
+                            <div class="step-buttons-right">
+                                <button type="button" class="btn btn-secondary" onclick="closeCreateTemplateModal()">Cancel</button>
+                                <button type="button" class="btn" id="next-step" onclick="nextStep()">Next</button>
+                                <button type="button" class="btn btn-success" id="create-template" onclick="createTemplate()" style="display: none;">Create Template</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+        
+        // Initialize the form
+        initializeTemplateForm();
+        
+        // Add first phase by default
+        addPhaseToTemplate();
+        
+    }
+    
+    // Edit template
+    function editTemplate(templateId) {
+        alert('Template editing coming soon! For now, templates can be edited via the API.');
+    }
+    
+    // Delete template
+    function deleteTemplate(templateId, templateName) {
+        if (!confirm(`Are you sure you want to delete the template "${templateName}"?`)) {
+            return;
+        }
+        
+        fetch(`/api/project-templates/${templateId}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (response.ok) {
+                loadTemplates(); // Refresh the templates list
+                alert(`Template "${templateName}" deleted successfully.`);
+            } else {
+                throw new Error('Failed to delete template');
+            }
+        })
+        .catch(error => {
+            console.error('Error deleting template:', error);
+            alert('Failed to delete template. Please try again.');
+        });
+    }
+    
+    // ===============================
+    // TEMPLATE CREATION WIZARD
+    // ===============================
+    
+    let currentStep = 1;
+    let templatePhases = [];
+    
+    function initializeTemplateForm() {
+        currentStep = 1;
+        templatePhases = [];
+        updateStepIndicator();
+    }
+    
+    function nextStep() {
+        if (validateCurrentStep()) {
+            if (currentStep === 3) {
+                generateReview();
+            }
+            currentStep++;
+            updateStepIndicator();
+            updateStepContent();
+            updateNavigationButtons();
+        }
+    }
+    
+    function previousStep() {
+        currentStep--;
+        updateStepIndicator();
+        updateStepContent();
+        updateNavigationButtons();
+    }
+    
+    function updateStepIndicator() {
+        document.querySelectorAll('.step').forEach((step, index) => {
+            const stepNumber = index + 1;
+            step.classList.remove('active', 'completed');
+            
+            if (stepNumber === currentStep) {
+                step.classList.add('active');
+            } else if (stepNumber < currentStep) {
+                step.classList.add('completed');
+            }
+        });
+    }
+    
+    function updateStepContent() {
+        document.querySelectorAll('.step-content').forEach((content, index) => {
+            const stepNumber = index + 1;
+            content.classList.remove('active');
+            
+            if (stepNumber === currentStep) {
+                content.classList.add('active');
+            }
+        });
+    }
+    
+    function updateNavigationButtons() {
+        const prevBtn = document.getElementById('prev-step');
+        const nextBtn = document.getElementById('next-step');
+        const createBtn = document.getElementById('create-template');
+        
+        // Show/hide previous button
+        prevBtn.style.display = currentStep > 1 ? 'block' : 'none';
+        
+        // Show next or create button
+        if (currentStep === 4) {
+            nextBtn.style.display = 'none';
+            createBtn.style.display = 'block';
+        } else {
+            nextBtn.style.display = 'block';
+            createBtn.style.display = 'none';
+        }
+    }
+    
+    function validateCurrentStep() {
+        const currentContent = document.querySelector(`.step-content[data-step="${currentStep}"]`);
+        const requiredInputs = currentContent.querySelectorAll('input[required], select[required], textarea[required]');
+        
+        for (let input of requiredInputs) {
+            if (!input.value.trim()) {
+                input.focus();
+                input.style.borderColor = '#dc3545';
+                setTimeout(() => {
+                    input.style.borderColor = '';
+                }, 3000);
+                return false;
+            }
+        }
+        
+        // Special validation for step 3 (phases)
+        if (currentStep === 3) {
+            if (templatePhases.length === 0) {
+                alert('Please add at least one phase to your template.');
+                return false;
+            }
+            
+            // Validate each phase has at least one task
+            for (let phase of templatePhases) {
+                if (phase.tasks.length === 0) {
+                    alert(`Phase "${phase.title}" must have at least one task.`);
+                    return false;
+                }
+            }
+        }
+        
+        return true;
+    }
+    
+    // ===============================
+    // PHASE AND TASK MANAGEMENT
+    // ===============================
+    
+    function addPhaseToTemplate() {
+        const phaseIndex = templatePhases.length;
+        const newPhase = {
+            title: '',
+            description: '',
+            order: phaseIndex + 1,
+            start_offset_days: phaseIndex * 14, // Default 2 week spacing
+            duration_days: 14,
+            tasks: []
+        };
+        
+        templatePhases.push(newPhase);
+        renderPhases();
+    }
+    
+    function removePhaseFromTemplate(phaseIndex) {
+        if (confirm('Are you sure you want to remove this phase? All tasks in this phase will also be removed.')) {
+            templatePhases.splice(phaseIndex, 1);
+            // Reorder remaining phases
+            templatePhases.forEach((phase, index) => {
+                phase.order = index + 1;
+            });
+            renderPhases();
+        }
+    }
+    
+    function renderPhases() {
+        const container = document.getElementById('phases-container');
+        
+        container.innerHTML = templatePhases.map((phase, phaseIndex) => `
+            <div class="phase-builder" data-phase-index="${phaseIndex}">
+                <div class="phase-header-builder">
+                    <div class="phase-title-section">
+                        <input type="text" 
+                               class="form-control" 
+                               placeholder="Phase ${phase.order} Title" 
+                               value="${phase.title}"
+                               onchange="updatePhaseTitle(${phaseIndex}, this.value)"
+                               style="margin-bottom: 8px;">
+                        <textarea class="form-control" 
+                                  rows="2" 
+                                  placeholder="Phase description..."
+                                  onchange="updatePhaseDescription(${phaseIndex}, this.value)">${phase.description}</textarea>
+                    </div>
+                    <div class="phase-actions-builder">
+                        <button type="button" class="btn btn-small btn-outline" onclick="togglePhaseCollapse(${phaseIndex})">
+                            <span id="collapse-icon-${phaseIndex}">▼</span>
+                        </button>
+                        <button type="button" class="btn btn-small" style="background: #dc3545; color: white;" onclick="removePhaseFromTemplate(${phaseIndex})">×</button>
+                    </div>
+                </div>
+                
+                <div class="phase-tasks" id="phase-tasks-${phaseIndex}">
+                    <div class="form-row" style="margin-bottom: 15px;">
+                        <div class="form-group">
+                            <label class="form-label">Start Offset (days)</label>
+                            <input type="number" 
+                                   class="form-control" 
+                                   min="0" 
+                                   value="${phase.start_offset_days}"
+                                   onchange="updatePhaseStartOffset(${phaseIndex}, this.value)"
+                                   placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Duration (days)</label>
+                            <input type="number" 
+                                   class="form-control" 
+                                   min="1" 
+                                   value="${phase.duration_days}"
+                                   onchange="updatePhaseDuration(${phaseIndex}, this.value)"
+                                   placeholder="14">
+                        </div>
+                    </div>
+                    
+                    <div class="tasks-container" id="tasks-container-${phaseIndex}">
+                        ${renderTasks(phaseIndex)}
+                    </div>
+                    
+                    <div class="add-task-section">
+                        <button type="button" class="btn btn-outline" onclick="addTaskToPhase(${phaseIndex})">+ Add Task</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    function renderTasks(phaseIndex) {
+        const phase = templatePhases[phaseIndex];
+        
+        return phase.tasks.map((task, taskIndex) => `
+            <div class="task-builder" data-task-index="${taskIndex}">
+                <div class="task-header-builder">
+                    <input type="text" 
+                           class="form-control" 
+                           placeholder="Task title..." 
+                           value="${task.title}"
+                           onchange="updateTaskTitle(${phaseIndex}, ${taskIndex}, this.value)"
+                           style="flex: 1; margin-right: 10px;">
+                    <button type="button" class="btn btn-small" style="background: #dc3545; color: white;" onclick="removeTaskFromPhase(${phaseIndex}, ${taskIndex})">×</button>
+                </div>
+                
+                <div class="task-fields">
+                    <div class="form-group">
+                        <label class="form-label">Priority</label>
+                        <select class="form-control" onchange="updateTaskPriority(${phaseIndex}, ${taskIndex}, this.value)">
+                            <option value="LOW" ${task.priority === 'LOW' ? 'selected' : ''}>Low</option>
+                            <option value="MEDIUM" ${task.priority === 'MEDIUM' ? 'selected' : ''}>Medium</option>
+                            <option value="HIGH" ${task.priority === 'HIGH' ? 'selected' : ''}>High</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Estimated Hours</label>
+                        <input type="number" 
+                               class="form-control" 
+                               min="0.5" 
+                               step="0.5" 
+                               value="${task.estimated_hours}"
+                               onchange="updateTaskHours(${phaseIndex}, ${taskIndex}, this.value)"
+                               placeholder="8">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Start Offset (days)</label>
+                        <input type="number" 
+                               class="form-control" 
+                               min="0" 
+                               value="${task.start_offset_days}"
+                               onchange="updateTaskStartOffset(${phaseIndex}, ${taskIndex}, this.value)"
+                               placeholder="0">
+                    </div>
+                </div>
+                
+                <div class="form-group" style="margin-top: 10px;">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" 
+                              rows="2" 
+                              placeholder="Task description..."
+                              onchange="updateTaskDescription(${phaseIndex}, ${taskIndex}, this.value)">${task.description}</textarea>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    // Phase update functions
+    function updatePhaseTitle(phaseIndex, value) {
+        templatePhases[phaseIndex].title = value;
+    }
+    
+    function updatePhaseDescription(phaseIndex, value) {
+        templatePhases[phaseIndex].description = value;
+    }
+    
+    function updatePhaseStartOffset(phaseIndex, value) {
+        templatePhases[phaseIndex].start_offset_days = parseInt(value) || 0;
+    }
+    
+    function updatePhaseDuration(phaseIndex, value) {
+        templatePhases[phaseIndex].duration_days = parseInt(value) || 1;
+    }
+    
+    function togglePhaseCollapse(phaseIndex) {
+        const tasksContainer = document.getElementById(`phase-tasks-${phaseIndex}`);
+        const icon = document.getElementById(`collapse-icon-${phaseIndex}`);
+        
+        if (tasksContainer.style.display === 'none') {
+            tasksContainer.style.display = 'block';
+            icon.textContent = '▼';
+        } else {
+            tasksContainer.style.display = 'none';
+            icon.textContent = '▶';
+        }
+    }
+    
+    // Task management functions
+    function addTaskToPhase(phaseIndex) {
+        const newTask = {
+            title: '',
+            description: '',
+            priority: 'MEDIUM',
+            estimated_hours: 8,
+            start_offset_days: 0,
+            is_divisible: false,
+            min_chunk_size: 30,
+            required_context: []
+        };
+        
+        templatePhases[phaseIndex].tasks.push(newTask);
+        
+        // Re-render just this phase's tasks
+        const tasksContainer = document.getElementById(`tasks-container-${phaseIndex}`);
+        tasksContainer.innerHTML = renderTasks(phaseIndex);
+    }
+    
+    function removeTaskFromPhase(phaseIndex, taskIndex) {
+        templatePhases[phaseIndex].tasks.splice(taskIndex, 1);
+        
+        // Re-render just this phase's tasks
+        const tasksContainer = document.getElementById(`tasks-container-${phaseIndex}`);
+        tasksContainer.innerHTML = renderTasks(phaseIndex);
+    }
+    
+    // Task update functions
+    function updateTaskTitle(phaseIndex, taskIndex, value) {
+        templatePhases[phaseIndex].tasks[taskIndex].title = value;
+    }
+    
+    function updateTaskDescription(phaseIndex, taskIndex, value) {
+        templatePhases[phaseIndex].tasks[taskIndex].description = value;
+    }
+    
+    function updateTaskPriority(phaseIndex, taskIndex, value) {
+        templatePhases[phaseIndex].tasks[taskIndex].priority = value;
+    }
+    
+    function updateTaskHours(phaseIndex, taskIndex, value) {
+        templatePhases[phaseIndex].tasks[taskIndex].estimated_hours = parseFloat(value) || 1;
+    }
+    
+    function updateTaskStartOffset(phaseIndex, taskIndex, value) {
+        templatePhases[phaseIndex].tasks[taskIndex].start_offset_days = parseInt(value) || 0;
+    }
+    
+    // ===============================
+    // REVIEW AND SUBMISSION
+    // ===============================
+    
+    function generateReview() {
+        const templateName = document.getElementById('template-name').value;
+        const templateDescription = document.getElementById('template-description').value;
+        const templateDuration = document.getElementById('template-duration').value;
+        const projectTitle = document.getElementById('project-title').value;
+        const projectDescription = document.getElementById('project-description').value;
+        const projectPriority = document.getElementById('project-priority').value;
+        
+        const totalTasks = templatePhases.reduce((total, phase) => total + phase.tasks.length, 0);
+        const totalHours = templatePhases.reduce((total, phase) => 
+            total + phase.tasks.reduce((phaseTotal, task) => phaseTotal + (task.estimated_hours || 0), 0), 0);
+        
+        const reviewHTML = `
+            <div class="review-section">
+                <h4>Template Overview</h4>
+                <div class="review-item">
+                    <div class="review-label">Template Name:</div>
+                    <div class="review-value">${templateName}</div>
+                </div>
+                <div class="review-item">
+                    <div class="review-label">Description:</div>
+                    <div class="review-value">${templateDescription || 'No description provided'}</div>
+                </div>
+                <div class="review-item">
+                    <div class="review-label">Estimated Duration:</div>
+                    <div class="review-value">${templateDuration} days</div>
+                </div>
+            </div>
+            
+            <div class="review-section">
+                <h4>Default Project Settings</h4>
+                <div class="review-item">
+                    <div class="review-label">Project Title:</div>
+                    <div class="review-value">${projectTitle}</div>
+                </div>
+                <div class="review-item">
+                    <div class="review-label">Project Description:</div>
+                    <div class="review-value">${projectDescription || 'No description provided'}</div>
+                </div>
+                <div class="review-item">
+                    <div class="review-label">Default Priority:</div>
+                    <div class="review-value">${projectPriority}</div>
+                </div>
+            </div>
+            
+            <div class="review-section">
+                <h4>Template Statistics</h4>
+                <div style="display: flex; gap: 30px;">
+                    <div class="review-item">
+                        <div class="review-label">Total Phases:</div>
+                        <div class="review-value">${templatePhases.length}</div>
+                    </div>
+                    <div class="review-item">
+                        <div class="review-label">Total Tasks:</div>
+                        <div class="review-value">${totalTasks}</div>
+                    </div>
+                    <div class="review-item">
+                        <div class="review-label">Total Estimated Hours:</div>
+                        <div class="review-value">${totalHours}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="review-phases">
+                <h4>Phases and Tasks</h4>
+                ${templatePhases.map(phase => `
+                    <div class="review-phase">
+                        <div class="review-phase-title">
+                            Phase ${phase.order}: ${phase.title || 'Untitled Phase'}
+                            <small style="color: #666; font-weight: normal;">
+                                (Start: Day ${phase.start_offset_days}, Duration: ${phase.duration_days} days)
+                            </small>
+                        </div>
+                        ${phase.description ? `<div style="color: #666; margin-bottom: 10px;">${phase.description}</div>` : ''}
+                        <div class="review-tasks">
+                            ${phase.tasks.map(task => `
+                                <div class="review-task">
+                                    <strong>${task.title || 'Untitled Task'}</strong>
+                                    <span style="color: #666;">
+                                        • ${task.priority} priority 
+                                        • ${task.estimated_hours}h 
+                                        • Start: +${task.start_offset_days} days
+                                    </span>
+                                    ${task.description ? `<div style="color: #666; font-size: 0.9em; margin-top: 4px;">${task.description}</div>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+        
+        document.getElementById('template-review').innerHTML = reviewHTML;
+    }
+    
+    function createTemplate() {
+        if (!validateCurrentStep()) {
+            return;
+        }
+        
+        // Gather all form data
+        const templateData = {
+            name: document.getElementById('template-name').value,
+            category: 'General',  // Default category since it's no longer user-specified
+            description: document.getElementById('template-description').value,
+            estimated_duration_days: parseInt(document.getElementById('template-duration').value),
+            template_data: {
+                project: {
+                    title: document.getElementById('project-title').value,
+                    description: document.getElementById('project-description').value,
+                    priority: document.getElementById('project-priority').value,
+                    estimated_duration_days: parseInt(document.getElementById('template-duration').value)
+                },
+                phases: templatePhases
+            }
+        };
+        
+        // Submit to API
+        fetch('/api/project-templates', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(templateData)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Failed to create template');
+        })
+        .then(result => {
+            closeCreateTemplateModal();
+            alert(`Template "${result.name}" created successfully!`);
+            
+            // Refresh templates if we're on the templates tab
+            if (document.getElementById('templates-tab').classList.contains('active')) {
+                loadTemplates();
+            }
+        })
+        .catch(error => {
+            console.error('Error creating template:', error);
+            alert('Failed to create template. Please try again.');
+        });
+    }
+    
+    function closeCreateTemplateModal() {
+        const modal = document.getElementById('create-template-modal');
+        if (modal) modal.remove();
+    }
+    
     </script>
+    
+    <!-- Template Modals will be inserted here dynamically -->
+    
 </body>
 </html>

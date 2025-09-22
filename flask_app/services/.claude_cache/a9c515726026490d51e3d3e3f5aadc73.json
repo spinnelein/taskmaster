@@ -1,0 +1,66 @@
+{
+  "task_id": "598f61a8-98fb-44a6-a1c2-2ae7920ef809",
+  "analyzed_at": "2025-09-19T10:08:11.409612",
+  "complexity_assessment": {
+    "complexity_score": 3,
+    "complexity_level": "low",
+    "estimated_duration_minutes": 8,
+    "time_confidence": "medium",
+    "time_multiplier": 0.8,
+    "factors": [],
+    "final_complexity_score": 4.0
+  },
+  "dependency_insights": {
+    "has_dependencies": false,
+    "dependency_signals": [],
+    "time_references": [],
+    "task_references": [],
+    "existing_dependencies": [],
+    "suggested_dependencies": [],
+    "dependency_confidence": "low"
+  },
+  "context_enhancement": {
+    "extracted_tags": [],
+    "categories": [],
+    "action_words": [],
+    "priority_indicators": [],
+    "skill_requirements": [],
+    "location_context": [],
+    "enhancement_confidence": "medium"
+  },
+  "smart_suggestions": [
+    {
+      "type": "clarity",
+      "priority": "medium",
+      "suggestion": "Add more detailed description for better planning",
+      "reasoning": "Detailed descriptions improve estimation and execution",
+      "implementation": "Expand description with specific steps or requirements"
+    }
+  ],
+  "ai_confidence": 0.8,
+  "analysis_source": "hybrid",
+  "ai_insights": {
+    "complexity_assessment": {
+      "ai_complexity_score": 5,
+      "ai_estimated_duration": 60,
+      "ai_confidence": 0.7,
+      "complexity_factors": []
+    },
+    "dependency_insights": {
+      "ai_detected_dependencies": [],
+      "dependency_signals": [],
+      "sequential_vs_parallel": "unknown",
+      "ai_confidence": 0.8
+    },
+    "context_enhancement": {
+      "ai_generated_tags": [],
+      "skill_requirements": [],
+      "resource_requirements": [],
+      "optimal_timing": "anytime",
+      "ai_confidence": 0.85
+    },
+    "smart_suggestions": [],
+    "confidence": 0.8,
+    "raw_response": "{\n  \"complexity_assessment\": {\n    \"complexity_score\": 2,\n    \"time_estimate_minutes\": 15,\n    \"confidence_level\": \"high\",\n    \"complexity_factors\": [\n      \"straightforward task\",\n      \"no specialized skills required\"\n    ]\n  },\n  \"dependency_insights\": {\n    \"likely_dependencies\": [\n      \"clear room of clutter\",\n      \"ensure access to vacuum\"\n    ],\n    \"dependency_signals\": [\n      \"access to vacuum\"\n    ],\n    \"sequential_vs_parallel\": \"sequential\"\n  },\n  \"context_enhancement\": {\n    \"suggested_tags\": [\n      \"cleaning\",\n      \"room maintenance\"\n    ],\n    \"skill_requirements\": [\n      \"basic vacuum operation\"\n    ],\n    \"resource_requirements\": [\n      \"vacuum cleaner\"\n    ],\n    \"optimal_time_of_day\": \"anytime\"\n  },\n  \"optimization_suggestions\": {\n    \"breaking_down\": false,\n    \"prioritization_advice\": \"Assign a higher urgency if the room needs to be vacuumed quickly, otherwise this can be a lower priority task.\",\n    \"efficiency_tips\": [\n      \"Develop a routine for efficient room vacuuming\",\n      \"Ensure the vacuum is well-maintained to maximize performance\"\n    ]\n  }\n}"
+  }
+}

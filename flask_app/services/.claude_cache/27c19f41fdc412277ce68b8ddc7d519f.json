@@ -1,0 +1,60 @@
+{
+  "task_id": null,
+  "analyzed_at": "2025-09-19T08:40:30.775201",
+  "complexity_assessment": {
+    "complexity_score": 2,
+    "complexity_level": "low",
+    "estimated_duration_minutes": 48,
+    "time_confidence": "medium",
+    "time_multiplier": 0.8,
+    "factors": [],
+    "final_complexity_score": 3.5
+  },
+  "dependency_insights": {
+    "has_dependencies": false,
+    "dependency_signals": [],
+    "time_references": [],
+    "task_references": [],
+    "existing_dependencies": [],
+    "suggested_dependencies": [],
+    "dependency_confidence": "low"
+  },
+  "context_enhancement": {
+    "extracted_tags": [],
+    "categories": [],
+    "action_words": [
+      "test"
+    ],
+    "priority_indicators": [],
+    "skill_requirements": [],
+    "location_context": [],
+    "enhancement_confidence": "medium"
+  },
+  "smart_suggestions": [],
+  "ai_confidence": 0.8,
+  "analysis_source": "hybrid",
+  "ai_insights": {
+    "complexity_assessment": {
+      "ai_complexity_score": 5,
+      "ai_estimated_duration": 60,
+      "ai_confidence": 0.7,
+      "complexity_factors": []
+    },
+    "dependency_insights": {
+      "ai_detected_dependencies": [],
+      "dependency_signals": [],
+      "sequential_vs_parallel": "unknown",
+      "ai_confidence": 0.8
+    },
+    "context_enhancement": {
+      "ai_generated_tags": [],
+      "skill_requirements": [],
+      "resource_requirements": [],
+      "optimal_timing": "anytime",
+      "ai_confidence": 0.85
+    },
+    "smart_suggestions": [],
+    "confidence": 0.8,
+    "raw_response": "{\n  \"complexity_assessment\": {\n    \"complexity_score\": 3,\n    \"time_estimate_minutes\": 45,\n    \"confidence_level\": \"high\",\n    \"complexity_factors\": [\n      \"Simple task with minimal requirements\"\n    ]\n  },\n  \"dependency_insights\": {\n    \"likely_dependencies\": [],\n    \"dependency_signals\": [],\n    \"sequential_vs_parallel\": \"parallel\"\n  },\n  \"context_enhancement\": {\n    \"suggested_tags\": [\n      \"test\",\n      \"simple\"\n    ],\n    \"skill_requirements\": [\n      \"Basic task execution\"\n    ],\n    \"resource_requirements\": [\n      \"Access to test environment\"\n    ],\n    \"optimal_time_of_day\": \"anytime\"\n  },\n  \"optimization_suggestions\": {\n    \"breaking_down\": false,\n    \"prioritization_advice\": \"Can be scheduled as a low-priority task\",\n    \"efficiency_tips\": [\n      \"Automate any repetitive steps\",\n      \"Leverage existing test scripts or templates\"\n    ]\n  }\n}"
+  }
+}

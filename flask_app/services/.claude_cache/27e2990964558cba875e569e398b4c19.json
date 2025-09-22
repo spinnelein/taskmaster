@@ -1,0 +1,66 @@
+{
+  "task_id": "925c684a-28f9-4e36-969d-08fbd0157a81",
+  "analyzed_at": "2025-09-21T19:31:15.950593",
+  "complexity_assessment": {
+    "complexity_score": 4,
+    "complexity_level": "medium",
+    "estimated_duration_minutes": 30,
+    "time_confidence": "medium",
+    "time_multiplier": 1.0,
+    "factors": [],
+    "final_complexity_score": 4.5
+  },
+  "dependency_insights": {
+    "has_dependencies": false,
+    "dependency_signals": [],
+    "time_references": [],
+    "task_references": [],
+    "existing_dependencies": [],
+    "suggested_dependencies": [],
+    "dependency_confidence": "low"
+  },
+  "context_enhancement": {
+    "extracted_tags": [],
+    "categories": [],
+    "action_words": [],
+    "priority_indicators": [],
+    "skill_requirements": [],
+    "location_context": [],
+    "enhancement_confidence": "medium"
+  },
+  "smart_suggestions": [
+    {
+      "type": "clarity",
+      "priority": "medium",
+      "suggestion": "Add more detailed description for better planning",
+      "reasoning": "Detailed descriptions improve estimation and execution",
+      "implementation": "Expand description with specific steps or requirements"
+    }
+  ],
+  "ai_confidence": 0.8,
+  "analysis_source": "hybrid",
+  "ai_insights": {
+    "complexity_assessment": {
+      "ai_complexity_score": 5,
+      "ai_estimated_duration": 60,
+      "ai_confidence": 0.7,
+      "complexity_factors": []
+    },
+    "dependency_insights": {
+      "ai_detected_dependencies": [],
+      "dependency_signals": [],
+      "sequential_vs_parallel": "unknown",
+      "ai_confidence": 0.8
+    },
+    "context_enhancement": {
+      "ai_generated_tags": [],
+      "skill_requirements": [],
+      "resource_requirements": [],
+      "optimal_timing": "anytime",
+      "ai_confidence": 0.85
+    },
+    "smart_suggestions": [],
+    "confidence": 0.8,
+    "raw_response": "{\n  \"duration_analysis\": {\n    \"recommended_minutes\": 45,\n    \"confidence\": \"medium\",\n    \"reasoning\": \"Spraying a couch for flea treatment may take longer than the initial 30 minutes, as it involves thorough coverage and potentially multiple application steps.\"\n  },\n  \"task_structure\": {\n    \"is_divisible\": true,\n    \"min_chunk_minutes\": 15,\n    \"natural_breakpoints\": \"The task can be divided into spraying the couch cushions, the underside, and any hard-to-reach areas.\"\n  },\n  \"energy_requirements\": {\n    \"energy_level\": \"medium\",\n    \"energy_type\": \"physical\",\n    \"cognitive_load\": \"low\"\n  },\n  \"environment\": {\n    \"location\": \"indoor\",\n    \"weather_dependent\": false,\n    \"weather_requirements\": null\n  },\n  \"scheduling\": {\n    \"urgency_assessment\": 7,\n    \"urgency_reasoning\": \"Flea infestations can become quickly problematic, so addressing this issue promptly is important.\",\n    \"optimal_time\": \"afternoon\",\n    \"time_sensitivity\": \"The task should be completed within the next 1-2 days for best results.\"\n  },\n  \"resources\": {\n    \"equipment_needed\": [\"flea spray\", \"cleaning cloths\", \"rubber gloves\"],\n    \"preparation_time\": 10,\n    \"location_requirements\": \"Well-ventilated indoor space, such as a garage or covered patio.\"\n  }\n}"
+  }
+}

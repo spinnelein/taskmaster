@@ -1,0 +1,66 @@
+{
+  "task_id": "751af15b-097b-4394-b00d-e71d6f720cf7",
+  "analyzed_at": "2025-09-20T10:00:34.727050",
+  "complexity_assessment": {
+    "complexity_score": 4,
+    "complexity_level": "medium",
+    "estimated_duration_minutes": 30,
+    "time_confidence": "medium",
+    "time_multiplier": 1.0,
+    "factors": [],
+    "final_complexity_score": 4.5
+  },
+  "dependency_insights": {
+    "has_dependencies": false,
+    "dependency_signals": [],
+    "time_references": [],
+    "task_references": [],
+    "existing_dependencies": [],
+    "suggested_dependencies": [],
+    "dependency_confidence": "low"
+  },
+  "context_enhancement": {
+    "extracted_tags": [],
+    "categories": [],
+    "action_words": [],
+    "priority_indicators": [],
+    "skill_requirements": [],
+    "location_context": [],
+    "enhancement_confidence": "medium"
+  },
+  "smart_suggestions": [
+    {
+      "type": "clarity",
+      "priority": "medium",
+      "suggestion": "Add more detailed description for better planning",
+      "reasoning": "Detailed descriptions improve estimation and execution",
+      "implementation": "Expand description with specific steps or requirements"
+    }
+  ],
+  "ai_confidence": 0.8,
+  "analysis_source": "hybrid",
+  "ai_insights": {
+    "complexity_assessment": {
+      "ai_complexity_score": 5,
+      "ai_estimated_duration": 60,
+      "ai_confidence": 0.7,
+      "complexity_factors": []
+    },
+    "dependency_insights": {
+      "ai_detected_dependencies": [],
+      "dependency_signals": [],
+      "sequential_vs_parallel": "unknown",
+      "ai_confidence": 0.8
+    },
+    "context_enhancement": {
+      "ai_generated_tags": [],
+      "skill_requirements": [],
+      "resource_requirements": [],
+      "optimal_timing": "anytime",
+      "ai_confidence": 0.85
+    },
+    "smart_suggestions": [],
+    "confidence": 0.8,
+    "raw_response": "{\n  \"complexity_assessment\": {\n    \"complexity_score\": 6,\n    \"time_estimate_minutes\": 45,\n    \"confidence_level\": \"medium\",\n    \"complexity_factors\": [\n      \"Requires specialized knowledge of beekeeping and varroa mite treatment\",\n      \"May need to coordinate with other beekeepers or experts\",\n      \"Potential risks involved in handling bees and applying treatments\"\n    ]\n  },\n  \"dependency_insights\": {\n    \"likely_dependencies\": [\n      \"Assess beehive health and identify varroa mite infestation\",\n      \"Obtain necessary treatment supplies and equipment\"\n    ],\n    \"dependency_signals\": [\n      \"for beehive\",\n      \"varroa treatment\"\n    ],\n    \"sequential_vs_parallel\": \"sequential\"\n  },\n  \"context_enhancement\": {\n    \"suggested_tags\": [\n      \"beekeeping\",\n      \"pest_control\",\n      \"hive_maintenance\"\n    ],\n    \"skill_requirements\": [\n      \"Beekeeping knowledge\",\n      \"Familiarity with varroa mite identification and treatment\",\n      \"Ability to work safely with bees\"\n    ],\n    \"resource_requirements\": [\n      \"Varroa mite treatment supplies (e.g., miticides, oxalic acid)\",\n      \"Protective equipment (e.g., bee suit, gloves, smoker)\"\n    ],\n    \"optimal_time_of_day\": \"morning\"\n  },\n  \"optimization_suggestions\": {\n    \"breaking_down\": true,\n    \"prioritization_advice\": \"High priority, as varroa mites can quickly damage or destroy a beehive if left untreated\",\n    \"efficiency_tips\": [\n      \"Consult with experienced beekeepers or experts to ensure proper treatment methods\",\n      \"Prepare all necessary equipment and supplies in advance to minimize disruption to the bees\",\n      \"Coordinate with other beekeepers in the area to share best practices and resources\"\n    ]\n  }\n}"
+  }
+}

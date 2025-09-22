@@ -1,0 +1,35 @@
+{
+  "task_id": "perf-task-010",
+  "analyzed_at": "2025-09-18T15:56:06.596102",
+  "complexity_assessment": {
+    "complexity_score": 5,
+    "complexity_level": "medium",
+    "estimated_duration_minutes": 40,
+    "time_confidence": "medium",
+    "time_multiplier": 1.0,
+    "factors": []
+  },
+  "dependency_insights": {
+    "has_dependencies": false,
+    "dependency_signals": [],
+    "time_references": [],
+    "task_references": [],
+    "existing_dependencies": [],
+    "suggested_dependencies": [],
+    "dependency_confidence": "low"
+  },
+  "context_enhancement": {
+    "extracted_tags": [],
+    "categories": [],
+    "action_words": [
+      "test"
+    ],
+    "priority_indicators": [],
+    "skill_requirements": [],
+    "location_context": [],
+    "enhancement_confidence": "medium"
+  },
+  "smart_suggestions": [],
+  "ai_confidence": 0.0,
+  "analysis_source": "rules"
+}

@@ -1,0 +1,83 @@
+{
+  "task_id": "00e5996d-fe77-4d97-bd0a-40c4c656513f",
+  "analyzed_at": "2025-09-19T09:18:13.884492",
+  "complexity_assessment": {
+    "complexity_score": 8,
+    "complexity_level": "high",
+    "estimated_duration_minutes": 360,
+    "time_confidence": "low",
+    "time_multiplier": 1.5,
+    "factors": [],
+    "final_complexity_score": 6.5
+  },
+  "dependency_insights": {
+    "has_dependencies": false,
+    "dependency_signals": [],
+    "time_references": [],
+    "task_references": [],
+    "existing_dependencies": [],
+    "suggested_dependencies": [],
+    "dependency_confidence": "low"
+  },
+  "context_enhancement": {
+    "extracted_tags": [],
+    "categories": [],
+    "action_words": [
+      "build",
+      "test"
+    ],
+    "priority_indicators": [],
+    "skill_requirements": [],
+    "location_context": [],
+    "enhancement_confidence": "medium"
+  },
+  "smart_suggestions": [
+    {
+      "type": "chunking",
+      "priority": "high",
+      "suggestion": "Consider breaking this long task into smaller chunks for better focus",
+      "reasoning": "Task duration of 240 minutes may lead to fatigue",
+      "implementation": "Enable task chunking or create sub-tasks"
+    },
+    {
+      "type": "priority",
+      "priority": "high",
+      "suggestion": "High urgency task with long duration - consider delegating or simplifying",
+      "reasoning": "Urgent tasks should typically be shorter to enable quick completion",
+      "implementation": "Break into smaller urgent pieces or reassess urgency"
+    },
+    {
+      "type": "scheduling",
+      "priority": "medium",
+      "suggestion": "Add due date for this important task",
+      "reasoning": "Important tasks benefit from explicit deadlines",
+      "implementation": "Set appropriate due date based on priority"
+    }
+  ],
+  "ai_confidence": 0.8,
+  "analysis_source": "hybrid",
+  "ai_insights": {
+    "complexity_assessment": {
+      "ai_complexity_score": 5,
+      "ai_estimated_duration": 60,
+      "ai_confidence": 0.7,
+      "complexity_factors": []
+    },
+    "dependency_insights": {
+      "ai_detected_dependencies": [],
+      "dependency_signals": [],
+      "sequential_vs_parallel": "unknown",
+      "ai_confidence": 0.8
+    },
+    "context_enhancement": {
+      "ai_generated_tags": [],
+      "skill_requirements": [],
+      "resource_requirements": [],
+      "optimal_timing": "anytime",
+      "ai_confidence": 0.85
+    },
+    "smart_suggestions": [],
+    "confidence": 0.8,
+    "raw_response": "{\n  \"complexity_assessment\": {\n    \"complexity_score\": 9,\n    \"time_estimate_minutes\": 480,\n    \"confidence_level\": \"high\",\n    \"complexity_factors\": [\n      \"Building a complex microservices architecture\",\n      \"Integrating Docker and Kubernetes\",\n      \"Potentially managing multiple services and their interactions\"\n    ]\n  },\n  \"dependency_insights\": {\n    \"likely_dependencies\": [\n      \"Kubernetes cluster setup\",\n      \"Docker image building and deployment\",\n      \"Understanding microservices architecture patterns\"\n    ],\n    \"dependency_signals\": [\n      \"Build a complex microservices architecture\",\n      \"with Docker and Kubernetes\"\n    ],\n    \"sequential_vs_parallel\": \"sequential\"\n  },\n  \"context_enhancement\": {\n    \"suggested_tags\": [\n      \"microservices\",\n      \"docker\",\n      \"kubernetes\",\n      \"architecture\",\n      \"devops\"\n    ],\n    \"skill_requirements\": [\n      \"Docker containerization\",\n      \"Kubernetes orchestration\",\n      \"Microservices design and implementation\",\n      \"Cloud infrastructure management\"\n    ],\n    \"resource_requirements\": [\n      \"Access to a Kubernetes cluster\",\n      \"Docker runtime environment\",\n      \"Microservices development tools\"\n    ],\n    \"optimal_time_of_day\": \"anytime\"\n  },\n  \"optimization_suggestions\": {\n    \"breaking_down\": true,\n    \"prioritization_advice\": \"This task should be prioritized highly due to its complexity and urgency. Ensure necessary dependencies are in place before starting.\",\n    \"efficiency_tips\": [\n      \"Break the task into smaller, manageable subtasks\",\n      \"Leverage automation and CI/CD tools to streamline the process\",\n      \"Carefully plan the microservices architecture upfront to avoid rework\"\n    ]\n  }\n}"
+  }
+}

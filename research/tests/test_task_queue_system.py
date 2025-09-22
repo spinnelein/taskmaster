@@ -13,7 +13,7 @@ BASE_URL = "http://localhost:5000/api"
 def test_task_queue_system():
     """Test the complete task queue and assignment system"""
     
-    print("📋 Testing Task Queue and Assignment System")
+    print("[CLIPBOARD] Testing Task Queue and Assignment System")
     print("=" * 60)
     
     # Test 1: Get task queue statistics
@@ -22,18 +22,18 @@ def test_task_queue_system():
         response = requests.get(f"{BASE_URL}/task-queue/statistics")
         if response.status_code == 200:
             stats = response.json()
-            print(f"   ✅ Queue Statistics:")
-            print(f"      📊 Total tasks: {stats.get('total_tasks', 0)}")
-            print(f"      🎯 Available tasks: {stats.get('available_tasks', 0)}")
+            print(f"   [SUCCESS] Queue Statistics:")
+            print(f"      [CHART] Total tasks: {stats.get('total_tasks', 0)}")
+            print(f"      [TARGET] Available tasks: {stats.get('available_tasks', 0)}")
             print(f"      🚫 Blocked tasks: {stats.get('blocked_tasks', 0)}")
             print(f"      🔴 Overdue tasks: {stats.get('overdue_tasks', 0)}")
             print(f"      💤 Snoozed tasks: {stats.get('snoozed_tasks', 0)}")
-            print(f"      📈 Average priority: {stats.get('average_priority_score', 0)}")
-            print(f"      🎯 Assigned tasks: {stats.get('assigned_tasks', 0)}")
+            print(f"      [TRENDING] Average priority: {stats.get('average_priority_score', 0)}")
+            print(f"      [TARGET] Assigned tasks: {stats.get('assigned_tasks', 0)}")
         else:
-            print(f"   ❌ Failed to get statistics: {response.status_code}")
+            print(f"   [ERROR] Failed to get statistics: {response.status_code}")
     except Exception as e:
-        print(f"   ❌ Statistics error: {e}")
+        print(f"   [ERROR] Statistics error: {e}")
     
     # Test 2: Get all tasks queue
     print("\n2. Getting all tasks queue (top 5)...")
@@ -44,7 +44,7 @@ def test_task_queue_system():
             tasks = data.get('task_queue', [])
             detailed = data.get('task_queue_detailed', [])
             
-            print(f"   ✅ Found {len(tasks)} tasks in queue")
+            print(f"   [SUCCESS] Found {len(tasks)} tasks in queue")
             for i, task_detail in enumerate(detailed[:3]):
                 task = task_detail['task_dict']
                 score = task_detail['priority_score']
@@ -56,9 +56,9 @@ def test_task_queue_system():
                 if task_detail.get('blocking_reasons'):
                     print(f"         🚫 {', '.join(task_detail['blocking_reasons'])}")
         else:
-            print(f"   ❌ Failed to get task queue: {response.status_code}")
+            print(f"   [ERROR] Failed to get task queue: {response.status_code}")
     except Exception as e:
-        print(f"   ❌ Task queue error: {e}")
+        print(f"   [ERROR] Task queue error: {e}")
     
     # Test 3: Get available tasks queue
     print("\n3. Getting available tasks queue...")
@@ -68,16 +68,16 @@ def test_task_queue_system():
             data = response.json()
             tasks = data.get('available_tasks', [])
             
-            print(f"   ✅ Found {len(tasks)} available tasks")
+            print(f"   [SUCCESS] Found {len(tasks)} available tasks")
             available_task_id = None
             for task in tasks[:2]:
-                print(f"      🎯 {task['title'][:40]} ({task.get('duration', 0)}min)")
+                print(f"      [TARGET] {task['title'][:40]} ({task.get('duration', 0)}min)")
                 if not available_task_id:
                     available_task_id = task['id']
         else:
-            print(f"   ❌ Failed to get available tasks: {response.status_code}")
+            print(f"   [ERROR] Failed to get available tasks: {response.status_code}")
     except Exception as e:
-        print(f"   ❌ Available tasks error: {e}")
+        print(f"   [ERROR] Available tasks error: {e}")
     
     # Test 4: Get time pools with weather
     print("\n4. Getting time pools for next 3 days...")
@@ -95,8 +95,8 @@ def test_task_queue_system():
             data = response.json()
             pools = data.get('pools', [])
             
-            print(f"   ✅ Found {len(pools)} time pools")
-            print(f"   📊 Total available time: {data.get('total_minutes', 0)} minutes")
+            print(f"   [SUCCESS] Found {len(pools)} time pools")
+            print(f"   [CHART] Total available time: {data.get('total_minutes', 0)} minutes")
             print(f"   🌤️  Outdoor suitable pools: {data.get('outdoor_suitable', 0)}")
             
             available_pool_id = None
@@ -108,14 +108,14 @@ def test_task_queue_system():
                 weather_info = pool.get('weather', {})
                 weather_desc = weather_info.get('weather_condition', 'Unknown') if weather_info else 'No weather'
                 
-                print(f"      📅 {pool_date} {start_time} ({available}min) - {weather_desc}")
+                print(f"      [CALENDAR] {pool_date} {start_time} ({available}min) - {weather_desc}")
                 if available >= 30 and not available_pool_id:
                     available_pool_id = pool['id']
                     
         else:
-            print(f"   ❌ Failed to get time pools: {response.status_code}")
+            print(f"   [ERROR] Failed to get time pools: {response.status_code}")
     except Exception as e:
-        print(f"   ❌ Time pools error: {e}")
+        print(f"   [ERROR] Time pools error: {e}")
     
     # Test 5: Task assignment suggestions
     if available_task_id:
@@ -126,7 +126,7 @@ def test_task_queue_system():
                 data = response.json()
                 suggestions = data.get('pool_suggestions', [])
                 
-                print(f"   ✅ Found {len(suggestions)} pool suggestions")
+                print(f"   [SUCCESS] Found {len(suggestions)} pool suggestions")
                 for suggestion in suggestions[:2]:
                     pool = suggestion['pool']
                     score = suggestion['match_score']
@@ -135,12 +135,12 @@ def test_task_queue_system():
                     pool_date = pool.get('pool_date', 'Unknown')
                     start_time = pool.get('start_time', '').split('T')[1][:5] if 'T' in pool.get('start_time', '') else 'Unknown'
                     
-                    print(f"      🎯 {pool_date} {start_time} (Score: {score:.1f})")
-                    print(f"         💡 {', '.join(reasons[:2])}")
+                    print(f"      [TARGET] {pool_date} {start_time} (Score: {score:.1f})")
+                    print(f"         [IDEA] {', '.join(reasons[:2])}")
             else:
-                print(f"   ❌ Failed to get suggestions: {response.status_code}")
+                print(f"   [ERROR] Failed to get suggestions: {response.status_code}")
         except Exception as e:
-            print(f"   ❌ Suggestions error: {e}")
+            print(f"   [ERROR] Suggestions error: {e}")
     
     # Test 6: Create a test assignment
     if available_task_id and available_pool_id:
@@ -159,8 +159,8 @@ def test_task_queue_system():
                 result = response.json()
                 assignment = result.get('assignment', {})
                 
-                print(f"   ✅ Assignment created successfully")
-                print(f"      📋 Assignment ID: {assignment.get('id', 'Unknown')[:8]}")
+                print(f"   [SUCCESS] Assignment created successfully")
+                print(f"      [CLIPBOARD] Assignment ID: {assignment.get('id', 'Unknown')[:8]}")
                 print(f"      ⏰ Allocated: {assignment.get('allocated_minutes', 0)} minutes")
                 print(f"      📝 Status: {assignment.get('status', 'Unknown')}")
                 
@@ -168,14 +168,14 @@ def test_task_queue_system():
                 test_assignment_id = assignment.get('id')
                 
             else:
-                print(f"   ❌ Failed to create assignment: {response.status_code}")
+                print(f"   [ERROR] Failed to create assignment: {response.status_code}")
                 try:
                     error_msg = response.json().get('error', 'Unknown error')
                     print(f"      📝 Error: {error_msg}")
                 except:
                     pass
         except Exception as e:
-            print(f"   ❌ Assignment creation error: {e}")
+            print(f"   [ERROR] Assignment creation error: {e}")
     
     # Test 7: Check updated queue statistics
     print("\n7. Checking updated queue statistics...")
@@ -183,15 +183,15 @@ def test_task_queue_system():
         response = requests.get(f"{BASE_URL}/task-queue/statistics")
         if response.status_code == 200:
             stats = response.json()
-            print(f"   ✅ Updated Statistics:")
-            print(f"      📊 Total tasks: {stats.get('total_tasks', 0)}")
-            print(f"      🎯 Available tasks: {stats.get('available_tasks', 0)}")
-            print(f"      ⚡ Assigned tasks: {stats.get('assigned_tasks', 0)}")
-            print(f"      ✅ Fully assigned: {stats.get('fully_assigned_tasks', 0)}")
+            print(f"   [SUCCESS] Updated Statistics:")
+            print(f"      [CHART] Total tasks: {stats.get('total_tasks', 0)}")
+            print(f"      [TARGET] Available tasks: {stats.get('available_tasks', 0)}")
+            print(f"      [FAST] Assigned tasks: {stats.get('assigned_tasks', 0)}")
+            print(f"      [SUCCESS] Fully assigned: {stats.get('fully_assigned_tasks', 0)}")
         else:
-            print(f"   ❌ Failed to get updated statistics: {response.status_code}")
+            print(f"   [ERROR] Failed to get updated statistics: {response.status_code}")
     except Exception as e:
-        print(f"   ❌ Updated statistics error: {e}")
+        print(f"   [ERROR] Updated statistics error: {e}")
     
     # Test 8: Get assignments
     print("\n8. Getting recent assignments...")
@@ -201,18 +201,18 @@ def test_task_queue_system():
             data = response.json()
             assignments = data.get('assignments', [])
             
-            print(f"   ✅ Found {len(assignments)} active assignments")
+            print(f"   [SUCCESS] Found {len(assignments)} active assignments")
             for assignment in assignments[:2]:
                 task_id = assignment.get('task_id', 'Unknown')
                 pool_id = assignment.get('time_pool_id', 'Unknown')
                 minutes = assignment.get('allocated_minutes', 0)
                 assigned_by = assignment.get('assigned_by', 'Unknown')
                 
-                print(f"      📋 Task {task_id[:8]} → Pool {pool_id[:8]} ({minutes}min) by {assigned_by}")
+                print(f"      [CLIPBOARD] Task {task_id[:8]} → Pool {pool_id[:8]} ({minutes}min) by {assigned_by}")
         else:
-            print(f"   ❌ Failed to get assignments: {response.status_code}")
+            print(f"   [ERROR] Failed to get assignments: {response.status_code}")
     except Exception as e:
-        print(f"   ❌ Assignments error: {e}")
+        print(f"   [ERROR] Assignments error: {e}")
     
     # Test 9: Auto-assignment test (if we have another available task)
     try:
@@ -236,11 +236,11 @@ def test_task_queue_system():
                     assignments = result.get('assignments', [])
                     message = result.get('message', '')
                     
-                    print(f"   ✅ Auto-assignment successful")
+                    print(f"   [SUCCESS] Auto-assignment successful")
                     print(f"      📝 {message}")
-                    print(f"      📋 Created {len(assignments)} assignments")
+                    print(f"      [CLIPBOARD] Created {len(assignments)} assignments")
                 else:
-                    print(f"   ⚠️  Auto-assignment failed: {response.status_code}")
+                    print(f"   [WARNING]  Auto-assignment failed: {response.status_code}")
                     try:
                         error_msg = response.json().get('message', 'Unknown error')
                         print(f"      📝 Reason: {error_msg}")
@@ -250,18 +250,18 @@ def test_task_queue_system():
                 print("\n9. Skipping auto-assignment test (no suitable tasks)")
                 
     except Exception as e:
-        print(f"   ❌ Auto-assignment test error: {e}")
+        print(f"   [ERROR] Auto-assignment test error: {e}")
     
     print("\n" + "=" * 60)
-    print("✅ Task Queue and Assignment System Test Complete!")
+    print("[SUCCESS] Task Queue and Assignment System Test Complete!")
     print("\nFeatures tested:")
-    print("• ✅ Task priority scoring and queue ordering")
-    print("• ✅ Available vs all tasks filtering") 
-    print("• ✅ Task assignment to time pools")
-    print("• ✅ Pool suggestions with weather matching")
-    print("• ✅ Assignment tracking and statistics")
-    print("• ✅ Auto-assignment with intelligent matching")
-    print("\nThe task queue system is working properly! 🎉")
+    print("• [SUCCESS] Task priority scoring and queue ordering")
+    print("• [SUCCESS] Available vs all tasks filtering") 
+    print("• [SUCCESS] Task assignment to time pools")
+    print("• [SUCCESS] Pool suggestions with weather matching")
+    print("• [SUCCESS] Assignment tracking and statistics")
+    print("• [SUCCESS] Auto-assignment with intelligent matching")
+    print("\nThe task queue system is working properly! [CELEBRATION]")
 
 if __name__ == "__main__":
     test_task_queue_system()

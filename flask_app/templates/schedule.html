@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
     <!-- FullCalendar CSS -->
-    <link href='https://unpkg.com/fullcalendar@6.1.8/index.global.min.css' rel='stylesheet' />
+    <link href="{{ url_for('static', filename='css/fullcalendar.min.css') }}" rel="stylesheet">
     
     <style>
         body { 
@@ -232,15 +232,22 @@
         
         /* Specific styling for time pool events */
         .fc-event[id^="timepool-"] {
-            min-height: 60px !important;
-            padding: 5px !important;
+            min-height: 80px !important;
+            padding: 8px !important;
+            overflow: visible !important;
+            height: auto !important;
         }
         
         .fc-event[id^="timepool-"] .fc-event-main {
             display: flex;
             flex-direction: column;
-            height: 100%;
-            overflow: visible;
+            height: auto !important;
+            overflow: visible !important;
+        }
+        
+        .fc-event[id^="timepool-"] .fc-event-main-frame {
+            height: auto !important;
+            overflow: visible !important;
         }
         .fc-event-title {
             font-weight: 500;
@@ -553,9 +560,9 @@
                 <a href="/tasks">Tasks</a>
                 <a href="/initiatives">Initiatives</a>
                 <a href="/projects">Projects</a>
-                <a href="/dishes">Dishes</a>
-                <a href="/meals">Meals</a>
+                <a href="/meals">Food</a>
                 <button class="btn" onclick="showAddEventModal()" style="margin-left: 20px;">Add Event</button>
+                <button class="btn btn-success" onclick="regenerateTimePools()" style="margin-left: 10px;">Regenerate Pools</button>
             </div>
         </div>
         
@@ -700,20 +707,14 @@
     </div>
     
     <!-- FullCalendar JS -->
-    <script src='https://unpkg.com/fullcalendar@6.1.8/index.global.min.js'></script>
+    <script src="{{ url_for('static', filename='js/fullcalendar.min.js') }}"></script>
     
     <script>
-    // Global calendar variable
+    // FullCalendar instance
     let calendar;
     
-    // Initialize calendar when page loads
+    // Initialize FullCalendar when page loads
     document.addEventListener('DOMContentLoaded', function() {
-        initializeCalendar();
-        loadActiveTasks();
-        checkHealth();
-    });
-    
-    function initializeCalendar() {
         const calendarEl = document.getElementById('calendar');
         
         calendar = new FullCalendar.Calendar(calendarEl, {
@@ -722,140 +723,260 @@
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                right: 'timeGridWeek,timeGridDay,dayGridMonth'
             },
-            // Make week view start with today at the left
-            firstDay: new Date().getDay(),
-            slotMinTime: '07:00:00',
-            slotMaxTime: '22:00:00',
+            slotMinTime: '06:00:00',
+            slotMaxTime: '24:00:00',
             slotDuration: '00:20:00',
-            slotLabelInterval: '01:00',
+            slotLabelInterval: '01:00:00',
             expandRows: true,
-            eventMinHeight: 30,
-            allDaySlot: true,
-            allDayText: 'All Day',
-            dayMaxEvents: true,
+            nowIndicator: true,
             editable: true,
             selectable: true,
             selectMirror: true,
+            dayMaxEvents: true,
+            weekends: true,
+            allDaySlot: true,
             
-            // Load events from API with calendar mode (expanded recurring events)
-            events: {
-                url: '/api/events',
-                extraParams: {
-                    mode: 'calendar'
-                }
+            // Event sources - fetch both events and time pools
+            events: function(info, successCallback, failureCallback) {
+                const startDate = info.start.toISOString().split('T')[0];
+                const endDate = info.end.toISOString().split('T')[0];
+                
+                // Fetch both events and time pools in parallel
+                Promise.all([
+                    fetch(`/api/events?mode=calendar&start=${startDate}&end=${endDate}&_cb=${Date.now()}`).then(r => r.json()),
+                    fetch(`/api/time-pools?start_date=${startDate}&end_date=${endDate}&include_weather=true&_cb=${Date.now()}`).then(r => r.json())
+                ])
+                .then(([events, timePools]) => {
+                    // Transform regular events
+                    const fcEvents = events.map(event => ({
+                        id: event.id,
+                        title: event.title,
+                        start: event.start,
+                        end: event.end,
+                        allDay: event.event_type === 'all_day',
+                        backgroundColor: '#007bff',
+                        borderColor: '#007bff',
+                        extendedProps: {
+                            description: event.description,
+                            location: event.location,
+                            event_type: event.event_type,
+                            isTimePool: false,
+                            originalEvent: event
+                        }
+                    }));
+                    
+                    // Transform time pools into calendar events
+                    if (timePools.pools && Array.isArray(timePools.pools)) {
+                        timePools.pools.forEach(pool => {
+                            // Use datetime strings directly from the API
+                            const startDateTime = pool.start_time;
+                            const endDateTime = pool.end_time;
+                            
+                            // Calculate utilization percentage
+                            const utilizationPercentage = pool.total_minutes > 0 
+                                ? Math.round((pool.allocated_minutes / pool.total_minutes) * 100) 
+                                : 0;
+                            
+                            // Use beige/tan color scheme for time pools
+                            let backgroundColor = '#f5e6d3'; // Light beige
+                            let borderColor = '#d4a574'; // Darker tan border
+                            
+                            // Create pool title with task info
+                            let poolTitle = `Time Pool (${utilizationPercentage}% used)`;
+                            if (pool.assignments && pool.assignments.length > 0) {
+                                const taskNames = pool.assignments.map(a => a.task_title).join(', ');
+                                poolTitle = `Pool: ${taskNames}`;
+                            }
+                            
+                            // Add weather info if available
+                            if (pool.weather && pool.weather.is_suitable_for_outdoor_work !== undefined) {
+                                poolTitle += pool.weather.is_suitable_for_outdoor_work ? ' ☀️' : ' 🌧️';
+                            }
+                            
+                            fcEvents.push({
+                                id: `timepool-${pool.id}`,
+                                title: poolTitle,
+                                start: startDateTime,
+                                end: endDateTime,
+                                allDay: false,
+                                backgroundColor: backgroundColor,
+                                borderColor: borderColor,
+                                display: 'block',
+                                extendedProps: {
+                                    isTimePool: true,
+                                    poolData: pool,
+                                    utilization: utilizationPercentage,
+                                    weather_suitable: pool.weather ? pool.weather.is_suitable_for_outdoor_work : null,
+                                    assignments: pool.assignments || []
+                                }
+                            });
+                        });
+                    }
+                    
+                    successCallback(fcEvents);
+                    
+                    // Update health status on successful load
+                    document.getElementById('health-status').textContent = '🟢 Connected';
+                    document.getElementById('health-status').style.background = '#28a745';
+                })
+                .catch(error => {
+                    console.error('Failed to load events/pools:', error);
+                    document.getElementById('health-status').textContent = '🔴 Connection Error';
+                    document.getElementById('health-status').style.background = '#dc3545';
+                    failureCallback(error);
+                });
             },
             
-            // Handle date selection for new events
+            // Event interactions
             select: function(info) {
-                // Pre-fill the modal with selected time range
-                const startDate = new Date(info.start);
-                const endDate = new Date(info.end);
-                
-                // Format dates for datetime-local input
-                document.getElementById('eventStart').value = formatDateTimeLocal(startDate);
-                document.getElementById('eventEnd').value = formatDateTimeLocal(endDate);
-                
-                // Show modal
+                // Set modal times to selection
+                document.getElementById('eventStart').value = formatDateTimeLocal(info.start);
+                document.getElementById('eventEnd').value = formatDateTimeLocal(info.end);
                 showAddEventModal();
                 calendar.unselect();
             },
             
-            // Handle event clicks 
             eventClick: function(info) {
+                // Check if this is a time pool
                 if (info.event.extendedProps.isTimePool) {
                     // Handle time pool click - show pool details
-                    const poolData = info.event.extendedProps.poolData;
-                    const taskList = info.event.extendedProps.taskList;
-                    const weather = info.event.extendedProps.weather;
+                    const pool = info.event.extendedProps.poolData;
+                    const utilization = info.event.extendedProps.utilization;
                     
-                    const weatherInfo = weather.weather_condition ? 
-                        `Weather: ${weather.weather_condition} (${weather.temp_high}°F)` : 
-                        'Weather: Unknown';
+                    // Parse times for display
+                    const startTime = new Date(pool.start_time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+                    const endTime = new Date(pool.end_time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
                     
-                    alert(`Time Pool Details:\\n\\n${info.event.title}\\n${weatherInfo}\\n\\nAssigned Tasks:\\n${taskList}`);
+                    let message = `Time Pool: ${startTime} - ${endTime}\n`;
+                    message += `Date: ${pool.pool_date}\n`;
+                    message += `Utilization: ${utilization}%\n`;
+                    message += `Available: ${pool.available_minutes} of ${pool.total_minutes} minutes\n`;
+                    
+                    if (pool.assignments && pool.assignments.length > 0) {
+                        message += '\nAssigned Tasks:\n';
+                        pool.assignments.forEach(assignment => {
+                            message += `- ${assignment.task_title} (${assignment.allocated_minutes} min)\n`;
+                        });
+                    }
+                    
+                    if (pool.weather) {
+                        message += `\nWeather: ${pool.weather.weather_condition}\n`;
+                        message += `Temperature: ${pool.weather.temp_low}°F - ${pool.weather.temp_high}°F\n`;
+                        message += pool.weather.is_suitable_for_outdoor_work 
+                            ? 'Suitable for outdoor tasks' 
+                            : 'Not suitable for outdoor tasks';
+                    }
+                    
+                    alert(message);
                 } else {
-                    // Handle regular event click - edit event
+                    // Regular event - navigate to edit page
                     window.location.href = `/events/${info.event.id}/edit`;
                 }
             },
             
-            // Handle event drag/resize
-            eventChange: function(info) {
+            eventDrop: function(info) {
+                // Don't allow dragging time pools
+                if (info.event.extendedProps.isTimePool) {
+                    info.revert();
+                    return;
+                }
+                
                 updateEvent(info.event.id, {
-                    start: info.event.startStr,
-                    end: info.event.endStr
+                    start: info.event.start.toISOString(),
+                    end: info.event.end ? info.event.end.toISOString() : null
                 });
             },
             
-            // Error handling
-            eventSourceFailure: function(error) {
-                console.error('Failed to load events:', error);
-                document.getElementById('health-status').textContent = '🔴 Connection Error';
-                document.getElementById('health-status').style.background = '#dc3545';
+            eventResize: function(info) {
+                // Don't allow resizing time pools
+                if (info.event.extendedProps.isTimePool) {
+                    info.revert();
+                    return;
+                }
+                
+                updateEvent(info.event.id, {
+                    start: info.event.start.toISOString(),
+                    end: info.event.end ? info.event.end.toISOString() : null
+                });
             },
             
-            // Custom event rendering to show task assignments
+            // Custom rendering for better time pool display
             eventDidMount: function(info) {
-                // Only customize time pool events
                 if (info.event.extendedProps.isTimePool) {
-                    console.log('Processing time pool:', info.event.title);
-                    console.log('Task list:', info.event.extendedProps.taskList);
+                    // Style time pool events
+                    const pool = info.event.extendedProps.poolData;
+                    const taskCount = pool.assignments ? pool.assignments.length : 0;
+                    const minHeight = Math.max(80, 60 + (taskCount * 35)); // Base height + height per task
                     
-                    // Add task list to the event element
-                    const taskList = info.event.extendedProps.taskList;
-                    if (taskList && taskList !== 'No tasks assigned') {
-                        // Find the title container within FullCalendar's structure
-                        const titleContainer = info.el.querySelector('.fc-event-title-container');
-                        console.log('Title container found:', !!titleContainer);
+                    info.el.style.minHeight = `${minHeight}px`;
+                    info.el.style.padding = '8px';
+                    info.el.style.opacity = '0.85';
+                    info.el.style.borderStyle = 'solid';
+                    info.el.style.borderWidth = '2px';
+                    info.el.style.overflow = 'visible';
+                    info.el.style.zIndex = '10';
+                    
+                    // Add custom content with better formatting
+                    const content = info.el.querySelector('.fc-event-main');
+                    if (content) {
+                        const pool = info.event.extendedProps.poolData;
+                        const utilization = info.event.extendedProps.utilization;
+                        let html = `<div style="font-size: 11px; color: #333;">`;
+                        html += `<div style="font-weight: bold; margin-bottom: 3px;">${utilization}% Used (${pool.available_minutes} min free)</div>`;
                         
-                        if (titleContainer) {
-                            // Create a div for tasks that fits within FullCalendar's structure
-                            const tasksDiv = document.createElement('div');
-                            tasksDiv.style.fontSize = '9px';
-                            tasksDiv.style.lineHeight = '1.1';
-                            tasksDiv.style.color = '#000';
-                            tasksDiv.style.fontWeight = '400';
-                            tasksDiv.style.marginTop = '2px';
-                            tasksDiv.style.padding = '1px 0';
-                            tasksDiv.style.maxHeight = 'none';
-                            tasksDiv.style.overflow = 'visible';
+                        if (pool.assignments && pool.assignments.length > 0) {
+                            html += `<div style="margin-top: 4px;">`;
                             
-                            // Convert task list to simple text display
-                            const taskLines = taskList.split('\\n');
-                            console.log('Task lines:', taskLines);
-                            
-                            taskLines.forEach(line => {
-                                if (line.trim()) {
-                                    const taskLine = document.createElement('div');
-                                    taskLine.textContent = line.replace('• ', '');  // Remove bullet
-                                    taskLine.style.fontSize = '9px';
-                                    taskLine.style.color = '#000';
-                                    taskLine.style.fontWeight = '400';
-                                    taskLine.style.marginBottom = '1px';
-                                    tasksDiv.appendChild(taskLine);
+                            // Show ALL tasks with details
+                            pool.assignments.forEach((assignment) => {
+                                html += `<div style="margin-bottom: 4px; padding-left: 8px; border-left: 2px solid #d4a574;">`;
+                                html += `<div style="font-weight: 500; color: #333;">${assignment.task_title}</div>`;
+                                html += `<div style="font-size: 10px; color: #666;">`;
+                                html += `${assignment.allocated_minutes} min`;
+                                
+                                // Show urgency and priority
+                                if (assignment.urgency !== undefined && assignment.urgency !== null) {
+                                    html += ` • Urg: ${assignment.urgency}/10`;
                                 }
+                                
+                                if (assignment.priority !== undefined && assignment.priority !== null) {
+                                    let priorityColor = '#666';
+                                    if (assignment.priority === 'high') priorityColor = '#d9534f';
+                                    else if (assignment.priority === 'medium') priorityColor = '#f0ad4e';
+                                    else if (assignment.priority === 'low') priorityColor = '#5cb85c';
+                                    
+                                    html += ` • <span style="color: ${priorityColor}; font-weight: 500;">${assignment.priority.charAt(0).toUpperCase() + assignment.priority.slice(1)}</span>`;
+                                }
+                                
+                                html += `</div></div>`;
                             });
                             
-                            // Append to title container (inside FullCalendar's structure)
-                            titleContainer.appendChild(tasksDiv);
-                            console.log('Tasks div appended to title container');
+                            html += `</div>`;
+                        } else {
+                            html += `<div style="font-style: italic; margin-top: 4px; color: #666;">No tasks assigned</div>`;
                         }
-                    } else {
-                        console.log('No tasks to display or empty task list');
+                        
+                        // Add weather indicator if available
+                        if (pool.weather && pool.weather.is_suitable_for_outdoor_work !== undefined) {
+                            html += `<div style="margin-top: 4px; font-size: 10px; color: #666;">`;
+                            html += pool.weather.is_suitable_for_outdoor_work ? '☀️ Outdoor suitable' : '🌧️ Indoor preferred';
+                            html += `</div>`;
+                        }
+                        
+                        html += `</div>`;
+                        
+                        content.innerHTML = html;
                     }
                 }
             }
         });
         
         calendar.render();
-        
-        // Load time pools after calendar is rendered
-        setTimeout(() => {
-            loadTimePoolsAsEvents();
-        }, 500);
-    }
+        loadActiveTasks();
+        checkHealth();
+    });
     
     // Event management functions
     
@@ -865,9 +986,15 @@
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(updates)
         })
+        .then(response => {
+            if (response.ok) {
+                calendar.refetchEvents();
+            }
+            return response;
+        })
         .catch(error => {
             console.error('Error updating event:', error);
-            calendar.refetchEvents(); // Revert on error
+            calendar.refetchEvents();
         });
     }
     
@@ -876,7 +1003,10 @@
             method: 'DELETE'
         })
         .then(() => {
-            calendar.getEventById(eventId).remove();
+            const event = calendar.getEventById(eventId);
+            if (event) {
+                event.remove();
+            }
         })
         .catch(error => {
             console.error('Error deleting event:', error);
@@ -889,9 +1019,24 @@
         fetch('/api/tasks')
             .then(response => response.json())
             .then(tasks => {
-                // Filter to active tasks only and limit to 10
-                const activeTasks = tasks.filter(task => task.status === 'active' && !task.completed).slice(0, 10);
-                displayActiveTasks(activeTasks);
+                // Filter to available tasks (not completed and not currently snoozed) and limit to 10
+                const now = new Date();
+                const availableTasks = tasks.filter(task => {
+                    // Must not be completed
+                    if (task.completed || task.is_completed) return false;
+                    
+                    // If snoozed, check if snooze period has ended
+                    if (task.is_snoozed && task.snoozed_until) {
+                        const snoozeEnd = new Date(task.snoozed_until);
+                        // Only include if snooze period has ended
+                        return now >= snoozeEnd;
+                    }
+                    
+                    // Include all other non-completed tasks
+                    return true;
+                }).slice(0, 10);
+                
+                displayActiveTasks(availableTasks);
             })
             .catch(error => {
                 console.error('Error loading active tasks:', error);
@@ -921,133 +1066,147 @@
     }
     
     function completeTask(taskId) {
+        // Find the task element and provide immediate visual feedback
+        const taskElements = document.querySelectorAll('.task-item');
+        let taskElement = null;
+        
+        // Find the specific task element by checking the button onclick attribute
+        taskElements.forEach(element => {
+            const completeButton = element.querySelector(`button[onclick="completeTask('${taskId}')"]`);
+            if (completeButton) {
+                taskElement = element;
+            }
+        });
+        
+        // Provide immediate visual feedback
+        if (taskElement) {
+            // Update button to show completion in progress
+            const completeButton = taskElement.querySelector('button');
+            completeButton.disabled = true;
+            completeButton.textContent = 'Completing...';
+            completeButton.style.opacity = '0.6';
+            
+            // Add visual indication that task is being completed
+            taskElement.style.transition = 'all 0.3s ease';
+            taskElement.style.opacity = '0.7';
+            taskElement.style.backgroundColor = '#f8f9fa';
+        }
+        
         fetch(`/api/tasks/${taskId}/complete`, {
             method: 'POST'
         })
-        .then(() => {
-            loadActiveTasks(); // Refresh task list
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to complete task');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Show success feedback
+            if (taskElement) {
+                const completeButton = taskElement.querySelector('button');
+                completeButton.textContent = 'Completed ✓';
+                completeButton.style.backgroundColor = '#28a745';
+                completeButton.style.opacity = '1';
+                
+                // Fade out the task element
+                taskElement.style.opacity = '0.3';
+                taskElement.style.transform = 'scale(0.95)';
+                
+                // Add completion indicator
+                const taskTitle = taskElement.querySelector('.task-title');
+                if (taskTitle) {
+                    taskTitle.style.textDecoration = 'line-through';
+                    taskTitle.style.color = '#6c757d';
+                }
+                
+                // Show a small completion message
+                const completionMessage = document.createElement('div');
+                completionMessage.style.cssText = `
+                    position: absolute;
+                    top: 10px;
+                    right: 20px;
+                    background: #28a745;
+                    color: white;
+                    padding: 8px 15px;
+                    border-radius: 20px;
+                    font-size: 14px;
+                    z-index: 1000;
+                    animation: fadeInOut 3s ease-in-out forwards;
+                `;
+                completionMessage.textContent = 'Task completed!';
+                
+                // Add fade animation
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes fadeInOut {
+                        0% { opacity: 0; transform: translateY(-10px); }
+                        20% { opacity: 1; transform: translateY(0); }
+                        80% { opacity: 1; transform: translateY(0); }
+                        100% { opacity: 0; transform: translateY(-10px); }
+                    }
+                `;
+                document.head.appendChild(style);
+                document.body.appendChild(completionMessage);
+                
+                // Remove the message after animation
+                setTimeout(() => {
+                    if (completionMessage.parentNode) {
+                        completionMessage.remove();
+                    }
+                    if (style.parentNode) {
+                        style.remove();
+                    }
+                }, 3000);
+            }
+            
+            // Refresh task list after a short delay to show the completion effect
+            setTimeout(() => {
+                loadActiveTasks();
+            }, 1500);
         })
         .catch(error => {
             console.error('Error completing task:', error);
+            
+            // Restore original state on error
+            if (taskElement) {
+                const completeButton = taskElement.querySelector('button');
+                completeButton.disabled = false;
+                completeButton.textContent = 'Complete';
+                completeButton.style.opacity = '1';
+                completeButton.style.backgroundColor = '#28a745';
+                
+                taskElement.style.opacity = '1';
+                taskElement.style.backgroundColor = '';
+                taskElement.style.transform = '';
+            }
+            
             alert('Failed to complete task');
         });
     }
     
-    // Time Pools as Calendar Events
-    function loadTimePoolsAsEvents() {
-        const currentView = calendar.view;
-        const startDate = currentView.currentStart.toISOString().split('T')[0];
-        const endDate = currentView.currentEnd.toISOString().split('T')[0];
+    // Time pool management functions
+    function regenerateTimePools() {
+        if (!confirm('Regenerate time pools? This will update all future time pools based on current schedule.')) {
+            return;
+        }
         
-        fetch(`/api/time-pools?start_date=${startDate}&end_date=${endDate}&include_weather=true`)
-            .then(response => response.json())
-            .then(data => {
-                addTimePoolsToCalendar(data.pools || []);
-            })
-            .catch(error => {
-                console.error('Error loading time pools for calendar:', error);
-            });
-    }
-    
-    function addTimePoolsToCalendar(pools) {
-        // Remove existing time pool events
-        const existingPools = calendar.getEvents().filter(event => event.extendedProps.isTimePool);
-        existingPools.forEach(event => event.remove());
-        
-        // Get existing regular events to check for conflicts
-        const regularEvents = calendar.getEvents().filter(event => !event.extendedProps.isTimePool);
-        
-        // Add new time pool events
-        pools.forEach(pool => {
-            const poolDate = pool.pool_date;
-            
-            // Parse start and end times properly
-            let startTime, endTime;
-            if (pool.start_time.includes('T')) {
-                // Full datetime format
-                startTime = pool.start_time.split('T')[1].substring(0, 5);
-                endTime = pool.end_time.split('T')[1].substring(0, 5);
+        fetch('/api/time-pools/regenerate', {
+            method: 'POST'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert(data.message);
+                // Refresh calendar to show updated pools
+                calendar.refetchEvents();
             } else {
-                // Time only format
-                startTime = pool.start_time.substring(0, 5);
-                endTime = pool.end_time.substring(0, 5);
+                alert('Error: ' + data.message);
             }
-            
-            // Create start and end datetime strings
-            const startDateTime = `${poolDate}T${startTime}:00`;
-            const endDateTime = `${poolDate}T${endTime}:00`;
-            
-            // Check for conflicts with existing events
-            const poolStart = new Date(startDateTime);
-            const poolEnd = new Date(endDateTime);
-            
-            const hasConflicts = regularEvents.some(event => {
-                const eventStart = new Date(event.start);
-                const eventEnd = new Date(event.end);
-                
-                // Check if times overlap
-                return (poolStart < eventEnd && poolEnd > eventStart);
-            });
-            
-            // Determine color based on utilization and conflicts
-            const allocatedMinutes = pool.allocated_minutes || 0;
-            const totalMinutes = pool.total_minutes || 1;
-            const utilization = allocatedMinutes / totalMinutes;
-            
-            let backgroundColor, borderColor, textColor = '#333';
-            
-            if (hasConflicts) {
-                // Conflicted pools - muted colors
-                backgroundColor = '#f8f9fa';
-                borderColor = '#6c757d';
-                textColor = '#6c757d';
-            } else if (utilization >= 0.9) {
-                backgroundColor = '#ffe6e6'; // Light red for full
-                borderColor = '#dc3545';
-            } else if (utilization >= 0.5) {
-                backgroundColor = '#fff3cd'; // Light yellow for partial
-                borderColor = '#ffc107';
-            } else {
-                backgroundColor = '#e8f5e8'; // Light green for available
-                borderColor = '#28a745';
-            }
-            
-            // Build task list for display
-            const assignments = pool.assignments || [];
-            const taskList = assignments.length > 0 ? 
-                assignments.map(a => `• ${a.task_title} (${a.allocated_minutes}m)`).join('\\n') :
-                'No tasks assigned';
-            
-            // Weather information
-            const weather = pool.weather || {};
-            const weatherIcon = weather.weather_condition ? 
-                (weather.weather_condition.toLowerCase().includes('sun') ? '☀️' : 
-                 weather.weather_condition.toLowerCase().includes('rain') ? '🌧️' : 
-                 weather.weather_condition.toLowerCase().includes('cloud') ? '☁️' : '🌤️') : '';
-            
-            // Title shows conflict status
-            const conflictText = hasConflicts ? ' (Conflicts!)' : '';
-            const poolTitle = `${weatherIcon} Time Pool (${allocatedMinutes}/${totalMinutes}m)${conflictText}`;
-            
-            const poolEvent = {
-                id: `timepool-${pool.id}`,
-                title: poolTitle,
-                start: startDateTime,
-                end: endDateTime,
-                backgroundColor: backgroundColor,
-                borderColor: borderColor,
-                textColor: textColor,
-                extendedProps: {
-                    isTimePool: true,
-                    poolData: pool,
-                    taskList: taskList,
-                    weather: weather,
-                    hasConflicts: hasConflicts
-                },
-                display: 'block'
-            };
-            
-            calendar.addEvent(poolEvent);
+        })
+        .catch(error => {
+            console.error('Error regenerating time pools:', error);
+            alert('Failed to regenerate time pools');
         });
     }
     
@@ -1175,7 +1334,7 @@
         .then(response => response.json())
         .then(() => {
             closeCreateTaskModal();
-            loadTasks(); // Refresh task list
+            loadActiveTasks(); // Refresh task list
         })
         .catch(error => {
             console.error('Error creating task:', error);
@@ -1286,7 +1445,7 @@
         })
         .then(response => response.json())
         .then(event => {
-            calendar.refetchEvents(); // Refresh all events
+            calendar.refetchEvents();
             closeEventModal();
         })
         .catch(error => {

@@ -3,3 +3,6 @@ nul
 backend/nul
 .env.production
 timekeeper.log
+.env
+flask_app/.env
+**/.env

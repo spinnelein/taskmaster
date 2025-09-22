@@ -1,0 +1,61 @@
+{
+  "task_id": "3806365d-e365-4d3d-8e6b-a599d6bb4711",
+  "analyzed_at": "2025-09-21T12:39:26.564552",
+  "complexity_assessment": {
+    "complexity_score": 4,
+    "complexity_level": "medium",
+    "estimated_duration_minutes": 25,
+    "time_confidence": "medium",
+    "time_multiplier": 1.0,
+    "factors": [],
+    "final_complexity_score": 4.5
+  },
+  "dependency_insights": {
+    "has_dependencies": false,
+    "dependency_signals": [],
+    "time_references": [],
+    "task_references": [],
+    "existing_dependencies": [],
+    "suggested_dependencies": [],
+    "dependency_confidence": "low"
+  },
+  "context_enhancement": {
+    "extracted_tags": [],
+    "categories": [],
+    "action_words": [
+      "test",
+      "verify"
+    ],
+    "priority_indicators": [],
+    "skill_requirements": [],
+    "location_context": [],
+    "enhancement_confidence": "medium"
+  },
+  "smart_suggestions": [],
+  "ai_confidence": 0.8,
+  "analysis_source": "hybrid",
+  "ai_insights": {
+    "complexity_assessment": {
+      "ai_complexity_score": 5,
+      "ai_estimated_duration": 60,
+      "ai_confidence": 0.7,
+      "complexity_factors": []
+    },
+    "dependency_insights": {
+      "ai_detected_dependencies": [],
+      "dependency_signals": [],
+      "sequential_vs_parallel": "unknown",
+      "ai_confidence": 0.8
+    },
+    "context_enhancement": {
+      "ai_generated_tags": [],
+      "skill_requirements": [],
+      "resource_requirements": [],
+      "optimal_timing": "anytime",
+      "ai_confidence": 0.85
+    },
+    "smart_suggestions": [],
+    "confidence": 0.8,
+    "raw_response": "{\n  \"duration_analysis\": {\n    \"recommended_minutes\": 30,\n    \"confidence\": \"high\",\n    \"reasoning\": \"The task of verifying the timekeeper's ability to recommend tasks is likely to take around 30 minutes, as it involves setting up the test, running the timekeeper, and evaluating the recommendations.\"\n  },\n  \"task_structure\": {\n    \"is_divisible\": true,\n    \"min_chunk_minutes\": 10,\n    \"natural_breakpoints\": \"The task can be divided into three main parts: 1) Set up the test environment, 2) Run the timekeeper and observe the recommendations, 3) Evaluate the recommendations and document the results.\"\n  },\n  \"energy_requirements\": {\n    \"energy_level\": \"medium\",\n    \"energy_type\": \"mental\",\n    \"cognitive_load\": \"medium\"\n  },\n  \"environment\": {\n    \"location\": \"indoor\",\n    \"weather_dependent\": false,\n    \"weather_requirements\": null\n  },\n  \"scheduling\": {\n    \"urgency_assessment\": 5,\n    \"urgency_reasoning\": \"This is a test task, so the urgency is moderate. It is important to verify the timekeeper's functionality, but it is not a critical, high-priority task.\",\n    \"optimal_time\": \"anytime\",\n    \"time_sensitivity\": \"No specific time constraints, but it should be scheduled during normal working hours.\"\n  },\n  \"resources\": {\n    \"equipment_needed\": [\"Timekeeper application\", \"Test data or scenarios\"],\n    \"preparation_time\": 5,\n    \"location_requirements\": \"A quiet, distraction-free indoor workspace is preferred.\"\n  }\n}"
+  }
+}

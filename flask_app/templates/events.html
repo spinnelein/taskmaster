@@ -416,8 +416,7 @@
                 <a href="/tasks">Tasks</a>
                 <a href="/initiatives">Initiatives</a>
                 <a href="/projects">Projects</a>
-                <a href="/dishes">Dishes</a>
-                <a href="/meals">Meals</a>
+                <a href="/meals">Food</a>
             </div>
         </div>
         
@@ -587,7 +586,9 @@
     });
     
     function loadEvents() {
-        fetch('/api/events')
+        // Add cache-busting parameter to ensure fresh data
+        const cacheBuster = Date.now();
+        fetch(`/api/events?_cb=${cacheBuster}`)
             .then(response => response.json())
             .then(events => {
                 allEvents = events;

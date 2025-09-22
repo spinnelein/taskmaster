@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Task Completion Test</title>
+    <meta charset="utf-8">
+</head>
+<body>
+    <h1>Task Completion Debug Test</h1>
+    
+    <div id="status">Ready to test...</div>
+    <button onclick="runTest()">Run Test</button>
+    
+    <h2>Console Output:</h2>
+    <pre id="console" style="background: #f0f0f0; padding: 10px; height: 400px; overflow-y: auto;"></pre>
+    
+    <script>
+    function log(message) {
+        const console = document.getElementById('console');
+        console.textContent += message + '\n';
+        console.scrollTop = console.scrollHeight;
+    }
+    
+    async function runTest() {
+        log('=== TASK COMPLETION UI TEST ===');
+        
+        // 1. Create a test task
+        log('\n1. Creating test task...');
+        const createResponse = await fetch('/api/tasks', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                title: 'UI Test Task - Should Complete',
+                description: 'Testing UI completion',
+                duration: 15,
+                urgency: 5
+            })
+        });
+        
+        const newTask = await createResponse.json();
+        const taskId = newTask.id;
+        log(`   Created task: ${taskId}`);
+        log(`   Initial completed: ${newTask.completed}`);
+        log(`   Initial status: ${newTask.status}`);
+        
+        // 2. Load tasks and verify it's there
+        log('\n2. Loading active tasks...');
+        const listResponse = await fetch('/api/tasks');
+        const tasks = await listResponse.json();
+        
+        const found = tasks.find(t => t.id === taskId);
+        if (found) {
+            log(`   FOUND in active list`);
+            log(`   - completed: ${found.completed}`);
+            log(`   - status: ${found.status}`);
+        } else {
+            log(`   ERROR: Not found in active list!`);
+        }
+        
+        // 3. Complete the task
+        log('\n3. Completing task...');
+        const completeResponse = await fetch(`/api/tasks/${taskId}/complete`, {
+            method: 'POST'
+        });
+        
+        const completeData = await completeResponse.json();
+        log(`   Response status: ${completeResponse.status}`);
+        log(`   task_completed: ${completeData.task_completed}`);
+        log(`   task.completed: ${completeData.task?.completed}`);
+        log(`   task.status: ${completeData.task?.status}`);
+        
+        // 4. Wait a bit
+        log('\n4. Waiting 2 seconds...');
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        // 5. Check active tasks again
+        log('\n5. Checking active tasks again...');
+        const listResponse2 = await fetch('/api/tasks');
+        const tasks2 = await listResponse2.json();
+        
+        const stillThere = tasks2.find(t => t.id === taskId);
+        if (stillThere) {
+            log(`   ERROR: Task STILL in active list!`);
+            log(`   - completed: ${stillThere.completed}`);
+            log(`   - status: ${stillThere.status}`);
+            log(`   - Full task data:`);
+            log(JSON.stringify(stillThere, null, 2));
+        } else {
+            log(`   SUCCESS: Task no longer in active list`);
+        }
+        
+        // 6. Check completed tasks
+        log('\n6. Checking completed tasks...');
+        const completedResponse = await fetch('/api/tasks?completed=true');
+        const completedTasks = await completedResponse.json();
+        
+        const inCompleted = completedTasks.find(t => t.id === taskId);
+        if (inCompleted) {
+            log(`   FOUND in completed list`);
+            log(`   - completed: ${inCompleted.completed}`);
+            log(`   - status: ${inCompleted.status}`);
+        } else {
+            log(`   Not in completed list`);
+        }
+        
+        // 7. Clean up
+        log('\n7. Cleaning up...');
+        await fetch(`/api/tasks/${taskId}`, { method: 'DELETE' });
+        log('   Test task deleted');
+        
+        log('\n=== TEST COMPLETE ===');
+    }
+    </script>
+</body>
+</html>

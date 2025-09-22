@@ -11,8 +11,8 @@ def get_models():
 def list_tasks():
     """List all tasks"""
     db, Event, Task = get_models()
-    tasks = Task.query.filter_by(completed=False).order_by(Task.urgency.desc()).all()
-    completed_tasks = Task.query.filter_by(completed=True).order_by(Task.completed_at.desc()).limit(10).all()
+    tasks = Task.query.filter_by(is_completed=False).order_by(Task.urgency.desc()).all()
+    completed_tasks = Task.query.filter_by(is_completed=True).order_by(Task.last_completed_at.desc()).limit(10).all()
     return render_template('tasks_list.html', tasks=tasks, completed_tasks=completed_tasks)
 
 @tasks_bp.route('/new', methods=['GET', 'POST'])
@@ -47,8 +47,8 @@ def complete_task(task_id):
     """Mark a task as completed"""
     db, Event, Task = get_models()
     task = Task.query.get_or_404(task_id)
-    task.completed = True
-    task.completed_at = datetime.utcnow()
+    task.is_completed = True  # Fixed: use correct column name
+    task.last_completed_at = datetime.utcnow()  # Fixed: use correct column name
     task.status = 'completed'
     
     db.session.commit()

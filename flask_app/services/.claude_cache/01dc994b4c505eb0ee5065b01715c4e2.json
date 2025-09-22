@@ -1,0 +1,64 @@
+{
+  "task_id": "test-123",
+  "analyzed_at": "2025-09-19T08:14:39.157860",
+  "complexity_assessment": {
+    "complexity_score": 5,
+    "complexity_level": "medium",
+    "estimated_duration_minutes": 60,
+    "time_confidence": "medium",
+    "time_multiplier": 1.0,
+    "factors": [],
+    "final_complexity_score": 5.0
+  },
+  "dependency_insights": {
+    "has_dependencies": false,
+    "dependency_signals": [],
+    "time_references": [],
+    "task_references": [],
+    "existing_dependencies": [],
+    "suggested_dependencies": [],
+    "dependency_confidence": "low"
+  },
+  "context_enhancement": {
+    "extracted_tags": [],
+    "categories": [],
+    "action_words": [
+      "build",
+      "design",
+      "implement"
+    ],
+    "priority_indicators": [],
+    "skill_requirements": [
+      "design"
+    ],
+    "location_context": [],
+    "enhancement_confidence": "medium"
+  },
+  "smart_suggestions": [],
+  "ai_confidence": 0.8,
+  "analysis_source": "hybrid",
+  "ai_insights": {
+    "complexity_assessment": {
+      "ai_complexity_score": 5,
+      "ai_estimated_duration": 60,
+      "ai_confidence": 0.7,
+      "complexity_factors": []
+    },
+    "dependency_insights": {
+      "ai_detected_dependencies": [],
+      "dependency_signals": [],
+      "sequential_vs_parallel": "unknown",
+      "ai_confidence": 0.8
+    },
+    "context_enhancement": {
+      "ai_generated_tags": [],
+      "skill_requirements": [],
+      "resource_requirements": [],
+      "optimal_timing": "anytime",
+      "ai_confidence": 0.85
+    },
+    "smart_suggestions": [],
+    "confidence": 0.8,
+    "raw_response": "{\n  \"complexity_assessment\": {\n    \"complexity_score\": 8,\n    \"time_estimate_minutes\": 120,\n    \"confidence_level\": \"medium\",\n    \"complexity_factors\": [\n      \"Designing a scalable microservices architecture\",\n      \"Integrating Docker and Kubernetes\",\n      \"Implementing container orchestration\"\n    ]\n  },\n  \"dependency_insights\": {\n    \"likely_dependencies\": [\n      \"Understanding microservices architecture principles\",\n      \"Familiarity with Docker and container technology\",\n      \"Knowledge of Kubernetes and container orchestration\"\n    ],\n    \"dependency_signals\": [\n      \"Design and implement a scalable microservices system\",\n      \"Using container orchestration\"\n    ],\n    \"sequential_vs_parallel\": \"sequential\"\n  },\n  \"context_enhancement\": {\n    \"suggested_tags\": [\n      \"microservices\",\n      \"docker\",\n      \"kubernetes\",\n      \"container-orchestration\",\n      \"scalable-architecture\"\n    ],\n    \"skill_requirements\": [\n      \"Software architecture design\",\n      \"Docker containerization\",\n      \"Kubernetes administration\",\n      \"Distributed systems development\"\n    ],\n    \"resource_requirements\": [\n      \"Access to a Kubernetes cluster or cloud-based container service\",\n      \"Docker and Kubernetes documentation\",\n      \"Familiarity with microservices design patterns\"\n    ],\n    \"optimal_time_of_day\": \"anytime\"\n  },\n  \"optimization_suggestions\": {\n    \"breaking_down\": true,\n    \"prioritization_advice\": \"This task should be prioritized based on the urgency and importance of the microservices system being built. It may be beneficial to break it down into smaller, more manageable subtasks.\",\n    \"efficiency_tips\": [\n      \"Utilize existing templates or starter projects for microservices architecture\",\n      \"Leverage cloud-based container services to reduce infrastructure setup time\",\n      \"Automate repetitive tasks like container image building and deployment\"\n    ]\n  }\n}"
+  }
+}

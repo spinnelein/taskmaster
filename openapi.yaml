@@ -1,0 +1,1880 @@
+openapi: 3.0.3
+info:
+  title: TaskMaster API
+  description: |
+    **TaskMaster Enhanced REST API v2 with Real-time Features**
+    
+    TaskMaster is a comprehensive task and schedule management platform featuring:
+    - Enhanced REST API v2 with pagination, filtering, and sorting
+    - Real-time WebSocket integration for live updates
+    - Advanced search with full-text search and faceting
+    - Data export in multiple formats
+    - Webhook notifications for external integrations
+    - AI-powered task analysis and recommendations
+    - Performance monitoring and analytics
+    
+    ## Key Features
+    
+    ### Enhanced REST API v2
+    - **Pagination**: Consistent pagination across all list endpoints
+    - **Filtering**: Advanced filtering with date ranges, status, priority
+    - **Sorting**: Multi-field sorting with direction control
+    - **Field Selection**: Reduce payload size by selecting specific fields
+    - **Batch Operations**: Create/update multiple resources efficiently
+    - **Conditional Requests**: ETag and Last-Modified support
+    
+    ### Real-time Features
+    - **WebSocket Integration**: Live updates for tasks, events, and schedules
+    - **Event Broadcasting**: Real-time notifications across connected clients
+    - **AI Insights**: Instant delivery of analysis results
+    - **Collaborative Features**: Multi-user synchronization
+    
+    ### Advanced Search
+    - **Full-Text Search**: Search across all entity types
+    - **Faceted Search**: Filter by categories, status, priority
+    - **Search Suggestions**: Auto-complete and query suggestions
+    - **Saved Searches**: Reusable search configurations
+    - **Query Analysis**: Advanced query processing
+    
+    ### Data Management
+    - **Export Capabilities**: CSV, JSON, PDF formats
+    - **Scheduled Exports**: Automated data extraction
+    - **Webhook Integration**: Event-driven external notifications
+    - **Analytics**: API usage tracking and performance insights
+    
+    ## Authentication
+    
+    The API supports multiple authentication methods:
+    - **API Keys**: For programmatic access with scoped permissions
+    - **Session Authentication**: For web application integration
+    - **Bearer Tokens**: For mobile and single-page applications
+    
+    ## Rate Limiting
+    
+    API endpoints are rate limited to ensure fair usage:
+    - **Standard Endpoints**: 1000 requests per hour per API key
+    - **Search Endpoints**: 500 requests per hour per API key
+    - **Analytics Endpoints**: 100 requests per hour per API key
+    - **Export Endpoints**: 50 requests per hour per API key
+    
+    Rate limit headers are included in responses:
+    - `X-RateLimit-Limit`: Request limit per window
+    - `X-RateLimit-Remaining`: Requests remaining in current window
+    - `X-RateLimit-Reset`: Time when limit resets (Unix timestamp)
+    
+    ## Response Format
+    
+    All API responses follow a consistent format:
+    
+    **Success Response (2xx):**
+    ```json
+    {
+      "status": "success",
+      "data": { ... },
+      "message": "Optional success message",
+      "meta": {
+        "total": 100,
+        "limit": 20,
+        "offset": 0,
+        "has_more": true
+      }
+    }
+    ```
+    
+    **Error Response (4xx/5xx):**
+    ```json
+    {
+      "status": "error",
+      "message": "Error description",
+      "errors": {
+        "field_name": "Specific validation error"
+      },
+      "code": "ERROR_CODE"
+    }
+    ```
+    
+    ## Versioning
+    
+    The API uses URL-based versioning:
+    - **v1**: `/api/v1/` - Legacy endpoints (deprecated)
+    - **v2**: `/api/v2/` - Enhanced endpoints with advanced features
+    
+    v2 endpoints maintain backward compatibility with v1 response structures while adding new capabilities.
+    
+  version: 2.4.0
+  contact:
+    name: TaskMaster API Support
+    email: api-support@taskmaster.dev
+    url: https://docs.taskmaster.dev
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  termsOfService: https://taskmaster.dev/terms
+
+servers:
+  - url: http://localhost:5000/api
+    description: Development server
+  - url: https://api.taskmaster.dev
+    description: Production server
+  - url: https://staging-api.taskmaster.dev
+    description: Staging server
+
+paths:
+  # Core API Health and Info
+  /health:
+    get:
+      tags: ["Core"]
+      summary: API Health Check
+      description: Check API service health and version information
+      operationId: getHealth
+      responses:
+        '200':
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+              example:
+                status: "success"
+                data:
+                  status: "healthy"
+                  version: "2.4.0"
+                  timestamp: "2025-09-19T10:00:00Z"
+                  database_status: "connected"
+                  websocket_status: "active"
+                  search_status: "ready"
+
+  # Enhanced Tasks API v2
+  /v2/tasks:
+    get:
+      tags: ["Tasks v2"]
+      summary: List Tasks with Advanced Filtering
+      description: |
+        Get tasks with comprehensive filtering, sorting, and pagination.
+        Supports full-text search across title and description fields.
+      operationId: listTasksV2
+      parameters:
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Offset'
+        - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/SearchQuery'
+        - $ref: '#/components/parameters/Fields'
+        - name: status
+          in: query
+          description: Filter by task status
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/TaskStatus'
+          style: form
+          explode: false
+        - name: priority
+          in: query
+          description: Filter by priority levels
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Priority'
+          style: form
+          explode: false
+        - name: is_completed
+          in: query
+          description: Filter by completion status
+          schema:
+            type: boolean
+        - name: is_snoozed
+          in: query
+          description: Filter by snooze status
+          schema:
+            type: boolean
+        - name: due_date_from
+          in: query
+          description: Filter tasks due after this date
+          schema:
+            type: string
+            format: date
+        - name: due_date_to
+          in: query
+          description: Filter tasks due before this date
+          schema:
+            type: string
+            format: date
+        - name: created_from
+          in: query
+          description: Filter tasks created after this datetime
+          schema:
+            type: string
+            format: date-time
+        - name: created_to
+          in: query
+          description: Filter tasks created before this datetime
+          schema:
+            type: string
+            format: date-time
+        - name: duration_min
+          in: query
+          description: Minimum task duration in minutes
+          schema:
+            type: integer
+            minimum: 1
+        - name: duration_max
+          in: query
+          description: Maximum task duration in minutes
+          schema:
+            type: integer
+            minimum: 1
+        - name: urgency_min
+          in: query
+          description: Minimum urgency level
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 10
+        - name: urgency_max
+          in: query
+          description: Maximum urgency level
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 10
+        - name: initiative_id
+          in: query
+          description: Filter by initiative ID
+          schema:
+            type: string
+            format: uuid
+        - name: project_id
+          in: query
+          description: Filter by project ID
+          schema:
+            type: string
+            format: uuid
+        - name: parent_task_id
+          in: query
+          description: Filter by parent task ID
+          schema:
+            type: string
+            format: uuid
+        - name: root_only
+          in: query
+          description: Only show tasks with no incomplete dependencies
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: List of tasks retrieved successfully
+          headers:
+            X-Total-Count:
+              description: Total number of tasks matching criteria
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    post:
+      tags: ["Tasks v2"]
+      summary: Create New Task
+      description: Create a new task with validation and automatic field population
+      operationId: createTaskV2
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskCreateRequest'
+      responses:
+        '201':
+          description: Task created successfully
+          headers:
+            Location:
+              description: URL of the created task
+              schema:
+                type: string
+                format: uri
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /v2/tasks/batch:
+    post:
+      tags: ["Tasks v2"]
+      summary: Create Multiple Tasks
+      description: Create multiple tasks in a single request with batch validation
+      operationId: createTasksBatchV2
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: ["tasks"]
+              properties:
+                tasks:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/TaskCreateRequest'
+                  minItems: 1
+                  maxItems: 50
+              example:
+                tasks:
+                  - title: "Complete project documentation"
+                    duration: 120
+                    priority: "high"
+                  - title: "Review code changes"
+                    duration: 60
+                    priority: "medium"
+      responses:
+        '201':
+          description: All tasks created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchTaskResponse'
+        '207':
+          description: Partial success - some tasks created, others failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchTaskResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+
+  /v2/tasks/{taskId}:
+    get:
+      tags: ["Tasks v2"]
+      summary: Get Task by ID
+      description: Retrieve a specific task with optional related data
+      operationId: getTaskV2
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          description: Unique task identifier
+          schema:
+            type: string
+            format: uuid
+        - name: include
+          in: query
+          description: Include related data
+          schema:
+            type: array
+            items:
+              type: string
+              enum: ["dependencies", "subtasks", "initiative", "project"]
+          style: form
+          explode: false
+      responses:
+        '200':
+          description: Task retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+    put:
+      tags: ["Tasks v2"]
+      summary: Update Task
+      description: Update task properties (partial updates supported)
+      operationId: updateTaskV2
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskUpdateRequest'
+      responses:
+        '200':
+          description: Task updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+    delete:
+      tags: ["Tasks v2"]
+      summary: Delete Task
+      description: Delete a task and optionally its subtasks
+      operationId: deleteTaskV2
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: delete_subtasks
+          in: query
+          description: Also delete all subtasks
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '204':
+          description: Task deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: Cannot delete task with dependencies
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # Enhanced Events API v2
+  /v2/events:
+    get:
+      tags: ["Events v2"]
+      summary: List Events with Advanced Filtering
+      description: |
+        Get events with comprehensive filtering and sorting.
+        Supports two modes: 'list' for master events and 'calendar' for expanded instances.
+      operationId: listEventsV2
+      parameters:
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Offset'
+        - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/SearchQuery'
+        - name: mode
+          in: query
+          description: Response mode
+          schema:
+            type: string
+            enum: ["list", "calendar"]
+            default: "list"
+        - name: event_type
+          in: query
+          description: Filter by event types
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/EventType'
+          style: form
+          explode: false
+        - name: status
+          in: query
+          description: Filter by event status
+          schema:
+            type: string
+            enum: ["scheduled", "in_progress", "completed", "cancelled"]
+        - name: is_blocking
+          in: query
+          description: Filter by blocking status
+          schema:
+            type: boolean
+        - name: is_recurring
+          in: query
+          description: Filter by recurring status
+          schema:
+            type: boolean
+        - name: notifications_enabled
+          in: query
+          description: Filter by notification status
+          schema:
+            type: boolean
+        - name: start_from
+          in: query
+          description: Events starting after this datetime
+          schema:
+            type: string
+            format: date-time
+        - name: start_to
+          in: query
+          description: Events starting before this datetime
+          schema:
+            type: string
+            format: date-time
+        - name: end_from
+          in: query
+          description: Events ending after this datetime
+          schema:
+            type: string
+            format: date-time
+        - name: end_to
+          in: query
+          description: Events ending before this datetime
+          schema:
+            type: string
+            format: date-time
+        - name: project_id
+          in: query
+          description: Filter by project ID
+          schema:
+            type: string
+            format: uuid
+        - name: meal_id
+          in: query
+          description: Filter by meal ID
+          schema:
+            type: string
+            format: uuid
+        - name: location
+          in: query
+          description: Filter by location (partial match)
+          schema:
+            type: string
+        - name: master_only
+          in: query
+          description: Only show master events (list mode)
+          schema:
+            type: boolean
+            default: true
+        - name: include_expansion_info
+          in: query
+          description: Include recurring event expansion metadata
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: List of events retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+
+  /v2/events/calendar:
+    get:
+      tags: ["Events v2"]
+      summary: Get Calendar Events
+      description: |
+        Get expanded events specifically optimized for calendar display.
+        Automatically expands recurring events within the specified date range.
+      operationId: getCalendarEventsV2
+      parameters:
+        - name: start
+          in: query
+          required: true
+          description: Calendar start date (required for expansion)
+          schema:
+            type: string
+            format: date
+        - name: end
+          in: query
+          required: true
+          description: Calendar end date (required for expansion)
+          schema:
+            type: string
+            format: date
+        - name: event_type
+          in: query
+          description: Filter by event types
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/EventType'
+          style: form
+          explode: false
+        - name: is_blocking
+          in: query
+          description: Filter by blocking status
+          schema:
+            type: boolean
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Offset'
+      responses:
+        '200':
+          description: Calendar events retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalendarEventListResponse'
+
+  # Search API
+  /search/search:
+    get:
+      tags: ["Search"]
+      summary: Comprehensive Search
+      description: |
+        Search across all entity types with full-text search, faceting, and suggestions.
+        Supports advanced query syntax and result ranking.
+      operationId: searchAll
+      security:
+        - ApiKeyAuth: ["search.read"]
+        - SessionAuth: []
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: Search query string
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 500
+          example: "project:work status:active urgent task"
+        - name: types
+          in: query
+          description: Entity types to search
+          schema:
+            type: array
+            items:
+              type: string
+              enum: ["tasks", "events", "initiatives", "projects", "meals", "dishes"]
+          style: form
+          explode: false
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Offset'
+        - name: include_facets
+          in: query
+          description: Include faceted search results
+          schema:
+            type: boolean
+            default: true
+        - name: format
+          in: query
+          description: Response format
+          schema:
+            type: string
+            enum: ["json", "minimal"]
+            default: "json"
+      responses:
+        '200':
+          description: Search results retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: "error"
+                message: "Search rate limit exceeded"
+                code: "RATE_LIMIT_EXCEEDED"
+
+  /search/suggestions:
+    get:
+      tags: ["Search"]
+      summary: Get Search Suggestions
+      description: Get auto-complete suggestions for partial queries
+      operationId: getSearchSuggestions
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: Partial query string
+          schema:
+            type: string
+            minLength: 2
+            maxLength: 100
+        - name: limit
+          in: query
+          description: Maximum suggestions to return
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 20
+            default: 10
+      responses:
+        '200':
+          description: Suggestions retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuggestionsResponse'
+
+  # WebSocket API
+  /websocket/stats:
+    get:
+      tags: ["WebSocket"]
+      summary: Get WebSocket Statistics
+      description: Get comprehensive WebSocket connection and usage statistics
+      operationId: getWebSocketStats
+      responses:
+        '200':
+          description: WebSocket statistics retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSocketStatsResponse'
+
+  # Export API
+  /export/tasks:
+    post:
+      tags: ["Export"]
+      summary: Export Tasks
+      description: |
+        Export tasks in various formats with filtering and custom field selection.
+        Supports CSV, JSON, and PDF formats with streaming for large datasets.
+      operationId: exportTasks
+      security:
+        - ApiKeyAuth: ["export.create"]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExportRequest'
+      responses:
+        '200':
+          description: Export completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExportResponse'
+            text/csv:
+              schema:
+                type: string
+                format: binary
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '202':
+          description: Export queued for processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExportQueuedResponse'
+
+  # Analytics API
+  /analytics/usage:
+    get:
+      tags: ["Analytics"]
+      summary: Get API Usage Analytics
+      description: Get comprehensive API usage statistics and performance metrics
+      operationId: getUsageAnalytics
+      security:
+        - ApiKeyAuth: ["analytics.read"]
+      parameters:
+        - name: timeframe
+          in: query
+          description: Analytics timeframe
+          schema:
+            type: string
+            enum: ["1h", "24h", "7d", "30d"]
+            default: "24h"
+        - name: format
+          in: query
+          description: Response detail level
+          schema:
+            type: string
+            enum: ["summary", "detailed"]
+            default: "summary"
+      responses:
+        '200':
+          description: Usage analytics retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsageAnalyticsResponse'
+
+  # Webhook API
+  /webhooks:
+    get:
+      tags: ["Webhooks"]
+      summary: List Webhooks
+      description: Get all configured webhooks
+      operationId: listWebhooks
+      security:
+        - ApiKeyAuth: ["webhooks.read"]
+      responses:
+        '200':
+          description: Webhooks retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookListResponse'
+    post:
+      tags: ["Webhooks"]
+      summary: Create Webhook
+      description: Create a new webhook subscription
+      operationId: createWebhook
+      security:
+        - ApiKeyAuth: ["webhooks.create"]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookCreateRequest'
+      responses:
+        '201':
+          description: Webhook created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponse'
+
+# Components section with reusable schemas, parameters, responses, etc.
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: |
+        API key authentication for programmatic access.
+        Required for analytics, export, and webhook endpoints.
+        
+        API keys can be scoped with specific permissions:
+        - `tasks.read`, `tasks.write` - Task operations
+        - `events.read`, `events.write` - Event operations
+        - `search.read` - Search operations
+        - `export.create` - Data export
+        - `webhooks.read`, `webhooks.create` - Webhook management
+        - `analytics.read` - Usage analytics
+    
+    SessionAuth:
+      type: http
+      scheme: bearer
+      description: |
+        Session-based authentication for web applications.
+        Obtained through login endpoints.
+    
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        JWT token authentication for mobile and SPA applications.
+
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      description: Maximum number of items to return
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 500
+        default: 20
+      example: 50
+
+    Offset:
+      name: offset
+      in: query
+      description: Number of items to skip for pagination
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+      example: 100
+
+    Sort:
+      name: sort
+      in: query
+      description: Sort order in format 'field:direction,field2:direction'
+      schema:
+        type: string
+        pattern: '^(\w+:(asc|desc))(,\w+:(asc|desc))*$'
+      example: "priority:desc,created_at:asc"
+
+    SearchQuery:
+      name: q
+      in: query
+      description: Full-text search query
+      schema:
+        type: string
+        maxLength: 500
+      example: "project management urgent"
+
+    Fields:
+      name: fields
+      in: query
+      description: Comma-separated list of fields to include in response
+      schema:
+        type: string
+      example: "id,title,status,priority"
+
+  schemas:
+    # Core Task Schemas
+    Task:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique task identifier
+          readOnly: true
+        title:
+          type: string
+          description: Task title
+          maxLength: 200
+          example: "Complete project documentation"
+        description:
+          type: string
+          description: Detailed task description
+          example: "Write comprehensive API documentation including examples"
+        duration:
+          type: integer
+          description: Estimated duration in minutes
+          minimum: 1
+          maximum: 4320
+          example: 120
+        urgency:
+          type: integer
+          description: Urgency level (1-10, where 10 is most urgent)
+          minimum: 1
+          maximum: 10
+          example: 7
+        priority:
+          $ref: '#/components/schemas/Priority'
+        status:
+          $ref: '#/components/schemas/TaskStatus'
+        due_date:
+          type: string
+          format: date
+          description: Task due date
+          example: "2025-09-25"
+        due_time:
+          type: string
+          format: time
+          description: Specific due time
+          example: "14:30:00"
+        completed:
+          type: boolean
+          description: Task completion status
+          readOnly: true
+        is_divisible:
+          type: boolean
+          description: Whether task can be split into smaller chunks
+          default: false
+        min_chunk_size:
+          type: integer
+          description: Minimum chunk size if divisible (minutes)
+          minimum: 5
+        required_weather:
+          type: array
+          items:
+            type: string
+            enum: ["sunny", "cloudy", "rainy", "snowy", "indoor"]
+          description: Weather conditions required for task
+        required_context:
+          type: array
+          items:
+            type: string
+          description: Context tags required for task execution
+          example: ["office", "computer", "internet"]
+        equipment_needed:
+          type: array
+          items:
+            type: string
+          description: Equipment required for task
+          example: ["laptop", "external monitor"]
+        depends_on_task_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: Task IDs this task depends on
+        blocks_task_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: Task IDs this task blocks
+        initiative_id:
+          type: string
+          format: uuid
+          description: Associated initiative ID
+        project_id:
+          type: string
+          format: uuid
+          description: Associated project ID
+        parent_task_id:
+          type: string
+          format: uuid
+          description: Parent task ID for subtasks
+        is_recurring:
+          type: boolean
+          description: Whether task is recurring
+          readOnly: true
+        recurrence_days:
+          type: integer
+          description: Days between recurring instances
+          minimum: 1
+        is_snoozed:
+          type: boolean
+          description: Whether task is currently snoozed
+          readOnly: true
+        snoozed_until:
+          type: string
+          format: date-time
+          description: When snooze expires
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          description: Task creation timestamp
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          description: Last update timestamp
+          readOnly: true
+      required:
+        - title
+
+    TaskCreateRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Task title
+          maxLength: 200
+          minLength: 1
+        description:
+          type: string
+          description: Task description
+          maxLength: 5000
+        duration:
+          type: integer
+          description: Estimated duration in minutes
+          minimum: 1
+          maximum: 4320
+          default: 30
+        urgency:
+          type: integer
+          description: Urgency level (1-10)
+          minimum: 1
+          maximum: 10
+          default: 5
+        priority:
+          $ref: '#/components/schemas/Priority'
+        due_date:
+          type: string
+          format: date
+          description: Task due date
+        start_date:
+          type: string
+          format: date-time
+          description: Earliest start time
+        required_weather:
+          type: array
+          items:
+            type: string
+            enum: ["sunny", "cloudy", "rainy", "snowy", "indoor"]
+        initiative_id:
+          type: string
+          format: uuid
+          description: Associated initiative
+        project_id:
+          type: string
+          format: uuid
+          description: Associated project
+        parent_task_id:
+          type: string
+          format: uuid
+          description: Parent task for subtasks
+        recurrence_days:
+          type: integer
+          description: Days between recurring instances
+          minimum: 1
+      required:
+        - title
+      example:
+        title: "Review and approve pull request"
+        description: "Review code changes for new feature implementation"
+        duration: 45
+        urgency: 6
+        priority: "high"
+        due_date: "2025-09-22"
+        project_id: "123e4567-e89b-12d3-a456-426614174000"
+
+    TaskUpdateRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+          maxLength: 5000
+        duration:
+          type: integer
+          minimum: 1
+          maximum: 4320
+        urgency:
+          type: integer
+          minimum: 1
+          maximum: 10
+        priority:
+          $ref: '#/components/schemas/Priority'
+        status:
+          $ref: '#/components/schemas/TaskStatus'
+        due_date:
+          type: string
+          format: date
+        required_weather:
+          type: array
+          items:
+            type: string
+        project_id:
+          type: string
+          format: uuid
+        initiative_id:
+          type: string
+          format: uuid
+      example:
+        status: "completed"
+        urgency: 8
+
+    TaskStatus:
+      type: string
+      enum: ["active", "blocked", "completed", "snoozed"]
+      description: |
+        Task status:
+        - `active`: Task is ready to be worked on
+        - `blocked`: Task is waiting for dependencies
+        - `completed`: Task has been finished
+        - `snoozed`: Task is temporarily hidden
+      example: "active"
+
+    Priority:
+      type: string
+      enum: ["low", "medium", "high", "urgent"]
+      description: |
+        Priority levels:
+        - `low`: Nice to have, no urgency
+        - `medium`: Normal priority work
+        - `high`: Important, should be done soon
+        - `urgent`: Critical, needs immediate attention
+      example: "high"
+
+    # Event Schemas
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          maxLength: 200
+          example: "Team standup meeting"
+        start:
+          type: string
+          format: date-time
+          description: Event start time (ISO 8601)
+          example: "2025-09-19T09:00:00Z"
+        end:
+          type: string
+          format: date-time
+          description: Event end time (ISO 8601)
+          example: "2025-09-19T09:30:00Z"
+        allDay:
+          type: boolean
+          description: Whether event is all-day
+          example: false
+        description:
+          type: string
+          description: Event description
+        location:
+          type: string
+          description: Event location
+          example: "Conference Room A"
+        event_type:
+          $ref: '#/components/schemas/EventType'
+        is_blocking:
+          type: boolean
+          description: Whether event blocks other scheduling
+          default: true
+        is_recurring:
+          type: boolean
+          description: Whether event is recurring
+          readOnly: true
+        recurrence_rrule:
+          type: string
+          description: RFC 5545 recurrence rule
+          example: "FREQ=WEEKLY;BYDAY=MO,WE,FR"
+        recurrence_end:
+          type: string
+          format: date-time
+          description: When recurrence ends
+        notifications_enabled:
+          type: boolean
+          description: Whether notifications are enabled
+          default: true
+        project_id:
+          type: string
+          format: uuid
+          description: Associated project
+        meal_id:
+          type: string
+          format: uuid
+          description: Associated meal for dinner events
+        color:
+          type: string
+          description: Event color for calendar display
+          pattern: '^#[0-9A-Fa-f]{6}$'
+          example: "#007bff"
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+        - title
+        - start
+        - end
+
+    EventType:
+      type: string
+      enum: ["timed", "all_day", "instant"]
+      description: |
+        Event types:
+        - `timed`: Specific start and end times
+        - `all_day`: Full day event
+        - `instant`: No duration, single point in time
+      example: "timed"
+
+    # Search Schemas
+    SearchResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: ["success"]
+        data:
+          type: object
+          properties:
+            results:
+              type: array
+              items:
+                $ref: '#/components/schemas/SearchResult'
+            total_count:
+              type: integer
+              description: Total matching results
+            facets:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Facet'
+            query_time_ms:
+              type: number
+              description: Query execution time in milliseconds
+            suggestions:
+              type: array
+              items:
+                type: string
+              description: Search query suggestions
+            corrected_query:
+              type: string
+              description: Spell-corrected query if applicable
+        meta:
+          type: object
+          properties:
+            query:
+              type: string
+            types_searched:
+              type: array
+              items:
+                type: string
+            limit:
+              type: integer
+            offset:
+              type: integer
+
+    SearchResult:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: ["task", "event", "initiative", "project", "meal", "dish"]
+        title:
+          type: string
+        description:
+          type: string
+        relevance_score:
+          type: number
+          minimum: 0
+          maximum: 1
+          description: Search relevance score
+        snippet:
+          type: string
+          description: Highlighted text snippet
+        metadata:
+          type: object
+          additionalProperties: true
+          description: Type-specific metadata
+
+    Facet:
+      type: object
+      properties:
+        value:
+          type: string
+        count:
+          type: integer
+        filter_key:
+          type: string
+
+    SuggestionsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: ["success"]
+        data:
+          type: object
+          properties:
+            suggestions:
+              type: array
+              items:
+                type: string
+            query:
+              type: string
+
+    # Response Wrapper Schemas
+    TaskResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: ["success"]
+        data:
+          $ref: '#/components/schemas/Task'
+        message:
+          type: string
+
+    TaskListResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: ["success"]
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+
+    EventListResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: ["success"]
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+
+    CalendarEventListResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: ["success"]
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+        meta:
+          allOf:
+            - $ref: '#/components/schemas/PaginationMeta'
+            - type: object
+              properties:
+                expansion_info:
+                  type: object
+                  properties:
+                    start_date:
+                      type: string
+                      format: date
+                    end_date:
+                      type: string
+                      format: date
+                    recurring_events_expanded:
+                      type: integer
+
+    BatchTaskResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: ["success", "partial"]
+        data:
+          type: object
+          properties:
+            created:
+              type: array
+              items:
+                $ref: '#/components/schemas/Task'
+            errors:
+              type: array
+              items:
+                type: object
+                properties:
+                  index:
+                    type: integer
+                  error:
+                    type: string
+        message:
+          type: string
+
+    PaginationMeta:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Total number of items
+        limit:
+          type: integer
+          description: Items per page
+        offset:
+          type: integer
+          description: Items skipped
+        has_more:
+          type: boolean
+          description: Whether more items are available
+        page:
+          type: integer
+          description: Current page number (1-indexed)
+        total_pages:
+          type: integer
+          description: Total number of pages
+
+    # Export Schemas
+    ExportRequest:
+      type: object
+      properties:
+        format:
+          type: string
+          enum: ["csv", "json", "pdf"]
+          default: "csv"
+        filters:
+          type: object
+          description: Same filter parameters as list endpoints
+        fields:
+          type: array
+          items:
+            type: string
+          description: Specific fields to include
+        sort:
+          type: string
+          description: Sort order
+        include_metadata:
+          type: boolean
+          default: false
+          description: Include export metadata
+      required:
+        - format
+
+    ExportResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: ["success"]
+        data:
+          type: object
+          properties:
+            export_id:
+              type: string
+              format: uuid
+            format:
+              type: string
+            download_url:
+              type: string
+              format: uri
+            expires_at:
+              type: string
+              format: date-time
+            record_count:
+              type: integer
+            file_size_bytes:
+              type: integer
+
+    ExportQueuedResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: ["queued"]
+        data:
+          type: object
+          properties:
+            export_id:
+              type: string
+              format: uuid
+            status_url:
+              type: string
+              format: uri
+            estimated_completion:
+              type: string
+              format: date-time
+
+    # WebSocket Schemas
+    WebSocketStatsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: ["success"]
+        data:
+          type: object
+          properties:
+            active_connections:
+              type: integer
+            total_connections_today:
+              type: integer
+            messages_sent_today:
+              type: integer
+            uptime_seconds:
+              type: integer
+            connection_stats:
+              type: object
+              properties:
+                by_user:
+                  type: object
+                  additionalProperties:
+                    type: integer
+                by_channel:
+                  type: object
+                  additionalProperties:
+                    type: integer
+
+    # Analytics Schemas
+    UsageAnalyticsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: ["success"]
+        data:
+          type: object
+          properties:
+            timeframe:
+              type: string
+            total_requests:
+              type: integer
+            successful_requests:
+              type: integer
+            error_requests:
+              type: integer
+            success_rate:
+              type: number
+              minimum: 0
+              maximum: 100
+            avg_response_time_ms:
+              type: number
+            top_endpoints:
+              type: array
+              items:
+                type: object
+                properties:
+                  endpoint:
+                    type: string
+                  requests:
+                    type: integer
+                  avg_response_time:
+                    type: number
+            error_breakdown:
+              type: object
+              additionalProperties:
+                type: integer
+
+    # Webhook Schemas
+    WebhookCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        url:
+          type: string
+          format: uri
+          description: Webhook endpoint URL
+        events:
+          type: array
+          items:
+            type: string
+            enum: ["task.created", "task.updated", "task.completed", "event.created", "event.updated"]
+        is_active:
+          type: boolean
+          default: true
+        secret:
+          type: string
+          description: Secret for HMAC signature verification
+          minLength: 16
+        headers:
+          type: object
+          additionalProperties:
+            type: string
+          description: Custom headers to include
+      required:
+        - name
+        - url
+        - events
+
+    WebhookResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: ["success"]
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            name:
+              type: string
+            url:
+              type: string
+              format: uri
+            events:
+              type: array
+              items:
+                type: string
+            is_active:
+              type: boolean
+            created_at:
+              type: string
+              format: date-time
+            last_triggered:
+              type: string
+              format: date-time
+            success_count:
+              type: integer
+            failure_count:
+              type: integer
+
+    WebhookListResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: ["success"]
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebhookResponse/properties/data'
+
+    # Common Response Schemas
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: ["success"]
+        data:
+          type: object
+          properties:
+            status:
+              type: string
+              enum: ["healthy", "degraded", "unhealthy"]
+            version:
+              type: string
+            timestamp:
+              type: string
+              format: date-time
+            database_status:
+              type: string
+              enum: ["connected", "error"]
+            websocket_status:
+              type: string
+              enum: ["active", "inactive", "error"]
+            search_status:
+              type: string
+              enum: ["ready", "indexing", "error"]
+
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: ["error"]
+        message:
+          type: string
+          description: Human-readable error message
+        code:
+          type: string
+          description: Machine-readable error code
+        errors:
+          type: object
+          additionalProperties:
+            type: string
+          description: Field-specific validation errors
+        details:
+          type: string
+          description: Additional error details
+      required:
+        - status
+        - message
+
+  responses:
+    BadRequest:
+      description: Bad request - invalid parameters or request format
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            status: "error"
+            message: "Invalid request parameters"
+            code: "BAD_REQUEST"
+
+    Unauthorized:
+      description: Authentication required or invalid credentials
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            status: "error"
+            message: "Authentication required"
+            code: "UNAUTHORIZED"
+
+    Forbidden:
+      description: Insufficient permissions for this operation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            status: "error"
+            message: "Insufficient permissions"
+            code: "FORBIDDEN"
+
+    NotFound:
+      description: Requested resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            status: "error"
+            message: "Resource not found"
+            code: "NOT_FOUND"
+
+    ValidationError:
+      description: Request validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            status: "error"
+            message: "Validation failed"
+            code: "VALIDATION_ERROR"
+            errors:
+              title: "Title is required"
+              duration: "Duration must be positive"
+
+    RateLimited:
+      description: Rate limit exceeded
+      headers:
+        X-RateLimit-Limit:
+          description: Request limit per window
+          schema:
+            type: integer
+        X-RateLimit-Remaining:
+          description: Requests remaining in current window
+          schema:
+            type: integer
+        X-RateLimit-Reset:
+          description: Time when limit resets (Unix timestamp)
+          schema:
+            type: integer
+        Retry-After:
+          description: Seconds to wait before retrying
+          schema:
+            type: integer
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            status: "error"
+            message: "Rate limit exceeded"
+            code: "RATE_LIMIT_EXCEEDED"
+
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            status: "error"
+            message: "Internal server error"
+            code: "INTERNAL_ERROR"
+
+# Global security requirement (can be overridden per operation)
+security:
+  - SessionAuth: []
+  - ApiKeyAuth: []
+
+# Tags for grouping operations
+tags:
+  - name: "Core"
+    description: "Health checks and system information"
+  - name: "Tasks v2"
+    description: "Enhanced task management with advanced filtering and batch operations"
+  - name: "Events v2"
+    description: "Enhanced event management with calendar optimization"
+  - name: "Search"
+    description: "Advanced search with full-text search, faceting, and suggestions"
+  - name: "WebSocket"
+    description: "Real-time updates and live collaboration features"
+  - name: "Export"
+    description: "Data export in multiple formats with filtering"
+  - name: "Analytics"
+    description: "API usage analytics and performance monitoring"
+  - name: "Webhooks"
+    description: "Event-driven external integrations"
+
+# External documentation links
+externalDocs:
+  description: "TaskMaster Complete Documentation"
+  url: "https://docs.taskmaster.dev"

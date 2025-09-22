@@ -56,7 +56,15 @@ def list_projects():
             phase.completion_percentage = (len(completed_tasks) / len(all_tasks) * 100) if all_tasks else 0
             
             # Check if phase has dependencies
-            phase.has_dependencies = bool(phase.depends_on_phase_ids and phase.depends_on_phase_ids != 'null')
+            # Parse the JSON string to check if it contains actual dependencies
+            dependencies = []
+            if phase.depends_on_phase_ids and phase.depends_on_phase_ids != 'null':
+                try:
+                    dependencies = json.loads(phase.depends_on_phase_ids)
+                except (json.JSONDecodeError, TypeError):
+                    dependencies = []
+            
+            phase.has_dependencies = bool(dependencies)
     
     return render_template('projects.html', projects=projects)
 
@@ -185,8 +193,16 @@ def create_project_phase(project_id):
     """Create a new phase for a project"""
     data = request.json
     
-    # Get the next order number
-    max_order = db.session.query(db.func.max(ProjectPhase.order)).filter_by(project_id=project_id).scalar() or 0
+    # Determine order based on dependencies
+    depends_on_phase_ids = data.get('depends_on_phase_ids', [])
+    
+    # If no dependencies provided, treat as anytime phase (order 0)
+    if not depends_on_phase_ids:
+        phase_order = 0
+    else:
+        # Get the next sequential order number
+        max_order = db.session.query(db.func.max(ProjectPhase.order)).filter_by(project_id=project_id).scalar() or 0
+        phase_order = max_order + 1
     
     # Parse dates if provided
     estimated_start_date = None
@@ -200,11 +216,11 @@ def create_project_phase(project_id):
         id=str(uuid.uuid4()),
         title=data['title'],
         description=data.get('description', ''),
-        order=max_order + 1,
+        order=phase_order,
         status=data.get('status', 'PLANNING'),
         estimated_start_date=estimated_start_date,
         estimated_end_date=estimated_end_date,
-        depends_on_phase_ids=json.dumps(data.get('depends_on_phase_ids', [])),
+        depends_on_phase_ids=json.dumps(depends_on_phase_ids),
         project_id=project_id,
         created_at=datetime.utcnow(),
         updated_at=datetime.utcnow()

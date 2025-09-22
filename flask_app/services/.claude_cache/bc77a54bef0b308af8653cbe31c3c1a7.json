@@ -1,0 +1,66 @@
+{
+  "task_id": "30178016-5af3-49db-a528-c5430f2d0558",
+  "analyzed_at": "2025-09-21T16:10:34.437942",
+  "complexity_assessment": {
+    "complexity_score": 4,
+    "complexity_level": "medium",
+    "estimated_duration_minutes": 30,
+    "time_confidence": "medium",
+    "time_multiplier": 1.0,
+    "factors": [],
+    "final_complexity_score": 4.5
+  },
+  "dependency_insights": {
+    "has_dependencies": false,
+    "dependency_signals": [],
+    "time_references": [],
+    "task_references": [],
+    "existing_dependencies": [],
+    "suggested_dependencies": [],
+    "dependency_confidence": "low"
+  },
+  "context_enhancement": {
+    "extracted_tags": [],
+    "categories": [],
+    "action_words": [],
+    "priority_indicators": [],
+    "skill_requirements": [],
+    "location_context": [],
+    "enhancement_confidence": "medium"
+  },
+  "smart_suggestions": [
+    {
+      "type": "clarity",
+      "priority": "medium",
+      "suggestion": "Add more detailed description for better planning",
+      "reasoning": "Detailed descriptions improve estimation and execution",
+      "implementation": "Expand description with specific steps or requirements"
+    }
+  ],
+  "ai_confidence": 0.8,
+  "analysis_source": "hybrid",
+  "ai_insights": {
+    "complexity_assessment": {
+      "ai_complexity_score": 5,
+      "ai_estimated_duration": 60,
+      "ai_confidence": 0.7,
+      "complexity_factors": []
+    },
+    "dependency_insights": {
+      "ai_detected_dependencies": [],
+      "dependency_signals": [],
+      "sequential_vs_parallel": "unknown",
+      "ai_confidence": 0.8
+    },
+    "context_enhancement": {
+      "ai_generated_tags": [],
+      "skill_requirements": [],
+      "resource_requirements": [],
+      "optimal_timing": "anytime",
+      "ai_confidence": 0.85
+    },
+    "smart_suggestions": [],
+    "confidence": 0.8,
+    "raw_response": "{\n  \"duration_analysis\": {\n    \"recommended_minutes\": 45,\n    \"confidence\": \"medium\",\n    \"reasoning\": \"The task of dealing with mites in a cupboard may take longer than the initial 30 minutes, as it likely involves inspecting the cupboard, identifying the extent of the infestation, and implementing a treatment plan. A 45-minute estimate allows for a more thorough assessment and initial mitigation steps.\"\n  },\n  \"task_structure\": {\n    \"is_divisible\": true,\n    \"min_chunk_minutes\": 15,\n    \"natural_breakpoints\": \"The task can be divided into three main steps: 1) Inspect the cupboard and identify the extent of the mite infestation, 2) Prepare and apply a treatment plan, 3) Monitor the cupboard and follow up as needed. Each of these steps can be completed in approximately 15-minute chunks.\"\n  },\n  \"energy_requirements\": {\n    \"energy_level\": \"medium\",\n    \"energy_type\": \"mixed\",\n    \"cognitive_load\": \"medium\"\n  },\n  \"environment\": {\n    \"location\": \"indoor\",\n    \"weather_dependent\": false,\n    \"weather_requirements\": null\n  },\n  \"scheduling\": {\n    \"urgency_assessment\": 7,\n    \"urgency_reasoning\": \"Mites in the cupboard can lead to further infestation and damage to stored items, so the task should be addressed in a timely manner, but it is not an immediate emergency.\",\n    \"optimal_time\": \"anytime\",\n    \"time_sensitivity\": \"The task should be completed as soon as possible, but can be scheduled at the most convenient time.\"\n  },\n  \"resources\": {\n    \"equipment_needed\": [\"mite treatment products\", \"cleaning supplies\", \"protective gear (gloves, mask)\"],\n    \"preparation_time\": 10,\n    \"location_requirements\": \"The task must be performed in the affected cupboard area, which should be cleared of any stored items beforehand.\"\n  }\n}"
+  }
+}

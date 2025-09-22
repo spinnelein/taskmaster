@@ -166,9 +166,9 @@ def main():
     print(f"\nOverall result: {'PASS' if all_passed else 'FAIL'}")
     
     if all_passed:
-        print("✅ Assignment regeneration triggers are working correctly!")
+        print("[SUCCESS] Assignment regeneration triggers are working correctly!")
     else:
-        print("❌ Some assignment regeneration triggers are not working")
+        print("[ERROR] Some assignment regeneration triggers are not working")
     
     return 0 if all_passed else 1
 

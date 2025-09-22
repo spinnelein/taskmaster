@@ -1,0 +1,86 @@
+{
+  "task_id": "4b47e39e-1fdf-46e4-9e6c-215095b47a79",
+  "analyzed_at": "2025-09-19T10:30:47.146462",
+  "complexity_assessment": {
+    "complexity_score": 10,
+    "complexity_level": "high",
+    "estimated_duration_minutes": 720,
+    "time_confidence": "low",
+    "time_multiplier": 1.5,
+    "factors": [
+      "learning_required"
+    ],
+    "final_complexity_score": 7.5
+  },
+  "dependency_insights": {
+    "has_dependencies": false,
+    "dependency_signals": [],
+    "time_references": [],
+    "task_references": [],
+    "existing_dependencies": [],
+    "suggested_dependencies": [],
+    "dependency_confidence": "low"
+  },
+  "context_enhancement": {
+    "extracted_tags": [],
+    "categories": [
+      "research"
+    ],
+    "action_words": [
+      "create",
+      "design",
+      "implement",
+      "write",
+      "test"
+    ],
+    "priority_indicators": [],
+    "skill_requirements": [
+      "design",
+      "write"
+    ],
+    "location_context": [],
+    "enhancement_confidence": "medium"
+  },
+  "smart_suggestions": [
+    {
+      "type": "chunking",
+      "priority": "high",
+      "suggestion": "Consider breaking this long task into smaller chunks for better focus",
+      "reasoning": "Task duration of 480 minutes may lead to fatigue",
+      "implementation": "Enable task chunking or create sub-tasks"
+    },
+    {
+      "type": "scheduling",
+      "priority": "medium",
+      "suggestion": "Add due date for this important task",
+      "reasoning": "Important tasks benefit from explicit deadlines",
+      "implementation": "Set appropriate due date based on priority"
+    }
+  ],
+  "ai_confidence": 0.8,
+  "analysis_source": "hybrid",
+  "ai_insights": {
+    "complexity_assessment": {
+      "ai_complexity_score": 5,
+      "ai_estimated_duration": 60,
+      "ai_confidence": 0.7,
+      "complexity_factors": []
+    },
+    "dependency_insights": {
+      "ai_detected_dependencies": [],
+      "dependency_signals": [],
+      "sequential_vs_parallel": "unknown",
+      "ai_confidence": 0.8
+    },
+    "context_enhancement": {
+      "ai_generated_tags": [],
+      "skill_requirements": [],
+      "resource_requirements": [],
+      "optimal_timing": "anytime",
+      "ai_confidence": 0.85
+    },
+    "smart_suggestions": [],
+    "confidence": 0.8,
+    "raw_response": "{\n  \"complexity_assessment\": {\n    \"complexity_score\": 9,\n    \"time_estimate_minutes\": 720,\n    \"confidence_level\": \"medium\",\n    \"complexity_factors\": [\n      \"Distributed system design\",\n      \"Machine learning integration\",\n      \"Caching strategy implementation\",\n      \"Comprehensive testing\",\n      \"CI/CD pipeline setup\",\n      \"API documentation\",\n      \"Monitoring and logging\",\n      \"Load testing\"\n    ]\n  },\n  \"dependency_insights\": {\n    \"likely_dependencies\": [\n      \"Familiarize with machine learning algorithms\",\n      \"Research Redis caching best practices\",\n      \"Set up containerization and CI/CD tooling\",\n      \"Establish monitoring and logging framework\"\n    ],\n    \"dependency_signals\": [\n      \"Design REST API with authentication\",\n      \"Implement collaborative filtering algorithm\",\n      \"Add Redis caching layer for performance\",\n      \"Write comprehensive unit and integration tests\",\n      \"Set up CI/CD pipeline with Docker\",\n      \"Document API with OpenAPI/Swagger\",\n      \"Implement monitoring and logging\",\n      \"Load testing with realistic data volumes\"\n    ],\n    \"sequential_vs_parallel\": \"sequential\"\n  },\n  \"context_enhancement\": {\n    \"suggested_tags\": [\n      \"machine-learning\",\n      \"microservice\",\n      \"redis\",\n      \"distributed-systems\",\n      \"devops\"\n    ],\n    \"skill_requirements\": [\n      \"Proficient in backend development (e.g., Node.js, Python, Java)\",\n      \"Strong understanding of distributed system design\",\n      \"Experience with machine learning algorithms and frameworks\",\n      \"Expertise in caching strategies and Redis\",\n      \"Familiarity with CI/CD tools and containerization\",\n      \"Knowledge of API documentation and testing frameworks\",\n      \"Proficient in monitoring and logging setup\"\n    ],\n    \"resource_requirements\": [\n      \"Access to cloud infrastructure (e.g., AWS, GCP, Azure)\",\n      \"Redis instance or managed Redis service\",\n      \"Machine learning training data and compute resources\",\n      \"Containerization and CI/CD tools (e.g., Docker, Jenkins, GitLab)\"\n    ],\n    \"optimal_time_of_day\": \"anytime\"\n  },\n  \"optimization_suggestions\": {\n    \"breaking_down\": true,\n    \"prioritization_advice\": [\n      \"Start with the core functionality (API design, ML algorithm, Redis caching)\",\n      \"Implement comprehensive testing and CI/CD pipeline\",\n      \"Gradually add monitoring, logging, and load testing features\"\n    ],\n    \"efficiency_tips\": [\n      \"Leverage pre-built ML frameworks and libraries to accelerate development\",\n      \"Optimize Redis caching strategies for the specific use case\",\n      \"Automate as much of the deployment and testing process as possible\"\n    ]\n  }\n}"
+  }
+}

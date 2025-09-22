@@ -1,0 +1,73 @@
+{
+  "task_id": "4a17dc8a-1b0e-4b3c-bd7a-5a5cfed50a69",
+  "analyzed_at": "2025-09-20T10:00:01.581653",
+  "complexity_assessment": {
+    "complexity_score": 5,
+    "complexity_level": "medium",
+    "estimated_duration_minutes": 240,
+    "time_confidence": "medium",
+    "time_multiplier": 1.0,
+    "factors": [],
+    "final_complexity_score": 5.0
+  },
+  "dependency_insights": {
+    "has_dependencies": false,
+    "dependency_signals": [],
+    "time_references": [],
+    "task_references": [],
+    "existing_dependencies": [],
+    "suggested_dependencies": [],
+    "dependency_confidence": "low"
+  },
+  "context_enhancement": {
+    "extracted_tags": [],
+    "categories": [],
+    "action_words": [],
+    "priority_indicators": [],
+    "skill_requirements": [],
+    "location_context": [],
+    "enhancement_confidence": "medium"
+  },
+  "smart_suggestions": [
+    {
+      "type": "chunking",
+      "priority": "high",
+      "suggestion": "Consider breaking this long task into smaller chunks for better focus",
+      "reasoning": "Task duration of 240 minutes may lead to fatigue",
+      "implementation": "Enable task chunking or create sub-tasks"
+    },
+    {
+      "type": "clarity",
+      "priority": "medium",
+      "suggestion": "Add more detailed description for better planning",
+      "reasoning": "Detailed descriptions improve estimation and execution",
+      "implementation": "Expand description with specific steps or requirements"
+    }
+  ],
+  "ai_confidence": 0.8,
+  "analysis_source": "hybrid",
+  "ai_insights": {
+    "complexity_assessment": {
+      "ai_complexity_score": 5,
+      "ai_estimated_duration": 60,
+      "ai_confidence": 0.7,
+      "complexity_factors": []
+    },
+    "dependency_insights": {
+      "ai_detected_dependencies": [],
+      "dependency_signals": [],
+      "sequential_vs_parallel": "unknown",
+      "ai_confidence": 0.8
+    },
+    "context_enhancement": {
+      "ai_generated_tags": [],
+      "skill_requirements": [],
+      "resource_requirements": [],
+      "optimal_timing": "anytime",
+      "ai_confidence": 0.85
+    },
+    "smart_suggestions": [],
+    "confidence": 0.8,
+    "raw_response": "{\n  \"complexity_assessment\": {\n    \"complexity_score\": 6,\n    \"time_estimate_minutes\": 300,\n    \"confidence_level\": \"medium\",\n    \"complexity_factors\": [\n      \"Tax preparation can involve gathering and organizing a significant amount of financial information\",\n      \"Tax laws and regulations may change annually, requiring research and updates\",\n      \"The task may involve navigating complex tax forms and filing procedures\"\n    ]\n  },\n  \"dependency_insights\": {\n    \"likely_dependencies\": [\n      \"Gather all necessary financial documents (e.g., W-2s, 1099s, bank statements)\",\n      \"Review changes in tax laws and regulations for the current year\"\n    ],\n    \"dependency_signals\": [\n      \"2024 Taxes\",\n      \"tax preparation\"\n    ],\n    \"sequential_vs_parallel\": \"sequential\"\n  },\n  \"context_enhancement\": {\n    \"suggested_tags\": [\n      \"taxes\",\n      \"financial\",\n      \"annual\"\n    ],\n    \"skill_requirements\": [\n      \"Tax preparation knowledge\",\n      \"Financial record-keeping\",\n      \"Attention to detail\"\n    ],\n    \"resource_requirements\": [\n      \"Access to tax software or resources\",\n      \"Copies of all necessary financial documents\"\n    ],\n    \"optimal_time_of_day\": \"anytime\"\n  },\n  \"optimization_suggestions\": {\n    \"breaking_down\": true,\n    \"prioritization_advice\": \"Schedule this task well in advance of the tax filing deadline to allow sufficient time for research, documentation gathering, and actual tax preparation\",\n    \"efficiency_tips\": [\n      \"Utilize tax preparation software or services to streamline the process\",\n      \"Maintain well-organized financial records throughout the year to simplify the task\"\n    ]\n  }\n}"
+  }
+}

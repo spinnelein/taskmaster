@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TaskMaster Meal Plan</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            background: #f5f5f5; 
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #333;
+        }
+        .header h1 {
+            margin: 0;
+            color: #333;
+        }
+        .nav-links a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #007bff;
+            font-weight: 500;
+        }
+        .nav-links a:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+        .nav-links a.active {
+            color: #0056b3;
+            font-weight: bold;
+        }
+        
+        .meal-plan-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+            min-height: 600px;
+        }
+        
+        /* Weekly Schedule */
+        .weekly-schedule {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        .schedule-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .schedule-header h2 {
+            margin: 0;
+            color: #333;
+        }
+        .week-navigation {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.9em;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.8em;
+        }
+        
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+        .day-card {
+            background: white;
+            border-radius: 8px;
+            border: 2px dashed #dee2e6;
+            padding: 15px;
+            min-height: 120px;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .day-card.has-meal {
+            border: 2px solid #28a745;
+            border-style: solid;
+        }
+        .day-card.drag-over {
+            border-color: #007bff;
+            background: #e7f3ff;
+        }
+        .day-header {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .day-date {
+            font-size: 0.9em;
+            color: #666;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .assigned-meal {
+            background: #e8f5e9;
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 4px solid #28a745;
+            position: relative;
+        }
+        .meal-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 5px;
+        }
+        .meal-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .meal-tag {
+            background: #c3e6c3;
+            color: #2e7d32;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 0.75em;
+        }
+        .remove-meal {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            display: none;
+        }
+        .assigned-meal:hover .remove-meal {
+            display: block;
+        }
+        
+        /* Meal Suggestions Sidebar */
+        .meal-suggestions {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .suggestions-section {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        .section-header {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        /* Frequent Meals */
+        .frequent-meals {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .meal-item {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 8px;
+            cursor: grab;
+            transition: all 0.2s;
+        }
+        .meal-item:hover {
+            background: #e9ecef;
+            border-color: #007bff;
+        }
+        .meal-item.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+        }
+        .meal-item-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .meal-item-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8em;
+            color: #666;
+        }
+        .usage-count {
+            background: #007bff;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 0.75em;
+        }
+        
+        /* Tag Suggestions */
+        .tag-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        .tag-filter {
+            background: #e9ecef;
+            border: 1px solid #dee2e6;
+            padding: 6px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.2s;
+        }
+        .tag-filter:hover, .tag-filter.active {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        .tag-suggestion-area {
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .suggestion-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .health-status {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+        }
+        
+        @media (max-width: 1200px) {
+            .meal-plan-layout {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .days-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .days-grid {
+                grid-template-columns: 1fr;
+            }
+            .meal-plan-layout {
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="health-status" id="health-status">🟢 Connected</div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>Meal Plan</h1>
+            <div class="nav-links">
+                <a href="/">Schedule</a>
+                <a href="/events">Events</a>
+                <a href="/tasks">Tasks</a>
+                <a href="/initiatives">Initiatives</a>
+                <a href="/projects">Projects</a>
+                <a href="/dishes">Dishes</a>
+                <a href="/meals">Meals</a>
+                <a href="/meal-plan" class="active">Meal Plan</a>
+            </div>
+        </div>
+        
+        <div class="meal-plan-layout">
+            <!-- Weekly Schedule -->
+            <div class="weekly-schedule">
+                <div class="schedule-header">
+                    <h2>This Week's Dinners</h2>
+                    <div class="week-navigation">
+                        <button class="btn btn-sm" onclick="previousWeek()">← Previous</button>
+                        <span id="week-range">Loading...</span>
+                        <button class="btn btn-sm" onclick="nextWeek()">Next →</button>
+                    </div>
+                </div>
+                
+                <div class="days-grid" id="days-grid">
+                    <!-- Days will be populated by JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Meal Suggestions Sidebar -->
+            <div class="meal-suggestions">
+                <!-- Frequent Meals Section -->
+                <div class="suggestions-section">
+                    <div class="section-header">Most Used Meals</div>
+                    <div class="frequent-meals" id="frequent-meals">
+                        <div style="text-align: center; color: #666; padding: 20px;">
+                            Loading meals...
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tag-Based Suggestions -->
+                <div class="suggestions-section">
+                    <div class="section-header">Suggestions by Tag</div>
+                    <div class="tag-filters" id="tag-filters">
+                        <!-- Tags will be populated by JavaScript -->
+                    </div>
+                    <div class="tag-suggestion-area" id="tag-suggestion-area">
+                        <div style="text-align: center; color: #666; padding: 20px;">
+                            Select a tag above to see suggestions
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+    let currentWeekStart = new Date();
+    let allMeals = [];
+    let allTags = new Set();
+    let currentTagFilter = null;
+    let tagSuggestions = [];
+    let currentSuggestionIndex = 0;
+    
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set to start of current week (Monday)
+        const today = new Date();
+        const dayOfWeek = today.getDay();
+        const daysToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // Sunday = 0, Monday = 1
+        currentWeekStart.setDate(today.getDate() + daysToMonday);
+        currentWeekStart.setHours(0, 0, 0, 0);
+        
+        loadWeeklySchedule();
+        loadMealsAndTags();
+        checkHealth();
+    });
+    
+    function loadWeeklySchedule() {
+        updateWeekDisplay();
+        loadDinnerEvents();
+    }
+    
+    function updateWeekDisplay() {
+        const weekEnd = new Date(currentWeekStart);
+        weekEnd.setDate(weekEnd.getDate() + 6);
+        
+        const formatOptions = { month: 'short', day: 'numeric' };
+        const startStr = currentWeekStart.toLocaleDateString([], formatOptions);
+        const endStr = weekEnd.toLocaleDateString([], formatOptions);
+        
+        document.getElementById('week-range').textContent = `${startStr} - ${endStr}`;
+        
+        // Generate day cards
+        const daysGrid = document.getElementById('days-grid');
+        const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        
+        daysGrid.innerHTML = dayNames.map((dayName, index) => {
+            const dayDate = new Date(currentWeekStart);
+            dayDate.setDate(dayDate.getDate() + index);
+            
+            return `
+                <div class="day-card" 
+                     data-day="${index}" 
+                     data-date="${dayDate.toISOString().split('T')[0]}"
+                     ondrop="dropMeal(event)" 
+                     ondragover="allowDrop(event)"
+                     ondragenter="dragEnter(event)"
+                     ondragleave="dragLeave(event)">
+                    <div class="day-header">${dayName}</div>
+                    <div class="day-date">${dayDate.toLocaleDateString([], formatOptions)}</div>
+                    <div class="meal-slot" id="meal-slot-${index}">
+                        <!-- Meal will be inserted here -->
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+    
+    function loadDinnerEvents() {
+        // Load dinner events for the current week
+        const startDate = currentWeekStart.toISOString().split('T')[0];
+        const endDate = new Date(currentWeekStart);
+        endDate.setDate(endDate.getDate() + 6);
+        const endDateStr = endDate.toISOString().split('T')[0];
+        
+        fetch(`/api/events?start=${startDate}&end=${endDateStr}&type=dinner`)
+            .then(response => response.json())
+            .then(events => {
+                // Clear existing meals
+                for (let i = 0; i < 7; i++) {
+                    const mealSlot = document.getElementById(`meal-slot-${i}`);
+                    mealSlot.innerHTML = '';
+                    document.querySelector(`[data-day="${i}"]`).classList.remove('has-meal');
+                }
+                
+                // Populate with existing dinner events
+                events.forEach(event => {
+                    if (event.meal_id) {
+                        const eventDate = new Date(event.start_time);
+                        const dayIndex = Math.floor((eventDate - currentWeekStart) / (24 * 60 * 60 * 1000));
+                        
+                        if (dayIndex >= 0 && dayIndex < 7) {
+                            displayMealInSlot(dayIndex, event.meal, event.id);
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error loading dinner events:', error);
+            });
+    }
+    
+    function loadMealsAndTags() {
+        fetch('/api/meals')
+            .then(response => response.json())
+            .then(meals => {
+                allMeals = meals;
+                
+                // Collect tags
+                allTags.clear();
+                meals.forEach(meal => {
+                    if (meal.dietary_tags && Array.isArray(meal.dietary_tags)) {
+                        meal.dietary_tags.forEach(tag => allTags.add(tag));
+                    }
+                });
+                
+                displayFrequentMeals();
+                displayTagFilters();
+            })
+            .catch(error => {
+                console.error('Error loading meals:', error);
+                document.getElementById('frequent-meals').innerHTML = 
+                    '<div style="color: #dc3545; text-align: center; padding: 20px;">Failed to load meals</div>';
+            });
+    }
+    
+    function displayFrequentMeals() {
+        // TODO: Get actual usage statistics from events
+        // For now, sort by created date (newest first) as a proxy
+        const sortedMeals = [...allMeals].sort((a, b) => 
+            new Date(b.created_at || 0) - new Date(a.created_at || 0)
+        );
+        
+        const frequentMealsHtml = sortedMeals.slice(0, 10).map((meal, index) => `
+            <div class="meal-item" 
+                 draggable="true" 
+                 data-meal-id="${meal.id}"
+                 ondragstart="dragStart(event)">
+                <div class="meal-item-title">${meal.title}</div>
+                <div class="meal-item-meta">
+                    <div>
+                        ${meal.dietary_tags ? meal.dietary_tags.slice(0, 2).map(tag => 
+                            `<span class="meal-tag">${tag}</span>`
+                        ).join(' ') : ''}
+                    </div>
+                    <div class="usage-count">${Math.max(1, 10 - index)}</div>
+                </div>
+            </div>
+        `).join('');
+        
+        document.getElementById('frequent-meals').innerHTML = frequentMealsHtml;
+    }
+    
+    function displayTagFilters() {
+        const popularTags = ['Mexican', 'Italian', 'Asian', 'American', 'Mediterranean', 
+                           'Healthy', 'Quick', 'Vegetarian', 'Comfort Food'];
+        const combinedTags = [...new Set([...popularTags, ...Array.from(allTags)])];
+        
+        const tagFiltersHtml = combinedTags.map(tag => `
+            <div class="tag-filter" onclick="selectTag('${tag}')">${tag}</div>
+        `).join('');
+        
+        document.getElementById('tag-filters').innerHTML = tagFiltersHtml;
+    }
+    
+    function selectTag(tag) {
+        // Update active tag
+        document.querySelectorAll('.tag-filter').forEach(el => el.classList.remove('active'));
+        event.target.classList.add('active');
+        
+        currentTagFilter = tag;
+        
+        // Filter meals by tag
+        tagSuggestions = allMeals.filter(meal => 
+            meal.dietary_tags && meal.dietary_tags.includes(tag)
+        );
+        
+        if (tagSuggestions.length === 0) {
+            document.getElementById('tag-suggestion-area').innerHTML = `
+                <div style="text-align: center; color: #666; padding: 20px;">
+                    No meals found with "${tag}" tag
+                </div>
+            `;
+            return;
+        }
+        
+        currentSuggestionIndex = 0;
+        showRandomSuggestion();
+    }
+    
+    function showRandomSuggestion() {
+        if (tagSuggestions.length === 0) return;
+        
+        // Shuffle and pick a random meal
+        const randomIndex = Math.floor(Math.random() * tagSuggestions.length);
+        const meal = tagSuggestions[randomIndex];
+        
+        const suggestionHtml = `
+            <div class="meal-item" 
+                 draggable="true" 
+                 data-meal-id="${meal.id}"
+                 ondragstart="dragStart(event)">
+                <div class="meal-item-title">${meal.title}</div>
+                <div class="meal-item-meta">
+                    <div>
+                        ${meal.dietary_tags ? meal.dietary_tags.slice(0, 3).map(tag => 
+                            `<span class="meal-tag">${tag}</span>`
+                        ).join(' ') : ''}
+                    </div>
+                </div>
+            </div>
+            <div class="suggestion-controls">
+                <span style="color: #666; font-size: 0.9em;">
+                    ${tagSuggestions.length} meals with "${currentTagFilter}" tag
+                </span>
+                <button class="btn btn-sm" onclick="showRandomSuggestion()">Next Suggestion</button>
+            </div>
+        `;
+        
+        document.getElementById('tag-suggestion-area').innerHTML = suggestionHtml;
+    }
+    
+    // Drag and Drop Functions
+    function dragStart(event) {
+        event.dataTransfer.setData('text/plain', event.target.dataset.mealId);
+        event.target.classList.add('dragging');
+    }
+    
+    function allowDrop(event) {
+        event.preventDefault();
+    }
+    
+    function dragEnter(event) {
+        event.preventDefault();
+        if (event.target.closest('.day-card')) {
+            event.target.closest('.day-card').classList.add('drag-over');
+        }
+    }
+    
+    function dragLeave(event) {
+        if (event.target.closest('.day-card')) {
+            event.target.closest('.day-card').classList.remove('drag-over');
+        }
+    }
+    
+    function dropMeal(event) {
+        event.preventDefault();
+        
+        const dayCard = event.target.closest('.day-card');
+        if (!dayCard) return;
+        
+        dayCard.classList.remove('drag-over');
+        
+        const mealId = event.dataTransfer.getData('text/plain');
+        const dayIndex = parseInt(dayCard.dataset.day);
+        const date = dayCard.dataset.date;
+        
+        // Remove dragging class from all meal items
+        document.querySelectorAll('.meal-item').forEach(el => el.classList.remove('dragging'));
+        
+        assignMealToDay(mealId, dayIndex, date);
+    }
+    
+    function assignMealToDay(mealId, dayIndex, date) {
+        const meal = allMeals.find(m => m.id === mealId);
+        if (!meal) return;
+        
+        // Create or update dinner event for this date
+        const eventData = {
+            title: `Dinner: ${meal.title}`,
+            start: `${date}T18:00:00`,
+            end: `${date}T19:00:00`,
+            event_type: 'timed',
+            meal_id: mealId,
+            description: `Dinner featuring ${meal.title}`
+        };
+        
+        fetch('/api/events', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(eventData)
+        })
+        .then(response => response.json())
+        .then(event => {
+            displayMealInSlot(dayIndex, meal, event.id);
+        })
+        .catch(error => {
+            console.error('Error creating dinner event:', error);
+            alert('Failed to assign meal to dinner');
+        });
+    }
+    
+    function displayMealInSlot(dayIndex, meal, eventId) {
+        const mealSlot = document.getElementById(`meal-slot-${dayIndex}`);
+        const dayCard = document.querySelector(`[data-day="${dayIndex}"]`);
+        
+        const mealHtml = `
+            <div class="assigned-meal" data-event-id="${eventId}">
+                <button class="remove-meal" onclick="removeMealFromDay(${dayIndex}, '${eventId}')">×</button>
+                <div class="meal-title">${meal.title}</div>
+                <div class="meal-tags">
+                    ${meal.dietary_tags ? meal.dietary_tags.slice(0, 3).map(tag => 
+                        `<span class="meal-tag">${tag}</span>`
+                    ).join('') : ''}
+                </div>
+            </div>
+        `;
+        
+        mealSlot.innerHTML = mealHtml;
+        dayCard.classList.add('has-meal');
+    }
+    
+    function removeMealFromDay(dayIndex, eventId) {
+        if (!confirm('Remove this meal from dinner?')) return;
+        
+        fetch(`/api/events/${eventId}`, {
+            method: 'DELETE'
+        })
+        .then(() => {
+            const mealSlot = document.getElementById(`meal-slot-${dayIndex}`);
+            const dayCard = document.querySelector(`[data-day="${dayIndex}"]`);
+            
+            mealSlot.innerHTML = '';
+            dayCard.classList.remove('has-meal');
+        })
+        .catch(error => {
+            console.error('Error removing dinner event:', error);
+            alert('Failed to remove meal from dinner');
+        });
+    }
+    
+    // Week Navigation
+    function previousWeek() {
+        currentWeekStart.setDate(currentWeekStart.getDate() - 7);
+        loadWeeklySchedule();
+    }
+    
+    function nextWeek() {
+        currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+        loadWeeklySchedule();
+    }
+    
+    // Health check
+    function checkHealth() {
+        fetch('/health')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('health-status').textContent = '🟢 ' + data.service;
+                document.getElementById('health-status').style.background = '#28a745';
+            })
+            .catch(error => {
+                document.getElementById('health-status').textContent = '🔴 Connection Error';
+                document.getElementById('health-status').style.background = '#dc3545';
+            });
+    }
+    
+    // Refresh health check every 30 seconds
+    setInterval(checkHealth, 30000);
+    </script>
+</body>
+</html>

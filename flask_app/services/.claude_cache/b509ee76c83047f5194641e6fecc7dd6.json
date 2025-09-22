@@ -1,0 +1,66 @@
+{
+  "task_id": "fbcb70bb-f1ea-42e8-ae52-b6f04eed13b9",
+  "analyzed_at": "2025-09-20T10:03:21.076684",
+  "complexity_assessment": {
+    "complexity_score": 4,
+    "complexity_level": "medium",
+    "estimated_duration_minutes": 30,
+    "time_confidence": "medium",
+    "time_multiplier": 1.0,
+    "factors": [],
+    "final_complexity_score": 4.5
+  },
+  "dependency_insights": {
+    "has_dependencies": false,
+    "dependency_signals": [],
+    "time_references": [],
+    "task_references": [],
+    "existing_dependencies": [],
+    "suggested_dependencies": [],
+    "dependency_confidence": "low"
+  },
+  "context_enhancement": {
+    "extracted_tags": [],
+    "categories": [],
+    "action_words": [],
+    "priority_indicators": [],
+    "skill_requirements": [],
+    "location_context": [],
+    "enhancement_confidence": "medium"
+  },
+  "smart_suggestions": [
+    {
+      "type": "clarity",
+      "priority": "medium",
+      "suggestion": "Add more detailed description for better planning",
+      "reasoning": "Detailed descriptions improve estimation and execution",
+      "implementation": "Expand description with specific steps or requirements"
+    }
+  ],
+  "ai_confidence": 0.8,
+  "analysis_source": "hybrid",
+  "ai_insights": {
+    "complexity_assessment": {
+      "ai_complexity_score": 5,
+      "ai_estimated_duration": 60,
+      "ai_confidence": 0.7,
+      "complexity_factors": []
+    },
+    "dependency_insights": {
+      "ai_detected_dependencies": [],
+      "dependency_signals": [],
+      "sequential_vs_parallel": "unknown",
+      "ai_confidence": 0.8
+    },
+    "context_enhancement": {
+      "ai_generated_tags": [],
+      "skill_requirements": [],
+      "resource_requirements": [],
+      "optimal_timing": "anytime",
+      "ai_confidence": 0.85
+    },
+    "smart_suggestions": [],
+    "confidence": 0.8,
+    "raw_response": "{\n  \"complexity_assessment\": {\n    \"complexity_score\": 3,\n    \"time_estimate_minutes\": 20,\n    \"confidence_level\": \"high\",\n    \"complexity_factors\": [\n      \"Physical labor required\",\n      \"Potential for complications with old wiring\"\n    ]\n  },\n  \"dependency_insights\": {\n    \"likely_dependencies\": [\n      \"Identify location of old internet wiring\",\n      \"Ensure internet service is disconnected\"\n    ],\n    \"dependency_signals\": [\n      \"old internet wire\",\n      \"take down\"\n    ],\n    \"sequential_vs_parallel\": \"sequential\"\n  },\n  \"context_enhancement\": {\n    \"suggested_tags\": [\n      \"internet setup\",\n      \"building maintenance\",\n      \"electrical work\"\n    ],\n    \"skill_requirements\": [\n      \"basic electrical knowledge\",\n      \"ability to work safely at heights\"\n    ],\n    \"resource_requirements\": [\n      \"ladder\",\n      \"wire cutters\",\n      \"electrical tape\"\n    ],\n    \"optimal_time_of_day\": \"afternoon\"\n  },\n  \"optimization_suggestions\": {\n    \"breaking_down\": false,\n    \"prioritization_advice\": \"Medium priority, should be scheduled before new internet installation\",\n    \"efficiency_tips\": [\n      \"Carefully inspect wiring before removal to avoid damage\",\n      \"Coordinate with internet service provider to ensure service is disconnected\"\n    ]\n  }\n}"
+  }
+}

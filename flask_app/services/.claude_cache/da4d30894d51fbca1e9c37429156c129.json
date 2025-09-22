@@ -1,0 +1,68 @@
+{
+  "task_id": "50731919-9058-4f6b-9204-12ad6448faad",
+  "analyzed_at": "2025-09-20T10:03:48.167462",
+  "complexity_assessment": {
+    "complexity_score": 4,
+    "complexity_level": "medium",
+    "estimated_duration_minutes": 30,
+    "time_confidence": "medium",
+    "time_multiplier": 1.0,
+    "factors": [],
+    "final_complexity_score": 4.5
+  },
+  "dependency_insights": {
+    "has_dependencies": false,
+    "dependency_signals": [],
+    "time_references": [],
+    "task_references": [],
+    "existing_dependencies": [],
+    "suggested_dependencies": [],
+    "dependency_confidence": "low"
+  },
+  "context_enhancement": {
+    "extracted_tags": [],
+    "categories": [
+      "shopping"
+    ],
+    "action_words": [],
+    "priority_indicators": [],
+    "skill_requirements": [],
+    "location_context": [],
+    "enhancement_confidence": "medium"
+  },
+  "smart_suggestions": [
+    {
+      "type": "clarity",
+      "priority": "medium",
+      "suggestion": "Add more detailed description for better planning",
+      "reasoning": "Detailed descriptions improve estimation and execution",
+      "implementation": "Expand description with specific steps or requirements"
+    }
+  ],
+  "ai_confidence": 0.8,
+  "analysis_source": "hybrid",
+  "ai_insights": {
+    "complexity_assessment": {
+      "ai_complexity_score": 5,
+      "ai_estimated_duration": 60,
+      "ai_confidence": 0.7,
+      "complexity_factors": []
+    },
+    "dependency_insights": {
+      "ai_detected_dependencies": [],
+      "dependency_signals": [],
+      "sequential_vs_parallel": "unknown",
+      "ai_confidence": 0.8
+    },
+    "context_enhancement": {
+      "ai_generated_tags": [],
+      "skill_requirements": [],
+      "resource_requirements": [],
+      "optimal_timing": "anytime",
+      "ai_confidence": 0.85
+    },
+    "smart_suggestions": [],
+    "confidence": 0.8,
+    "raw_response": "{\n  \"complexity_assessment\": {\n    \"complexity_score\": 3,\n    \"time_estimate_minutes\": 45,\n    \"confidence_level\": \"medium\",\n    \"complexity_factors\": [\n      \"Potential safety considerations\",\n      \"Need to coordinate with team or other stakeholders\"\n    ]\n  },\n  \"dependency_insights\": {\n    \"likely_dependencies\": [\n      \"Assess roof condition\",\n      \"Obtain necessary equipment/materials\"\n    ],\n    \"dependency_signals\": [\n      \"Current roof tarps\",\n      \"Workshop roof\"\n    ],\n    \"sequential_vs_parallel\": \"sequential\"\n  },\n  \"context_enhancement\": {\n    \"suggested_tags\": [\n      \"roof maintenance\",\n      \"workshop\",\n      \"weather protection\"\n    ],\n    \"skill_requirements\": [\n      \"basic carpentry/construction skills\",\n      \"ability to work at heights\"\n    ],\n    \"resource_requirements\": [\n      \"tarps\",\n      \"ladder or scaffolding\",\n      \"safety equipment (harness, etc.)\"\n    ],\n    \"optimal_time_of_day\": \"morning\"\n  },\n  \"optimization_suggestions\": {\n    \"breaking_down\": true,\n    \"prioritization_advice\": \"Schedule during dry weather, prioritize before rainy season\",\n    \"efficiency_tips\": [\n      \"Prepare all necessary materials and equipment beforehand\",\n      \"Assign team members to specific tasks for better coordination\"\n    ]\n  }\n}"
+  }
+}

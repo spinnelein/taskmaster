@@ -1,0 +1,66 @@
+{
+  "task_id": "test-123",
+  "analyzed_at": "2025-09-18T15:43:28.536008",
+  "complexity_assessment": {
+    "complexity_score": 10,
+    "complexity_level": "high",
+    "estimated_duration_minutes": 720,
+    "time_confidence": "low",
+    "time_multiplier": 1.5,
+    "factors": []
+  },
+  "dependency_insights": {
+    "has_dependencies": true,
+    "dependency_signals": [
+      "requires"
+    ],
+    "time_references": [],
+    "task_references": [
+      "database"
+    ],
+    "existing_dependencies": [],
+    "suggested_dependencies": [],
+    "dependency_confidence": "medium"
+  },
+  "context_enhancement": {
+    "extracted_tags": [],
+    "categories": [],
+    "action_words": [
+      "create",
+      "design",
+      "implement",
+      "test"
+    ],
+    "priority_indicators": [],
+    "skill_requirements": [
+      "design"
+    ],
+    "location_context": [],
+    "enhancement_confidence": "medium"
+  },
+  "smart_suggestions": [
+    {
+      "type": "chunking",
+      "priority": "high",
+      "suggestion": "Consider breaking this long task into smaller chunks for better focus",
+      "reasoning": "Task duration of 480 minutes may lead to fatigue",
+      "implementation": "Enable task chunking or create sub-tasks"
+    },
+    {
+      "type": "priority",
+      "priority": "high",
+      "suggestion": "High urgency task with long duration - consider delegating or simplifying",
+      "reasoning": "Urgent tasks should typically be shorter to enable quick completion",
+      "implementation": "Break into smaller urgent pieces or reassess urgency"
+    },
+    {
+      "type": "scheduling",
+      "priority": "medium",
+      "suggestion": "Add due date for this important task",
+      "reasoning": "Important tasks benefit from explicit deadlines",
+      "implementation": "Set appropriate due date based on priority"
+    }
+  ],
+  "ai_confidence": 0.0,
+  "analysis_source": "rules"
+}

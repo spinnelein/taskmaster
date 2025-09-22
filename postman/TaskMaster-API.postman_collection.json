@@ -1,0 +1,1797 @@
+{
+  "info": {
+    "name": "TaskMaster API",
+    "description": "Comprehensive TaskMaster API collection with all endpoints, authentication, and testing scenarios.\n\n## Setup Instructions\n\n1. Import this collection into Postman\n2. Set up environment variables:\n   - `baseUrl`: API base URL (e.g., https://api.taskmaster.dev)\n   - `apiKey`: Your API key (tk_live_...)\n   - `sessionToken`: Session token (if using session auth)\n3. Run the \"Setup & Health Check\" folder first\n4. Explore different API features through organized folders\n\n## Features Covered\n\n- ✅ Authentication (API Key, Session)\n- ✅ Tasks API v2 (CRUD, filtering, batch operations)\n- ✅ Events API v2 (Calendar integration)\n- ✅ Search API (Full-text search, faceting)\n- ✅ Export API (CSV, JSON, PDF)\n- ✅ WebSocket API (Real-time features)\n- ✅ Analytics API (Usage monitoring)\n- ✅ Webhooks API (Event-driven integrations)\n- ✅ Error handling and edge cases\n\n## Environment Variables\n\nRequired:\n- `baseUrl` - API base URL\n- `apiKey` - Your API key\n\nOptional:\n- `sessionToken` - Session authentication token\n- `userId` - Your user ID\n- `projectId` - Test project ID\n- `initiativeId` - Test initiative ID",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "taskmaster-api-collection",
+    "version": {
+      "major": 2,
+      "minor": 4,
+      "patch": 0
+    }
+  },
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-API-Key",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Global pre-request script",
+          "// Set timestamp for requests that need it",
+          "pm.globals.set('timestamp', new Date().toISOString());",
+          "",
+          "// Helper function to generate UUID",
+          "pm.globals.set('generateUUID', function() {",
+          "    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {",
+          "        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);",
+          "        return v.toString(16);",
+          "    });",
+          "});"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Global test script",
+          "// Check for common error responses",
+          "if (pm.response.code >= 400) {",
+          "    console.log('Error Response:', pm.response.json());",
+          "}",
+          "",
+          "// Set rate limit info if available",
+          "if (pm.response.headers.has('X-RateLimit-Remaining')) {",
+          "    pm.environment.set('rateLimitRemaining', pm.response.headers.get('X-RateLimit-Remaining'));",
+          "}"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "{{baseUrl}}",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "🚀 Setup & Health Check",
+      "item": [
+        {
+          "name": "Health Check",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('API is healthy', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    pm.expect(response.data.status).to.eql('healthy');",
+                  "    ",
+                  "    console.log('API Version:', response.data.version);",
+                  "    console.log('Database Status:', response.data.database_status);",
+                  "    console.log('WebSocket Status:', response.data.websocket_status);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            },
+            "description": "Check API health and version information. This should be your first request to verify the API is working."
+          }
+        },
+        {
+          "name": "Test Authentication",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Authentication successful', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    ",
+                  "    console.log('API Key Authentication: ✅ Working');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v2/tasks?limit=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["v2", "tasks"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Test API key authentication by making a simple authenticated request."
+          }
+        },
+        {
+          "name": "Get Rate Limit Status",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Rate limit headers present', function () {",
+                  "    pm.response.to.have.header('X-RateLimit-Limit');",
+                  "    pm.response.to.have.header('X-RateLimit-Remaining');",
+                  "    ",
+                  "    const limit = pm.response.headers.get('X-RateLimit-Limit');",
+                  "    const remaining = pm.response.headers.get('X-RateLimit-Remaining');",
+                  "    ",
+                  "    console.log(`Rate Limit: ${remaining}/${limit} remaining`);",
+                  "    ",
+                  "    pm.environment.set('rateLimitTotal', limit);",
+                  "    pm.environment.set('rateLimitRemaining', remaining);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            },
+            "description": "Check current rate limit status and save to environment variables."
+          }
+        }
+      ],
+      "description": "Essential setup requests to verify API connectivity, authentication, and rate limits.",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "console.log('🚀 Starting TaskMaster API Testing');",
+              "console.log('Base URL:', pm.environment.get('baseUrl'));",
+              "console.log('API Key:', pm.environment.get('apiKey') ? '✅ Set' : '❌ Missing');"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "📋 Tasks API v2",
+      "item": [
+        {
+          "name": "List All Tasks",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Tasks retrieved successfully', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    pm.expect(response.data).to.be.an('array');",
+                  "    pm.expect(response.meta).to.have.property('total');",
+                  "    pm.expect(response.meta).to.have.property('limit');",
+                  "    pm.expect(response.meta).to.have.property('offset');",
+                  "    ",
+                  "    console.log(`Found ${response.meta.total} total tasks`);",
+                  "    console.log(`Showing ${response.data.length} tasks on this page`);",
+                  "    ",
+                  "    // Save first task ID if available",
+                  "    if (response.data.length > 0) {",
+                  "        pm.environment.set('firstTaskId', response.data[0].id);",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v2/tasks?limit=20&offset=0&sort=created_at:desc",
+              "host": ["{{baseUrl}}"],
+              "path": ["v2", "tasks"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "offset",
+                  "value": "0"
+                },
+                {
+                  "key": "sort",
+                  "value": "created_at:desc"
+                }
+              ]
+            },
+            "description": "Retrieve tasks with pagination and sorting. This demonstrates the enhanced v2 API capabilities."
+          }
+        },
+        {
+          "name": "Create New Task",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Task created successfully', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    pm.expect(response.data).to.have.property('id');",
+                  "    pm.expect(response.data.title).to.eql('API Testing Task');",
+                  "    pm.expect(response.data.priority).to.eql('high');",
+                  "    ",
+                  "    // Save task ID for other requests",
+                  "    pm.environment.set('testTaskId', response.data.id);",
+                  "    ",
+                  "    console.log('Created task:', response.data.id);",
+                  "    console.log('Task title:', response.data.title);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"API Testing Task\",\n  \"description\": \"This task was created via Postman to test the TaskMaster API endpoints\",\n  \"priority\": \"high\",\n  \"urgency\": 7,\n  \"duration\": 60,\n  \"due_date\": \"2025-09-25\",\n  \"required_context\": [\"computer\", \"internet\"],\n  \"equipment_needed\": [\"laptop\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v2/tasks",
+              "host": ["{{baseUrl}}"],
+              "path": ["v2", "tasks"]
+            },
+            "description": "Create a new task with comprehensive properties to test task creation capabilities."
+          }
+        },
+        {
+          "name": "Get Task by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Task retrieved by ID', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    pm.expect(response.data).to.have.property('id');",
+                  "    pm.expect(response.data.id).to.eql(pm.environment.get('testTaskId'));",
+                  "    ",
+                  "    console.log('Retrieved task:', response.data.title);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v2/tasks/{{testTaskId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["v2", "tasks", "{{testTaskId}}"]
+            },
+            "description": "Retrieve a specific task by its ID. Uses the task ID from the previous creation request."
+          }
+        },
+        {
+          "name": "Update Task",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Task updated successfully', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    pm.expect(response.data.urgency).to.eql(9);",
+                  "    pm.expect(response.data.priority).to.eql('urgent');",
+                  "    ",
+                  "    console.log('Updated task urgency to:', response.data.urgency);",
+                  "    console.log('Updated task priority to:', response.data.priority);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"urgency\": 9,\n  \"priority\": \"urgent\",\n  \"description\": \"This task was created via Postman and then updated to test the update functionality\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v2/tasks/{{testTaskId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["v2", "tasks", "{{testTaskId}}"]
+            },
+            "description": "Update task properties using partial update. Only specified fields will be changed."
+          }
+        },
+        {
+          "name": "Filter Tasks by Status and Priority",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Filtered tasks retrieved', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    ",
+                  "    // Verify all returned tasks match filters",
+                  "    response.data.forEach(task => {",
+                  "        pm.expect(task.status).to.eql('active');",
+                  "        pm.expect(['high', 'urgent']).to.include(task.priority);",
+                  "    });",
+                  "    ",
+                  "    console.log(`Found ${response.data.length} high/urgent active tasks`);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v2/tasks?status=active&priority=high,urgent&sort=urgency:desc",
+              "host": ["{{baseUrl}}"],
+              "path": ["v2", "tasks"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "active"
+                },
+                {
+                  "key": "priority",
+                  "value": "high,urgent"
+                },
+                {
+                  "key": "sort",
+                  "value": "urgency:desc"
+                }
+              ]
+            },
+            "description": "Demonstrate advanced filtering by status and priority with sorting by urgency."
+          }
+        },
+        {
+          "name": "Create Multiple Tasks (Batch)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Batch task creation', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    pm.expect(response.data.created).to.be.an('array');",
+                  "    pm.expect(response.data.created).to.have.length(3);",
+                  "    ",
+                  "    console.log(`Created ${response.data.created.length} tasks in batch`);",
+                  "    ",
+                  "    // Save batch task IDs",
+                  "    const batchTaskIds = response.data.created.map(task => task.id);",
+                  "    pm.environment.set('batchTaskIds', JSON.stringify(batchTaskIds));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tasks\": [\n    {\n      \"title\": \"Setup development environment\",\n      \"description\": \"Install and configure development tools\",\n      \"priority\": \"high\",\n      \"urgency\": 8,\n      \"duration\": 120\n    },\n    {\n      \"title\": \"Write unit tests\",\n      \"description\": \"Create comprehensive test coverage\",\n      \"priority\": \"medium\",\n      \"urgency\": 6,\n      \"duration\": 180\n    },\n    {\n      \"title\": \"Update documentation\",\n      \"description\": \"Reflect recent API changes in docs\",\n      \"priority\": \"low\",\n      \"urgency\": 3,\n      \"duration\": 90\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v2/tasks/batch",
+              "host": ["{{baseUrl}}"],
+              "path": ["v2", "tasks", "batch"]
+            },
+            "description": "Create multiple tasks in a single request to demonstrate batch operations."
+          }
+        },
+        {
+          "name": "Search Tasks by Text",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Tasks search completed', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    pm.expect(response.data).to.be.an('array');",
+                  "    ",
+                  "    console.log(`Found ${response.data.length} tasks matching 'API'`);",
+                  "    ",
+                  "    // Verify search terms appear in results",
+                  "    response.data.forEach(task => {",
+                  "        const searchableText = (task.title + ' ' + (task.description || '')).toLowerCase();",
+                  "        pm.expect(searchableText).to.include('api');",
+                  "    });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v2/tasks?q=API&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["v2", "tasks"],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "API"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Search tasks using full-text search functionality to find tasks containing 'API'."
+          }
+        },
+        {
+          "name": "Mark Task as Completed",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Task marked as completed', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    pm.expect(response.data.status).to.eql('completed');",
+                  "    pm.expect(response.data.completed).to.eql(true);",
+                  "    ",
+                  "    console.log('Task marked as completed:', response.data.title);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"completed\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v2/tasks/{{testTaskId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["v2", "tasks", "{{testTaskId}}"]
+            },
+            "description": "Mark the test task as completed to demonstrate status updates."
+          }
+        },
+        {
+          "name": "Delete Test Task",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Task deleted successfully', function () {",
+                  "    pm.response.to.have.status(204);",
+                  "    ",
+                  "    console.log('Test task deleted successfully');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v2/tasks/{{testTaskId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["v2", "tasks", "{{testTaskId}}"]
+            },
+            "description": "Clean up by deleting the test task. Demonstrates DELETE operation."
+          }
+        }
+      ],
+      "description": "Comprehensive testing of the enhanced Tasks API v2 with CRUD operations, filtering, searching, and batch operations."
+    },
+    {
+      "name": "📅 Events API v2",
+      "item": [
+        {
+          "name": "List Events",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Events retrieved successfully', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    pm.expect(response.data).to.be.an('array');",
+                  "    ",
+                  "    console.log(`Found ${response.meta.total} total events`);",
+                  "    ",
+                  "    if (response.data.length > 0) {",
+                  "        pm.environment.set('firstEventId', response.data[0].id);",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v2/events?limit=20&sort=start:asc",
+              "host": ["{{baseUrl}}"],
+              "path": ["v2", "events"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "sort",
+                  "value": "start:asc"
+                }
+              ]
+            },
+            "description": "Retrieve events sorted by start time."
+          }
+        },
+        {
+          "name": "Create Calendar Event",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Event created successfully', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    pm.expect(response.data).to.have.property('id');",
+                  "    pm.expect(response.data.title).to.eql('API Testing Meeting');",
+                  "    ",
+                  "    pm.environment.set('testEventId', response.data.id);",
+                  "    ",
+                  "    console.log('Created event:', response.data.id);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Generate future datetime for event",
+                  "const now = new Date();",
+                  "const futureDate = new Date(now.getTime() + (24 * 60 * 60 * 1000)); // Tomorrow",
+                  "futureDate.setHours(14, 0, 0, 0); // 2 PM",
+                  "",
+                  "const startTime = futureDate.toISOString();",
+                  "const endTime = new Date(futureDate.getTime() + (90 * 60 * 1000)).toISOString(); // 90 minutes later",
+                  "",
+                  "pm.environment.set('eventStartTime', startTime);",
+                  "pm.environment.set('eventEndTime', endTime);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"API Testing Meeting\",\n  \"description\": \"Meeting to review API testing results and plan next steps\",\n  \"start\": \"{{eventStartTime}}\",\n  \"end\": \"{{eventEndTime}}\",\n  \"location\": \"Conference Room B\",\n  \"event_type\": \"timed\",\n  \"is_blocking\": true,\n  \"notifications_enabled\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v2/events",
+              "host": ["{{baseUrl}}"],
+              "path": ["v2", "events"]
+            },
+            "description": "Create a calendar event with proper datetime formatting."
+          }
+        },
+        {
+          "name": "Get Calendar Events for Date Range",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Set date range for this week",
+                  "const now = new Date();",
+                  "const startOfWeek = new Date(now);",
+                  "startOfWeek.setDate(now.getDate() - now.getDay()); // Sunday",
+                  "startOfWeek.setHours(0, 0, 0, 0);",
+                  "",
+                  "const endOfWeek = new Date(startOfWeek);",
+                  "endOfWeek.setDate(startOfWeek.getDate() + 6); // Saturday",
+                  "endOfWeek.setHours(23, 59, 59, 999);",
+                  "",
+                  "pm.environment.set('weekStart', startOfWeek.toISOString().split('T')[0]);",
+                  "pm.environment.set('weekEnd', endOfWeek.toISOString().split('T')[0]);"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Calendar events retrieved', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    pm.expect(response.data).to.be.an('array');",
+                  "    ",
+                  "    console.log(`Found ${response.data.length} events this week`);",
+                  "    ",
+                  "    // Verify events have calendar-specific fields",
+                  "    response.data.forEach(event => {",
+                  "        pm.expect(event).to.have.property('start');",
+                  "        pm.expect(event).to.have.property('end');",
+                  "        pm.expect(event).to.have.property('allDay');",
+                  "    });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v2/events/calendar?start={{weekStart}}&end={{weekEnd}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["v2", "events", "calendar"],
+              "query": [
+                {
+                  "key": "start",
+                  "value": "{{weekStart}}"
+                },
+                {
+                  "key": "end",
+                  "value": "{{weekEnd}}"
+                }
+              ]
+            },
+            "description": "Get events for calendar display with proper expansion of recurring events."
+          }
+        },
+        {
+          "name": "Update Event",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Event updated successfully', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    pm.expect(response.data.location).to.eql('Conference Room A - Updated');",
+                  "    ",
+                  "    console.log('Updated event location');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"location\": \"Conference Room A - Updated\",\n  \"description\": \"Meeting to review API testing results and plan next steps - Updated with new location\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v2/events/{{testEventId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["v2", "events", "{{testEventId}}"]
+            },
+            "description": "Update event properties like location and description."
+          }
+        },
+        {
+          "name": "Delete Test Event",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Event deleted successfully', function () {",
+                  "    pm.response.to.have.status(204);",
+                  "    ",
+                  "    console.log('Test event deleted successfully');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v2/events/{{testEventId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["v2", "events", "{{testEventId}}"]
+            },
+            "description": "Clean up by deleting the test event."
+          }
+        }
+      ],
+      "description": "Testing calendar and event management features including creation, updates, and calendar view."
+    },
+    {
+      "name": "🔍 Search API",
+      "item": [
+        {
+          "name": "Basic Search",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Search completed successfully', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    pm.expect(response.data).to.have.property('results');",
+                  "    pm.expect(response.data).to.have.property('total_count');",
+                  "    ",
+                  "    console.log(`Search found ${response.data.total_count} results`);",
+                  "    console.log(`Query time: ${response.data.query_time_ms}ms`);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/search/search?q=project management&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["search", "search"],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "project management"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Perform a basic full-text search across all entity types."
+          }
+        },
+        {
+          "name": "Search with Facets",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Search with facets completed', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    pm.expect(response.data).to.have.property('facets');",
+                  "    ",
+                  "    console.log('Available facets:', Object.keys(response.data.facets));",
+                  "    ",
+                  "    // Check facet structure",
+                  "    Object.values(response.data.facets).forEach(facetGroup => {",
+                  "        facetGroup.forEach(facet => {",
+                  "            pm.expect(facet).to.have.property('value');",
+                  "            pm.expect(facet).to.have.property('count');",
+                  "        });",
+                  "    });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/search/search?q=task&include_facets=true&limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["search", "search"],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "task"
+                },
+                {
+                  "key": "include_facets",
+                  "value": "true"
+                },
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            },
+            "description": "Search with faceted results to understand data distribution."
+          }
+        },
+        {
+          "name": "Search Specific Entity Types",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Entity-specific search completed', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    ",
+                  "    // Verify all results are of requested types",
+                  "    response.data.results.forEach(result => {",
+                  "        pm.expect(['task', 'event']).to.include(result.type);",
+                  "    });",
+                  "    ",
+                  "    console.log(`Found ${response.data.total_count} tasks and events`);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/search/search?q=meeting&types=tasks,events",
+              "host": ["{{baseUrl}}"],
+              "path": ["search", "search"],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "meeting"
+                },
+                {
+                  "key": "types",
+                  "value": "tasks,events"
+                }
+              ]
+            },
+            "description": "Search only within specific entity types (tasks and events)."
+          }
+        },
+        {
+          "name": "Get Search Suggestions",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Search suggestions retrieved', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    pm.expect(response.data).to.have.property('suggestions');",
+                  "    pm.expect(response.data.suggestions).to.be.an('array');",
+                  "    ",
+                  "    console.log('Suggestions for \"proj\":', response.data.suggestions);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/search/suggestions?q=proj&limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["search", "suggestions"],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "proj"
+                },
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            },
+            "description": "Get auto-complete suggestions for partial search queries."
+          }
+        },
+        {
+          "name": "Analyze Search Query",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Query analysis completed', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    pm.expect(response.data).to.have.property('original_query');",
+                  "    pm.expect(response.data).to.have.property('cleaned_query');",
+                  "    pm.expect(response.data).to.have.property('terms');",
+                  "    ",
+                  "    console.log('Query analysis:', response.data);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"status:active priority:high urgent task\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/search/query/analyze",
+              "host": ["{{baseUrl}}"],
+              "path": ["search", "query", "analyze"]
+            },
+            "description": "Analyze how search queries are processed and broken down."
+          }
+        }
+      ],
+      "description": "Testing advanced search capabilities including full-text search, faceting, suggestions, and query analysis."
+    },
+    {
+      "name": "📊 Export API",
+      "item": [
+        {
+          "name": "Export Tasks as CSV",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Export request successful', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    pm.expect(response.data).to.have.property('export_id');",
+                  "    pm.expect(response.data).to.have.property('download_url');",
+                  "    pm.expect(response.data.format).to.eql('csv');",
+                  "    ",
+                  "    pm.environment.set('exportId', response.data.export_id);",
+                  "    pm.environment.set('downloadUrl', response.data.download_url);",
+                  "    ",
+                  "    console.log('Export ID:', response.data.export_id);",
+                  "    console.log('Download URL:', response.data.download_url);",
+                  "    console.log('Record Count:', response.data.record_count);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"format\": \"csv\",\n  \"filters\": {\n    \"status\": [\"active\", \"completed\"]\n  },\n  \"fields\": [\"id\", \"title\", \"status\", \"priority\", \"urgency\", \"created_at\"],\n  \"sort\": \"created_at:desc\",\n  \"include_metadata\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/export/tasks",
+              "host": ["{{baseUrl}}"],
+              "path": ["export", "tasks"]
+            },
+            "description": "Export tasks to CSV format with filtering and field selection."
+          }
+        },
+        {
+          "name": "Export Events as JSON",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Events export successful', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    pm.expect(response.data.format).to.eql('json');",
+                  "    ",
+                  "    console.log('Events export created:', response.data.export_id);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Set date range for current month",
+                  "const now = new Date();",
+                  "const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);",
+                  "const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);",
+                  "",
+                  "pm.environment.set('monthStart', startOfMonth.toISOString());",
+                  "pm.environment.set('monthEnd', endOfMonth.toISOString());"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"format\": \"json\",\n  \"filters\": {\n    \"start_from\": \"{{monthStart}}\",\n    \"start_to\": \"{{monthEnd}}\"\n  },\n  \"fields\": [\"id\", \"title\", \"start\", \"end\", \"location\", \"event_type\"],\n  \"include_metadata\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/export/events",
+              "host": ["{{baseUrl}}"],
+              "path": ["export", "events"]
+            },
+            "description": "Export events for the current month in JSON format."
+          }
+        }
+      ],
+      "description": "Testing data export capabilities in various formats with filtering and field selection."
+    },
+    {
+      "name": "🔗 WebSocket API",
+      "item": [
+        {
+          "name": "Get WebSocket Statistics",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('WebSocket stats retrieved', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    pm.expect(response.data).to.have.property('active_connections');",
+                  "    ",
+                  "    console.log('Active WebSocket connections:', response.data.active_connections);",
+                  "    console.log('Total connections today:', response.data.total_connections_today);",
+                  "    console.log('Messages sent today:', response.data.messages_sent_today);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/websocket/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["websocket", "stats"]
+            },
+            "description": "Get current WebSocket connection statistics and usage metrics."
+          }
+        },
+        {
+          "name": "Test WebSocket Task Creation Broadcast",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('WebSocket broadcast successful', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.success).to.eql(true);",
+                  "    pm.expect(response.task).to.have.property('id');",
+                  "    ",
+                  "    console.log('Broadcasted task creation:', response.task.title);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"WebSocket Test Task\",\n  \"description\": \"This task creation will be broadcast via WebSocket\",\n  \"priority\": \"medium\",\n  \"user_id\": \"{{userId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/websocket/broadcast/task-created",
+              "host": ["{{baseUrl}}"],
+              "path": ["websocket", "broadcast", "task-created"]
+            },
+            "description": "Test WebSocket broadcasting by creating a task that will be broadcast to connected clients."
+          }
+        },
+        {
+          "name": "Test All WebSocket Events",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('All WebSocket events tested', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.success).to.eql(true);",
+                  "    pm.expect(response.events_sent).to.be.an('array');",
+                  "    pm.expect(response.events_sent.length).to.be.greaterThan(0);",
+                  "    ",
+                  "    console.log('WebSocket events tested:', response.events_sent);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": \"{{userId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/websocket/test-events",
+              "host": ["{{baseUrl}}"],
+              "path": ["websocket", "test-events"]
+            },
+            "description": "Test all WebSocket event types in sequence to verify real-time functionality."
+          }
+        }
+      ],
+      "description": "Testing WebSocket real-time features and event broadcasting capabilities."
+    },
+    {
+      "name": "📈 Analytics API",
+      "item": [
+        {
+          "name": "Get Usage Analytics (24h)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Usage analytics retrieved', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    pm.expect(response.data).to.have.property('total_requests');",
+                  "    pm.expect(response.data).to.have.property('success_rate');",
+                  "    pm.expect(response.data).to.have.property('avg_response_time_ms');",
+                  "    ",
+                  "    console.log('Total requests (24h):', response.data.total_requests);",
+                  "    console.log('Success rate:', response.data.success_rate + '%');",
+                  "    console.log('Average response time:', response.data.avg_response_time_ms + 'ms');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/analytics/usage?timeframe=24h&format=summary",
+              "host": ["{{baseUrl}}"],
+              "path": ["analytics", "usage"],
+              "query": [
+                {
+                  "key": "timeframe",
+                  "value": "24h"
+                },
+                {
+                  "key": "format",
+                  "value": "summary"
+                }
+              ]
+            },
+            "description": "Get API usage analytics for the last 24 hours in summary format."
+          }
+        },
+        {
+          "name": "Get Detailed Analytics (7d)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Detailed analytics retrieved', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    pm.expect(response.data).to.have.property('top_endpoints');",
+                  "    pm.expect(response.data).to.have.property('error_breakdown');",
+                  "    ",
+                  "    console.log('Top endpoints:', response.data.top_endpoints);",
+                  "    console.log('Error breakdown:', response.data.error_breakdown);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/analytics/usage?timeframe=7d&format=detailed",
+              "host": ["{{baseUrl}}"],
+              "path": ["analytics", "usage"],
+              "query": [
+                {
+                  "key": "timeframe",
+                  "value": "7d"
+                },
+                {
+                  "key": "format",
+                  "value": "detailed"
+                }
+              ]
+            },
+            "description": "Get detailed API usage analytics for the last 7 days including endpoint breakdown."
+          }
+        }
+      ],
+      "description": "Testing analytics and monitoring capabilities to track API usage and performance."
+    },
+    {
+      "name": "🔔 Webhooks API",
+      "item": [
+        {
+          "name": "List Webhooks",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Webhooks listed successfully', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    pm.expect(response.data).to.be.an('array');",
+                  "    ",
+                  "    console.log(`Found ${response.data.length} configured webhooks`);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/webhooks",
+              "host": ["{{baseUrl}}"],
+              "path": ["webhooks"]
+            },
+            "description": "List all configured webhooks for the current API key."
+          }
+        },
+        {
+          "name": "Create Webhook",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Webhook created successfully', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    pm.expect(response.data).to.have.property('id');",
+                  "    pm.expect(response.data.name).to.eql('Test Webhook');",
+                  "    ",
+                  "    pm.environment.set('webhookId', response.data.id);",
+                  "    ",
+                  "    console.log('Created webhook:', response.data.id);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Webhook\",\n  \"url\": \"https://webhook.site/unique-url-here\",\n  \"events\": [\"task.created\", \"task.completed\", \"event.created\"],\n  \"is_active\": true,\n  \"secret\": \"test-webhook-secret-key\",\n  \"headers\": {\n    \"Authorization\": \"Bearer test-token\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/webhooks",
+              "host": ["{{baseUrl}}"],
+              "path": ["webhooks"]
+            },
+            "description": "Create a new webhook subscription for task and event notifications. Update the URL to a real webhook endpoint."
+          }
+        }
+      ],
+      "description": "Testing webhook functionality for event-driven integrations with external systems."
+    },
+    {
+      "name": "🚨 Error Handling & Edge Cases",
+      "item": [
+        {
+          "name": "Test 401 Unauthorized",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Unauthorized access properly handled', function () {",
+                  "    pm.response.to.have.status(401);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('error');",
+                  "    pm.expect(response.code).to.eql('UNAUTHORIZED');",
+                  "    ",
+                  "    console.log('Unauthorized error properly returned');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "invalid-api-key"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v2/tasks",
+              "host": ["{{baseUrl}}"],
+              "path": ["v2", "tasks"]
+            },
+            "description": "Test authentication error handling with invalid API key."
+          }
+        },
+        {
+          "name": "Test 404 Not Found",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Not found properly handled', function () {",
+                  "    pm.response.to.have.status(404);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('error');",
+                  "    pm.expect(response.code).to.eql('NOT_FOUND');",
+                  "    ",
+                  "    console.log('Not found error properly returned');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v2/tasks/00000000-0000-0000-0000-000000000000",
+              "host": ["{{baseUrl}}"],
+              "path": ["v2", "tasks", "00000000-0000-0000-0000-000000000000"]
+            },
+            "description": "Test 404 error handling by requesting a non-existent task."
+          }
+        },
+        {
+          "name": "Test 422 Validation Error",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Validation error properly handled', function () {",
+                  "    pm.response.to.have.status(422);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('error');",
+                  "    pm.expect(response.code).to.eql('VALIDATION_ERROR');",
+                  "    pm.expect(response.errors).to.have.property('title');",
+                  "    ",
+                  "    console.log('Validation errors:', response.errors);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Task without required title field\",\n  \"priority\": \"invalid_priority\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v2/tasks",
+              "host": ["{{baseUrl}}"],
+              "path": ["v2", "tasks"]
+            },
+            "description": "Test validation error handling by sending invalid task data."
+          }
+        },
+        {
+          "name": "Test Large Pagination Offset",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Large offset handled gracefully', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    pm.expect(response.data).to.be.an('array');",
+                  "    pm.expect(response.data.length).to.eql(0); // Should be empty",
+                  "    pm.expect(response.meta.has_more).to.eql(false);",
+                  "    ",
+                  "    console.log('Large offset returned empty results as expected');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v2/tasks?limit=10&offset=99999",
+              "host": ["{{baseUrl}}"],
+              "path": ["v2", "tasks"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "offset",
+                  "value": "99999"
+                }
+              ]
+            },
+            "description": "Test edge case with very large pagination offset."
+          }
+        },
+        {
+          "name": "Test Invalid Search Query",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Invalid search query handled', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('error');",
+                  "    pm.expect(response.code).to.eql('MISSING_QUERY');",
+                  "    ",
+                  "    console.log('Empty search query properly rejected');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/search/search?q=",
+              "host": ["{{baseUrl}}"],
+              "path": ["search", "search"],
+              "query": [
+                {
+                  "key": "q",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Test search error handling with empty query parameter."
+          }
+        }
+      ],
+      "description": "Testing error handling and edge cases to ensure robust API behavior."
+    },
+    {
+      "name": "🧹 Cleanup",
+      "item": [
+        {
+          "name": "Delete Batch Tasks",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Get batch task IDs from environment",
+                  "const batchTaskIds = pm.environment.get('batchTaskIds');",
+                  "if (batchTaskIds) {",
+                  "    const taskIds = JSON.parse(batchTaskIds);",
+                  "    pm.environment.set('currentBatchTaskId', taskIds[0] || '');",
+                  "    console.log('Cleaning up batch task:', taskIds[0]);",
+                  "} else {",
+                  "    console.log('No batch tasks to clean up');",
+                  "    pm.environment.set('currentBatchTaskId', '');",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const taskId = pm.environment.get('currentBatchTaskId');",
+                  "if (taskId) {",
+                  "    pm.test('Batch task deleted', function () {",
+                  "        pm.response.to.have.status(204);",
+                  "        console.log('Deleted batch task:', taskId);",
+                  "    });",
+                  "} else {",
+                  "    pm.test('No batch tasks to delete', function () {",
+                  "        pm.expect(true).to.be.true;",
+                  "        console.log('No batch tasks found for cleanup');",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v2/tasks/{{currentBatchTaskId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["v2", "tasks", "{{currentBatchTaskId}}"]
+            },
+            "description": "Clean up any remaining batch tasks created during testing."
+          }
+        },
+        {
+          "name": "Delete Test Webhook",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const webhookId = pm.environment.get('webhookId');",
+                  "if (webhookId && pm.response.code === 204) {",
+                  "    pm.test('Test webhook deleted', function () {",
+                  "        pm.response.to.have.status(204);",
+                  "        console.log('Deleted test webhook:', webhookId);",
+                  "    });",
+                  "} else if (!webhookId) {",
+                  "    pm.test('No webhook to delete', function () {",
+                  "        pm.expect(true).to.be.true;",
+                  "        console.log('No test webhook found for cleanup');",
+                  "    });",
+                  "} else {",
+                  "    pm.test('Webhook deletion failed', function () {",
+                  "        console.log('Could not delete webhook - may not exist');",
+                  "        pm.expect(pm.response.code).to.be.oneOf([204, 404]);",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/webhooks/{{webhookId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["webhooks", "{{webhookId}}"]
+            },
+            "description": "Clean up test webhook created during testing."
+          }
+        },
+        {
+          "name": "Final Status Check",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('API still healthy after testing', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    ",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.status).to.eql('success');",
+                  "    pm.expect(response.data.status).to.eql('healthy');",
+                  "    ",
+                  "    console.log('✅ TaskMaster API testing completed successfully!');",
+                  "    console.log('📊 Final rate limit status:', pm.response.headers.get('X-RateLimit-Remaining') || 'N/A');",
+                  "});",
+                  "",
+                  "// Clean up environment variables",
+                  "pm.environment.unset('testTaskId');",
+                  "pm.environment.unset('testEventId');",
+                  "pm.environment.unset('batchTaskIds');",
+                  "pm.environment.unset('webhookId');",
+                  "pm.environment.unset('exportId');",
+                  "pm.environment.unset('currentBatchTaskId');"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            },
+            "description": "Final health check to ensure API is still functioning after all tests."
+          }
+        }
+      ],
+      "description": "Clean up any test data created during the testing session and verify final API health."
+    }
+  ]
+}

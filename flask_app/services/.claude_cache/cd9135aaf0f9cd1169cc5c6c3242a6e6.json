@@ -1,0 +1,33 @@
+{
+  "task_id": "test-task-003",
+  "analyzed_at": "2025-09-18T15:56:06.581979",
+  "complexity_assessment": {
+    "complexity_score": 1,
+    "complexity_level": "low",
+    "estimated_duration_minutes": 12,
+    "time_confidence": "medium",
+    "time_multiplier": 0.8,
+    "factors": []
+  },
+  "dependency_insights": {
+    "has_dependencies": false,
+    "dependency_signals": [],
+    "time_references": [],
+    "task_references": [],
+    "existing_dependencies": [],
+    "suggested_dependencies": [],
+    "dependency_confidence": "low"
+  },
+  "context_enhancement": {
+    "extracted_tags": [],
+    "categories": [],
+    "action_words": [],
+    "priority_indicators": [],
+    "skill_requirements": [],
+    "location_context": [],
+    "enhancement_confidence": "medium"
+  },
+  "smart_suggestions": [],
+  "ai_confidence": 0.0,
+  "analysis_source": "rules"
+}

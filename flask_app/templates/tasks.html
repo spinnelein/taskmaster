@@ -170,6 +170,20 @@
             font-size: 0.9em;
         }
         
+        .task-item.completed-task {
+            border-left-color: #6c757d;
+            background: #f8f9fa;
+            opacity: 0.8;
+        }
+        
+        .task-item.completed-task .task-title {
+            color: #6c757d !important;
+        }
+        
+        .task-item.completed-task .task-meta {
+            color: #868e96 !important;
+        }
+        
         @media (max-width: 768px) {
             .tasks-grid {
                 grid-template-columns: 1fr;
@@ -189,8 +203,7 @@
                 <a href="/tasks" class="active">Tasks</a>
                 <a href="/initiatives">Initiatives</a>
                 <a href="/projects">Projects</a>
-                <a href="/dishes">Dishes</a>
-                <a href="/meals">Meals</a>
+                <a href="/meals">Food</a>
             </div>
         </div>
         
@@ -248,8 +261,15 @@
     });
     
     function loadAllTasks() {
+        const timestamp = Date.now(); // Cache buster
+        
         // Load active tasks
-        fetch('/api/tasks')
+        fetch(`/api/tasks?_t=${timestamp}`, {
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            }
+        })
             .then(response => response.json())
             .then(tasks => {
                 displayActiveTasks(tasks);
@@ -261,17 +281,31 @@
                     '<div style="color: #dc3545;">Failed to load active tasks</div>';
             });
         
-        // Note: Would need a separate endpoint for completed tasks
-        // For now, showing placeholder
-        document.getElementById('completed-tasks').innerHTML = 
-            '<div style="color: #666; text-align: center; padding: 20px;">Completed tasks feature coming soon</div>';
+        // Load completed tasks
+        fetch(`/api/tasks?completed=true&_t=${timestamp}`, {
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            }
+        })
+            .then(response => response.json())
+            .then(completedTasks => {
+                displayCompletedTasks(completedTasks);
+            })
+            .catch(error => {
+                console.error('Error loading completed tasks:', error);
+                document.getElementById('completed-tasks').innerHTML = 
+                    '<div style="color: #dc3545;">Failed to load completed tasks</div>';
+            });
     }
     
     function displayActiveTasks(tasks) {
         const activeTasksContainer = document.getElementById('active-tasks');
         
-        // Filter to active tasks only (same as schedule page)
+        // Filter to active tasks only (exclude completed and snoozed)
         const activeTasks = tasks.filter(task => task.status === 'active' && !task.completed);
+        console.log('Filtered to', activeTasks.length, 'active tasks');
+        console.log('Active tasks:', activeTasks.map(t => ({ id: t.id, title: t.title })));
         
         if (activeTasks.length === 0) {
             activeTasksContainer.innerHTML = '<div style="color: #666; text-align: center; padding: 20px;">No active tasks</div>';
@@ -291,10 +325,65 @@
                 <div class="task-actions">
                     <button class="btn btn-success btn-sm" onclick="completeTask('${task.id}')">Complete</button>
                     <button class="btn btn-sm" onclick="editTask('${task.id}')">Edit</button>
+                    <button class="btn btn-sm" style="background: #6f42c1;" onclick="analyzeWithAI('${task.id}')">Analyze with AI</button>
                     <button class="btn btn-danger btn-sm" onclick="deleteTask('${task.id}')">Delete</button>
                 </div>
             </div>
         `).join('');
+    }
+    
+    function displayCompletedTasks(tasks) {
+        const completedTasksContainer = document.getElementById('completed-tasks');
+        
+        if (tasks.length === 0) {
+            completedTasksContainer.innerHTML = '<div style="color: #666; text-align: center; padding: 20px;">No completed tasks</div>';
+            return;
+        }
+        
+        // Sort tasks by completion date (most recent first)
+        tasks.sort((a, b) => {
+            const aDate = a.last_completed_at || a.updated_at;
+            const bDate = b.last_completed_at || b.updated_at;
+            return new Date(bDate) - new Date(aDate);
+        });
+        
+        completedTasksContainer.innerHTML = tasks.map(task => {
+            const completedDate = task.last_completed_at ? 
+                new Date(task.last_completed_at).toLocaleDateString() : 
+                new Date(task.updated_at).toLocaleDateString();
+            
+            return `
+                <div class="task-item completed-task">
+                    <div class="task-title" style="text-decoration: line-through; color: #666;">${task.title}</div>
+                    <div class="task-meta">
+                        Completed: ${completedDate} | Duration: ${task.duration || 0} min | Priority: ${task.priority || 'medium'}
+                    </div>
+                    ${task.description ? `<div class="task-description">${task.description}</div>` : ''}
+                    <div class="task-actions">
+                        <button class="btn btn-sm" onclick="viewCompletedTask('${task.id}')">View Details</button>
+                        <button class="btn btn-sm" style="background: #6f42c1;" onclick="analyzeWithAI('${task.id}')">Analyze with AI</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteTask('${task.id}')">Delete</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+    
+    function viewCompletedTask(taskId) {
+        // Get task details and show in a simple modal
+        fetch(`/api/tasks/${taskId}`)
+            .then(response => response.json())
+            .then(task => {
+                const completedDate = task.last_completed_at ? 
+                    new Date(task.last_completed_at).toLocaleString() : 
+                    'Date not recorded';
+                    
+                alert(`Task: ${task.title}\n\nDescription: ${task.description || 'No description'}\n\nCompleted: ${completedDate}\nDuration: ${task.duration} minutes\nPriority: ${task.priority}\nUrgency: ${task.urgency}/10`);
+            })
+            .catch(error => {
+                console.error('Error loading task details:', error);
+                alert('Failed to load task details');
+            });
     }
     
     function getPriorityClass(priority) {
@@ -649,6 +738,13 @@
     
     function submitTaskCreate(event) {
         event.preventDefault();
+        event.stopPropagation(); // Prevent event bubbling
+        
+        // Disable the submit button to prevent double submission
+        const submitButton = event.target.querySelector('button[type="submit"]');
+        if (submitButton) {
+            submitButton.disabled = true;
+        }
         
         const taskData = {
             title: document.getElementById('create-title').value,
@@ -665,14 +761,27 @@
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(taskData)
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(() => {
+            // Ensure modal is closed
             closeCreateTaskModal();
             loadAllTasks(); // Refresh task list
         })
         .catch(error => {
             console.error('Error creating task:', error);
+            alert('Failed to create task');
+            // Re-enable submit button on error
+            if (submitButton) {
+                submitButton.disabled = false;
+            }
         });
+        
+        return false; // Extra prevention of default form submission
     }
     
     function refreshTasks() {
@@ -695,6 +804,175 @@
     
     // Refresh health check every 30 seconds
     setInterval(checkHealth, 30000);
+    
+    function analyzeWithAI(taskId) {
+        // Show immediate feedback
+        const buttons = document.querySelectorAll(`button[onclick="analyzeWithAI('${taskId}')"]`);
+        buttons.forEach(button => {
+            button.disabled = true;
+            button.textContent = 'Analyzing...';
+            button.style.opacity = '0.6';
+        });
+        
+        fetch(`/api/tasks/${taskId}/analyze-and-save`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                // Show success feedback
+                showAnalysisResult(taskId, data);
+                
+                // Restore button state
+                buttons.forEach(button => {
+                    button.disabled = false;
+                    button.textContent = 'Analyzed ✓';
+                    button.style.opacity = '1';
+                    button.style.background = '#28a745';
+                });
+                
+                // Reset button after 3 seconds
+                setTimeout(() => {
+                    buttons.forEach(button => {
+                        button.textContent = 'Analyze with AI';
+                        button.style.background = '#6f42c1';
+                    });
+                }, 3000);
+            } else {
+                throw new Error(data.error || 'Analysis failed');
+            }
+        })
+        .catch(error => {
+            console.error('Error analyzing task:', error);
+            
+            // Show error feedback
+            buttons.forEach(button => {
+                button.disabled = false;
+                button.textContent = 'Analysis Failed';
+                button.style.opacity = '1';
+                button.style.background = '#dc3545';
+            });
+            
+            alert(`Failed to analyze task: ${error.message}`);
+            
+            // Reset button after 3 seconds
+            setTimeout(() => {
+                buttons.forEach(button => {
+                    button.textContent = 'Analyze with AI';
+                    button.style.background = '#6f42c1';
+                });
+            }, 3000);
+        });
+    }
+    
+    function showAnalysisResult(taskId, data) {
+        // Create a modal to show the analysis results
+        const modalHTML = `
+            <div id="analysis-modal" style="
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                background: rgba(0,0,0,0.7); z-index: 1200; display: flex; 
+                align-items: center; justify-content: center;
+            ">
+                <div style="
+                    background: white; width: 90%; max-width: 600px; max-height: 80vh;
+                    border-radius: 8px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                    overflow-y: auto;
+                ">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2 style="margin: 0; color: #333;">AI Analysis Results</h2>
+                        <button onclick="closeAnalysisModal()" style="
+                            background: #dc3545; color: white; border: none; 
+                            border-radius: 4px; padding: 8px 12px; cursor: pointer;
+                            font-size: 18px; width: 30px; height: 30px;
+                        ">×</button>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="color: #495057; margin-bottom: 10px;">${data.task_title}</h3>
+                    </div>
+                    
+                    ${data.yolo_fields ? `
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                            <h4 style="margin-top: 0; color: #333;">Key Insights</h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                <div>
+                                    <strong>Cognitive Load:</strong> 
+                                    <span style="color: ${getCognitiveLoadColor(data.yolo_fields.cognitive_load)}; font-weight: bold;">
+                                        ${data.yolo_fields.cognitive_load || 'N/A'}
+                                    </span>
+                                </div>
+                                <div>
+                                    <strong>Energy Level:</strong> 
+                                    <span style="color: ${getEnergyLevelColor(data.yolo_fields.energy_level)}; font-weight: bold;">
+                                        ${data.yolo_fields.energy_level || 'N/A'}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    ${data.analysis && data.analysis.complexity_assessment ? `
+                        <div style="background: #e9ecef; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                            <h4 style="margin-top: 0; color: #333;">Complexity Assessment</h4>
+                            <div><strong>Score:</strong> ${data.analysis.complexity_assessment.complexity_score}/10</div>
+                            <div><strong>Factors:</strong> ${(data.analysis.complexity_assessment.factors || []).join(', ')}</div>
+                            <div style="margin-top: 10px;">${data.analysis.complexity_assessment.description || ''}</div>
+                        </div>
+                    ` : ''}
+                    
+                    ${data.analysis && data.analysis.optimization_suggestions ? `
+                        <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                            <h4 style="margin-top: 0; color: #333;">Optimization Suggestions</h4>
+                            <ul style="margin: 0; padding-left: 20px;">
+                                ${data.analysis.optimization_suggestions.map(suggestion => 
+                                    `<li style="margin-bottom: 5px;">${suggestion}</li>`
+                                ).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+                    
+                    <div style="text-align: right; margin-top: 20px;">
+                        <small style="color: #666;">Analysis saved to database</small>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+    }
+    
+    function closeAnalysisModal() {
+        const modal = document.getElementById('analysis-modal');
+        if (modal) {
+            modal.remove();
+        }
+    }
+    
+    function getCognitiveLoadColor(load) {
+        switch(load) {
+            case 'low': return '#28a745';
+            case 'medium': return '#ffc107';
+            case 'high': return '#dc3545';
+            default: return '#666';
+        }
+    }
+    
+    function getEnergyLevelColor(level) {
+        switch(level) {
+            case 'low': return '#dc3545';
+            case 'medium': return '#ffc107';
+            case 'high': return '#28a745';
+            default: return '#666';
+        }
+    }
     </script>
 </body>
 </html>

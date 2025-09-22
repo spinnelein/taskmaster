@@ -1,0 +1,66 @@
+{
+  "task_id": "96ceac73-9cf3-4881-b77b-e0b4a61fa70c",
+  "analyzed_at": "2025-09-20T00:27:52.808646",
+  "complexity_assessment": {
+    "complexity_score": 4,
+    "complexity_level": "medium",
+    "estimated_duration_minutes": 60,
+    "time_confidence": "medium",
+    "time_multiplier": 1.0,
+    "factors": [],
+    "final_complexity_score": 4.5
+  },
+  "dependency_insights": {
+    "has_dependencies": false,
+    "dependency_signals": [],
+    "time_references": [],
+    "task_references": [],
+    "existing_dependencies": [],
+    "suggested_dependencies": [],
+    "dependency_confidence": "low"
+  },
+  "context_enhancement": {
+    "extracted_tags": [],
+    "categories": [],
+    "action_words": [],
+    "priority_indicators": [],
+    "skill_requirements": [],
+    "location_context": [],
+    "enhancement_confidence": "medium"
+  },
+  "smart_suggestions": [
+    {
+      "type": "clarity",
+      "priority": "medium",
+      "suggestion": "Add more detailed description for better planning",
+      "reasoning": "Detailed descriptions improve estimation and execution",
+      "implementation": "Expand description with specific steps or requirements"
+    }
+  ],
+  "ai_confidence": 0.8,
+  "analysis_source": "hybrid",
+  "ai_insights": {
+    "complexity_assessment": {
+      "ai_complexity_score": 5,
+      "ai_estimated_duration": 60,
+      "ai_confidence": 0.7,
+      "complexity_factors": []
+    },
+    "dependency_insights": {
+      "ai_detected_dependencies": [],
+      "dependency_signals": [],
+      "sequential_vs_parallel": "unknown",
+      "ai_confidence": 0.8
+    },
+    "context_enhancement": {
+      "ai_generated_tags": [],
+      "skill_requirements": [],
+      "resource_requirements": [],
+      "optimal_timing": "anytime",
+      "ai_confidence": 0.85
+    },
+    "smart_suggestions": [],
+    "confidence": 0.8,
+    "raw_response": "{\n  \"complexity_assessment\": {\n    \"complexity_score\": 3,\n    \"time_estimate_minutes\": 45,\n    \"confidence_level\": \"high\",\n    \"complexity_factors\": [\n      \"Requires sorting and organizing files\",\n      \"Potentially large number of files to sort\"\n    ]\n  },\n  \"dependency_insights\": {\n    \"likely_dependencies\": [\n      \"Gather all files that need to be sorted\"\n    ],\n    \"dependency_signals\": [\n      \"all files\"\n    ],\n    \"sequential_vs_parallel\": \"sequential\"\n  },\n  \"context_enhancement\": {\n    \"suggested_tags\": [\n      \"file_organization\",\n      \"office_tasks\"\n    ],\n    \"skill_requirements\": [\n      \"File management\",\n      \"Attention to detail\"\n    ],\n    \"resource_requirements\": [\n      \"Access to file storage locations\",\n      \"File organizer (physical or digital)\"\n    ],\n    \"optimal_time_of_day\": \"anytime\"\n  },\n  \"optimization_suggestions\": {\n    \"breaking_down\": \"Consider breaking the task into smaller sub-tasks, such as sorting files by type, location, or project\",\n    \"prioritization_advice\": \"This task may be a good candidate for regular maintenance or batch processing, rather than an urgent one-time activity\",\n    \"efficiency_tips\": [\n      \"Develop a consistent file organization system to make sorting easier in the future\",\n      \"Use digital tools (e.g., search, filtering) to speed up the sorting process\"\n    ]\n  }\n}"
+  }
+}

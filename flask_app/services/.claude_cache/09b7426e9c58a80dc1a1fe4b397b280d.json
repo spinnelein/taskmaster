@@ -1,0 +1,66 @@
+{
+  "task_id": "488eb7bd-3c18-44b5-9406-737ff1b3e2c1",
+  "analyzed_at": "2025-09-20T10:00:57.062778",
+  "complexity_assessment": {
+    "complexity_score": 4,
+    "complexity_level": "medium",
+    "estimated_duration_minutes": 30,
+    "time_confidence": "medium",
+    "time_multiplier": 1.0,
+    "factors": [],
+    "final_complexity_score": 4.5
+  },
+  "dependency_insights": {
+    "has_dependencies": false,
+    "dependency_signals": [],
+    "time_references": [],
+    "task_references": [],
+    "existing_dependencies": [],
+    "suggested_dependencies": [],
+    "dependency_confidence": "low"
+  },
+  "context_enhancement": {
+    "extracted_tags": [],
+    "categories": [],
+    "action_words": [],
+    "priority_indicators": [],
+    "skill_requirements": [],
+    "location_context": [],
+    "enhancement_confidence": "medium"
+  },
+  "smart_suggestions": [
+    {
+      "type": "clarity",
+      "priority": "medium",
+      "suggestion": "Add more detailed description for better planning",
+      "reasoning": "Detailed descriptions improve estimation and execution",
+      "implementation": "Expand description with specific steps or requirements"
+    }
+  ],
+  "ai_confidence": 0.8,
+  "analysis_source": "hybrid",
+  "ai_insights": {
+    "complexity_assessment": {
+      "ai_complexity_score": 5,
+      "ai_estimated_duration": 60,
+      "ai_confidence": 0.7,
+      "complexity_factors": []
+    },
+    "dependency_insights": {
+      "ai_detected_dependencies": [],
+      "dependency_signals": [],
+      "sequential_vs_parallel": "unknown",
+      "ai_confidence": 0.8
+    },
+    "context_enhancement": {
+      "ai_generated_tags": [],
+      "skill_requirements": [],
+      "resource_requirements": [],
+      "optimal_timing": "anytime",
+      "ai_confidence": 0.85
+    },
+    "smart_suggestions": [],
+    "confidence": 0.8,
+    "raw_response": "{\n  \"complexity_assessment\": {\n    \"complexity_score\": 4,\n    \"time_estimate_minutes\": 45,\n    \"confidence_level\": \"medium\",\n    \"complexity_factors\": [\n      \"Requires specific beekeeping knowledge\",\n      \"Potential weather/seasonal dependencies\"\n    ]\n  },\n  \"dependency_insights\": {\n    \"likely_dependencies\": [\n      \"Check on beehive condition\",\n      \"Gather necessary winterizing supplies\"\n    ],\n    \"dependency_signals\": [\n      \"Winterize\",\n      \"beehive\"\n    ],\n    \"sequential_vs_parallel\": \"sequential\"\n  },\n  \"context_enhancement\": {\n    \"suggested_tags\": [\n      \"beekeeping\",\n      \"seasonal\",\n      \"home maintenance\"\n    ],\n    \"skill_requirements\": [\n      \"Beekeeping experience\",\n      \"Basic carpentry/handyman skills\"\n    ],\n    \"resource_requirements\": [\n      \"Beekeeping equipment (e.g., smoker, protective gear)\",\n      \"Insulation materials\",\n      \"Tools for minor repairs\"\n    ],\n    \"optimal_time_of_day\": \"morning\"\n  },\n  \"optimization_suggestions\": {\n    \"breaking_down\": true,\n    \"prioritization_advice\": \"High priority, as winterizing the beehive is crucial for the bees' survival\",\n    \"efficiency_tips\": [\n      \"Refer to beekeeping guides for best practices\",\n      \"Perform a walkthrough of the beehive beforehand to identify any specific needs\",\n      \"Coordinate with other beekeepers or experts for guidance and support\"\n    ]\n  }\n}"
+  }
+}

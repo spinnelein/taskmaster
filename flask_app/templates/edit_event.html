@@ -422,7 +422,8 @@
         .then(response => response.json())
         .then(event => {
             alert('Event updated successfully!');
-            window.location.href = '/events';
+            // Force a fresh reload instead of just redirecting
+            window.location.href = '/events?refresh=' + Date.now();
         })
         .catch(error => {
             console.error('Error updating event:', error);

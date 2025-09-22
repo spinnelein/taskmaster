@@ -1,0 +1,75 @@
+{
+  "task_id": "b25fc3b9-c334-45ad-a307-03050e234e5e",
+  "analyzed_at": "2025-09-21T15:05:50.690220",
+  "complexity_assessment": {
+    "complexity_score": 7,
+    "complexity_level": "high",
+    "estimated_duration_minutes": 600,
+    "time_confidence": "medium",
+    "time_multiplier": 1.0,
+    "factors": [],
+    "final_complexity_score": 6.0
+  },
+  "dependency_insights": {
+    "has_dependencies": false,
+    "dependency_signals": [],
+    "time_references": [],
+    "task_references": [],
+    "existing_dependencies": [],
+    "suggested_dependencies": [],
+    "dependency_confidence": "low"
+  },
+  "context_enhancement": {
+    "extracted_tags": [],
+    "categories": [
+      "shopping"
+    ],
+    "action_words": [],
+    "priority_indicators": [],
+    "skill_requirements": [],
+    "location_context": [],
+    "enhancement_confidence": "medium"
+  },
+  "smart_suggestions": [
+    {
+      "type": "chunking",
+      "priority": "high",
+      "suggestion": "Consider breaking this long task into smaller chunks for better focus",
+      "reasoning": "Task duration of 600 minutes may lead to fatigue",
+      "implementation": "Enable task chunking or create sub-tasks"
+    },
+    {
+      "type": "clarity",
+      "priority": "medium",
+      "suggestion": "Add more detailed description for better planning",
+      "reasoning": "Detailed descriptions improve estimation and execution",
+      "implementation": "Expand description with specific steps or requirements"
+    }
+  ],
+  "ai_confidence": 0.8,
+  "analysis_source": "hybrid",
+  "ai_insights": {
+    "complexity_assessment": {
+      "ai_complexity_score": 5,
+      "ai_estimated_duration": 60,
+      "ai_confidence": 0.7,
+      "complexity_factors": []
+    },
+    "dependency_insights": {
+      "ai_detected_dependencies": [],
+      "dependency_signals": [],
+      "sequential_vs_parallel": "unknown",
+      "ai_confidence": 0.8
+    },
+    "context_enhancement": {
+      "ai_generated_tags": [],
+      "skill_requirements": [],
+      "resource_requirements": [],
+      "optimal_timing": "anytime",
+      "ai_confidence": 0.85
+    },
+    "smart_suggestions": [],
+    "confidence": 0.8,
+    "raw_response": "{\n  \"duration_analysis\": {\n    \"recommended_minutes\": 480,\n    \"confidence\": \"medium\",\n    \"reasoning\": \"The task of 'cleaning and organizing a workshop' typically takes a significant amount of time, often around 8 hours (480 minutes) for a thorough job. However, the actual duration can vary depending on the size and complexity of the workshop, as well as the individual's efficiency and experience.\"\n  },\n  \"task_structure\": {\n    \"is_divisible\": true,\n    \"min_chunk_minutes\": 60,\n    \"natural_breakpoints\": \"The task can be divided into smaller subtasks, such as cleaning specific areas, organizing tools and materials, and disposing of unwanted items. These subtasks can be performed in 60-minute chunks, with natural breaks in between to rest and recharge.\"\n  },\n  \"energy_requirements\": {\n    \"energy_level\": \"high\",\n    \"energy_type\": \"physical\",\n    \"cognitive_load\": \"medium\"\n  },\n  \"environment\": {\n    \"location\": \"indoor\",\n    \"weather_dependent\": false,\n    \"weather_requirements\": null\n  },\n  \"scheduling\": {\n    \"urgency_assessment\": 5,\n    \"urgency_reasoning\": \"The task is important for maintaining a functional and organized workshop, but it is not an immediate emergency. Completing the task within the next few days or weeks would be reasonable.\",\n    \"optimal_time\": \"anytime\",\n    \"time_sensitivity\": \"The task can be scheduled at any time, but it may be preferable to avoid periods when the workshop is actively being used for other projects.\"\n  },\n  \"resources\": {\n    \"equipment_needed\": [\"cleaning supplies\", \"organization containers\", \"power tools\", \"work gloves\"],\n    \"preparation_time\": 30,\n    \"location_requirements\": \"A clean, well-lit, and spacious workshop environment is ideal for this task.\"\n  }\n}"
+  }
+}

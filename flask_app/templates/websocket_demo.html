@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskMaster WebSocket Demo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .status.connected {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status.disconnected {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .btn-warning {
+            background-color: #ffc107;
+            color: black;
+        }
+        
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .events-log {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #f8f9fa;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        
+        .event-entry {
+            margin-bottom: 5px;
+            padding: 5px;
+            border-left: 3px solid #007bff;
+            background-color: white;
+        }
+        
+        .event-entry.task {
+            border-left-color: #28a745;
+        }
+        
+        .event-entry.calendar {
+            border-left-color: #ffc107;
+        }
+        
+        .event-entry.notification {
+            border-left-color: #dc3545;
+        }
+        
+        .event-timestamp {
+            color: #666;
+            font-size: 11px;
+        }
+        
+        .rooms-section {
+            margin-top: 20px;
+        }
+        
+        .room-list {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .room-badge {
+            padding: 4px 8px;
+            background-color: #e9ecef;
+            border-radius: 12px;
+            font-size: 12px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .room-badge.joined {
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+        }
+        
+        input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .stat-card {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>TaskMaster WebSocket Real-time Demo</h1>
+    
+    <div class="container">
+        <h2>Connection Status</h2>
+        <div id="status" class="status disconnected">Disconnected</div>
+        
+        <div class="controls">
+            <button id="connectBtn" class="btn-primary">Connect</button>
+            <button id="disconnectBtn" class="btn-danger" disabled>Disconnect</button>
+            <button id="authenticateBtn" class="btn-success" disabled>Authenticate</button>
+            <button id="pingBtn" class="btn-warning" disabled>Ping</button>
+        </div>
+        
+        <div>
+            <input type="text" id="userIdInput" placeholder="Enter User ID" value="demo_user">
+            <input type="text" id="roomInput" placeholder="Enter Room Name" value="dashboard">
+            <button id="joinRoomBtn" class="btn-primary" disabled>Join Room</button>
+            <button id="leaveRoomBtn" class="btn-danger" disabled>Leave Room</button>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h2>Connection Statistics</h2>
+        <div id="statsGrid" class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="connectionStatus">-</div>
+                <div class="stat-label">Connection Status</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="authenticatedStatus">-</div>
+                <div class="stat-label">Authenticated</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="roomCount">0</div>
+                <div class="stat-label">Joined Rooms</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="eventCount">0</div>
+                <div class="stat-label">Events Received</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container rooms-section">
+        <h2>Joined Rooms</h2>
+        <div id="roomsList" class="room-list">
+            <span>No rooms joined</span>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h2>Real-time Events Log</h2>
+        <div class="controls">
+            <button id="clearLogBtn" class="btn-warning">Clear Log</button>
+            <button id="simulateTaskBtn" class="btn-success" disabled>Simulate Task Event</button>
+            <button id="simulateEventBtn" class="btn-success" disabled>Simulate Calendar Event</button>
+        </div>
+        <div id="eventsLog" class="events-log"></div>
+    </div>
+    
+    <script src="/static/js/websocket_client.js"></script>
+    <script>
+        // WebSocket client instance
+        let wsClient = null;
+        let eventCount = 0;
+        
+        // DOM elements
+        const statusEl = document.getElementById('status');
+        const connectBtn = document.getElementById('connectBtn');
+        const disconnectBtn = document.getElementById('disconnectBtn');
+        const authenticateBtn = document.getElementById('authenticateBtn');
+        const pingBtn = document.getElementById('pingBtn');
+        const userIdInput = document.getElementById('userIdInput');
+        const roomInput = document.getElementById('roomInput');
+        const joinRoomBtn = document.getElementById('joinRoomBtn');
+        const leaveRoomBtn = document.getElementById('leaveRoomBtn');
+        const eventsLog = document.getElementById('eventsLog');
+        const clearLogBtn = document.getElementById('clearLogBtn');
+        const simulateTaskBtn = document.getElementById('simulateTaskBtn');
+        const simulateEventBtn = document.getElementById('simulateEventBtn');
+        const roomsList = document.getElementById('roomsList');
+        
+        // Initialize WebSocket client
+        function initializeClient() {
+            wsClient = new TaskMasterRealtimeClient({
+                debug: true,
+                autoReconnect: true,
+                maxReconnectAttempts: 5
+            });
+            
+            // Connection events
+            wsClient.subscribe('connection_confirmed', (data) => {
+                updateStatus('Connected', true);
+                logEvent('Connection', 'Connected to WebSocket server', data);
+                updateStats();
+            });
+            
+            wsClient.subscribe('authenticated', (data) => {
+                logEvent('Auth', 'Successfully authenticated', data);
+                updateStats();
+            });
+            
+            wsClient.subscribe('disconnect', (data) => {
+                updateStatus('Disconnected', false);
+                logEvent('Connection', 'Disconnected from server', data);
+                updateStats();
+            });
+            
+            wsClient.subscribe('error', (data) => {
+                logEvent('Error', 'WebSocket error occurred', data, 'notification');
+            });
+            
+            // Room events
+            wsClient.subscribe('room_joined', (data) => {
+                logEvent('Room', `Joined room: ${data.room}`, data);
+                updateRoomsList();
+            });
+            
+            wsClient.subscribe('room_left', (data) => {
+                logEvent('Room', `Left room: ${data.room}`, data);
+                updateRoomsList();
+            });
+            
+            // TaskMaster-specific events
+            wsClient.onTaskEvent('any', (eventType, data) => {
+                logEvent('Task', `Task ${eventType}`, data, 'task');
+            });
+            
+            wsClient.onCalendarEvent('created', (data) => {
+                logEvent('Calendar', 'Event created', data, 'calendar');
+            });
+            
+            wsClient.onCalendarEvent('updated', (data) => {
+                logEvent('Calendar', 'Event updated', data, 'calendar');
+            });
+            
+            wsClient.onNotification((data) => {
+                logEvent('Notification', data.message, data, 'notification');
+            });
+            
+            // Presence updates
+            wsClient.subscribe('presence_update', (data) => {
+                logEvent('Presence', `User ${data.event}`, data);
+            });
+        }
+        
+        // Update connection status
+        function updateStatus(status, connected) {
+            statusEl.textContent = status;
+            statusEl.className = `status ${connected ? 'connected' : 'disconnected'}`;
+            
+            // Update button states
+            connectBtn.disabled = connected;
+            disconnectBtn.disabled = !connected;
+            authenticateBtn.disabled = !connected;
+            pingBtn.disabled = !connected;
+            joinRoomBtn.disabled = !connected;
+            leaveRoomBtn.disabled = !connected;
+            simulateTaskBtn.disabled = !connected;
+            simulateEventBtn.disabled = !connected;
+        }
+        
+        // Update statistics
+        function updateStats() {
+            if (wsClient) {
+                const status = wsClient.getStatus();
+                document.getElementById('connectionStatus').textContent = status.connected ? 'Connected' : 'Disconnected';
+                document.getElementById('authenticatedStatus').textContent = status.authenticated ? 'Yes' : 'No';
+                document.getElementById('roomCount').textContent = status.joinedRooms.length;
+                document.getElementById('eventCount').textContent = eventCount;
+            }
+        }
+        
+        // Update rooms list
+        function updateRoomsList() {
+            if (wsClient) {
+                const status = wsClient.getStatus();
+                if (status.joinedRooms.length === 0) {
+                    roomsList.innerHTML = '<span>No rooms joined</span>';
+                } else {
+                    roomsList.innerHTML = status.joinedRooms
+                        .map(room => `<span class="room-badge joined">${room}</span>`)
+                        .join('');
+                }
+            }
+        }
+        
+        // Log events
+        function logEvent(category, message, data = {}, type = 'general') {
+            eventCount++;
+            const timestamp = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.className = `event-entry ${type}`;
+            
+            const dataStr = Object.keys(data).length > 0 ? 
+                JSON.stringify(data, null, 2) : '';
+            
+            entry.innerHTML = `
+                <div class="event-timestamp">[${timestamp}] ${category}</div>
+                <div><strong>${message}</strong></div>
+                ${dataStr ? `<pre style="margin: 5px 0; font-size: 11px; color: #666;">${dataStr}</pre>` : ''}
+            `;
+            
+            eventsLog.appendChild(entry);
+            eventsLog.scrollTop = eventsLog.scrollHeight;
+            
+            updateStats();
+        }
+        
+        // Event handlers
+        connectBtn.addEventListener('click', async () => {
+            try {
+                await wsClient.connect();
+            } catch (error) {
+                logEvent('Error', 'Failed to connect', { error: error.message }, 'notification');
+            }
+        });
+        
+        disconnectBtn.addEventListener('click', () => {
+            wsClient.disconnect();
+        });
+        
+        authenticateBtn.addEventListener('click', () => {
+            const userId = userIdInput.value.trim();
+            if (userId) {
+                wsClient.authenticate(userId);
+            } else {
+                alert('Please enter a User ID');
+            }
+        });
+        
+        pingBtn.addEventListener('click', () => {
+            wsClient.ping();
+            logEvent('Health', 'Ping sent');
+        });
+        
+        joinRoomBtn.addEventListener('click', () => {
+            const roomName = roomInput.value.trim();
+            if (roomName) {
+                wsClient.joinRoom(roomName);
+            } else {
+                alert('Please enter a room name');
+            }
+        });
+        
+        leaveRoomBtn.addEventListener('click', () => {
+            const roomName = roomInput.value.trim();
+            if (roomName) {
+                wsClient.leaveRoom(roomName);
+            } else {
+                alert('Please enter a room name');
+            }
+        });
+        
+        clearLogBtn.addEventListener('click', () => {
+            eventsLog.innerHTML = '';
+            eventCount = 0;
+            updateStats();
+        });
+        
+        simulateTaskBtn.addEventListener('click', () => {
+            // Simulate a task completion via API
+            fetch('/api/tasks', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title: 'Demo Task ' + Date.now(),
+                    description: 'Simulated task for WebSocket demo',
+                    priority: 3,
+                    status: 'active'
+                })
+            }).then(response => response.json())
+              .then(data => logEvent('API', 'Task created via API', data, 'task'))
+              .catch(error => logEvent('Error', 'Failed to create task', { error }, 'notification'));
+        });
+        
+        simulateEventBtn.addEventListener('click', () => {
+            // Simulate an event creation via API
+            const now = new Date();
+            const startTime = new Date(now.getTime() + 60000).toISOString(); // 1 minute from now
+            
+            fetch('/api/events', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title: 'Demo Event ' + Date.now(),
+                    description: 'Simulated event for WebSocket demo',
+                    start_time: startTime,
+                    duration: 30,
+                    event_type: 'meeting'
+                })
+            }).then(response => response.json())
+              .then(data => logEvent('API', 'Event created via API', data, 'calendar'))
+              .catch(error => logEvent('Error', 'Failed to create event', { error }, 'notification'));
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeClient();
+            updateStatus('Disconnected', false);
+            updateStats();
+        });
+    </script>
+</body>
+</html>

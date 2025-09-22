@@ -1,1 +1,16 @@
-Couldn't find the requested file /main.min.css in fullcalendar.
+/* FullCalendar Basic Styles - CSS is included in the global bundle */
+.fc {
+  font-family: Arial, sans-serif;
+}
+
+.fc-event {
+  cursor: pointer;
+}
+
+.fc-button {
+  cursor: pointer;
+}
+
+.fc-toolbar {
+  margin-bottom: 1em;
+}
